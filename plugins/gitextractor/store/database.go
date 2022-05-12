@@ -2,107 +2,97 @@ package store
 
 import (
 	"github.com/merico-dev/lake/models/domainlayer/code"
+	"github.com/merico-dev/lake/plugins/helper"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
+	"reflect"
 )
 
 const BathSize = 100
 
 type Database struct {
 	db            *gorm.DB
-	repoCommits   []*code.RepoCommit
-	commits       []*code.Commit
-	refs          []*code.Ref
-	commitFiles   []*code.CommitFile
-	commitParents []*code.CommitParent
+	repoCommits   *helper.BatchSave
+	commits       *helper.BatchSave
+	refs          *helper.BatchSave
+	commitFiles   *helper.BatchSave
+	commitParents *helper.BatchSave
 }
 
-func NewDatabase(db *gorm.DB) *Database {
-	return &Database{db: db}
+func NewDatabase(db *gorm.DB) (*Database, error) {
+	var err error
+	database := new(Database)
+	database.repoCommits, err = helper.NewBatchSave(db, reflect.TypeOf(&code.RepoCommit{}), BathSize)
+	if err != nil {
+		return nil, err
+	}
+	database.commits, err = helper.NewBatchSave(db, reflect.TypeOf(&code.Commit{}), BathSize)
+	if err != nil {
+		return nil, err
+	}
+	database.refs, err = helper.NewBatchSave(db, reflect.TypeOf(&code.Ref{}), BathSize)
+	if err != nil {
+		return nil, err
+	}
+	database.commitFiles, err = helper.NewBatchSave(db, reflect.TypeOf(&code.CommitFile{}), BathSize)
+	if err != nil {
+		return nil, err
+	}
+	database.commitParents, err = helper.NewBatchSave(db, reflect.TypeOf(&code.CommitParent{}), BathSize)
+	if err != nil {
+		return nil, err
+	}
+
+	return database, nil
 }
 
 func (d *Database) RepoCommits(repoCommit *code.RepoCommit) error {
-	d.repoCommits = append(d.repoCommits, repoCommit)
-	if len(d.repoCommits) < BathSize {
-		return nil
-	}
-	defer func() { d.repoCommits = make([]*code.RepoCommit, 0, BathSize) }()
-	return d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.repoCommits).Error
+	return d.repoCommits.Add(repoCommit)
 }
 
 func (d *Database) Commits(commit *code.Commit) error {
-	d.commits = append(d.commits, commit)
-	if len(d.commits) < BathSize {
-		return nil
-	}
-	defer func() { d.commits = make([]*code.Commit, 0, BathSize) }()
-	return d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commits).Error
+	return d.commits.Add(commit)
 }
 
 func (d *Database) Refs(ref *code.Ref) error {
-	d.refs = append(d.refs, ref)
-	if len(d.refs) < BathSize {
-		return nil
-	}
-	defer func() { d.refs = make([]*code.Ref, 0, BathSize) }()
-	return d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.refs).Error
+	return d.refs.Add(ref)
 }
 
 func (d *Database) CommitFiles(file *code.CommitFile) error {
-	d.commitFiles = append(d.commitFiles, file)
-	if len(d.commitFiles) < BathSize {
-		return nil
-	}
-	defer func() { d.commitFiles = make([]*code.CommitFile, 0, BathSize) }()
-	return d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commitFiles).Error
+	return d.commitFiles.Add(file)
 }
 
 func (d *Database) CommitParents(pp []*code.CommitParent) error {
-	d.commitParents = append(d.commitParents, pp...)
-	if len(d.commitParents) < BathSize {
-		return nil
+	for _, cp := range pp {
+		err := d.commitParents.Add(cp)
+		if err != nil {
+			return err
+		}
 	}
-	defer func() { d.commitParents = make([]*code.CommitParent, 0, BathSize) }()
-	return d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commitParents).Error
+	return nil
 }
 
 func (d *Database) Flush() error {
 	var err error
-	if len(d.repoCommits) > 0 {
-		err = d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.repoCommits).Error
-		if err != nil {
-			return err
-		}
+	err = d.repoCommits.Flush()
+	if err != nil {
+		return err
 	}
-	d.repoCommits = make([]*code.RepoCommit, 0, BathSize)
-	if len(d.commits) > 0 {
-		err = d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commits).Error
-		if err != nil {
-			return err
-		}
+	err = d.commits.Flush()
+	if err != nil {
+		return err
 	}
-	d.commits = make([]*code.Commit, 0, BathSize)
-	if len(d.refs) > 0 {
-		err = d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.refs).Error
-		if err != nil {
-			return err
-		}
+	err = d.refs.Flush()
+	if err != nil {
+		return err
 	}
-	d.refs = make([]*code.Ref, 0, BathSize)
-	if len(d.commitFiles) > 0 {
-		err = d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commitFiles).Error
-		if err != nil {
-			return err
-		}
+	err = d.commitParents.Flush()
+	if err != nil {
+		return err
 	}
-	d.commitFiles = make([]*code.CommitFile, 0, BathSize)
-	if len(d.commitParents) > 0 {
-		err = d.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(d.commitParents).Error
-		if err != nil {
-			return err
-		}
+	err = d.commitFiles.Flush()
+	if err != nil {
+		return err
 	}
-	d.commitParents = make([]*code.CommitParent, 0, BathSize)
 	return nil
 }
 

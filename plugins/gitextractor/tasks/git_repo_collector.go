@@ -38,10 +38,12 @@ func (o GitExtractorOptions) Valid() error {
 
 func CollectGitRepo(subTaskCtx core.SubTaskContext) error {
 	db := subTaskCtx.GetDb()
-	storage := store.NewDatabase(db)
+	storage, err := store.NewDatabase(db)
+	if err != nil {
+		return err
+	}
 	op := subTaskCtx.GetData().(GitExtractorOptions)
 	p := parser.NewLibGit2(storage, subTaskCtx)
-	var err error
 	if strings.HasPrefix(op.Url, "http") {
 		err = p.CloneOverHTTP(op.RepoId, op.Url, op.User, op.Password, op.Proxy)
 	} else if url := strings.TrimPrefix(op.Url, "ssh://"); strings.HasPrefix(url, "git@") {
