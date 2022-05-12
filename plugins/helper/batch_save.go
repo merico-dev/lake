@@ -16,11 +16,12 @@ type BatchSave struct {
 	slotType reflect.Type
 	// slots can not be []interface{}, because gorm wouldn't take it
 	// I'm guessing the reason is the type information lost when converted to interface{}
-	slots      reflect.Value
-	db         *gorm.DB
-	current    int
-	size       int
-	valueIndex map[string]int
+	slots         reflect.Value
+	db            *gorm.DB
+	current       int
+	size          int
+	valueIndex    map[string]int
+	hasPrimarykey bool
 }
 
 func NewBatchSave(db *gorm.DB, slotType reflect.Type, size int) (*BatchSave, error) {
@@ -29,11 +30,12 @@ func NewBatchSave(db *gorm.DB, slotType reflect.Type, size int) (*BatchSave, err
 	}
 
 	return &BatchSave{
-		slotType:   slotType,
-		slots:      reflect.MakeSlice(reflect.SliceOf(slotType), size, size),
-		db:         db,
-		size:       size,
-		valueIndex: make(map[string]int),
+		slotType:      slotType,
+		slots:         reflect.MakeSlice(reflect.SliceOf(slotType), size, size),
+		db:            db,
+		size:          size,
+		valueIndex:    make(map[string]int),
+		hasPrimarykey: true,
 	}, nil
 }
 
@@ -47,6 +49,8 @@ func (c *BatchSave) Add(slot interface{}) error {
 	}
 	// deduplication
 	key := getPrimaryKeyValue(slot)
+	c.hasPrimarykey = hasPrimaryKey(slot)
+	
 	if key != "" {
 		if index, ok := c.valueIndex[key]; !ok {
 			c.valueIndex[key] = c.current
@@ -65,10 +69,18 @@ func (c *BatchSave) Add(slot interface{}) error {
 }
 
 func (c *BatchSave) Flush() error {
-	err := c.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(c.slots.Slice(0, c.current).Interface()).Error
-	if err != nil {
-		return err
+	if c.hasPrimarykey {
+		err := c.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(c.slots.Slice(0, c.current).Interface()).Error
+		if err != nil {
+			return err
+		}
+	} else {
+		err := c.db.Create(c.slots.Slice(0, c.current).Interface()).Error
+		if err != nil {
+			return err
+		}
 	}
+
 	c.current = 0
 	c.valueIndex = make(map[string]int)
 	return nil
@@ -87,6 +99,29 @@ func isPrimaryKey(f reflect.StructField, v reflect.Value) (string, bool) {
 		return fmt.Sprintf("%v", v.Interface()), true
 	}
 	return "", false
+}
+
+func hasPrimaryKey(iface interface{}) bool {
+	ifv := reflect.ValueOf(iface)
+	if ifv.Kind() == reflect.Ptr {
+		ifv = ifv.Elem()
+	}
+	for i := 0; i < ifv.NumField(); i++ {
+		v := ifv.Field(i)
+		switch v.Kind() {
+		case reflect.Struct:
+			ok := hasPrimaryKey(v.Interface())
+			if ok {
+				return true
+			}
+		default:
+			if _, ok := isPrimaryKey(ifv.Type().Field(i), v); ok {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 func getPrimaryKeyValue(iface interface{}) string {
