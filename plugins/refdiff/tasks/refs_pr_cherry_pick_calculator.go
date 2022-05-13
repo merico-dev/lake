@@ -75,7 +75,7 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 
 		var parentPrId string
 		err = db.Model(&code.PullRequest{}).
-			Where("key = ? and repo_id = ?", parentPrKeyInt, repoId).
+			Where("key = ? and base_repo_id = ?", parentPrKeyInt, repoId).
 			Pluck("id", &parentPrId).Error
 		if err != nil {
 			return err
@@ -118,7 +118,7 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 			pr2.created_date
 		ORDER  BY pr1.parent_pr_id, pr2.created_date ASC
 	*/
-	cursor2, err := db.Exec(
+	cursor2, err := db.Raw(
 		`
 			SELECT pr2.KEY                              AS parent_pr_key,
 			       pr1.parent_pr_id                     AS parent_pr_id,
@@ -134,7 +134,7 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 			              ON pr2.base_repo_id = repos.id
 			WHERE  pr1.parent_pr_id != ''
 			ORDER  BY pr1.parent_pr_id,
-			          pr2.created_date ASC,
+			          pr2.created_date,
 					  pr1.base_ref ASC
 			`).Rows()
 	if err != nil {
@@ -154,7 +154,7 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 			return err
 		}
 		if item.ParentPrId == lastParentPrId && item.CreatedDate == lastCreatedDate {
-			cherrypickBaseBranches = append(cherrypickPrKeys, item.CherrypickBaseBranch)
+			cherrypickBaseBranches = append(cherrypickBaseBranches, item.CherrypickBaseBranch)
 			cherrypickPrKeys = append(cherrypickPrKeys, strconv.Itoa(item.CherrypickPrKey))
 		} else {
 			if refsPrCherryPick != nil {
