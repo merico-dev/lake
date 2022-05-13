@@ -92,32 +92,6 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 		taskCtx.IncProgress(1)
 	}
 
-	//cursor2, err := db.Table("pull_requests pr1").
-	//	Joins("left join pull_requests pr2 on pr1.parent_pr_id = pr2.id").Group("pr1.parent_pr_id, pr2.created_date").Where("pr1.parent_pr_id != ''").
-	//	Joins("left join repos on pr2.base_repo_id = repos.id").
-	//	Order("pr2.created_date ASC").
-	//	Select(`pr2.key as parent_pr_key, pr1.parent_pr_id as parent_pr_id, GROUP_CONCAT(pr1.base_ref order by pr1.base_ref ASC) as cherrypick_base_branches,
-	//		GROUP_CONCAT(pr1.key order by pr1.base_ref ASC) as cherrypick_pr_keys, repos.name as repo_name,
-	//		concat(repos.url, '/pull/', pr2.key) as parent_pr_url`).Rows()
-	/*
-		SELECT pr2.key                                              AS parent_pr_key,
-			pr1.parent_pr_id                                     AS parent_pr_id,
-			Group_concat(pr1.base_ref ORDER BY pr1.base_ref ASC) AS cherrypick_base_branches,
-			Group_concat(pr1.key ORDER BY pr1.base_ref ASC)      AS cherrypick_pr_keys,
-			pr1.base_ref,
-			pr1.key,
-			repos.name                                           AS repo_name,
-			Concat(repos.url, '/pull/', pr2.key)                 AS parent_pr_url
-		FROM   pull_requests pr1
-		LEFT JOIN pull_requests pr2
-		ON pr1.parent_pr_id = pr2.id
-		LEFT JOIN repos
-		ON pr2.base_repo_id = repos.id
-		WHERE  pr1.parent_pr_id != ''
-		GROUP  BY pr1.parent_pr_id,
-			pr2.created_date
-		ORDER  BY pr1.parent_pr_id, pr2.created_date ASC
-	*/
 	cursor2, err := db.Raw(
 		`
 			SELECT pr2.KEY                              AS parent_pr_key,
