@@ -68,3 +68,49 @@ func Test_getPrimaryKeyValue(t *testing.T) {
 		})
 	}
 }
+
+func Test_hasPrimaryKey(t *testing.T) {
+	type args struct {
+		iface interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			"",
+			args{ticket.SprintIssue{
+				SprintId: "abc",
+				IssueId:  "123",
+			},
+			},
+			true,
+		},
+		{
+			"",
+			args{&ticket.SprintIssue{
+				SprintId: "abc",
+				IssueId:  "123",
+			},
+			},
+			true,
+		},
+		{
+			"",
+			args{ticket.Issue{}},
+			true,
+		},
+		{
+			"",
+			args{&ticket.Issue{}},
+			true,
+		},
+	}
+	
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equalf(t, tt.want, hasPrimaryKey(tt.args.iface), "hasPrimaryKey(%v)", tt.args.iface)
+		})
+	}
+}

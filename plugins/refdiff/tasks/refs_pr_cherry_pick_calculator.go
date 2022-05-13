@@ -153,11 +153,14 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 			}
 		}
 	}
-	err = db.Clauses(clause.OnConflict{
-		UpdateAll: true,
-	}).Create(refsPrCherryPick).Error
-	if err != nil {
-		return err
+
+	if refsPrCherryPick != nil {
+		err = db.Clauses(clause.OnConflict{
+			UpdateAll: true,
+		}).Create(refsPrCherryPick).Error
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
