@@ -43,10 +43,7 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		storage, err = store.NewDatabase(database)
-		if err != nil {
-			panic(err)
-		}
+		storage = store.NewDatabase(database)
 	} else {
 		panic("either specify `-output` or `-db` argument as destination")
 	}

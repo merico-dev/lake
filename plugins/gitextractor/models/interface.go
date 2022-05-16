@@ -10,6 +10,5 @@ type Store interface {
 	Refs(ref *code.Ref) error
 	CommitFiles(file *code.CommitFile) error
 	CommitParents(pp []*code.CommitParent) error
-	Flush() error
 	Close() error
 }

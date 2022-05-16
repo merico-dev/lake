@@ -145,6 +145,3 @@ func (c *CsvStore) Close() error {
 	}
 	return nil
 }
-func (c *CsvStore) Flush() error {
-	return nil
-}

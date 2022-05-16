@@ -37,11 +37,9 @@ func (o GitExtractorOptions) Valid() error {
 }
 
 func CollectGitRepo(subTaskCtx core.SubTaskContext) error {
+	var err error
 	db := subTaskCtx.GetDb()
-	storage, err := store.NewDatabase(db)
-	if err != nil {
-		return err
-	}
+	storage := store.NewDatabase(db)
 	op := subTaskCtx.GetData().(GitExtractorOptions)
 	p := parser.NewLibGit2(storage, subTaskCtx)
 	if strings.HasPrefix(op.Url, "http") {

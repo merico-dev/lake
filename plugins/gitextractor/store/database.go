@@ -10,60 +10,58 @@ import (
 const BathSize = 100
 
 type Database struct {
-	db            *gorm.DB
-	repoCommits   *helper.BatchSave
-	commits       *helper.BatchSave
-	refs          *helper.BatchSave
-	commitFiles   *helper.BatchSave
-	commitParents *helper.BatchSave
+	db     *gorm.DB
+	driver *helper.BatchSaveDivider
 }
 
-func NewDatabase(db *gorm.DB) (*Database, error) {
-	var err error
+func NewDatabase(db *gorm.DB) *Database {
 	database := new(Database)
-	database.repoCommits, err = helper.NewBatchSave(db, reflect.TypeOf(&code.RepoCommit{}), BathSize)
-	if err != nil {
-		return nil, err
-	}
-	database.commits, err = helper.NewBatchSave(db, reflect.TypeOf(&code.Commit{}), BathSize)
-	if err != nil {
-		return nil, err
-	}
-	database.refs, err = helper.NewBatchSave(db, reflect.TypeOf(&code.Ref{}), BathSize)
-	if err != nil {
-		return nil, err
-	}
-	database.commitFiles, err = helper.NewBatchSave(db, reflect.TypeOf(&code.CommitFile{}), BathSize)
-	if err != nil {
-		return nil, err
-	}
-	database.commitParents, err = helper.NewBatchSave(db, reflect.TypeOf(&code.CommitParent{}), BathSize)
-	if err != nil {
-		return nil, err
-	}
-
-	return database, nil
+	database.driver = helper.NewBatchSaveDivider(db, BathSize)
+	return database
 }
 
 func (d *Database) RepoCommits(repoCommit *code.RepoCommit) error {
-	return d.repoCommits.Add(repoCommit)
+	batch, err := d.driver.ForType(reflect.TypeOf(repoCommit))
+	if err != nil {
+		return err
+	}
+	return batch.Add(repoCommit)
 }
 
 func (d *Database) Commits(commit *code.Commit) error {
-	return d.commits.Add(commit)
+	batch, err := d.driver.ForType(reflect.TypeOf(commit))
+	if err != nil {
+		return err
+	}
+	return batch.Add(commit)
 }
 
 func (d *Database) Refs(ref *code.Ref) error {
-	return d.refs.Add(ref)
+	batch, err := d.driver.ForType(reflect.TypeOf(ref))
+	if err != nil {
+		return err
+	}
+	return batch.Add(ref)
 }
 
 func (d *Database) CommitFiles(file *code.CommitFile) error {
-	return d.commitFiles.Add(file)
+	batch, err := d.driver.ForType(reflect.TypeOf(file))
+	if err != nil {
+		return err
+	}
+	return batch.Add(file)
 }
 
 func (d *Database) CommitParents(pp []*code.CommitParent) error {
+	if len(pp) == 0 {
+		return nil
+	}
+	batch, err := d.driver.ForType(reflect.TypeOf(pp[0]))
+	if err != nil {
+		return err
+	}
 	for _, cp := range pp {
-		err := d.commitParents.Add(cp)
+		err = batch.Add(cp)
 		if err != nil {
 			return err
 		}
@@ -71,31 +69,6 @@ func (d *Database) CommitParents(pp []*code.CommitParent) error {
 	return nil
 }
 
-func (d *Database) Flush() error {
-	var err error
-	err = d.repoCommits.Flush()
-	if err != nil {
-		return err
-	}
-	err = d.commits.Flush()
-	if err != nil {
-		return err
-	}
-	err = d.refs.Flush()
-	if err != nil {
-		return err
-	}
-	err = d.commitParents.Flush()
-	if err != nil {
-		return err
-	}
-	err = d.commitFiles.Flush()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func (d *Database) Close() error {
-	return nil
+	return d.driver.Close()
 }

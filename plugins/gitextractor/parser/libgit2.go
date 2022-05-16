@@ -260,8 +260,5 @@ func (l *LibGit2) run(repo *git.Repository, repoId string) error {
 		l.subTaskCtx.IncProgress(1)
 		return nil
 	})
-	if err == nil {
-		err = l.store.Flush()
-	}
 	return err
 }
