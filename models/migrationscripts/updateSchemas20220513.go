@@ -2,10 +2,10 @@ package migrationscripts
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/merico-dev/lake/models/migrationscripts/archived"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type RefsIssuesDiffs20220513 struct {
@@ -19,6 +19,20 @@ type RefsIssuesDiffs20220513 struct {
 }
 
 func (RefsIssuesDiffs20220513) TableName() string {
+	return "refs_issues_diffs_20220513"
+}
+
+type RefsIssuesDiffsNew struct {
+	NewRefId        string `gorm:"primaryKey;type:varchar(255)"`
+	OldRefId        string `gorm:"primaryKey;type:varchar(255)"`
+	NewRefCommitSha string `gorm:"type:varchar(40)"`
+	OldRefCommitSha string `gorm:"type:varchar(40)"`
+	IssueNumber     string `gorm:"type:varchar(255)"`
+	IssueId         string `gorm:"primaryKey;type:varchar(255)"`
+	archived.NoPKModel
+}
+
+func (RefsIssuesDiffsNew) TableName() string {
 	return "refs_issues_diffs"
 }
 
@@ -31,18 +45,20 @@ func (*updateSchemas20220513) Up(ctx context.Context, db *gorm.DB) error {
 	}
 	defer cursor.Close()
 
-	duplicateData := make(map[string]interface{})
+	err = db.Migrator().CreateTable(RefsIssuesDiffs20220513{})
+	if err != nil {
+		return err
+	}
+
 	for cursor.Next() {
 		inputRow := archived.RefsIssuesDiffs{}
 		err := db.ScanRows(cursor, &inputRow)
 		if err != nil {
 			return err
-
 		}
-
-		inputRowkey := fmt.Sprintf("%s%s%s", inputRow.NewRefId, inputRow.OldRefId, inputRow.IssueId)
-		if inputRowkey != "" {
-			duplicateData[inputRowkey] = inputRow
+		err = db.Clauses(clause.OnConflict{UpdateAll: true}).Create(inputRow).Error
+		if err != nil {
+			return err
 		}
 	}
 
@@ -51,14 +67,7 @@ func (*updateSchemas20220513) Up(ctx context.Context, db *gorm.DB) error {
 		return err
 	}
 
-	err = db.Migrator().CreateTable(RefsIssuesDiffs20220513{})
-	if err != nil {
-		return err
-	}
-
-	for _, v := range duplicateData {
-		db.Create(v)
-	}
+	db.Migrator().RenameTable(RefsIssuesDiffs20220513{}, RefsIssuesDiffsNew{})
 
 	return nil
 }
