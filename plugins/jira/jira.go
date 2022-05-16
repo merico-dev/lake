@@ -87,7 +87,7 @@ func (plugin Jira) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 		return nil, fmt.Errorf("connectionId is invalid")
 	}
 	connection := &models.JiraConnection{}
-	err = db.Find(connection, op.ConnectionId).Error
+	err = db.First(connection, op.ConnectionId).Error
 	if err != nil {
 		return nil, err
 	}

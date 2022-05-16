@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/merico-dev/lake/migration"
 	"github.com/merico-dev/lake/models/domainlayer/didgen"
 	"github.com/merico-dev/lake/plugins/core"
@@ -14,7 +16,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"time"
 )
 
 var _ core.PluginMeta = (*Tapd)(nil)
@@ -94,7 +95,7 @@ func (plugin Tapd) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 		return nil, fmt.Errorf("ConnectionId is required for Tapd execution")
 	}
 	connection := &models.TapdConnection{}
-	err = db.Find(connection, op.ConnectionId).Error
+	err = db.First(connection, op.ConnectionId).Error
 	if err != nil {
 		return nil, err
 	}
