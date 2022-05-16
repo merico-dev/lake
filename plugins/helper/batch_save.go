@@ -16,26 +16,26 @@ type BatchSave struct {
 	slotType reflect.Type
 	// slots can not be []interface{}, because gorm wouldn't take it
 	// I'm guessing the reason is the type information lost when converted to interface{}
-	slots         reflect.Value
-	db            *gorm.DB
-	current       int
-	size          int
-	valueIndex    map[string]int
-	hasPrimarykey bool
+	slots      reflect.Value
+	db         *gorm.DB
+	current    int
+	size       int
+	valueIndex map[string]int
 }
 
 func NewBatchSave(db *gorm.DB, slotType reflect.Type, size int) (*BatchSave, error) {
 	if slotType.Kind() != reflect.Ptr {
 		return nil, fmt.Errorf("slotType must be a pointer")
 	}
-
+	if !hasPrimaryKey(slotType) {
+		return nil, fmt.Errorf("no primary key")
+	}
 	return &BatchSave{
-		slotType:      slotType,
-		slots:         reflect.MakeSlice(reflect.SliceOf(slotType), size, size),
-		db:            db,
-		size:          size,
-		valueIndex:    make(map[string]int),
-		hasPrimarykey: hasPrimaryKey(slotType),
+		slotType:   slotType,
+		slots:      reflect.MakeSlice(reflect.SliceOf(slotType), size, size),
+		db:         db,
+		size:       size,
+		valueIndex: make(map[string]int),
 	}, nil
 }
 
@@ -68,18 +68,10 @@ func (c *BatchSave) Add(slot interface{}) error {
 }
 
 func (c *BatchSave) Flush() error {
-	if c.hasPrimarykey {
-		err := c.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(c.slots.Slice(0, c.current).Interface()).Error
-		if err != nil {
-			return err
-		}
-	} else {
-		err := c.db.Create(c.slots.Slice(0, c.current).Interface()).Error
-		if err != nil {
-			return err
-		}
+	err := c.db.Clauses(clause.OnConflict{UpdateAll: true}).Create(c.slots.Slice(0, c.current).Interface()).Error
+	if err != nil {
+		return err
 	}
-
 	c.current = 0
 	c.valueIndex = make(map[string]int)
 	return nil
