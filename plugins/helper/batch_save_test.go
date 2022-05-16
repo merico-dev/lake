@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/merico-dev/lake/models/domainlayer"
@@ -107,10 +108,10 @@ func Test_hasPrimaryKey(t *testing.T) {
 			true,
 		},
 	}
-	
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equalf(t, tt.want, hasPrimaryKey(tt.args.iface), "hasPrimaryKey(%v)", tt.args.iface)
+			assert.Equalf(t, tt.want, hasPrimaryKey(reflect.TypeOf(tt.args.iface)), "hasPrimaryKey(%v)", tt.args.iface)
 		})
 	}
 }
