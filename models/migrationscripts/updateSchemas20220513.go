@@ -44,14 +44,15 @@ func (*updateSchemas20220513) Up(ctx context.Context, db *gorm.DB) error {
 		return err
 	}
 	defer cursor.Close()
-
+	// 1. create a temporary table to store unique records
 	err = db.Migrator().CreateTable(RefsIssuesDiffs20220513{})
 	if err != nil {
 		return err
 	}
-
+	// 2. dedupe records and insert into the temporary table
 	for cursor.Next() {
-		inputRow := archived.RefsIssuesDiffs{}
+		//inputRow := archived.RefsIssuesDiffs{}
+		inputRow := RefsIssuesDiffs20220513{}
 		err := db.ScanRows(cursor, &inputRow)
 		if err != nil {
 			return err
@@ -61,12 +62,12 @@ func (*updateSchemas20220513) Up(ctx context.Context, db *gorm.DB) error {
 			return err
 		}
 	}
-
+	// 3. drop old table
 	err = db.Migrator().DropTable(archived.RefsIssuesDiffs{})
 	if err != nil {
 		return err
 	}
-
+	// 4. rename the temporary table to the old table
 	db.Migrator().RenameTable(RefsIssuesDiffs20220513{}, RefsIssuesDiffsNew{})
 
 	return nil
