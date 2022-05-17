@@ -26,36 +26,36 @@ function useSettingsManager ({
         connectionPayload = {
           ...connectionPayload,
           name: connection.name,
-          Endpoint: connection.endpoint,
-          BasicAuthEncoded: connection.basicAuthEncoded,
-          Proxy: connection.proxy || connection.Proxy
+          endPoing: connection.endpoint,
+          basicAuthEncoded: connection.basicAuthEncoded,
+          proxy: connection.proxy || connection.Proxy
         }
         break
       case Providers.GITHUB:
         connectionPayload = {
           ...connectionPayload,
           name: connection.name,
-          GITHUB_ENDPOINT: connection.endpoint,
-          GITHUB_AUTH: connection.auth,
-          GITHUB_PROXY: connection.proxy || connection.Proxy
+          endpoint: connection.endpoint,
+          auth: connection.auth,
+          proxy: connection.proxy || connection.Proxy
         }
         break
       case Providers.JENKINS:
         connectionPayload = {
           ...connectionPayload,
           name: connection.name,
-          JENKINS_ENDPOINT: connection.endpoint,
-          JENKINS_USERNAME: connection.username,
-          JENKINS_PASSWORD: connection.password
+          endpoint: connection.endpoint,
+          username: connection.username,
+          password: connection.password
         }
         break
       case Providers.GITLAB:
         connectionPayload = {
           ...connectionPayload,
           name: connection.name,
-          GITLAB_ENDPOINT: connection.endpoint,
-          GITLAB_AUTH: connection.auth,
-          GITLAB_PROXY: connection.proxy || connection.Proxy
+          endpoint: connection.endpoint,
+          auth: connection.auth,
+          proxy: connection.proxy || connection.Proxy
         }
         break
     }
