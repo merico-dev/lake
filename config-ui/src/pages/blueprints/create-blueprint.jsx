@@ -61,36 +61,9 @@ import InputValidationError from '@/components/validation/InputValidationError'
 import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
 
+import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
 import CronHelp from '@/images/cron-help.png'
-
-// @todo: extract this into ConnectionTabs Component
-const ConnectionTabs = (props) => {
-  const { connections = [], selectedTabId, onChange = () => {} } = props
-
-  return (
-    <>
-      <Tabs
-        className='connection-tabs'
-        animate={false}
-        vertical={true}
-        id='connection-tabs'
-        onChange={(tabId) => onChange(tabId)}
-        selectedTabId={selectedTabId}
-      >
-        {connections.map((c, cIdx) => (
-          <Tab
-            key={`tab-key-${cIdx}`}
-            id={`connection-${c.id}`}
-            title={c.title}
-            connection={c}
-            // disabled={bC.disabled || bC.status !== 'online'}
-          />
-        ))}
-      </Tabs>
-    </>
-  )
-}
 
 const CreateBlueprint = (props) => {
   const history = useHistory()
