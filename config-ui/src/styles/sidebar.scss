@@ -1,16 +1,18 @@
 .card.sidebar-card {
   width: 250px;
   border-radius: 0;
-  background: #ffffff;
+  background-color: #292B3F;
+  color: #ffffff;
   z-index: 10;
   box-shadow: none;
   position: fixed;
   height: 100vh;
   left: 0;
   top: 0;
-  padding-top: 50px;
+  // padding-top: 50px;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 
   &:hover {
     box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 1px 1px rgba(16, 22, 26, 0.2), 0 2px 6px rgba(16, 22, 26, 0.2)
@@ -18,9 +20,18 @@
 }
 
 .logo {
-  max-width: 60px;
+  max-width: 48px;
+  width: 48px;
+  height: 48px;
   display: block;
-  margin: -2rem auto 2.5rem;
+  margin: 28px auto;
+}
+
+.logo-textmark {
+  margin: 10px auto;
+  display: block;
+  max-width: 120px;
+  width: 120px;
 }
 
 .copyright-tag {

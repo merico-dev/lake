@@ -1,9 +1,13 @@
 .sidebarMenu {
   font-family: 'Montserrat', sans-serif;
+  margin-bottom: auto;
+  background-color: transparent;
+  color: #ddd;
 
-  li {
+  > li {
     font-size: 13px;
     transition: all 0.3s ease;
+    color: #ffffff;
 
     .bp3-menu-item {
       line-height: 26px;
@@ -14,8 +18,8 @@
 
       &.bp3-active {
         font-weight: bold;
-        background-color: #f5f5f5;
-        color: #E8471C;
+        background-color: #7497F7;
+        color: #ffffff;
       }
 
       .bp3-icon {

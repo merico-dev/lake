@@ -33,3 +33,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# ide & workspace files
+.nova
+*.sublime*

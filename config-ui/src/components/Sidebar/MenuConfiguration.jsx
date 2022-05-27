@@ -61,16 +61,16 @@ const MenuConfiguration = (activeRoute) => {
         }
       ]
     },
-    // {
-    //   id: 1,
-    //   label: 'Tasks',
-    //   icon: 'automatic-updates',
-    //   route: '/tasks',
-    //   disabled: true,
-    //   active: activeRoute.url === '/tasks',
-    //   children: [
-    //   ]
-    // },
+    {
+      id: 1,
+      label: 'Blueprints',
+      icon: 'bold',
+      route: '/blueprints/create',
+      disabled: false,
+      active: activeRoute.url === '/blueprints/create',
+      children: [
+      ]
+    },
     // {
     //   id: 2,
     //   label: 'Triggers',

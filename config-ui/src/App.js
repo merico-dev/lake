@@ -41,6 +41,7 @@ import Pipelines from '@/pages/pipelines/index'
 import CreatePipeline from '@/pages/pipelines/create'
 import PipelineActivity from '@/pages/pipelines/activity'
 import Blueprints from '@/pages/blueprints/index'
+import CreateBlueprint from '@/pages/blueprints/create-blueprint'
 
 function App () {
   return (
@@ -78,6 +79,9 @@ function App () {
       </Route>
       <Route exact path='/pipelines/activity/:pId'>
         <PipelineActivity />
+      </Route>
+      <Route exact path='/blueprints/create'>
+        <CreateBlueprint />
       </Route>
       <Route exact path='/blueprints'>
         <Blueprints />
