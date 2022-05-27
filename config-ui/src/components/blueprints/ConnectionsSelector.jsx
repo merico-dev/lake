@@ -41,6 +41,8 @@ import {
   Tag,
 } from '@blueprintjs/core'
 import { MultiSelect, Select } from '@blueprintjs/select'
+import { Providers, ProviderTypes, ProviderIcons } from '@/data/Providers'
+
 const ConnectionsSelector = (props) => {
   const {
     connections = [],
@@ -60,7 +62,20 @@ const ConnectionsSelector = (props) => {
         key={item.value}
         label={
           <span style={{ marginLeft: '20px' }}>
-            {item.description || item.value}
+            <span
+              style={{
+                display: 'inline-block',
+                marginTop: '2px',
+                width: '14px',
+                height: '14px'
+              }}
+            >
+              {ProviderIcons[item.provider] ? (
+                ProviderIcons[item.provider](14, 14)
+              ) : (
+                <></>
+              )}
+            </span>
           </span>
         }
         onClick={handleClick}
@@ -77,13 +92,11 @@ const ConnectionsSelector = (props) => {
         }
         style={{
           marginBottom: '2px',
-          fontWeight: items.includes(item)
-            ? 700
-            : 'normal',
+          fontWeight: items.includes(item) ? 700 : 'normal',
         }}
       />
     ),
-    tagRenderer = (item) => item.title
+    tagRenderer = (item) => item.title,
   } = props
   return (
     <>
@@ -120,9 +133,7 @@ const ConnectionsSelector = (props) => {
             }}
             noResults={<MenuItem disabled={true} text='No connections.' />}
             onRemove={(item) => {
-              onRemove((rT) =>
-                rT.filter((t) => t.id !== item.id)
-              )
+              onRemove((rT) => rT.filter((t) => t.id !== item.id))
             }}
             onItemSelect={(item) => {
               onItemSelect((rT) =>
@@ -140,7 +151,12 @@ const ConnectionsSelector = (props) => {
             intent={Intent.NONE}
             minimal={false}
             onClick={() => onClear([])}
-            style={{ borderLeft: 0, borderTopLeftRadius: 0, borderBottomLeftRadius: 0, marginLeft: '-2px' }}
+            style={{
+              borderLeft: 0,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+              marginLeft: '-2px',
+            }}
           />
         </div>
       </div>
