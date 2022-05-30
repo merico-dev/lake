@@ -165,7 +165,7 @@ const CreateBlueprint = (props) => {
 
   const [blueprintConnections, setBlueprintConnections] = useState([])
   const [configuredConnection, setConfiguredConnection] = useState()
-  const [dataEntities, setDataEntities] = useState([])
+  const [dataEntities, setDataEntities] = useState({})
   const [activeConnectionTab, setActiveConnectionTab] = useState()
 
   const [dataScopes, setDataScopes] = useState([])
@@ -372,6 +372,8 @@ const CreateBlueprint = (props) => {
     setConfiguredConnection(
       blueprintConnections.length > 0 ? blueprintConnections[0] : null
     )
+    const initializeEntities = (pV, cV) => ({...pV, [cV.id]: []})
+    setDataEntities(dE => ({...blueprintConnections.reduce(initializeEntities, {})}))
   }, [blueprintConnections])
 
   useEffect(() => {
@@ -396,6 +398,10 @@ const CreateBlueprint = (props) => {
       }
     }
   }, [configuredConnection])
+  
+  useEffect(() => {
+    console.log('>> DATA ENTITIES', dataEntities)
+  }, [dataEntities])
 
   return (
     <>
@@ -716,12 +722,13 @@ const CreateBlueprint = (props) => {
                               </p>
                               <DataEntitiesSelector
                                 items={dataEntitiesList}
-                                selectedItems={dataEntities}
-                                restrictedItems={getRestrictedDataEntities()}
+                                selectedItems={dataEntities[configuredConnection.id] || []}
+                                // restrictedItems={getRestrictedDataEntities()}
                                 onItemSelect={setDataEntities}
                                 onClear={setDataEntities}
                                 onRemove={setDataEntities}
                                 disabled={isSaving}
+                                configuredConnection={configuredConnection}
                               />
                             </>
                           )}

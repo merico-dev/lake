@@ -44,6 +44,7 @@ import { MultiSelect, Select } from '@blueprintjs/select'
 const DataEntitiesSelector = (props) => {
   const {
     connections = [],
+    configuredConnection,
     placeholder = 'Select data entities',
     items = [],
     selectedItems = [],
@@ -56,13 +57,15 @@ const DataEntitiesSelector = (props) => {
     onClear = () => {},
     itemRenderer = (item, { handleClick, modifiers }) => (
       <MenuItem
-        active={modifiers.active || selectedItems.includes(item)}
-        disabled={selectedItems.includes(item) || restrictedItems.includes(item)}
+        active={modifiers.active || selectedItems.find(i => i.id === item.id)}
+        disabled={
+          selectedItems.find(i => i.id === item.id)
+        }
         key={item.value}
         // label=
         onClick={handleClick}
         text={
-          selectedItems.includes(item) ? (
+          selectedItems.find(i => i.id === item.id) ? (
             <>
               <input type='checkbox' checked readOnly /> {item.title}
             </>
@@ -74,13 +77,11 @@ const DataEntitiesSelector = (props) => {
         }
         style={{
           marginBottom: '2px',
-          fontWeight: items.includes(item)
-            ? 700
-            : 'normal',
+          fontWeight: items.includes(item) ? 700 : 'normal',
         }}
       />
     ),
-    tagRenderer = (item) => item.title
+    tagRenderer = (item) => item.title,
   } = props
   return (
     <>
@@ -117,17 +118,29 @@ const DataEntitiesSelector = (props) => {
             }}
             noResults={<MenuItem disabled={true} text='No Data Entities.' />}
             onRemove={(item) => {
-              onRemove((rT) =>
-                rT.filter((t) => t.id !== item.id)
-              )
+              onRemove((rT) => {
+                return {
+                  ...rT,
+                  [configuredConnection.id]: rT[configuredConnection.id].filter(
+                    (t) => t.id !== item.id
+                  ),
+                }
+              })
             }}
             onItemSelect={(item) => {
-              onItemSelect((rT) =>
-                !rT.includes(item) ? [...rT, item] : [...rT]
-              )
+              onItemSelect((rT) => {
+                return !rT[configuredConnection.id].includes(item)
+                  ? {
+                      ...rT,
+                      [configuredConnection.id]: [
+                        ...rT[configuredConnection.id],
+                        item,
+                      ],
+                    }
+                  : { ...rT }
+              })
             }}
             style={{ borderRight: 0 }}
-            
           />
         </div>
       </div>
