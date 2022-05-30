@@ -108,7 +108,16 @@ const CreateBlueprint = (props) => {
       id: 1,
       name: 'JIRA',
       title: 'JIRA',
-      value: 100,
+      value: 1,
+      status: 'disconnected',
+      disabled: false,
+      provider: Providers.JIRA,
+    },
+    {
+      id: 10,
+      name: 'JIRA-PROD',
+      title: 'JIRA PROD',
+      value: 10,
       status: 'disconnected',
       disabled: false,
       provider: Providers.JIRA,
@@ -117,7 +126,16 @@ const CreateBlueprint = (props) => {
       id: 2,
       name: 'GitLab',
       title: 'GitLab',
-      value: 200,
+      value: 2,
+      status: 'online',
+      disabled: false,
+      provider: Providers.GITLAB,
+    },
+    {
+      id: 20,
+      name: 'GitLab-Prod',
+      title: 'GitLab PROD',
+      value: 20,
       status: 'online',
       disabled: false,
       provider: Providers.GITLAB,
@@ -126,7 +144,7 @@ const CreateBlueprint = (props) => {
       id: 3,
       name: 'Jenkins',
       title: 'Jenkins',
-      value: 300,
+      value: 3,
       status: 'online',
       disabled: false,
       provider: Providers.JENKINS,
@@ -135,11 +153,12 @@ const CreateBlueprint = (props) => {
       id: 4,
       name: 'GitHub',
       title: 'GitHub',
-      value: 400,
+      value: 4,
       status: 'online',
       disabled: false,
       provider: Providers.GITHUB,
     },
+    
   ])
 
   const DEFAULT_DATA_ENTITIES = [
@@ -171,7 +190,9 @@ const CreateBlueprint = (props) => {
   const [dataScopes, setDataScopes] = useState([])
   const [transformations, setTransformations] = useState([])
 
+  // @todo: replace with $projects
   const [projectId, setProjectId] = useState([])
+  const [projects, setProjects] = useState({})
   const [boardId, setBoardId] = useState([])
   const [connectionId, setConnectionId] = useState('')
   const [connections, setConnections] = useState([])
@@ -373,7 +394,9 @@ const CreateBlueprint = (props) => {
       blueprintConnections.length > 0 ? blueprintConnections[0] : null
     )
     const initializeEntities = (pV, cV) => ({...pV, [cV.id]: []})
+    const initializeProjects = (pV, cV) => ({...pV, [cV.id]: []})
     setDataEntities(dE => ({...blueprintConnections.reduce(initializeEntities, {})}))
+    setProjects(p => ({...blueprintConnections.reduce(initializeProjects, {})}))
   }, [blueprintConnections])
 
   useEffect(() => {
@@ -676,10 +699,10 @@ const CreateBlueprint = (props) => {
                                     id='project-id'
                                     disabled={isRunning}
                                     placeholder='username/repo, username/another-repo'
-                                    values={projectId || []}
+                                    values={projects[configuredConnection.id] || []}
                                     fill={true}
                                     onChange={(values) =>
-                                      setProjectId([...new Set(values)])
+                                      setProjects(p => ({...p, [configuredConnection.id]: [...new Set(values)]}))
                                     }
                                     addOnPaste={true}
                                     addOnBlur={true}
@@ -688,7 +711,7 @@ const CreateBlueprint = (props) => {
                                         disabled={isRunning}
                                         icon='eraser'
                                         minimal
-                                        onClick={() => setProjectId([])}
+                                        onClick={() => setProjects(p => ({...p, [configuredConnection.id]:[]}))}
                                       />
                                     }
                                     onKeyDown={(e) =>
