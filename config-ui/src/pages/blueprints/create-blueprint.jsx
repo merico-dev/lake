@@ -52,6 +52,7 @@ import Sidebar from '@/components/Sidebar'
 import AppCrumbs from '@/components/Breadcrumbs'
 import Content from '@/components/Content'
 
+import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
 import { NullBlueprint } from '@/data/NullBlueprint'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 
@@ -138,7 +139,7 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.GITLAB,
-      plugin: Providers.JIRA,
+      plugin: Providers.GITLAB,
       scope: [],
     },
     {
@@ -149,7 +150,7 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.GITLAB,
-      plugin: Providers.JIRA,
+      plugin: Providers.GITLAB,
       scope: [],
     },
     {
@@ -160,7 +161,7 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.JENKINS,
-      plugin: Providers.JIRA,
+      plugin: Providers.JENKINS,
       scope: [],
     },
     {
@@ -181,16 +182,17 @@ const CreateBlueprint = (props) => {
       id: 1,
       name: 'source-code-management',
       title: 'Source Code Management',
-      value: 'source-code-management',
+      value: DataEntityTypes.CODE,
     },
     {
       id: 2,
       name: 'issue-tracking',
       title: 'Issue Tracking',
-      value: 'issue-tracking',
+      value: DataEntityTypes.TICKET,
     },
-    { id: 3, name: 'code-review', title: 'Code Review', value: 'code-review' },
-    { id: 4, name: 'ci-cd', title: 'CI/CD', value: 'ci-cd' },
+    // @todo: confirm entity type value for "Code Review"
+    { id: 3, name: 'code-review', title: 'Code Review', value: DataEntityTypes.USER},
+    { id: 4, name: 'ci-cd', title: 'CI/CD', value: DataEntityTypes.DEVOPS },
   ]
 
   const [dataEntitiesList, setDataEntitiesList] = useState([
@@ -455,11 +457,11 @@ const CreateBlueprint = (props) => {
         scope: {
           options: {},
           transformation: {},
-          entities: {},
+          entities: dataEntities[c.id]?.map(entity => entity.value) || [],
         },
       }))
     )
-  }, [blueprintConnections])
+  }, [blueprintConnections, dataEntities])
 
   return (
     <>
