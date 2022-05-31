@@ -15,28 +15,20 @@
  * limitations under the License.
  *
  */
-const BlueprintMode = {
-  NORMAL: 'NORMAL',
-  ADVANCED: 'ADVANCED'
-}
-
-const NullBlueprint = {
-  version: '1.0',
-  id: null,
-  createdAt: null,
-  updatedAt: null,
-  name: null,
-  tasks: [
-    []
+const NullBlueprintConnection = {
+  plugin: null,
+  connectionId: null,
+  scope: [
+    {
+      owner: null,
+      repo: null,
+      options: null,
+      boardId: null,
+      transformation: {
+      },
+      entities: [],
+    },
   ],
-  cronConfig: '0 0 * * *',
-  description: '',
-  interval: 'daily',
-  enabled: false,
-  mode: BlueprintMode.NORMAL
 }
 
-export {
-  NullBlueprint,
-  BlueprintMode
-}
+export { NullBlueprintConnection }

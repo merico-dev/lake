@@ -51,6 +51,10 @@ import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
 import AppCrumbs from '@/components/Breadcrumbs'
 import Content from '@/components/Content'
+
+import { NullBlueprint } from '@/data/NullBlueprint'
+import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
+
 import useBlueprintManager from '@/hooks/useBlueprintManager'
 import usePipelineManager from '@/hooks/usePipelineManager'
 import useBlueprintValidation from '@/hooks/useBlueprintValidation'
@@ -112,6 +116,8 @@ const CreateBlueprint = (props) => {
       status: 'disconnected',
       disabled: false,
       provider: Providers.JIRA,
+      plugin: Providers.JIRA,
+      scope: [],
     },
     {
       id: 10,
@@ -121,6 +127,8 @@ const CreateBlueprint = (props) => {
       status: 'disconnected',
       disabled: false,
       provider: Providers.JIRA,
+      plugin: Providers.JIRA,
+      scope: [],
     },
     {
       id: 2,
@@ -130,6 +138,8 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.GITLAB,
+      plugin: Providers.JIRA,
+      scope: [],
     },
     {
       id: 20,
@@ -139,6 +149,8 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.GITLAB,
+      plugin: Providers.JIRA,
+      scope: [],
     },
     {
       id: 3,
@@ -148,6 +160,8 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.JENKINS,
+      plugin: Providers.JIRA,
+      scope: [],
     },
     {
       id: 4,
@@ -157,8 +171,9 @@ const CreateBlueprint = (props) => {
       status: 'online',
       disabled: false,
       provider: Providers.GITHUB,
+      plugin: Providers.JIRA,
+      scope: [],
     },
-    
   ])
 
   const DEFAULT_DATA_ENTITIES = [
@@ -393,10 +408,15 @@ const CreateBlueprint = (props) => {
     setConfiguredConnection(
       blueprintConnections.length > 0 ? blueprintConnections[0] : null
     )
-    const initializeEntities = (pV, cV) => ({...pV, [cV.id]: []})
-    const initializeProjects = (pV, cV) => ({...pV, [cV.id]: []})
-    setDataEntities(dE => ({...blueprintConnections.reduce(initializeEntities, {})}))
-    setProjects(p => ({...blueprintConnections.reduce(initializeProjects, {})}))
+    const initializeEntities = (pV, cV) => ({ ...pV, [cV.id]: [] })
+    const initializeProjects = (pV, cV) => ({ ...pV, [cV.id]: [] })
+    setDataEntities((dE) => ({
+      ...blueprintConnections.reduce(initializeEntities, {}),
+    }))
+    setProjects((p) => ({
+      ...blueprintConnections.reduce(initializeProjects, {}),
+    }))
+    setEnabledProviders([...new Set(blueprintConnections.map(c => c.provider))])
   }, [blueprintConnections])
 
   useEffect(() => {
@@ -421,10 +441,25 @@ const CreateBlueprint = (props) => {
       }
     }
   }, [configuredConnection])
-  
+
   useEffect(() => {
     console.log('>> DATA ENTITIES', dataEntities)
   }, [dataEntities])
+
+  useEffect(() => {
+    setRunTasks(
+      blueprintConnections.map((c) => ({
+        ...NullBlueprintConnection,
+        connectionId: c.id,
+        plugin: c.plugin || c.provider,
+        scope: {
+          options: {},
+          transformation: {},
+          entities: {},
+        },
+      }))
+    )
+  }, [blueprintConnections])
 
   return (
     <>
@@ -699,10 +734,17 @@ const CreateBlueprint = (props) => {
                                     id='project-id'
                                     disabled={isRunning}
                                     placeholder='username/repo, username/another-repo'
-                                    values={projects[configuredConnection.id] || []}
+                                    values={
+                                      projects[configuredConnection.id] || []
+                                    }
                                     fill={true}
                                     onChange={(values) =>
-                                      setProjects(p => ({...p, [configuredConnection.id]: [...new Set(values)]}))
+                                      setProjects((p) => ({
+                                        ...p,
+                                        [configuredConnection.id]: [
+                                          ...new Set(values),
+                                        ],
+                                      }))
                                     }
                                     addOnPaste={true}
                                     addOnBlur={true}
@@ -711,7 +753,12 @@ const CreateBlueprint = (props) => {
                                         disabled={isRunning}
                                         icon='eraser'
                                         minimal
-                                        onClick={() => setProjects(p => ({...p, [configuredConnection.id]:[]}))}
+                                        onClick={() =>
+                                          setProjects((p) => ({
+                                            ...p,
+                                            [configuredConnection.id]: [],
+                                          }))
+                                        }
                                       />
                                     }
                                     onKeyDown={(e) =>
@@ -745,7 +792,9 @@ const CreateBlueprint = (props) => {
                               </p>
                               <DataEntitiesSelector
                                 items={dataEntitiesList}
-                                selectedItems={dataEntities[configuredConnection.id] || []}
+                                selectedItems={
+                                  dataEntities[configuredConnection.id] || []
+                                }
                                 // restrictedItems={getRestrictedDataEntities()}
                                 onItemSelect={setDataEntities}
                                 onClear={setDataEntities}
