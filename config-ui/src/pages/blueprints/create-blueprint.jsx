@@ -21,6 +21,12 @@ import { CSSTransition } from 'react-transition-group'
 import { useHistory, useLocation, Link } from 'react-router-dom'
 import dayjs from '@/utils/time'
 import {
+  API_PROXY_ENDPOINT,
+  ISSUE_TYPES_ENDPOINT,
+  ISSUE_FIELDS_ENDPOINT,
+  BOARDS_ENDPOINT,
+} from '@/config/jiraApiProxy'
+import {
   Button,
   Icon,
   Intent,
@@ -61,10 +67,13 @@ import usePipelineManager from '@/hooks/usePipelineManager'
 import useBlueprintValidation from '@/hooks/useBlueprintValidation'
 import usePipelineValidation from '@/hooks/usePipelineValidation'
 import useConnectionManager from '@/hooks/useConnectionManager'
+import useJIRA from '@/hooks/useJIRA'
+
 import FormValidationErrors from '@/components/messages/FormValidationErrors'
 import InputValidationError from '@/components/validation/InputValidationError'
 import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
+import BoardsSelector from '@/components/blueprints/BoardsSelector'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
@@ -191,13 +200,38 @@ const CreateBlueprint = (props) => {
       value: DataEntityTypes.TICKET,
     },
     // @todo: confirm entity type value for "Code Review"
-    { id: 3, name: 'code-review', title: 'Code Review', value: DataEntityTypes.USER},
+    {
+      id: 3,
+      name: 'code-review',
+      title: 'Code Review',
+      value: DataEntityTypes.USER,
+    },
     { id: 4, name: 'ci-cd', title: 'CI/CD', value: DataEntityTypes.DEVOPS },
+  ]
+
+  const DEFAULT_BOARDS = [
+    {
+      id: 1,
+      name: 'scrum-lake',
+      title: 'DEVLAKE BOARD',
+      value: 'scrum-lake',
+      type: 'scrum',
+      self: 'https://your-domain.atlassian.net/rest/agile/1.0/board/1',
+    },
+    {
+      id: 2,
+      name: 'scrum-stream',
+      title: 'DEVSTREAM BOARD',
+      value: 'scrum-stream',
+      type: 'scrum',
+      self: 'https://your-domain.atlassian.net/rest/agile/1.0/board/2',
+    },
   ]
 
   const [dataEntitiesList, setDataEntitiesList] = useState([
     ...DEFAULT_DATA_ENTITIES,
   ])
+  const [boardsList, setBoardsList] = useState([...DEFAULT_BOARDS])
 
   const [blueprintConnections, setBlueprintConnections] = useState([])
   const [configuredConnection, setConfiguredConnection] = useState()
@@ -210,6 +244,8 @@ const CreateBlueprint = (props) => {
   // @todo: replace with $projects
   const [projectId, setProjectId] = useState([])
   const [projects, setProjects] = useState({})
+  const [boards, setBoards] = useState({})
+  // @todo: replace with $boards
   const [boardId, setBoardId] = useState([])
   const [connectionId, setConnectionId] = useState('')
   const [connections, setConnections] = useState([])
@@ -324,6 +360,20 @@ const CreateBlueprint = (props) => {
     advancedMode,
   })
 
+  const {
+    fetchIssueTypes,
+    fetchFields,
+    issueTypes,
+    fields,
+    isFetching: isFetchingJIRA,
+    error: jiraProxyError,
+  } = useJIRA({
+    apiProxyPath: API_PROXY_ENDPOINT,
+    issuesEndpoint: ISSUE_TYPES_ENDPOINT,
+    fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
+    boardsEndpoint: BOARDS_ENDPOINT,
+  })
+
   const isValidStep = useCallback((stepId) => {}, [])
 
   const nextStep = useCallback(() => {
@@ -361,6 +411,49 @@ const CreateBlueprint = (props) => {
         return items
     }
   }, [dataEntitiesList, configuredConnection])
+
+  const createProviderScope = useCallback(
+    (
+      providerId,
+      connection,
+      entities = [],
+      boards = [],
+      defaultScope = { transformation: {}, options: {}, entities: [] }
+    ) => {
+      let newScope = { ...defaultScope, entities: entities[connection.id]?.map((entity) => entity.value) || []}
+      switch (providerId) {
+        case Providers.JIRA:
+          newScope = {
+            ...newScope,
+            boardId: boards[connection.id]?.map((b) => b.id),
+            options: {
+              // @todo: verify initial value of since date for jira provider
+              since: new Date(),
+            },
+          }
+          break
+        case Providers.GITLAB:
+          // @todo: map repositories
+          return newScope
+          break
+        case Providers.JENKINS:
+          return newScope
+          break
+        // @todo: check with backend team on payload structure, projects should be array of object containing owner+repo
+        case Providers.GITHUB:
+          newScope = {
+            ...newScope,
+            // @todo: map repositories
+            owner: null,
+            repo: null,
+            transformation: { issueTypeBug: '^(bug|failure|error)$' },
+          }
+          break
+      }
+      return newScope
+    },
+    []
+  )
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
@@ -412,13 +505,19 @@ const CreateBlueprint = (props) => {
     )
     const initializeEntities = (pV, cV) => ({ ...pV, [cV.id]: [] })
     const initializeProjects = (pV, cV) => ({ ...pV, [cV.id]: [] })
+    const initializeBoards = (pV, cV) => ({ ...pV, [cV.id]: [] })
     setDataEntities((dE) => ({
       ...blueprintConnections.reduce(initializeEntities, {}),
     }))
     setProjects((p) => ({
       ...blueprintConnections.reduce(initializeProjects, {}),
     }))
-    setEnabledProviders([...new Set(blueprintConnections.map(c => c.provider))])
+    setBoards((p) => ({
+      ...blueprintConnections.reduce(initializeBoards, {}),
+    }))
+    setEnabledProviders([
+      ...new Set(blueprintConnections.map((c) => c.provider)),
+    ])
   }, [blueprintConnections])
 
   useEffect(() => {
@@ -449,16 +548,21 @@ const CreateBlueprint = (props) => {
   }, [dataEntities])
 
   useEffect(() => {
+    console.log('>> BOARDS', boards)
+  }, [boards])
+
+  useEffect(() => {
     setRunTasks(
       blueprintConnections.map((c) => ({
         ...NullBlueprintConnection,
         connectionId: c.id,
         plugin: c.plugin || c.provider,
-        scope: {
-          options: {},
-          transformation: {},
-          entities: dataEntities[c.id]?.map(entity => entity.value) || [],
-        },
+        scope: createProviderScope(c.provider, c, dataEntities, boards)
+        // scope: {
+        //  options: {},
+        //  transformation: {},
+        //  entities: dataEntities[c.id]?.map((entity) => entity.value) || [],
+        // },
       }))
     )
   }, [blueprintConnections, dataEntities])
@@ -783,10 +887,21 @@ const CreateBlueprint = (props) => {
                                   <p>
                                     Select the boards you would like to sync.
                                   </p>
+                                  <BoardsSelector
+                                    items={boardsList}
+                                    selectedItems={
+                                      boards[configuredConnection.id] || []
+                                    }
+                                    onItemSelect={setBoards}
+                                    onClear={setBoards}
+                                    onRemove={setBoards}
+                                    disabled={isSaving}
+                                    configuredConnection={configuredConnection}
+                                  />
                                 </>
                               )}
 
-                              <h4>Data Entities (Optional)</h4>
+                              <h4>Data Entities</h4>
                               <p>
                                 Select the data entities you wish to collect for
                                 the projects.{' '}

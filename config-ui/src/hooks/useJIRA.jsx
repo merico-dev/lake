@@ -19,12 +19,14 @@ import { useEffect, useState, useCallback } from 'react'
 import request from '@/utils/request'
 import { ToastNotification } from '@/components/Toast'
 
-const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint }) => {
+const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint, boardsEndpoint }) => {
   const [isFetching, setIsFetching] = useState(false)
   const [issueTypes, setIssueTypes] = useState([])
   const [fields, setFields] = useState([])
+  const [boards, setBoards] = useState([])
   const [issueTypesResponse, setIssueTypesResponse] = useState([])
   const [fieldsResponse, setFieldsResponse] = useState([])
+  const [boardsResponse, setBoardsResponse] = useState([])
   const [error, setError] = useState()
 
   const fetchIssueTypes = useCallback(() => {
@@ -76,6 +78,31 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint }) => {
       ToastNotification.show({ message: e.message, intent: 'danger', icon: 'error' })
     }
   }, [fieldsEndpoint, apiProxyPath])
+  
+  const fetchBoards = useCallback(() => {
+    try {
+      if (apiProxyPath.includes('null')) {
+        throw new Error('Connection ID is Null')
+      }
+      setError(null)
+      const fetchBoards = async () => {
+        const boards = await
+        request
+          .get(boardsEndpoint)
+          .catch(e => setError(e))
+        console.log('>>> JIRA API PROXY: Boards Response...', boards)
+        setBoardsResponse(boards && Array.isArray(boards.data) ? boards.data : [])
+        setTimeout(() => {
+          setIsFetching(false)
+        }, 1000)
+      }
+      fetchBoards()
+    } catch (e) {
+      setIsFetching(false)
+      setError(e)
+      ToastNotification.show({ message: e.message, intent: 'danger', icon: 'error' })
+    }
+  }, [fetchBoards, apiProxyPath])
 
   const createListData = (data = [], titleProperty = 'name', valueProperty = 'name') => {
     return data.map((d, dIdx) => {
@@ -99,10 +126,18 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint }) => {
   useEffect(() => {
     setFields(fieldsResponse ? createListData(fieldsResponse, 'name', 'key') : [])
   }, [fieldsResponse])
+  
+  useEffect(() => {
+    setBoards(boardsResponse ? createListData(boardsResponse, 'name', 'key') : [])
+  }, [boardsResponse])
 
   useEffect(() => {
     console.log('>>> JIRA API PROXY: FIELD SELECTOR LIST DATA', fields)
   }, [fields])
+
+  useEffect(() => {
+    console.log('>>> JIRA API PROXY: FIELD SELECTOR BOARDS DATA', boards)
+  }, [boards])
 
   useEffect(() => {
     if (error) {
@@ -117,8 +152,10 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint }) => {
     createListData,
     issueTypesResponse,
     fieldsResponse,
+    boardsResponse,
     issueTypes,
     fields,
+    boards,
     error
   }
 }
