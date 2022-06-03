@@ -64,9 +64,10 @@ import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
 import usePipelineManager from '@/hooks/usePipelineManager'
+import useConnectionManager from '@/hooks/useConnectionManager'
 import useBlueprintValidation from '@/hooks/useBlueprintValidation'
 import usePipelineValidation from '@/hooks/usePipelineValidation'
-import useConnectionManager from '@/hooks/useConnectionManager'
+import useConnectionValidation from '@/hooks/useConnectionValidation'
 import useJIRA from '@/hooks/useJIRA'
 
 import FormValidationErrors from '@/components/messages/FormValidationErrors'
@@ -74,6 +75,8 @@ import InputValidationError from '@/components/validation/InputValidationError'
 import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
 import BoardsSelector from '@/components/blueprints/BoardsSelector'
+import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
+
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
@@ -116,6 +119,9 @@ const CreateBlueprint = (props) => {
   )
   const [isValidConfiguration, setIsValidConfiguration] = useState(false)
   const [validationError, setValidationError] = useState()
+  
+  const [connectionDialogIsOpen, setConnectionDialogIsOpen] = useState(false)
+  const [managedConnection, setManagedConnection] = useState(NullBlueprintConnection)
 
   const [connectionsList, setConnectionsList] = useState([
     {
@@ -373,6 +379,14 @@ const CreateBlueprint = (props) => {
     fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
     boardsEndpoint: BOARDS_ENDPOINT,
   })
+  
+  const {
+    validate: validateConnection,
+    errors: connectionErrors,
+    isValid: isValidConnectionForm
+  } = useConnectionValidation(managedConnection)
+
+
 
   const isValidStep = useCallback((stepId) => {}, [])
 
@@ -396,6 +410,15 @@ const CreateBlueprint = (props) => {
     },
     [blueprintConnections]
   )
+  
+  const handleConnectionDialogOpen = () => {
+    console.log('>>> MANAGING CONNECTION', managedConnection)
+  }
+  
+  const handleConnectionDialogClose = () => {
+    setConnectionDialogIsOpen(false)
+    setManagedConnection(NullBlueprintConnection)
+  }
 
   const getRestrictedDataEntities = useCallback(() => {
     let items = []
@@ -454,6 +477,13 @@ const CreateBlueprint = (props) => {
     },
     []
   )
+  
+  const manageConnection = useCallback((connection) => {
+    if(connection?.id) {
+      setManagedConnection(connection)
+      setConnectionDialogIsOpen(true)
+    }
+  }, [])
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
@@ -742,6 +772,7 @@ const CreateBlueprint = (props) => {
                                       icon='cog'
                                       size={12}
                                       color={Colors.BLUE4}
+                                      onClick={() => manageConnection(bC)}
                                     />
                                   }
                                   color={Colors.BLUE3}
@@ -1421,6 +1452,15 @@ const CreateBlueprint = (props) => {
           </main>
         </Content>
       </div>
+      <ConnectionDialog
+        isOpen={connectionDialogIsOpen}
+        onClose={handleConnectionDialogClose}
+        onOpen={handleConnectionDialogOpen}
+        onTest={() => {}}
+        onSave={() => {}}
+        connection={managedConnection}
+        errors={connectionErrors}
+      />
     </>
   )
 }
