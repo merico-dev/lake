@@ -76,7 +76,7 @@ import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
 import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
-
+import ProjectsStackedList from '@/components/blueprints/ProjectsStackedList'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
@@ -119,9 +119,11 @@ const CreateBlueprint = (props) => {
   )
   const [isValidConfiguration, setIsValidConfiguration] = useState(false)
   const [validationError, setValidationError] = useState()
-  
+
   const [connectionDialogIsOpen, setConnectionDialogIsOpen] = useState(false)
-  const [managedConnection, setManagedConnection] = useState(NullBlueprintConnection)
+  const [managedConnection, setManagedConnection] = useState(
+    NullBlueprintConnection
+  )
 
   const [connectionsList, setConnectionsList] = useState([
     {
@@ -269,6 +271,13 @@ const CreateBlueprint = (props) => {
     'calculateIssuesDiff',
   ])
 
+  const [configuredProject, setConfiguredProject] = useState(
+    projects.length > 0 ? projects[0] : null
+  )
+  const [configuredBoard, setConfiguredBoard] = useState(
+    boards.length > 0 ? boards[0] : null
+  )
+
   const {
     // eslint-disable-next-line no-unused-vars
     blueprint,
@@ -379,14 +388,12 @@ const CreateBlueprint = (props) => {
     fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
     boardsEndpoint: BOARDS_ENDPOINT,
   })
-  
+
   const {
     validate: validateConnection,
     errors: connectionErrors,
-    isValid: isValidConnectionForm
+    isValid: isValidConnectionForm,
   } = useConnectionValidation(managedConnection)
-
-
 
   const isValidStep = useCallback((stepId) => {}, [])
 
@@ -410,11 +417,11 @@ const CreateBlueprint = (props) => {
     },
     [blueprintConnections]
   )
-  
+
   const handleConnectionDialogOpen = () => {
     console.log('>>> MANAGING CONNECTION', managedConnection)
   }
-  
+
   const handleConnectionDialogClose = () => {
     setConnectionDialogIsOpen(false)
     setManagedConnection(NullBlueprintConnection)
@@ -443,7 +450,10 @@ const CreateBlueprint = (props) => {
       boards = [],
       defaultScope = { transformation: {}, options: {}, entities: [] }
     ) => {
-      let newScope = { ...defaultScope, entities: entities[connection.id]?.map((entity) => entity.value) || []}
+      let newScope = {
+        ...defaultScope,
+        entities: entities[connection.id]?.map((entity) => entity.value) || [],
+      }
       switch (providerId) {
         case Providers.JIRA:
           newScope = {
@@ -477,13 +487,17 @@ const CreateBlueprint = (props) => {
     },
     []
   )
-  
+
   const manageConnection = useCallback((connection) => {
-    if(connection?.id) {
+    if (connection?.id) {
       setManagedConnection(connection)
       setConnectionDialogIsOpen(true)
     }
   }, [])
+
+  const addProjectTransformation = (project) => {
+    setConfiguredProject(project)
+  }
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
@@ -515,7 +529,7 @@ const CreateBlueprint = (props) => {
     validateAdvanced,
     setBlueprintTasks,
   ])
-  
+
   const addConnection = () => {
     setManagedConnection(NullBlueprintConnection)
     setConnectionDialogIsOpen(true)
@@ -565,6 +579,7 @@ const CreateBlueprint = (props) => {
           setDataEntitiesList(
             DEFAULT_DATA_ENTITIES.filter((d) => d.name !== 'ci-cd')
           )
+          // setConfiguredProject(projects.length > 0 ? projects[0] : null)
           break
         case Providers.JENKINS:
           setDataEntitiesList(
@@ -592,7 +607,7 @@ const CreateBlueprint = (props) => {
         ...NullBlueprintConnection,
         connectionId: c.id,
         plugin: c.plugin || c.provider,
-        scope: createProviderScope(c.provider, c, dataEntities, boards)
+        scope: createProviderScope(c.provider, c, dataEntities, boards),
         // scope: {
         //  options: {},
         //  transformation: {},
@@ -601,6 +616,10 @@ const CreateBlueprint = (props) => {
       }))
     )
   }, [blueprintConnections, dataEntities])
+
+  useEffect(() => {
+    setConfiguredProject(projects.length > 0 ? projects[0] : null)
+  }, [projects])
 
   return (
     <>
@@ -1016,72 +1035,6 @@ const CreateBlueprint = (props) => {
                           className='workflow-card workflow-panel-card'
                           elevation={Elevation.TWO}
                         >
-                          {projectId.length > 0 && (
-                            <Card
-                              className='selected-connections-list'
-                              elevation={Elevation.ZERO}
-                              style={{ padding: 0, marginTop: '10px' }}
-                            >
-                              {projectId.map((project, pIdx) => (
-                                <div
-                                  className='project-entry'
-                                  key={`project-row-key-${pIdx}`}
-                                  style={{
-                                    display: 'flex',
-                                    width: '100%',
-                                    height: '32px',
-                                    lineHeight: '100%',
-                                    justifyContent: 'space-between',
-                                    // margin: '8px 0',
-                                    padding: '8px 12px',
-                                    borderBottom: '1px solid #f0f0f0',
-                                  }}
-                                >
-                                  <div>
-                                    <div
-                                      className='project-name'
-                                      style={{ fontWeight: 600 }}
-                                    >
-                                      {project}
-                                    </div>
-                                  </div>
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      alignContent: 'center',
-                                    }}
-                                  >
-                                    <div
-                                      className='connection-actions'
-                                      style={{ paddingLeft: '20px' }}
-                                    >
-                                      <Button
-                                        intent={Intent.PRIMARY}
-                                        className='project-action-transformation'
-                                        icon={
-                                          <Icon
-                                            // icon='plus'
-                                            size={12}
-                                            color={Colors.BLUE4}
-                                          />
-                                        }
-                                        text='Add Transformation'
-                                        color={Colors.BLUE3}
-                                        small
-                                        minimal
-                                        style={{
-                                          minWidth: '18px',
-                                          minHeight: '18px',
-                                          fontSize: '11px',
-                                        }}
-                                      />
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                            </Card>
-                          )}
-
                           {configuredConnection && (
                             <>
                               <h3>
@@ -1101,25 +1054,80 @@ const CreateBlueprint = (props) => {
                                 {configuredConnection.title}
                               </h3>
                               <Divider className='section-divider' />
+                                
+                              <ProjectsStackedList 
+                                projects={projects}
+                                configuredConnection={configuredConnection}
+                                configuredProject={configuredProject}
+                                addProjectTransformation={addProjectTransformation}
+                              />
 
                               <h4>Project</h4>
-                              <p>merico-dev/lake</p>
-
-                              <h4>Data Transformation Rules</h4>
-
-                              <h5>Issue Tracking</h5>
                               <p>
-                                Map your issue labels with each category to view
-                                corresponding metrics in the dashboard.
+                                {configuredProject || '< select a project >'}
                               </p>
 
-                              <h5>Code Review</h5>
-                              <p>
-                                Map your pull requests labels with each category
-                                to view corresponding metrics in the dashboard.
-                              </p>
+                              {configuredProject && (
+                                <>
+                                  <h4>Data Transformation Rules</h4>
 
-                              <h5>Additional Settings</h5>
+                                  {dataEntities[configuredConnection.id]?.find(
+                                    (e) => e.value === DataEntityTypes.TICKET
+                                  ) && (
+                                    <>
+                                      <h5>Issue Tracking</h5>
+                                      <p>
+                                        Map your issue labels with each category
+                                        to view corresponding metrics in the
+                                        dashboard.
+                                      </p>
+                                    </>
+                                  )}
+
+                                  {dataEntities[configuredConnection.id]?.find(
+                                    (e) => e.value === DataEntityTypes.CODE
+                                  ) && (
+                                    <>
+                                      <h5>Code Review</h5>
+                                      <p>
+                                        Map your pull requests labels with each
+                                        category to view corresponding metrics
+                                        in the dashboard.
+                                      </p>
+                                    </>
+                                  )}
+
+                                  {dataEntities[configuredConnection.id]?.find(
+                                    (e) => e.value === DataEntityTypes.USER
+                                  ) && (
+                                    <>
+                                      <h5>Users</h5>
+                                      <p>Map Team and People</p>
+                                    </>
+                                  )}
+
+                                  {dataEntities[configuredConnection.id]?.find(
+                                    (e) => e.value === DataEntityTypes.DEVOPS
+                                  ) && (
+                                    <>
+                                      <h5>DevOps</h5>
+                                      <p>&lt; need description/context &rt;</p>
+                                    </>
+                                  )}
+
+                                  {dataEntities[configuredConnection.id]?.find(
+                                    (e) =>
+                                      e.value === DataEntityTypes.CROSSDOMAIN
+                                  ) && (
+                                    <>
+                                      <h5>Cross Domain</h5>
+                                      <p>&lt; need description/context &rt;</p>
+                                    </>
+                                  )}
+
+                                  <h5>Additional Settings</h5>
+                                </>
+                              )}
                             </>
                           )}
                         </Card>
