@@ -515,6 +515,11 @@ const CreateBlueprint = (props) => {
     validateAdvanced,
     setBlueprintTasks,
   ])
+  
+  const addConnection = () => {
+    setManagedConnection(NullBlueprintConnection)
+    setConnectionDialogIsOpen(true)
+  }
 
   useEffect(() => {
     validateBlueprint()
@@ -704,6 +709,7 @@ const CreateBlueprint = (props) => {
                           icon='plus'
                           intent={Intent.PRIMARY}
                           small
+                          onClick={addConnection}
                         />
                       </div>
                     </div>
@@ -1454,6 +1460,9 @@ const CreateBlueprint = (props) => {
       </div>
       <ConnectionDialog
         isOpen={connectionDialogIsOpen}
+        // isTesting=
+        // isSaving=
+        // isValid=
         onClose={handleConnectionDialogClose}
         onOpen={handleConnectionDialogOpen}
         onTest={() => {}}

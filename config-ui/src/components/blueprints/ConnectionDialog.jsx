@@ -43,6 +43,11 @@ import InputValidationError from '@/components/validation/InputValidationError'
 import ContentLoader from '@/components/loaders/ContentLoader'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 
+const Modes = {
+  CREATE: 'create',
+  EDIT: 'edit'
+}
+
 const ConnectionDialog = (props) => {
   const {
     isOpen = false,
@@ -52,7 +57,7 @@ const ConnectionDialog = (props) => {
     isTesting = false,
     isSaving = false,
     isValid = false,
-    editMode = false,
+    // editMode = false,
     dataSourcesList = [
       {id: 1, name: Providers.JIRA, title: ProviderLabels[Providers.JIRA.toUpperCase()], value: Providers.JIRA},
       {id: 2, name: Providers.GITHUB, title: ProviderLabels[Providers.GITHUB.toUpperCase()], value: Providers.GITHUB},
@@ -68,9 +73,11 @@ const ConnectionDialog = (props) => {
   } = props
   
   const connectionNameRef = useRef()
-  const [datasource, setDatasource] = useState()
+  const [datasource, setDatasource] = useState(connection?.id ? dataSourcesList.find(d => d.value === connection.provider) : null)
   
   const [stateErrored, setStateErrored] = useState(false)
+  
+  const [mode, setMode] = useState(Modes.CREATE)
   
   const getFieldError = (fieldId) => {
     return errors.find(e => e.includes(fieldId))
@@ -83,13 +90,22 @@ const ConnectionDialog = (props) => {
   useEffect(() => {
     
   }, [datasource])
+  
+  useEffect(() => {
+    if (connection?.id) {
+      setMode(Modes.EDIT)
+      setDatasource(dataSourcesList.find(d => d.value === connection.provider))
+    } else {
+      setMode(Modes.CREATE)
+    }
+  }, [connection])
 
   return (
     <>
       <Dialog
         className='dialog-manage-connection'
-        icon={'add'}
-        title={'Create a New Data Connection'}
+        icon={mode === Modes.EDIT ? 'edit' : 'add'}
+        title={mode === Modes.EDIT ? `Modify ${connection?.name} [#${connection?.id}]`: 'Create a New Data Connection'}
         isOpen={isOpen}
         onClose={onClose}
         onClosed={() => {}}
@@ -123,6 +139,7 @@ const ConnectionDialog = (props) => {
                           )}
                       <span className='requiredStar'>*</span>
                     </Label>
+                    <p>Give your connection a unique name to help you identify it in the future.</p>
                     <InputGroup
                       id='connection-name'
                       inputRef={connectionNameRef}
@@ -163,7 +180,7 @@ const ConnectionDialog = (props) => {
                   inline={true}
                   fill={true}
                   items={dataSourcesList}
-                  activeItem={connection?.id ? dataSourcesList.find(d => d.value === connection.provider) : null}
+                  activeItem={datasource}
                   itemPredicate={(query, item) => item.title.toLowerCase().indexOf(query.toLowerCase()) >= 0}
                   itemRenderer={(item, { handleClick, modifiers }) => (
                     <MenuItem
@@ -178,13 +195,17 @@ const ConnectionDialog = (props) => {
                   onItemSelect={(item) => {
                     setDatasource(item)
                   }}
+                  readOnly={connection?.id && mode === Modes.EDIT}
                 >
                   <Button
+                    disabled={connection?.id && mode === Modes.EDIT}
+                    className='btn-select-datasource'
                     intent={Intent.NONE}
                     style={{ maxWidth: '260px' }}
                     text={datasource ? `${datasource.title}` : '< Select Datasource >'}
                     rightIcon='double-caret-vertical'
                     fill
+                    style={{ display: 'flex', justifyContent: 'space-between'}}
                   />
                 </Select>  
                 </div>
