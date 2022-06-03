@@ -1,0 +1,23 @@
+version: "3"
+services:
+
+  grafana:
+    image: mericodev/grafana_debug
+    build:
+      context: grafana/
+
+  devlake:
+    image: mericodev/lake_debug
+    build:
+      context: "."
+      dockerfile: Dockerfile.keon
+    entrypoint:
+      "/go/bin/dlv --listen=:9999 --headless=true --api-version=2 --accept-multiclient exec --continue /app/bin/lake"
+    ports:
+      - "30000:9999"
+
+  config-ui:
+    image: mericodev/config-ui_debug
+    build:
+      context: "config-ui"
+    #      dockerfile: Dockerfile.keon

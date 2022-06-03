@@ -1,0 +1,16 @@
+SHA = $(shell git show -s --format=%h)
+TAG = $(shell git tag --points-at HEAD)
+VERSION = $(TAG)@$(SHA)
+
+build-plugin:
+	@sh scripts/compile-plugins.keon.sh
+
+build-worker:
+	go build -gcflags="all=-N -l" -ldflags "-X 'github.com/apache/incubator-devlake/version.Version=$(VERSION)'" -o bin/lake-worker ./worker/
+
+build-server:
+	go build -gcflags="all=-N -l" -ldflags "-X 'github.com/apache/incubator-devlake/version.Version=$(VERSION)'" -o bin/lake
+
+build: build-plugin build-server
+
+all: build build-worker
