@@ -51,6 +51,7 @@ import {
   Colors,
   Tag,
 } from '@blueprintjs/core'
+import { integrationsData } from '@/data/integrations'
 import { Providers, ProviderTypes, ProviderIcons } from '@/data/Providers'
 import { MultiSelect, Select } from '@blueprintjs/select'
 import Nav from '@/components/Nav'
@@ -109,6 +110,7 @@ const CreateBlueprint = (props) => {
   ]
   const [activeStep, setActiveStep] = useState(steps.find((s) => s.id === 1))
   const [advancedMode, setAdvancedMode] = useState(false)
+  const [activeProvider, setActiveProvider] = useState(integrationsData[0])
 
   const [enabledProviders, setEnabledProviders] = useState([])
   const [runTasks, setRunTasks] = useState([])
@@ -390,9 +392,37 @@ const CreateBlueprint = (props) => {
   })
 
   const {
+    testConnection,
+    saveConnection,
+    errors,
+    isSaving: isSavingConnection,
+    isTesting: isTestingConnection,
+    showError,
+    testStatus,
+    name: connectionName,
+    endpointUrl,
+    proxy,
+    token,
+    username,
+    password,
+    setName,
+    setEndpointUrl,
+    setProxy,
+    setUsername,
+    setPassword,
+    setToken,
+    fetchAllConnections,
+    connectionLimitReached,
+    // Providers
+  } = useConnectionManager({
+    activeProvider,
+  })
+
+
+  const {
     validate: validateConnection,
     errors: connectionErrors,
-    isValid: isValidConnectionForm,
+    isValid: isValidConnection,
   } = useConnectionValidation(managedConnection)
 
   const isValidStep = useCallback((stepId) => {}, [])
@@ -1467,16 +1497,29 @@ const CreateBlueprint = (props) => {
         </Content>
       </div>
       <ConnectionDialog
-        isOpen={connectionDialogIsOpen}
-        // isTesting=
-        // isSaving=
-        // isValid=
-        onClose={handleConnectionDialogClose}
-        onOpen={handleConnectionDialogOpen}
-        onTest={() => {}}
-        onSave={() => {}}
         connection={managedConnection}
         errors={connectionErrors}
+        endpointUrl={endpointUrl}
+        name={connectionName}
+        proxy={proxy}
+        token={token}
+        username={username}
+        password={password}
+        isOpen={connectionDialogIsOpen}
+        isTesting={isTestingConnection}
+        isSaving={isSavingConnection}
+        isValid={isValidConnection}
+        onClose={handleConnectionDialogClose}
+        onOpen={handleConnectionDialogOpen}
+        onTest={testConnection}
+        onSave={saveConnection}
+        onValidate={validateConnection}
+        onNameChange={setName}
+        onEndpointChange={setEndpointUrl}
+        onProxyChange={setProxy}
+        onTokenChange={setToken}
+        onUsernameChange={setUsername}
+        onPasswordChange={setPassword}
       />
     </>
   )

@@ -181,6 +181,23 @@
   }
 }
 
+.bp3-form-group {
+  &.formGroup-full {
+    width: 100%;
+    > .bp3-form-content {
+      width: 100%;
+    }
+  }
+}
+
+.bp3-dialog {
+  &.dialog-manage-connection {
+    .bp3-form-group {
+      margin: 0 0 8px
+    }
+  }
+}
+
 .connections-multiselect-selector {
   .bp3-input.bp3-multi-select {
     border-right: 0;
