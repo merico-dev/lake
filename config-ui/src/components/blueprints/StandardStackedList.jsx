@@ -26,26 +26,30 @@ import {
   Colors,
 } from '@blueprintjs/core'
 
-const ProjectsStackedList = (props) => {
+const StandardStackedList = (props) => {
   const {
-    projects = [],
-    configuredConnection,
-    configuredProject,
-    addProjectTransformation = () => {},
+    items = [],
+    className = 'selected-items-list',
+    connection,
+    activeItem,
+    addButtonText = 'Add Transformation',
+    onAdd = () => {},
+    onChange = () => {},
+    style = { padding: 0, marginTop: '10px' }
   } = props
 
   return (
     <>
-      {projects[configuredConnection.id]?.length > 0 && (
+      {items[connection.id]?.length > 0 && (
         <Card
-          className='selected-connections-list'
+          className={className}
           elevation={Elevation.ZERO}
-          style={{ padding: 0, marginTop: '10px' }}
+          style={style}
         >
-          {projects[configuredConnection.id]?.map((project, pIdx) => (
+          {items[connection.id]?.map((item, pIdx) => (
             <div
-              className='project-entry'
-              key={`project-row-key-${pIdx}`}
+              className='item-entry'
+              key={`item-row-key-${pIdx}`}
               style={{
                 display: 'flex',
                 width: '100%',
@@ -56,20 +60,20 @@ const ProjectsStackedList = (props) => {
                 padding: '8px 12px',
                 borderBottom: '1px solid #f0f0f0',
                 backgroundColor:
-                  configuredProject === project
+                  activeItem === item
                     ? 'rgba(116, 151, 247, 0.2)'
                     : '#fff',
               }}
             >
               <div>
-                <div className='project-name' style={{ fontWeight: 600 }}>
+                <div className='item-name' style={{ fontWeight: 600 }}>
                   <input
                     type='radio'
-                    name='configured-project'
-                    checked={project === configuredProject}
-                    onChange={() => addProjectTransformation(project)}
+                    name='configured-item'
+                    checked={item === activeItem}
+                    onChange={() => onChange(item)}
                   />{' '}
-                  {project}
+                  <label onClick={() => onAdd(item)} style={{ cursor: 'pointer' }}>{item}</label>
                 </div>
               </div>
               <div
@@ -79,12 +83,12 @@ const ProjectsStackedList = (props) => {
                 }}
               >
                 <div
-                  className='connection-actions'
+                  className='item-actions'
                   style={{ paddingLeft: '20px' }}
                 >
                   <Button
                     intent={Intent.PRIMARY}
-                    className='project-action-transformation'
+                    className='item-action-transformation'
                     icon={
                       <Icon
                         // icon='plus'
@@ -92,16 +96,16 @@ const ProjectsStackedList = (props) => {
                         color={Colors.BLUE4}
                       />
                     }
-                    text='Add Transformation'
+                    text={addButtonText}
                     color={Colors.BLUE3}
                     small
-                    minimal={configuredProject !== project ? true : false}
+                    minimal={activeItem !== item ? true : false}
                     style={{
                       minWidth: '18px',
                       minHeight: '18px',
                       fontSize: '11px',
                     }}
-                    onClick={() => addProjectTransformation(project)}
+                    onClick={() => onAdd(item)}
                   />
                 </div>
               </div>
@@ -113,4 +117,4 @@ const ProjectsStackedList = (props) => {
   )
 }
 
-export default ProjectsStackedList
+export default StandardStackedList

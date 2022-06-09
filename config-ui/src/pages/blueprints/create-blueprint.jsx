@@ -52,7 +52,13 @@ import {
   Tag,
 } from '@blueprintjs/core'
 import { integrationsData } from '@/data/integrations'
-import { Providers, ProviderTypes, ProviderIcons, ConnectionStatus, ConnectionStatusLabels } from '@/data/Providers'
+import {
+  Providers,
+  ProviderTypes,
+  ProviderIcons,
+  ConnectionStatus,
+  ConnectionStatusLabels,
+} from '@/data/Providers'
 import { MultiSelect, Select } from '@blueprintjs/select'
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
@@ -77,7 +83,8 @@ import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
 import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
-import ProjectsStackedList from '@/components/blueprints/ProjectsStackedList'
+import StandardStackedList from '@/components/blueprints/StandardStackedList'
+import CodeInspector from '@/components/pipelines/CodeInspector'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
@@ -134,9 +141,11 @@ const CreateBlueprint = (props) => {
       name: c.name,
       title: c.name,
       value: c.id,
-      status: ConnectionStatusLabels[c.status] || ConnectionStatusLabels[ConnectionStatus.OFFLINE],
+      status:
+        ConnectionStatusLabels[c.status] ||
+        ConnectionStatusLabels[ConnectionStatus.OFFLINE],
       provider: c.provider,
-      plugin: c.provider
+      plugin: c.provider,
     }))
   )
 
@@ -191,6 +200,8 @@ const CreateBlueprint = (props) => {
   const [configuredConnection, setConfiguredConnection] = useState()
   const [dataEntities, setDataEntities] = useState({})
   const [activeConnectionTab, setActiveConnectionTab] = useState()
+  
+  const [showBlueprintInspector, setShowBlueprintInspector] = useState(false)
 
   const [dataScopes, setDataScopes] = useState([])
   const [transformations, setTransformations] = useState([])
@@ -476,6 +487,10 @@ const CreateBlueprint = (props) => {
     setConfiguredProject(project)
   }
 
+  const addBoardTransformation = (board) => {
+    setConfiguredBoard(board)
+  }
+
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
     if (activeStep?.id === 1) {
@@ -484,19 +499,23 @@ const CreateBlueprint = (props) => {
       fetchAllConnections(enableNotifications, getAllSources)
     }
   }, [activeStep])
-  
+
   useEffect(() => {
     console.log('>>> ALL DATA PROVIDER CONNECTIONS...', allProviderConnections)
-    setConnectionsList(allProviderConnections?.map((c, cIdx) => ({
+    setConnectionsList(
+      allProviderConnections?.map((c, cIdx) => ({
         ...c,
         id: cIdx,
         name: c.name,
         title: c.name,
         value: c.id,
-        status: ConnectionStatusLabels[c.status] || ConnectionStatusLabels[ConnectionStatus.OFFLINE],
+        status:
+          ConnectionStatusLabels[c.status] ||
+          ConnectionStatusLabels[ConnectionStatus.OFFLINE],
         provider: c.provider,
-        plugin: c.provider
-      })))
+        plugin: c.provider,
+      }))
+    )
   }, [allProviderConnections])
 
   useEffect(() => {
@@ -525,7 +544,7 @@ const CreateBlueprint = (props) => {
     validateAdvanced,
     setBlueprintTasks,
   ])
-  
+
   useEffect(() => {
     console.log(
       '>> BLUEPRINT SETTINGS FOR PIPELINE MANAGER ....',
@@ -629,14 +648,14 @@ const CreateBlueprint = (props) => {
   }, [boards])
 
   useEffect(() => {
-    setBlueprintSettings(currentSettings => ({
+    setBlueprintSettings((currentSettings) => ({
       ...currentSettings,
       connections: blueprintConnections.map((c) => ({
         ...NullBlueprintConnection,
         connectionId: c.value,
         plugin: c.plugin || c.provider,
         scope: createProviderScope(c.provider, c, dataEntities, boards),
-      }))
+      })),
     }))
   }, [blueprintConnections, dataEntities])
 
@@ -1078,24 +1097,45 @@ const CreateBlueprint = (props) => {
                               </h3>
                               <Divider className='section-divider' />
 
-                              <ProjectsStackedList
-                                projects={projects}
-                                configuredConnection={configuredConnection}
-                                configuredProject={configuredProject}
-                                addProjectTransformation={
-                                  addProjectTransformation
-                                }
-                              />
+                              {[Providers.GITLAB, Providers.GITHUB].includes(
+                                configuredConnection.provider
+                              ) && (
+                                <StandardStackedList
+                                  items={projects}
+                                  className='selected-items-list selected-projects-list'
+                                  connection={configuredConnection}
+                                  activeItem={configuredProject}
+                                  onAdd={addProjectTransformation}
+                                  onChange={addProjectTransformation}
+                                />
+                              )}
 
-                              <h4>Project</h4>
-                              <p>
-                                {configuredProject || '< select a project >'}
-                              </p>
+                              {[Providers.JIRA].includes(
+                                configuredConnection.provider
+                              ) && (
+                                <StandardStackedList
+                                  items={boards}
+                                  className='selected-items-list selected-boards-list'
+                                  connection={configuredConnection}
+                                  activeItem={configuredBoard}
+                                  onAdd={addBoardTransformation}
+                                  onChange={addBoardTransformation}
+                                />
+                              )}
 
                               {configuredProject && (
                                 <>
+                                  <h4>Project</h4>
+                                  <p>
+                                    {configuredProject ||
+                                      '< select a project >'}
+                                  </p>
                                   <h4>Data Transformation Rules</h4>
-
+                                  {!dataEntities[configuredConnection.id] ||
+                                    (dataEntities[configuredConnection.id]
+                                      ?.length === 0 && (
+                                      <p>(No Data Entities Selected)</p>
+                                    ))}
                                   {dataEntities[configuredConnection.id]?.find(
                                     (e) => e.value === DataEntityTypes.TICKET
                                   ) && (
@@ -1103,11 +1143,15 @@ const CreateBlueprint = (props) => {
                                       {renderProviderSettings(
                                         configuredConnection,
                                         configuredConnection.provider,
-                                        integrationsData.find(p => p.id === configuredConnection.provider),
+                                        integrationsData.find(
+                                          (p) =>
+                                            p.id ===
+                                            configuredConnection.provider
+                                        ),
                                         DataEntityTypes.TICKET
                                       )}
                                     </>
-                                  )}                
+                                  )}
                                 </>
                               )}
                             </>
@@ -1436,13 +1480,22 @@ const CreateBlueprint = (props) => {
                   />
                 </div>
               ) : (
-                <>
+                <div style={{ display: 'flex', marginLeft: 'auto' }}>
+                  <Button
+                    intent={Intent.PRIMARY}
+                    icon='code'
+                    text='Inspect'
+                    onClick={() => setShowBlueprintInspector(true)}
+                    style={{ marginRight: '8px' }}
+                    minimal
+                    small
+                  />
                   <Button
                     intent={Intent.PRIMARY}
                     text='Next Step'
                     onClick={nextStep}
                   />
-                </>
+                </div>
               )}
             </div>
           </main>
@@ -1472,6 +1525,23 @@ const CreateBlueprint = (props) => {
         onTokenChange={setToken}
         onUsernameChange={setUsername}
         onPasswordChange={setPassword}
+      />
+      
+      <CodeInspector
+        title={name}
+        titleIcon='add'
+        subtitle='JSON CONFIGURATION'
+        isOpen={showBlueprintInspector}
+        activePipeline={{
+          ID: 0,
+          name,
+          tasks: blueprintTasks,
+          settings: blueprintSettings,
+          cronConfig,
+          enable
+        }}
+        onClose={setShowBlueprintInspector}
+        hasBackdrop={false}
       />
     </>
   )

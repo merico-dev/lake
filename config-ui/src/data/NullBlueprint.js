@@ -20,23 +20,34 @@ const BlueprintMode = {
   ADVANCED: 'ADVANCED'
 }
 
+const BlueprintStatus = {
+  ENABLED: true,
+  DISABLED: false
+}
+
 const NullBlueprint = {
-  version: '1.0',
   id: null,
   createdAt: null,
   updatedAt: null,
   name: null,
+  // Advanced mode uses tasks
   tasks: [
     []
   ],
+  // Normal mode uses settings
+  settings: {
+    version: '1.0',
+    connections: []
+  },
   cronConfig: '0 0 * * *',
   description: '',
   interval: 'daily',
-  enabled: false,
+  enabled: BlueprintStatus.DISABLED,
   mode: BlueprintMode.NORMAL
 }
 
 export {
   NullBlueprint,
-  BlueprintMode
+  BlueprintMode,
+  BlueprintStatus
 }

@@ -29,14 +29,14 @@ import {
 } from '@blueprintjs/core'
 
 const CodeInspector = (props) => {
-  const { activePipeline, isOpen, onClose, hasBackdrop = true } = props
+  const { activePipeline, isOpen, onClose, titleIcon = 'code', title = `Inspect RUN #${activePipeline.ID}`, subtitle = 'JSON RESPONSE', hasBackdrop = true } = props
 
   return (
     <Drawer
       className='drawer-json-inspector'
-      icon='code'
+      icon={titleIcon}
       onClose={() => onClose(false)}
-      title={`Inspect RUN #${activePipeline.ID}`}
+      title={title}
       position={Position.RIGHT}
       size={DrawerSize.SMALL}
       autoFocus
@@ -50,7 +50,7 @@ const CodeInspector = (props) => {
       <div className={Classes.DRAWER_BODY}>
         <div className={Classes.DIALOG_BODY}>
           <h3 className='no-user-select' style={{ margin: 0, padding: '8px 0' }}>
-            <span style={{ float: 'right', fontSize: '9px', color: '#aaaaaa' }}>application/json</span> JSON RESPONSE
+            <span style={{ float: 'right', fontSize: '9px', color: '#aaaaaa' }}>application/json</span> {subtitle}
           </h3>
           <p className='no-user-select'>
             If you are submitting a
