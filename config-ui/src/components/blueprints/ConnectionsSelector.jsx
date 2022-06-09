@@ -57,8 +57,8 @@ const ConnectionsSelector = (props) => {
     onClear = () => {},
     itemRenderer = (item, { handleClick, modifiers }) => (
       <MenuItem
-        active={modifiers.active || selectedItems.includes(item)}
-        disabled={selectedItems.includes(item) || modifiers.active}
+        active={modifiers.active || selectedItems.find(i => i.id === item.id)}
+        disabled={selectedItems.find(i => i.id === item.id) || modifiers.active}
         key={item.id}
         label={
           <span style={{ marginLeft: '20px' }}>
@@ -80,7 +80,7 @@ const ConnectionsSelector = (props) => {
         }
         onClick={handleClick}
         text={
-          (selectedItems.includes(item) || modifiers.active) ? (
+          selectedItems.find(i => i.id === item.id) ? (
             <>
               <input type='checkbox' checked readOnly /> {item.title}
             </>
