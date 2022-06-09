@@ -188,6 +188,18 @@ const ProviderIcons = {
   [Providers.DBT]: (w, h) => <Icon icon='box' size={w || 24} />,
 }
 
+const ConnectionStatus = {
+  OFFLINE: 0,
+  ONLINE: 1,
+  DISCONNECTED: 2
+}
+
+const ConnectionStatusLabels = {
+  [ConnectionStatus.OFFLINE]: 'Offline',
+  [ConnectionStatus.ONLINE]: 'Online',
+  [ConnectionStatus.DISCONNECTED]: 'Disconnected',
+}
+
 export {
   Providers,
   ProviderTypes,
@@ -195,5 +207,7 @@ export {
   ProviderLabels,
   ProviderConnectionLimits,
   ProviderFormLabels,
-  ProviderFormPlaceholders
+  ProviderFormPlaceholders,
+  ConnectionStatus,
+  ConnectionStatusLabels
 }

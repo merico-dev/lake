@@ -145,7 +145,7 @@ const ConnectionDialog = (props) => {
         icon={mode === Modes.EDIT ? 'edit' : 'add'}
         title={
           mode === Modes.EDIT
-            ? `Modify ${connection?.name} [#${connection?.id}]`
+            ? `Modify ${connection?.name} [#${connection?.value}]`
             : 'Create a New Data Connection'
         }
         isOpen={isOpen}

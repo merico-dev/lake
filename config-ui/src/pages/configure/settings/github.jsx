@@ -23,7 +23,7 @@ import '@/styles/integration.scss'
 import '@/styles/connections.scss'
 
 export default function GithubSettings (props) {
-  const { connection, isSaving, isSavingConnection, onSettingsChange } = props
+  const { connection, isSaving, isSavingConnection, onSettingsChange = () => {} } = props
   const { providerId, connectionId } = useParams()
   const [prType, setPrType] = useState('')
   const [prComponent, setPrComponent] = useState('')
@@ -86,19 +86,20 @@ export default function GithubSettings (props) {
 
   return (
     <>
-      <h3 className='headline'>Issue Enrichment Options <Tag className='bp3-form-helper-text'>RegExp</Tag></h3>
-      <p className=''>Enrich GitHub Issues using Label data.</p>
+      <h5>Issue Tracking{' '} <Tag className='bp3-form-helper-text'>RegExp</Tag></h5>
+      <p className=''>Map your issue labels with each category
+        to view corresponding metrics in the
+        dashboard.</p>
       <div style={{ maxWidth: '60%' }}>
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Severity'
             labelFor='github-issue-severity'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              Severity
-            </Label>
             <InputGroup
               id='github-issue-severity'
               placeholder='severity/(.*)$'
@@ -114,13 +115,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Component'
             labelFor='github-issue-component'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              Component
-            </Label>
             <InputGroup
               id='github-issue-component'
               placeholder='component/(.*)$'
@@ -136,13 +136,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Priority'
             labelFor='github-issue-priority'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              Priority
-            </Label>
             <InputGroup
               id='github-issue-priority'
               placeholder='(highest|high|medium|low)$'
@@ -158,13 +157,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Type/Requirement'
             labelFor='github-issue-requirement'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              <span className='bp3-tag tag-requirement'>Type - Requirement</span>
-            </Label>
             <InputGroup
               id='github-issue-requirement'
               placeholder='(feat|feature|proposal|requirement)$'
@@ -180,13 +178,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Type/Bug'
             labelFor='github-issue-bug'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              <span className='bp3-tag tag-bug'>Type - Bug</span>
-            </Label>
             <InputGroup
               id='github-issue-bug'
               placeholder='(bug|broken)$'
@@ -202,13 +199,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Type/Incident'
             labelFor='github-issue-bug'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              <span className='bp3-tag tag-incident'>Type - Incident</span>
-            </Label>
             <InputGroup
               id='github-issue-incident'
               placeholder='(incident|p0|p1|p2)$'
@@ -223,20 +219,19 @@ export default function GithubSettings (props) {
         </div>
       </div>
 
-      <h3 className='headline'>Pull Request Enrichment Options <Tag className='bp3-form-helper-text'>RegExp</Tag></h3>
-      <p className=''>Enrich GitHub PRs using Label data.</p>
+      <h5>Code Review{' '} <Tag className='bp3-form-helper-text'>RegExp</Tag></h5>
+      <p className=''>Map your pull requests labels with each category to view corresponding metrics in the dashboard.</p>
 
       <div style={{ maxWidth: '60%' }}>
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Type'
             labelFor='github-pr-type'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              Type
-            </Label>
             <InputGroup
               id='github-pr-type'
               placeholder='type/(.*)$'
@@ -252,13 +247,12 @@ export default function GithubSettings (props) {
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
+            inline={true}
+            label='Component'
             labelFor='github-pr-component'
             className='formGroup'
             contentClassName='formGroupContent'
           >
-            <Label>
-              Component
-            </Label>
             <InputGroup
               id='github-pr-type'
               placeholder='component/(.*)$'
@@ -272,29 +266,6 @@ export default function GithubSettings (props) {
           </FormGroup>
         </div>
       </div>
-      {/* <h3 className='headline'>Github Proxy</h3>
-      <p className=''>Optional</p>
-      <div className='formContainer'>
-        <FormGroup
-          disabled={isSaving || isSavingConnection}
-          labelFor='github-proxy'
-          helperText='PROXY'
-          className='formGroup'
-          contentClassName='formGroupContent'
-        >
-          <Label>
-            Proxy URL
-          </Label>
-          <InputGroup
-            id='github-proxy'
-            placeholder='http://your-proxy-server.com:1080'
-            defaultValue={githubProxy}
-            onChange={(e) => setGithubProxy(e.target.value)}
-            disabled={isSaving || isSavingConnection}
-            className='input'
-          />
-        </FormGroup>
-      </div> */}
     </>
   )
 }

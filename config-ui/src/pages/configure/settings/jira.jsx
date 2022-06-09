@@ -43,18 +43,20 @@ const MAPPING_TYPES = {
 }
 
 export default function JiraSettings (props) {
-  const { connection, isSaving, onSettingsChange } = props
+  const { connection, isSaving, onSettingsChange = () => {}, apiVersion = 2 } = props
   // const { providerId, connectionId } = useParams()
   // const history = useHistory()
 
   const API_PROXY_ENDPOINT = `/api/plugins/jira/connections/${connection?.ID}/proxy/rest`
-  const ISSUE_TYPES_ENDPOINT = `${API_PROXY_ENDPOINT}/api/2/issuetype`
-  const ISSUE_FIELDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/2/field`
+  const ISSUE_TYPES_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/issuetype`
+  const ISSUE_FIELDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/field`
+  const BOARDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/board`
 
   const { fetchIssueTypes, fetchFields, issueTypes, fields, isFetching: isFetchingJIRA, error: jiraProxyError } = useJIRA({
     apiProxyPath: API_PROXY_ENDPOINT,
     issuesEndpoint: ISSUE_TYPES_ENDPOINT,
-    fieldsEndpoint: ISSUE_FIELDS_ENDPOINT
+    fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
+    boardsEndpoint: BOARDS_ENDPOINT
   })
 
   const [typeMappingBug, setTypeMappingBug] = useState([])

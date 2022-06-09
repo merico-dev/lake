@@ -19,6 +19,7 @@ import { useCallback, useState } from 'react'
 import { DEVLAKE_ENDPOINT } from '@/utils/config'
 import request from '@/utils/request'
 import { ToastNotification } from '@/components/Toast'
+import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
 import cron from 'cron-validate'
 import parser from 'cron-parser'
 
@@ -35,6 +36,11 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
   const [cronConfig, setCronConfig] = useState('0 0 * * *')
   const [customCronConfig, setCustomCronConfig] = useState('0 0 * * *')
   const [tasks, setTasks] = useState([])
+  const [settings, setSettings] = useState({
+    version: '1.0',
+    connections: []
+  })
+  const [mode, setMode] = useState(BlueprintMode.NORMAL)
   const [enable, setEnable] = useState(true)
   const [detectedProviderTasks, setDetectedProviderTasks] = useState([])
 
@@ -137,6 +143,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
         name,
         cronConfig: cronConfig === 'custom' ? customCronConfig : cronConfig,
         tasks,
+        settings,
         enable: enable
       }
       console.log('>> DISPATCHING BLUEPRINT SAVE REQUEST', blueprintPayload)
@@ -310,6 +317,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
     customCronConfig,
     cronPresets,
     tasks,
+    settings,
     detectedProviderTasks,
     enable,
     saveBlueprint,
@@ -331,6 +339,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
     setCustomCronConfig,
     setCronPresets,
     setTasks,
+    setSettings,
     setEnable,
     setDetectedProviderTasks,
     isFetching,

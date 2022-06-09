@@ -52,7 +52,7 @@ import {
   Tag,
 } from '@blueprintjs/core'
 import { integrationsData } from '@/data/integrations'
-import { Providers, ProviderTypes, ProviderIcons } from '@/data/Providers'
+import { Providers, ProviderTypes, ProviderIcons, ConnectionStatus, ConnectionStatusLabels } from '@/data/Providers'
 import { MultiSelect, Select } from '@blueprintjs/select'
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
@@ -127,74 +127,18 @@ const CreateBlueprint = (props) => {
     NullBlueprintConnection
   )
 
-  const [connectionsList, setConnectionsList] = useState([
-    {
-      id: 1,
-      name: 'JIRA',
-      title: 'JIRA',
-      value: 1,
-      status: 'disconnected',
-      disabled: false,
-      provider: Providers.JIRA,
-      plugin: Providers.JIRA,
-      scope: [],
-    },
-    {
-      id: 10,
-      name: 'JIRA-PROD',
-      title: 'JIRA PROD',
-      value: 10,
-      status: 'disconnected',
-      disabled: false,
-      provider: Providers.JIRA,
-      plugin: Providers.JIRA,
-      scope: [],
-    },
-    {
-      id: 2,
-      name: 'GitLab',
-      title: 'GitLab',
-      value: 2,
-      status: 'online',
-      disabled: false,
-      provider: Providers.GITLAB,
-      plugin: Providers.GITLAB,
-      scope: [],
-    },
-    {
-      id: 20,
-      name: 'GitLab-Prod',
-      title: 'GitLab PROD',
-      value: 20,
-      status: 'online',
-      disabled: false,
-      provider: Providers.GITLAB,
-      plugin: Providers.GITLAB,
-      scope: [],
-    },
-    {
-      id: 3,
-      name: 'Jenkins',
-      title: 'Jenkins',
-      value: 3,
-      status: 'online',
-      disabled: false,
-      provider: Providers.JENKINS,
-      plugin: Providers.JENKINS,
-      scope: [],
-    },
-    {
-      id: 4,
-      name: 'GitHub',
-      title: 'GitHub',
-      value: 4,
-      status: 'online',
-      disabled: false,
-      provider: Providers.GITHUB,
-      plugin: Providers.JIRA,
-      scope: [],
-    },
-  ])
+  const [connectionsList, setConnectionsList] = useState(
+    allProviderConnections?.map((c, cIdx) => ({
+      ...c,
+      id: cIdx,
+      name: c.name,
+      title: c.name,
+      value: c.id,
+      status: ConnectionStatusLabels[c.status] || ConnectionStatusLabels[ConnectionStatus.OFFLINE],
+      provider: c.provider,
+      plugin: c.provider
+    }))
+  )
 
   const DEFAULT_DATA_ENTITIES = [
     {
@@ -281,6 +225,7 @@ const CreateBlueprint = (props) => {
   )
 
   const {
+    activeConnection,
     // eslint-disable-next-line no-unused-vars
     blueprint,
     // eslint-disable-next-line no-unused-vars
@@ -291,12 +236,14 @@ const CreateBlueprint = (props) => {
     // eslint-disable-next-line no-unused-vars
     cronPresets,
     tasks: blueprintTasks,
+    settings: blueprintSettings,
     detectedProviderTasks,
     enable,
     setName: setBlueprintName,
     setCronConfig,
     setCustomCronConfig,
     setTasks: setBlueprintTasks,
+    setSettings: setBlueprintSettings,
     setDetectedProviderTasks,
     setEnable: setEnableBlueprint,
     // eslint-disable-next-line no-unused-vars
@@ -394,6 +341,7 @@ const CreateBlueprint = (props) => {
   const {
     testConnection,
     saveConnection,
+    allProviderConnections,
     errors,
     isSaving: isSavingConnection,
     isTesting: isTestingConnection,
@@ -417,7 +365,6 @@ const CreateBlueprint = (props) => {
   } = useConnectionManager({
     activeProvider,
   })
-
 
   const {
     validate: validateConnection,
@@ -531,7 +478,26 @@ const CreateBlueprint = (props) => {
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
+    if (activeStep?.id === 1) {
+      const enableNotifications = false
+      const getAllSources = true
+      fetchAllConnections(enableNotifications, getAllSources)
+    }
   }, [activeStep])
+  
+  useEffect(() => {
+    console.log('>>> ALL DATA PROVIDER CONNECTIONS...', allProviderConnections)
+    setConnectionsList(allProviderConnections?.map((c, cIdx) => ({
+        ...c,
+        id: cIdx,
+        name: c.name,
+        title: c.name,
+        value: c.id,
+        status: ConnectionStatusLabels[c.status] || ConnectionStatusLabels[ConnectionStatus.OFFLINE],
+        provider: c.provider,
+        plugin: c.provider
+      })))
+  }, [allProviderConnections])
 
   useEffect(() => {
     console.log(
@@ -559,11 +525,42 @@ const CreateBlueprint = (props) => {
     validateAdvanced,
     setBlueprintTasks,
   ])
+  
+  useEffect(() => {
+    console.log(
+      '>> BLUEPRINT SETTINGS FOR PIPELINE MANAGER ....',
+      blueprintSettings
+    )
+  }, [blueprintSettings])
 
   const addConnection = () => {
     setManagedConnection(NullBlueprintConnection)
     setConnectionDialogIsOpen(true)
   }
+
+  const renderProviderSettings = useCallback(
+    (activeConnection, providerId, activeProvider, dataEntityType) => {
+      console.log('>>> RENDERING PROVIDER SETTINGS...')
+      let settingsComponent = null
+      if (activeProvider && activeProvider.settings) {
+        settingsComponent = activeProvider.settings({
+          activeProvider,
+          activeConnection,
+          isSaving,
+          isSavingConnection,
+          // setSettings,
+          // @todo: fix setter
+        })
+      } else {
+        console.log(
+          '>> WARNING: NO PROVIDER SETTINGS RENDERED, PROVIDER = ',
+          activeProvider
+        )
+      }
+      return settingsComponent
+    },
+    [isSaving, isSavingConnection]
+  )
 
   useEffect(() => {
     validateBlueprint()
@@ -632,19 +629,15 @@ const CreateBlueprint = (props) => {
   }, [boards])
 
   useEffect(() => {
-    setRunTasks(
-      blueprintConnections.map((c) => ({
+    setBlueprintSettings(currentSettings => ({
+      ...currentSettings,
+      connections: blueprintConnections.map((c) => ({
         ...NullBlueprintConnection,
-        connectionId: c.id,
+        connectionId: c.value,
         plugin: c.plugin || c.provider,
         scope: createProviderScope(c.provider, c, dataEntities, boards),
-        // scope: {
-        //  options: {},
-        //  transformation: {},
-        //  entities: dataEntities[c.id]?.map((entity) => entity.value) || [],
-        // },
       }))
-    )
+    }))
   }, [blueprintConnections, dataEntities])
 
   useEffect(() => {
@@ -1084,12 +1077,14 @@ const CreateBlueprint = (props) => {
                                 {configuredConnection.title}
                               </h3>
                               <Divider className='section-divider' />
-                                
-                              <ProjectsStackedList 
+
+                              <ProjectsStackedList
                                 projects={projects}
                                 configuredConnection={configuredConnection}
                                 configuredProject={configuredProject}
-                                addProjectTransformation={addProjectTransformation}
+                                addProjectTransformation={
+                                  addProjectTransformation
+                                }
                               />
 
                               <h4>Project</h4>
@@ -1105,57 +1100,14 @@ const CreateBlueprint = (props) => {
                                     (e) => e.value === DataEntityTypes.TICKET
                                   ) && (
                                     <>
-                                      <h5>Issue Tracking</h5>
-                                      <p>
-                                        Map your issue labels with each category
-                                        to view corresponding metrics in the
-                                        dashboard.
-                                      </p>
+                                      {renderProviderSettings(
+                                        configuredConnection,
+                                        configuredConnection.provider,
+                                        integrationsData.find(p => p.id === configuredConnection.provider),
+                                        DataEntityTypes.TICKET
+                                      )}
                                     </>
-                                  )}
-
-                                  {dataEntities[configuredConnection.id]?.find(
-                                    (e) => e.value === DataEntityTypes.CODE
-                                  ) && (
-                                    <>
-                                      <h5>Code Review</h5>
-                                      <p>
-                                        Map your pull requests labels with each
-                                        category to view corresponding metrics
-                                        in the dashboard.
-                                      </p>
-                                    </>
-                                  )}
-
-                                  {dataEntities[configuredConnection.id]?.find(
-                                    (e) => e.value === DataEntityTypes.USER
-                                  ) && (
-                                    <>
-                                      <h5>Users</h5>
-                                      <p>Map Team and People</p>
-                                    </>
-                                  )}
-
-                                  {dataEntities[configuredConnection.id]?.find(
-                                    (e) => e.value === DataEntityTypes.DEVOPS
-                                  ) && (
-                                    <>
-                                      <h5>DevOps</h5>
-                                      <p>&lt; need description/context &rt;</p>
-                                    </>
-                                  )}
-
-                                  {dataEntities[configuredConnection.id]?.find(
-                                    (e) =>
-                                      e.value === DataEntityTypes.CROSSDOMAIN
-                                  ) && (
-                                    <>
-                                      <h5>Cross Domain</h5>
-                                      <p>&lt; need description/context &rt;</p>
-                                    </>
-                                  )}
-
-                                  <h5>Additional Settings</h5>
+                                  )}                
                                 </>
                               )}
                             </>

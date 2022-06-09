@@ -16,33 +16,39 @@
  *
  */
 import { useState, useEffect, useCallback } from 'react'
-import {
-  useHistory
-} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { ToastNotification } from '@/components/Toast'
 import { DEVLAKE_ENDPOINT } from '@/utils/config'
 import request from '@/utils/request'
 import { NullConnection } from '@/data/NullConnection'
-import { Providers, ProviderConnectionLimits } from '@/data/Providers'
+import {
+  Providers,
+  ProviderConnectionLimits,
+  ConnectionStatus,
+  ConnectionStatusLabels
+} from '@/data/Providers'
 
 import useNetworkOfflineMode from '@/hooks/useNetworkOfflineMode'
 
-function useConnectionManager ({
-  activeProvider,
-  connectionId,
-  // activeConnection,
-  // setActiveConnection,
-  // name = null,
-  // endpointUrl = null,
-  // token = null,
-  // username = null,
-  // password = null,
-  // isTesting, setIsTesting,
-  // isSaving, setIsSaving,
-  // testStatus, setTestStatus,
-  // errors, setErrors,
-  // showError, setShowError
-}, updateMode = false) {
+function useConnectionManager(
+  {
+    activeProvider,
+    connectionId,
+    // activeConnection,
+    // setActiveConnection,
+    // name = null,
+    // endpointUrl = null,
+    // token = null,
+    // username = null,
+    // password = null,
+    // isTesting, setIsTesting,
+    // isSaving, setIsSaving,
+    // testStatus, setTestStatus,
+    // errors, setErrors,
+    // showError, setShowError
+  },
+  updateMode = false
+) {
   const history = useHistory()
   const { handleOfflineMode } = useNetworkOfflineMode()
 
@@ -66,6 +72,7 @@ function useConnectionManager ({
 
   const [activeConnection, setActiveConnection] = useState(NullConnection)
   const [allConnections, setAllConnections] = useState([])
+  const [allProviderConnections, setAllProviderConnections] = useState([])
   const [domainRepositories, setDomainRepositories] = useState([])
   const [testedConnections, setTestedConnections] = useState([])
   const [connectionCount, setConnectionCount] = useState(0)
@@ -74,77 +81,138 @@ function useConnectionManager ({
   const [saveComplete, setSaveComplete] = useState(false)
   const [deleteComplete, setDeleteComplete] = useState(false)
 
-  const testConnection = useCallback((notify = true, manualPayload = {}, onSuccess = () => {}, onFail = () => {}) => {
-    setIsTesting(true)
-    setShowError(false)
-    ToastNotification.clear()
-    // TODO: run Save first
-    const runTest = async () => {
-      let connectionPayload
-      switch (activeProvider.id) {
-        case Providers.JIRA:
-          connectionPayload = { endpoint: endpointUrl, username: username, password: password, proxy: proxy }
-          break
-        case Providers.GITHUB:
-          connectionPayload = { endpoint: endpointUrl, token: token, proxy: proxy }
-          break
-        case Providers.JENKINS:
-          connectionPayload = { endpoint: endpointUrl, username: username, password: password }
-          break
-        case Providers.GITLAB:
-          connectionPayload = { endpoint: endpointUrl, token: token, proxy: proxy }
-          break
-      }
-      connectionPayload = { ...connectionPayload, ...manualPayload }
-      const testUrl = `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/test`
-      console.log('INFO >>> Endopoint URL & Payload for testing: ', testUrl, connectionPayload)
-      const res = await request.post(testUrl, connectionPayload)
-      console.log('res.data', res.data)
-      if (res.data?.success && res.status === 200) {
-        setIsTesting(false)
-        setTestStatus(1)
-        if (notify) {
-          ToastNotification.show({ message: `Connection test OK. ${connectionPayload.endpoint}`, intent: 'success', icon: 'small-tick' })
+  const testConnection = useCallback(
+    (
+      notify = true,
+      manualPayload = {},
+      onSuccess = () => {},
+      onFail = () => {}
+    ) => {
+      setIsTesting(true)
+      setShowError(false)
+      ToastNotification.clear()
+      // TODO: run Save first
+      const runTest = async () => {
+        let connectionPayload
+        switch (activeProvider.id) {
+          case Providers.JIRA:
+            connectionPayload = {
+              endpoint: endpointUrl,
+              auth: token,
+              proxy: proxy,
+            }
+            break
+          case Providers.GITHUB:
+            connectionPayload = {
+              endpoint: endpointUrl,
+              auth: token,
+              proxy: proxy,
+            }
+            break
+          case Providers.JENKINS:
+            connectionPayload = {
+              endpoint: endpointUrl,
+              username: username,
+              password: password,
+            }
+            break
+          case Providers.GITLAB:
+            connectionPayload = {
+              endpoint: endpointUrl,
+              auth: token,
+              proxy: proxy,
+            }
+            break
         }
-        onSuccess(res)
-      } else {
-        setIsTesting(false)
-        setTestStatus(2)
-        const errorMessage = 'Connection test FAILED. ' + (res.data ? res.data.message : '')
-        if (notify) {
-          ToastNotification.show({ message: errorMessage, intent: 'danger', icon: 'error' })
+        connectionPayload = { ...connectionPayload, ...manualPayload }
+        const testUrl = `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/test`
+        console.log(
+          'INFO >>> Endopoint URL & Payload for testing: ',
+          testUrl,
+          connectionPayload
+        )
+        const res = await request.post(testUrl, connectionPayload)
+        console.log('res.data', res.data)
+        if (res.data?.success && res.status === 200) {
+          setIsTesting(false)
+          setTestStatus(1)
+          if (notify) {
+            ToastNotification.show({
+              message: `Connection test OK. ${connectionPayload.endpoint}`,
+              intent: 'success',
+              icon: 'small-tick',
+            })
+          }
+          onSuccess(res)
+        } else {
+          setIsTesting(false)
+          setTestStatus(2)
+          const errorMessage =
+            'Connection test FAILED. ' + (res.data ? res.data.message : '')
+          if (notify) {
+            ToastNotification.show({
+              message: errorMessage,
+              intent: 'danger',
+              icon: 'error',
+            })
+          }
+          onFail(res)
         }
-        onFail(res)
       }
-    }
-    runTest()
-  }, [activeProvider.id, endpointUrl, password, proxy, token, username])
+      runTest()
+    },
+    [activeProvider.id, endpointUrl, password, proxy, token, username]
+  )
 
   const saveConnection = (configurationSettings = {}) => {
     setIsSaving(true)
     let connectionPayload = { ...configurationSettings }
     switch (activeProvider.id) {
       case Providers.JIRA:
-        connectionPayload = { name: name, endpoint: endpointUrl, username: username, password: password, proxy: proxy, ...connectionPayload }
+        connectionPayload = {
+          name: name,
+          endpoint: endpointUrl,
+          basicAuthEncoded: token,
+          proxy: proxy,
+          ...connectionPayload,
+        }
         break
       case Providers.GITHUB:
-        connectionPayload = { name: name, endpoint: endpointUrl, token, proxy: proxy, ...connectionPayload }
+        connectionPayload = {
+          name: name,
+          endpoint: endpointUrl,
+          auth: token,
+          proxy: proxy,
+          ...connectionPayload,
+        }
         break
       case Providers.JENKINS:
         // eslint-disable-next-line max-len
-        connectionPayload = { name: name, endpoint: endpointUrl, username: username, password: password, ...connectionPayload }
+        connectionPayload = {
+          name: name,
+          endpoint: endpointUrl,
+          username: username,
+          password: password,
+          ...connectionPayload,
+        }
         break
       case Providers.GITLAB:
-        connectionPayload = { name: name, endpoint: endpointUrl, token: token, proxy: proxy, ...connectionPayload }
+        connectionPayload = {
+          name: name,
+          endpoint: endpointUrl,
+          auth: token,
+          proxy: proxy,
+          ...connectionPayload,
+        }
         break
     }
 
     let saveResponse = {
       success: false,
       connection: {
-        ...connectionPayload
+        ...connectionPayload,
       },
-      errors: []
+      errors: [],
     }
 
     const saveConfiguration = async (configPayload) => {
@@ -152,13 +220,16 @@ function useConnectionManager ({
         setShowError(false)
         setErrors([])
         ToastNotification.clear()
-        const s = await request.post(`${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`, configPayload)
+        const s = await request.post(
+          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`,
+          configPayload
+        )
         console.log('>> CONFIGURATION SAVED SUCCESSFULLY', configPayload, s)
         saveResponse = {
           ...saveResponse,
           success: [200, 201].includes(s.status),
           connection: { ...s.data },
-          errors: s.isAxiosError ? [s.message] : []
+          errors: s.isAxiosError ? [s.message] : [],
         }
       } catch (e) {
         saveResponse.errors.push(e.message)
@@ -173,14 +244,19 @@ function useConnectionManager ({
         setErrors([])
         ToastNotification.clear()
         // eslint-disable-next-line max-len
-        const s = await request.patch(`${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${activeConnection.id || activeConnection.ID}`, configPayload)
+        const s = await request.patch(
+          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${
+            activeConnection.id || activeConnection.ID
+          }`,
+          configPayload
+        )
         const silentRefetch = true
         console.log('>> CONFIGURATION MODIFIED SUCCESSFULLY', configPayload, s)
         saveResponse = {
           ...saveResponse,
           success: [200, 201].includes(s.status),
           connection: { ...s.data },
-          errors: s.isAxiosError ? [s.message] : []
+          errors: s.isAxiosError ? [s.message] : [],
         }
         fetchConnection(silentRefetch)
       } catch (e) {
@@ -198,18 +274,30 @@ function useConnectionManager ({
 
     setTimeout(() => {
       if (saveResponse.success && errors.length === 0) {
-        ToastNotification.show({ message: 'Connection saved successfully.', intent: 'success', icon: 'small-tick' })
+        ToastNotification.show({
+          message: 'Connection saved successfully.',
+          intent: 'success',
+          icon: 'small-tick',
+        })
         setShowError(false)
         setIsSaving(false)
         setSaveComplete(saveResponse.connection)
-        if ([Providers.GITHUB, Providers.JIRA, Providers.GITLAB].includes(activeProvider.id) && token !== '' && token?.toString().split(',').length > 1) {
+        if (
+          [Providers.GITHUB, Providers.JIRA].includes(activeProvider.id) &&
+          token !== '' &&
+          token?.toString().split(',').length > 1
+        ) {
           testConnection()
         }
         if (!updateMode) {
           history.push(`/integrations/${activeProvider.id}`)
         }
       } else {
-        ToastNotification.show({ message: 'Connection failed to save, please try again.', intent: 'danger', icon: 'error' })
+        ToastNotification.show({
+          message: 'Connection failed to save, please try again.',
+          intent: 'danger',
+          icon: 'error',
+        })
         setShowError(true)
         setIsSaving(false)
         setSaveComplete(false)
@@ -219,130 +307,210 @@ function useConnectionManager ({
 
   const runCollection = (options = {}) => {
     setIsRunning(true)
-    ToastNotification.show({ message: 'Triggered Collection Process', intent: 'info', icon: 'info' })
+    ToastNotification.show({
+      message: 'Triggered Collection Process',
+      intent: 'info',
+      icon: 'info',
+    })
     console.log('>> RUNNING COLLECTION PROCESS', isRunning)
     // Run Collection Tasks...
   }
 
-  const fetchConnection = useCallback((silent = false, notify = false) => {
-    console.log('>> FETCHING CONNECTION....')
-    try {
-      setIsFetching(!silent)
-      setErrors([])
-      ToastNotification.clear()
-      console.log('>> FETCHING CONNECTION SOURCE')
-      const fetch = async () => {
-        const f = await request.get(`${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${connectionId}`)
-        const connectionData = f.data
-        console.log('>> RAW CONNECTION DATA FROM API...', connectionData)
-        setActiveConnection({
-          ...connectionData,
-          ID: connectionData.ID || connectionData.id,
-          name: connectionData.name || connectionData.Name,
-          endpoint: connectionData.endpoint || connectionData.Endpoint,
-          proxy: connectionData.proxy || connectionData.Proxy,
-          username: connectionData.username || connectionData.Username,
-          password: connectionData.password || connectionData.Password,
-          token: connectionData.token,
-        })
-        setTimeout(() => {
-          setIsFetching(false)
-        }, 500)
-      }
-      fetch()
-    } catch (e) {
-      setIsFetching(false)
-      setActiveConnection(NullConnection)
-      setErrors([e.message])
-      ToastNotification.show({ message: `${e}`, intent: 'danger', icon: 'error' })
-      console.log('>> FAILED TO FETCH CONNECTION', e)
-    }
-  }, [activeProvider.id, connectionId])
-
-  const fetchAllConnections = useCallback(async (notify = false) => {
-    try {
-      setIsFetching(true)
-      setErrors([])
-      ToastNotification.clear()
-      console.log('>> FETCHING ALL CONNECTION SOURCES')
-      const f = await request.get(`${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`)
-      console.log('>> RAW ALL CONNECTIONS DATA FROM API...', f.data)
-      const providerConnections = [].concat(Array.isArray(f.data) ? f.data : []).map((conn, idx) => {
-        return {
-          ...conn,
-          status: 0,
-          ID: conn.ID || conn.id,
-          name: conn.name,
-          endpoint: conn.endpoint,
-          errors: []
+  const fetchConnection = useCallback(
+    (silent = false, notify = false) => {
+      console.log('>> FETCHING CONNECTION....')
+      try {
+        setIsFetching(!silent)
+        setErrors([])
+        ToastNotification.clear()
+        console.log('>> FETCHING CONNECTION SOURCE')
+        const fetch = async () => {
+          const f = await request.get(
+            `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${connectionId}`
+          )
+          const connectionData = f.data
+          console.log('>> RAW CONNECTION DATA FROM API...', connectionData)
+          setActiveConnection({
+            ...connectionData,
+            ID: connectionData.ID || connectionData.id,
+            name: connectionData.name || connectionData.Name,
+            endpoint: connectionData.endpoint || connectionData.Endpoint,
+            proxy: connectionData.proxy || connectionData.Proxy,
+            username: connectionData.username || connectionData.Username,
+            password: connectionData.password || connectionData.Password,
+          })
+          setTimeout(() => {
+            setIsFetching(false)
+          }, 500)
         }
-      })
-      if (notify) {
-        ToastNotification.show({ message: 'Loaded all connections.', intent: 'success', icon: 'small-tick' })
+        fetch()
+      } catch (e) {
+        setIsFetching(false)
+        setActiveConnection(NullConnection)
+        setErrors([e.message])
+        ToastNotification.show({
+          message: `${e}`,
+          intent: 'danger',
+          icon: 'error',
+        })
+        console.log('>> FAILED TO FETCH CONNECTION', e)
       }
-      setAllConnections(providerConnections)
-      setConnectionCount(f.data?.length)
-      setConnectionLimitReached(sourceLimits[activeProvider.id] && f.data?.length >= sourceLimits[activeProvider.id])
-      setIsFetching(false)
-    } catch (e) {
-      console.log('>> FAILED TO FETCH ALL CONNECTIONS', e)
-      ToastNotification.show({ message: `Failed to Load Connections - ${e.message}`, intent: 'danger', icon: 'error' })
-      setIsFetching(false)
-      setAllConnections([])
-      setConnectionCount(0)
-      setConnectionLimitReached(false)
-      setErrors([e.message])
-      handleOfflineMode(e.response.status, e.response)
-    }
-  }, [activeProvider.id, sourceLimits, handleOfflineMode])
+    },
+    [activeProvider.id, connectionId]
+  )
 
-  const deleteConnection = useCallback(async (connection) => {
-    try {
-      setIsDeleting(true)
-      setErrors([])
-      console.log('>> TRYING TO DELETE CONNECTION...', connection)
-      const d = await request.delete(`${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${connection.ID || connection.id}`)
-      console.log('>> CONNECTION DELETED...', d)
-      setIsDeleting(false)
-      setDeleteComplete({
-        provider: activeProvider,
-        connection: d.data
-      })
-    } catch (e) {
-      setIsDeleting(false)
-      setDeleteComplete(false)
-      setErrors([e.message])
-      console.log('>> FAILED TO DELETE CONNECTION', e)
-    }
-  }, [activeProvider.id])
+  const fetchAllConnections = useCallback(
+    async (notify = false, allSources = false) => {
+      try {
+        setIsFetching(true)
+        setErrors([])
+        ToastNotification.clear()
+        console.log('>> FETCHING ALL CONNECTION SOURCES')
+        const c = await request.get(
+          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`
+        )
+        if (allSources) {
+          const aC = await Promise.all([
+            // @todo: re-enable JIRA & fix encKey warning msg (rebuild local db)
+            // request.get(`${DEVLAKE_ENDPOINT}/plugins/${Providers.JIRA}/connections`),
+            request.get(
+              `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITHUB}/connections`
+            ),
+            request.get(
+              `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITLAB}/connections`
+            ),
+            request.get(
+              `${DEVLAKE_ENDPOINT}/plugins/${Providers.JENKINS}/connections`
+            ),
+          ])
+          setAllProviderConnections(
+            aC
+              .map((providerResponse) => [
+                {
+                  ...providerResponse.data.reduce((cV, pV) => ({...pV, connectionId: pV.id}), {}),
+                  provider: providerResponse.config?.url?.split('/')[3],
+                  status: ConnectionStatus.ONLINE
+                },
+              ])
+              .flat()
+          )
+          console.log(
+            '>> ALL SOURCE CONNECTIONS: FETCHING ALL CONNECTION FROM ALL DATA SOURCES'
+          )
+          console.log('>> ALL SOURCE CONNECTIONS: ', aC)
+        }
+
+        console.log('>> RAW ALL CONNECTIONS DATA FROM API...', c.data)
+        const providerConnections = []
+          .concat(Array.isArray(c.data) ? c.data : [])
+          .map((conn, idx) => {
+            return {
+              ...conn,
+              status: ConnectionStatus.OFFLINE,
+              ID: conn.ID || conn.id,
+              name: conn.name,
+              endpoint: conn.endpoint,
+              errors: [],
+            }
+          })
+        if (notify) {
+          ToastNotification.show({
+            message: 'Loaded all connections.',
+            intent: 'success',
+            icon: 'small-tick',
+          })
+        }
+        setAllConnections(providerConnections)
+        setConnectionCount(c.data?.length)
+        setConnectionLimitReached(
+          sourceLimits[activeProvider.id] &&
+            c.data?.length >= sourceLimits[activeProvider.id]
+        )
+        setIsFetching(false)
+      } catch (e) {
+        console.log('>> FAILED TO FETCH ALL CONNECTIONS', e)
+        ToastNotification.show({
+          message: `Failed to Load Connections - ${e.message}`,
+          intent: 'danger',
+          icon: 'error',
+        })
+        setIsFetching(false)
+        setAllConnections([])
+        setConnectionCount(0)
+        setConnectionLimitReached(false)
+        setErrors([e.message])
+        handleOfflineMode(e.response.status, e.response)
+      }
+    },
+    [activeProvider.id, sourceLimits, handleOfflineMode]
+  )
+
+  const deleteConnection = useCallback(
+    async (connection) => {
+      try {
+        setIsDeleting(true)
+        setErrors([])
+        console.log('>> TRYING TO DELETE CONNECTION...', connection)
+        const d = await request.delete(
+          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${
+            connection.ID || connection.id
+          }`
+        )
+        console.log('>> CONNECTION DELETED...', d)
+        setIsDeleting(false)
+        setDeleteComplete({
+          provider: activeProvider,
+          connection: d.data,
+        })
+      } catch (e) {
+        setIsDeleting(false)
+        setDeleteComplete(false)
+        setErrors([e.message])
+        console.log('>> FAILED TO DELETE CONNECTION', e)
+      }
+    },
+    [activeProvider.id]
+  )
 
   const getConnectionName = useCallback((connectionId, connections) => {
-    const source = connections.find(s => s.id === connectionId)
+    const source = connections.find((s) => s.id === connectionId)
     return source ? source.title : '(Instance)'
   }, [])
 
-  const testAllConnections = useCallback((connections) => {
-    console.log('>> TESTING ALL CONNECTION SOURCES...')
-    connections.forEach((c, cIdx) => {
-      console.log('>>> TESTING CONNECTION INSTANCE...', c)
-      const notify = false
-      const payload = {
-        endpoint: c.Endpoint || c.endpoint,
-        username: c.username,
-        password: c.password,
-        auth: c.basicAuthEncoded || c.auth,
-        token: c.token,
-        proxy: c.Proxy || c.Proxy
-      }
-      const onSuccess = (res) => {
-        setTestedConnections(testedConnections => [...new Set([...testedConnections.filter(oC => oC.id !== c.id), { ...c, status: 1 }])])
-      }
-      const onFail = (res) => {
-        setTestedConnections(testedConnections => [...new Set([...testedConnections.filter(oC => oC.ID !== c.ID), { ...c, status: 2 }])])
-      }
-      testConnection(notify, payload, onSuccess, onFail)
-    })
-  }, [testConnection])
+  const testAllConnections = useCallback(
+    (connections) => {
+      console.log('>> TESTING ALL CONNECTION SOURCES...')
+      connections.forEach((c, cIdx) => {
+        console.log('>>> TESTING CONNECTION INSTANCE...', c)
+        const notify = false
+        const payload = {
+          endpoint: c.Endpoint || c.endpoint,
+          username: c.username,
+          password: c.password,
+          auth: c.basicAuthEncoded || c.auth,
+          proxy: c.Proxy || c.Proxy,
+        }
+        const onSuccess = (res) => {
+          setTestedConnections((testedConnections) => [
+            ...new Set([
+              ...testedConnections.filter((oC) => oC.id !== c.id),
+              { ...c, status: ConnectionStatus.ONLINE },
+            ]),
+          ])
+        }
+        const onFail = (res) => {
+          setTestedConnections((testedConnections) => [
+            ...new Set([
+              ...testedConnections.filter((oC) => oC.ID !== c.ID),
+              { ...c, status: ConnectionStatus.DISCONNECTED },
+            ]),
+          ])
+        }
+        testConnection(notify, payload, onSuccess, onFail)
+      })
+    },
+    [testConnection]
+  )
 
   const fetchDomainLayerRepositories = useCallback(() => {
     console.log('>> FETCHING DOMAIN LAYER REPOS....')
@@ -363,7 +531,11 @@ function useConnectionManager ({
       setIsFetching(false)
       setDomainRepositories([])
       setErrors([e.message])
-      ToastNotification.show({ message: `${e}`, intent: 'danger', icon: 'error' })
+      ToastNotification.show({
+        message: `${e}`,
+        intent: 'danger',
+        icon: 'error',
+      })
       console.log('>> FAILED TO FETCH DOMAIN LAYER REPOS', e)
     }
   }, [])
@@ -378,16 +550,15 @@ function useConnectionManager ({
           setPassword(activeConnection.password)
           break
         case Providers.GITLAB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.GITHUB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
-          setUsername(activeConnection.username)
-          setPassword(activeConnection.password)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
       }
@@ -403,14 +574,17 @@ function useConnectionManager ({
       setActiveConnection((ac) => {
         return {
           ...ac,
-          ...saveComplete
+          ...saveComplete,
         }
       })
     }
   }, [saveComplete])
 
   useEffect(() => {
-    console.log('>> CONNECTION MANAGER - RECEIVED ACTIVE PROVIDER...', activeProvider)
+    console.log(
+      '>> CONNECTION MANAGER - RECEIVED ACTIVE PROVIDER...',
+      activeProvider
+    )
     if (activeProvider && activeProvider.id) {
       // console.log(activeProvider)
     }
@@ -463,6 +637,7 @@ function useConnectionManager ({
     setTestStatus,
     setConnectionLimits,
     allConnections,
+    allProviderConnections,
     domainRepositories,
     testedConnections,
     sourceLimits,
@@ -471,7 +646,7 @@ function useConnectionManager ({
     Providers,
     saveComplete,
     deleteComplete,
-    getConnectionName
+    getConnectionName,
   }
 }
 
