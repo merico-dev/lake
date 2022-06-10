@@ -68,6 +68,7 @@ import Content from '@/components/Content'
 import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
 import { NullBlueprint } from '@/data/NullBlueprint'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
+import { WorkflowSteps, DEFAULT_DATA_ENTITIES, DEFAULT_BOARDS } from '@/data/BlueprintWorkflow'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
 import usePipelineManager from '@/hooks/usePipelineManager'
@@ -85,6 +86,7 @@ import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
 import StandardStackedList from '@/components/blueprints/StandardStackedList'
 import CodeInspector from '@/components/pipelines/CodeInspector'
+import NoData from '@/components/NoData'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import ClearButton from '@/components/ClearButton'
@@ -94,28 +96,7 @@ const CreateBlueprint = (props) => {
   const history = useHistory()
   // const dispatch = useDispatch()
 
-  const steps = [
-    {
-      id: 1,
-      active: 1,
-      name: 'add-connections',
-      title: 'Add Data Connections',
-    },
-    { id: 2, active: 0, name: 'set-data-scope', title: 'Set Data Scope' },
-    {
-      id: 3,
-      active: 0,
-      name: 'add-transformation',
-      title: 'Add Transformation (Optional)',
-    },
-    {
-      id: 4,
-      active: 0,
-      name: 'set-sync-frequeny',
-      title: 'Set Sync Frequency',
-    },
-  ]
-  const [activeStep, setActiveStep] = useState(steps.find((s) => s.id === 1))
+  const [activeStep, setActiveStep] = useState(WorkflowSteps.find((s) => s.id === 1))
   const [advancedMode, setAdvancedMode] = useState(false)
   const [activeProvider, setActiveProvider] = useState(integrationsData[0])
 
@@ -148,48 +129,6 @@ const CreateBlueprint = (props) => {
       plugin: c.provider,
     }))
   )
-
-  const DEFAULT_DATA_ENTITIES = [
-    {
-      id: 1,
-      name: 'source-code-management',
-      title: 'Source Code Management',
-      value: DataEntityTypes.CODE,
-    },
-    {
-      id: 2,
-      name: 'issue-tracking',
-      title: 'Issue Tracking',
-      value: DataEntityTypes.TICKET,
-    },
-    // @todo: confirm entity type value for "Code Review"
-    {
-      id: 3,
-      name: 'code-review',
-      title: 'Code Review',
-      value: DataEntityTypes.USER,
-    },
-    { id: 4, name: 'ci-cd', title: 'CI/CD', value: DataEntityTypes.DEVOPS },
-  ]
-
-  const DEFAULT_BOARDS = [
-    {
-      id: 1,
-      name: 'scrum-lake',
-      title: 'DEVLAKE BOARD',
-      value: 'scrum-lake',
-      type: 'scrum',
-      self: 'https://your-domain.atlassian.net/rest/agile/1.0/board/1',
-    },
-    {
-      id: 2,
-      name: 'scrum-stream',
-      title: 'DEVSTREAM BOARD',
-      value: 'scrum-stream',
-      type: 'scrum',
-      self: 'https://your-domain.atlassian.net/rest/agile/1.0/board/2',
-    },
-  ]
 
   const [dataEntitiesList, setDataEntitiesList] = useState([
     ...DEFAULT_DATA_ENTITIES,
@@ -387,13 +326,13 @@ const CreateBlueprint = (props) => {
 
   const nextStep = useCallback(() => {
     setActiveStep((aS) =>
-      steps.find((s) => s.id === Math.min(aS.id + 1, steps.length))
+      WorkflowSteps.find((s) => s.id === Math.min(aS.id + 1, WorkflowSteps.length))
     )
-  }, [steps])
+  }, [WorkflowSteps])
 
   const prevStep = useCallback(() => {
-    setActiveStep((aS) => steps.find((s) => s.id === Math.max(aS.id - 1, 1)))
-  }, [steps])
+    setActiveStep((aS) => WorkflowSteps.find((s) => s.id === Math.max(aS.id - 1, 1)))
+  }, [WorkflowSteps])
 
   const handleConnectionTabChange = useCallback(
     (tab) => {
@@ -440,14 +379,18 @@ const CreateBlueprint = (props) => {
       projects = [],
       defaultScope = { transformation: {}, options: {}, entities: [] }
     ) => {
-      console.log('>>> CREATING PROVIDER SCOPE FOR CONNECTION...', connectionIdx, connection)
+      console.log(
+        '>>> CREATING PROVIDER SCOPE FOR CONNECTION...',
+        connectionIdx,
+        connection
+      )
       let newScope = {
         ...defaultScope,
         entities: entities[connection.id]?.map((entity) => entity.value) || [],
       }
       switch (providerId) {
         case Providers.JIRA:
-          newScope = boards[connection.id]?.map(b => ({
+          newScope = boards[connection.id]?.map((b) => ({
             ...newScope,
             boardId: b.id,
             // @todo: verify transformation payload for jira
@@ -459,7 +402,7 @@ const CreateBlueprint = (props) => {
           }))
           break
         case Providers.GITLAB:
-          newScope = projects[connection.id]?.map(p => ({
+          newScope = projects[connection.id]?.map((p) => ({
             ...newScope,
             projectId: p,
             // @todo: verify transformation payload for gitlab (none? - no additional settings)
@@ -473,11 +416,11 @@ const CreateBlueprint = (props) => {
           }
           break
         case Providers.GITHUB:
-          newScope = projects[connection.id]?.map(p => ({
+          newScope = projects[connection.id]?.map((p) => ({
             ...newScope,
             owner: p.split('/')[0],
             repo: p.split('/')[1],
-            transformation: { 
+            transformation: {
               prType: 'type/(.*)$',
               prComponent: 'component/(.*)$',
               issueSeverity: 'severity/(.*)$',
@@ -486,7 +429,7 @@ const CreateBlueprint = (props) => {
               issueTypeRequirement: '^(feat|feature|proposal|requirement)$',
               issueTypeBug: '^(bug|failure|error)$',
               issueTypeIncident: '',
-             },
+            },
           }))
           break
       }
@@ -673,7 +616,14 @@ const CreateBlueprint = (props) => {
         ...NullBlueprintConnection,
         connectionId: c.value,
         plugin: c.plugin || c.provider,
-        scope: createProviderScopes(c.provider, c, cIdx, dataEntities, boards, projects),
+        scope: createProviderScopes(
+          c.provider,
+          c,
+          cIdx,
+          dataEntities,
+          boards,
+          projects
+        ),
       })),
     }))
   }, [blueprintConnections, dataEntities, boards, projects])
@@ -734,7 +684,9 @@ const CreateBlueprint = (props) => {
               </ul>
             </div>
 
-            <div className={`workflow-content workflow-step-id-${activeStep?.id}`}>
+            <div
+              className={`workflow-content workflow-step-id-${activeStep?.id}`}
+            >
               {activeStep?.id === 1 && (
                 <div className='workflow-step workflow-step-data-connections'>
                   <Card
@@ -956,7 +908,12 @@ const CreateBlueprint = (props) => {
                                   <TagInput
                                     id='project-id'
                                     disabled={isRunning}
-                                    placeholder={configuredConnection.provider === Providers.GITHUB ? 'username/repo, username/another-repo' : '1000000, 200000'}
+                                    placeholder={
+                                      configuredConnection.provider ===
+                                      Providers.GITHUB
+                                        ? 'username/repo, username/another-repo'
+                                        : '1000000, 200000'
+                                    }
                                     values={
                                       projects[configuredConnection.id] || []
                                     }
@@ -1043,27 +1000,11 @@ const CreateBlueprint = (props) => {
                     </div>
                   )}
                   {blueprintConnections.length === 0 && (
-                    <>
-                      <div className='bp3-non-ideal-state'>
-                        <div className='bp3-non-ideal-state-visual'>
-                          <Icon icon='offline' size={32} />
-                        </div>
-                        <div className='bp3-non-ideal-state-text'>
-                          <h4 className='bp3-heading' style={{ margin: 0 }}>
-                            No Data Connections
-                          </h4>
-                          <div>
-                            Please select at least one connection source.
-                          </div>
-                        </div>
-                        <button
-                          className='bp3-button bp4-intent-primary'
-                          onClick={prevStep}
-                        >
-                          Go Back
-                        </button>
-                      </div>
-                    </>
+                    <NoData
+                      title='No Data Connections'
+                      message='Please select at least one connection source.'
+                      onClick={prevStep}
+                    />
                   )}
                 </div>
               )}
@@ -1083,9 +1024,19 @@ const CreateBlueprint = (props) => {
                       border: '1px solid #BDCEFB',
                     }}
                   >
-                    Set transformation rules for your selected data
-                    to view more complex metrics in the dashboards.<br />
-                    <a href='#' className='more-link' rel='noreferrer' style={{ color: '#7497F7', marginTop: '5px', display: 'inline-block' }}>
+                    Set transformation rules for your selected data to view more
+                    complex metrics in the dashboards.
+                    <br />
+                    <a
+                      href='#'
+                      className='more-link'
+                      rel='noreferrer'
+                      style={{
+                        color: '#7497F7',
+                        marginTop: '5px',
+                        display: 'inline-block',
+                      }}
+                    >
                       Find out more
                     </a>
                   </p>
@@ -1138,27 +1089,49 @@ const CreateBlueprint = (props) => {
                               {[Providers.GITLAB, Providers.GITHUB].includes(
                                 configuredConnection.provider
                               ) && (
-                                <StandardStackedList
-                                  items={projects}
-                                  className='selected-items-list selected-projects-list'
-                                  connection={configuredConnection}
-                                  activeItem={configuredProject}
-                                  onAdd={addProjectTransformation}
-                                  onChange={addProjectTransformation}
-                                />
+                                <>
+                                  <StandardStackedList
+                                    items={projects}
+                                    className='selected-items-list selected-projects-list'
+                                    connection={configuredConnection}
+                                    activeItem={configuredProject}
+                                    onAdd={addProjectTransformation}
+                                    onChange={addProjectTransformation}
+                                  />
+                                  {projects[configuredConnection.id].length ===
+                                    0 && (
+                                    <NoData
+                                      title='No Projects Selected'
+                                      icon='git-branch'
+                                      message='Please select specify at least one project.'
+                                      onClick={prevStep}
+                                    />
+                                  )}
+                                </>
                               )}
 
                               {[Providers.JIRA].includes(
                                 configuredConnection.provider
                               ) && (
-                                <StandardStackedList
-                                  items={boards}
-                                  className='selected-items-list selected-boards-list'
-                                  connection={configuredConnection}
-                                  activeItem={configuredBoard}
-                                  onAdd={addBoardTransformation}
-                                  onChange={addBoardTransformation}
-                                />
+                                <>
+                                  <StandardStackedList
+                                    items={boards}
+                                    className='selected-items-list selected-boards-list'
+                                    connection={configuredConnection}
+                                    activeItem={configuredBoard}
+                                    onAdd={addBoardTransformation}
+                                    onChange={addBoardTransformation}
+                                  />
+                                  {boards[configuredConnection.id].length ===
+                                    0 && (
+                                    <NoData
+                                      title='No Boards Selected'
+                                      icon='th'
+                                      message='Please select specify at least one board.'
+                                      onClick={prevStep}
+                                    />
+                                  )}
+                                </>
                               )}
 
                               {configuredProject && (
