@@ -105,6 +105,10 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  
+  &.workflow-step-id-3 {
+    margin-top: 8px;
+  }
 
   > .workflow-step {
     display: block;

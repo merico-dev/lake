@@ -200,7 +200,7 @@ const CreateBlueprint = (props) => {
   const [configuredConnection, setConfiguredConnection] = useState()
   const [dataEntities, setDataEntities] = useState({})
   const [activeConnectionTab, setActiveConnectionTab] = useState()
-  
+
   const [showBlueprintInspector, setShowBlueprintInspector] = useState(false)
 
   const [dataScopes, setDataScopes] = useState([])
@@ -430,48 +430,67 @@ const CreateBlueprint = (props) => {
     }
   }, [dataEntitiesList, configuredConnection])
 
-  const createProviderScope = useCallback(
+  const createProviderScopes = useCallback(
     (
       providerId,
       connection,
+      connectionIdx,
       entities = [],
       boards = [],
+      projects = [],
       defaultScope = { transformation: {}, options: {}, entities: [] }
     ) => {
+      console.log('>>> CREATING PROVIDER SCOPE FOR CONNECTION...', connectionIdx, connection)
       let newScope = {
         ...defaultScope,
         entities: entities[connection.id]?.map((entity) => entity.value) || [],
       }
       switch (providerId) {
         case Providers.JIRA:
-          newScope = {
+          newScope = boards[connection.id]?.map(b => ({
             ...newScope,
-            boardId: boards[connection.id]?.map((b) => b.id),
+            boardId: b.id,
+            // @todo: verify transformation payload for jira
+            transformation: {},
             options: {
               // @todo: verify initial value of since date for jira provider
               since: new Date(),
             },
-          }
+          }))
           break
         case Providers.GITLAB:
-          // @todo: map repositories
-          return newScope
+          newScope = projects[connection.id]?.map(p => ({
+            ...newScope,
+            projectId: p,
+            // @todo: verify transformation payload for gitlab (none? - no additional settings)
+            transformation: {},
+          }))
           break
         case Providers.JENKINS:
-          return newScope
-          break
-        // @todo: check with backend team on payload structure, projects should be array of object containing owner+repo
-        case Providers.GITHUB:
+          // @todo: verify scope settings if any for jenkins
           newScope = {
             ...newScope,
-            // @todo: map repositories
-            owner: null,
-            repo: null,
-            transformation: { issueTypeBug: '^(bug|failure|error)$' },
           }
           break
+        case Providers.GITHUB:
+          newScope = projects[connection.id]?.map(p => ({
+            ...newScope,
+            owner: p.split('/')[0],
+            repo: p.split('/')[1],
+            transformation: { 
+              prType: 'type/(.*)$',
+              prComponent: 'component/(.*)$',
+              issueSeverity: 'severity/(.*)$',
+              issueComponent: 'component/(.*)$',
+              issuePriority: '^(highest|high|medium|low)$',
+              issueTypeRequirement: '^(feat|feature|proposal|requirement)$',
+              issueTypeBug: '^(bug|failure|error)$',
+              issueTypeIncident: '',
+             },
+          }))
+          break
       }
-      return newScope
+      return Array.isArray(newScope) ? newScope.flat() : [newScope]
     },
     []
   )
@@ -607,7 +626,7 @@ const CreateBlueprint = (props) => {
     setProjects((p) => ({
       ...blueprintConnections.reduce(initializeProjects, {}),
     }))
-    setBoards((p) => ({
+    setBoards((b) => ({
       ...blueprintConnections.reduce(initializeBoards, {}),
     }))
     setEnabledProviders([
@@ -650,14 +669,14 @@ const CreateBlueprint = (props) => {
   useEffect(() => {
     setBlueprintSettings((currentSettings) => ({
       ...currentSettings,
-      connections: blueprintConnections.map((c) => ({
+      connections: blueprintConnections.map((c, cIdx) => ({
         ...NullBlueprintConnection,
         connectionId: c.value,
         plugin: c.plugin || c.provider,
-        scope: createProviderScope(c.provider, c, dataEntities, boards),
+        scope: createProviderScopes(c.provider, c, cIdx, dataEntities, boards, projects),
       })),
     }))
-  }, [blueprintConnections, dataEntities])
+  }, [blueprintConnections, dataEntities, boards, projects])
 
   useEffect(() => {
     setConfiguredProject(projects.length > 0 ? projects[0] : null)
@@ -715,7 +734,7 @@ const CreateBlueprint = (props) => {
               </ul>
             </div>
 
-            <div className='workflow-content'>
+            <div className={`workflow-content workflow-step-id-${activeStep?.id}`}>
               {activeStep?.id === 1 && (
                 <div className='workflow-step workflow-step-data-connections'>
                   <Card
@@ -900,7 +919,7 @@ const CreateBlueprint = (props) => {
                       </div>
                       <div
                         className='connection-scope'
-                        style={{ marginLeft: '20px', width: '100%' }}
+                        style={{ marginLeft: '10px', width: '100%' }}
                       >
                         <Card
                           className='workflow-card worfklow-panel-card'
@@ -937,7 +956,7 @@ const CreateBlueprint = (props) => {
                                   <TagInput
                                     id='project-id'
                                     disabled={isRunning}
-                                    placeholder='username/repo, username/another-repo'
+                                    placeholder={configuredConnection.provider === Providers.GITHUB ? 'username/repo, username/another-repo' : '1000000, 200000'}
                                     values={
                                       projects[configuredConnection.id] || []
                                     }
@@ -1051,6 +1070,25 @@ const CreateBlueprint = (props) => {
 
               {activeStep?.id === 3 && (
                 <div className='workflow-step workflow-step-add-transformation'>
+                  <p
+                    className='alert-neutral'
+                    style={{
+                      fontFamily: 'Montserrat, sans-serif',
+                      fontSize: '12px',
+                      margin: '0 0 10px 0',
+                      padding: '8px',
+                      borderRadius: '6px',
+                      color: '#3C5088',
+                      backgroundColor: '#F0F4FE',
+                      border: '1px solid #BDCEFB',
+                    }}
+                  >
+                    Set transformation rules for your selected data
+                    to view more complex metrics in the dashboards.<br />
+                    <a href='#' className='more-link' rel='noreferrer' style={{ color: '#7497F7', marginTop: '5px', display: 'inline-block' }}>
+                      Find out more
+                    </a>
+                  </p>
                   {blueprintConnections.length > 0 && (
                     <div style={{ display: 'flex' }}>
                       <div
@@ -1071,7 +1109,7 @@ const CreateBlueprint = (props) => {
                       </div>
                       <div
                         className='connection-transformation'
-                        style={{ marginLeft: '20px', width: '100%' }}
+                        style={{ marginLeft: '10px', width: '100%' }}
                       >
                         <Card
                           className='workflow-card workflow-panel-card'
@@ -1526,7 +1564,7 @@ const CreateBlueprint = (props) => {
         onUsernameChange={setUsername}
         onPasswordChange={setPassword}
       />
-      
+
       <CodeInspector
         title={name}
         titleIcon='add'
@@ -1538,7 +1576,7 @@ const CreateBlueprint = (props) => {
           tasks: blueprintTasks,
           settings: blueprintSettings,
           cronConfig,
-          enable
+          enable,
         }}
         onClose={setShowBlueprintInspector}
         hasBackdrop={false}
