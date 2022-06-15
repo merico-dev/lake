@@ -45,7 +45,7 @@ Click **Save Settings** to update additional settings.
 
 ### Regular Expression Configuration
 Define regex pattern in .env
-- gitee_PR_BODY_CLOSE_PATTERN: Define key word to associate issue in pr body, please check the example in .env.example
+- GITEE_PR_BODY_CLOSE_PATTERN: Define key word to associate issue in pr body, please check the example in .env.example
 
 ## Sample Request
 In order to collect data, you have to compose a JSON looks like following one, and send it by selecting `Advanced Mode` on `Create Pipeline Run` page:
