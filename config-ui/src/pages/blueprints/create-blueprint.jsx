@@ -50,6 +50,7 @@ import {
   Position,
   Colors,
   Tag,
+  PopoverInteractionKind
 } from '@blueprintjs/core'
 import { integrationsData } from '@/data/integrations'
 import {
@@ -189,6 +190,7 @@ const CreateBlueprint = (props) => {
     settings: blueprintSettings,
     detectedProviderTasks,
     enable,
+    mode,
     setName: setBlueprintName,
     setCronConfig,
     setCustomCronConfig,
@@ -196,6 +198,7 @@ const CreateBlueprint = (props) => {
     setSettings: setBlueprintSettings,
     setDetectedProviderTasks,
     setEnable: setEnableBlueprint,
+    setMode,
     // eslint-disable-next-line no-unused-vars
     isFetching: isFetchingBlueprints,
     isSaving,
@@ -226,6 +229,7 @@ const CreateBlueprint = (props) => {
     customCronConfig,
     enable,
     tasks: blueprintTasks,
+    mode
   })
 
   const {
@@ -250,8 +254,8 @@ const CreateBlueprint = (props) => {
   } = usePipelineManager(null, runTasks)
 
   const {
-    validate,
-    validateAdvanced,
+    validate: validatePipeline,
+    validateAdvanced: validateAdvancedPipeline,
     errors: validationErrors,
     setErrors: setPipelineErrors,
     isValid: isValidPipelineForm,
@@ -260,7 +264,9 @@ const CreateBlueprint = (props) => {
     enabledProviders,
     // pipelineName,
     projectId,
+    projects,
     boardId,
+    boards,
     owner,
     repositoryName,
     connectionId,
@@ -272,6 +278,9 @@ const CreateBlueprint = (props) => {
     tasks: runTasks,
     tasksAdvanced: runTasksAdvanced,
     advancedMode,
+    mode,
+    connection: configuredConnection,
+    entities: dataEntities
   })
 
   const {
@@ -439,7 +448,8 @@ const CreateBlueprint = (props) => {
   )
 
   const manageConnection = useCallback((connection) => {
-    if (connection?.id) {
+    console.log('>> MANAGE CONNECTION...', connection)
+    if (connection?.id !== null) {
       setManagedConnection(connection)
       setConnectionDialogIsOpen(true)
     }
@@ -491,10 +501,10 @@ const CreateBlueprint = (props) => {
     // })
     // setRawConfiguration(JSON.stringify(buildPipelineStages(runTasks, true), null, '  '))
     if (advancedMode) {
-      validateAdvanced()
+      validateAdvancedPipeline()
       setBlueprintTasks(runTasksAdvanced)
     } else {
-      validate()
+      validatePipeline()
       setBlueprintTasks([[...runTasks]])
     }
   }, [
@@ -502,8 +512,8 @@ const CreateBlueprint = (props) => {
     runTasks,
     runTasksAdvanced,
     setPipelineSettings,
-    validate,
-    validateAdvanced,
+    validatePipeline,
+    validateAdvancedPipeline,
     setBlueprintTasks,
   ])
 
@@ -626,7 +636,8 @@ const CreateBlueprint = (props) => {
         ),
       })),
     }))
-  }, [blueprintConnections, dataEntities, boards, projects])
+    // validatePipeline()
+  }, [blueprintConnections, dataEntities, boards, projects, validatePipeline])
 
   useEffect(() => {
     setConfiguredProject(projects.length > 0 ? projects[0] : null)
@@ -1505,6 +1516,13 @@ const CreateBlueprint = (props) => {
                     intent={Intent.PRIMARY}
                     text='Next Step'
                     onClick={nextStep}
+                    rightIcon={
+                        validationErrors.length > 0 ? (
+                          <Popover interactionKind={PopoverInteractionKind.HOVER_TARGET_ONLY}>
+                            <Icon icon='warning-sign' size={12} color={Colors.ORANGE5} style={{ outline: 'none', margin: '0 3px 2px 3px' }} />
+                            <div style={{ padding: '5px' }}><FormValidationErrors errors={validationErrors} /></div>
+                          </Popover>
+                        ) : null}
                   />
                 </div>
               )}

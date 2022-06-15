@@ -128,7 +128,7 @@ const ConnectionDialog = (props) => {
   useEffect(() => {}, [datasource])
 
   useEffect(() => {
-    if (connection?.id) {
+    if (connection?.id !== null && connection?.id !== undefined) {
       setMode(Modes.EDIT)
       setDatasource(
         dataSourcesList.find((d) => d.value === connection.provider)

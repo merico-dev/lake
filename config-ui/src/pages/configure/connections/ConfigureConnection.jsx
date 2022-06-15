@@ -285,19 +285,11 @@ export default function ConfigureConnection () {
                       <FormValidationErrors errors={validationErrors} />
                     )} */}
                   </Card>
-                  <div style={{ marginTop: '30px' }}>
+                  {/* <div style={{ marginTop: '30px' }}>
                     {renderProviderSettings(providerId, activeProvider)}
-                  </div>
-                  <div className='form-actions-block' style={{ display: 'flex', marginTop: '60px', justifyContent: 'space-between' }}>
-                    <div>
-                      {/* <Button
-                        icon={getConnectionStatusIcon()}
-                        text='Test Connection'
-                        onClick={testConnection}
-                        loading={isTesting}
-                        disabled={isTesting || isSaving}
-                      /> */}
-                    </div>
+                  </div> */}
+                  {/* <div className='form-actions-block' style={{ display: 'flex', marginTop: '60px', justifyContent: 'space-between' }}>
+                    <div />
                     <div>
                       <Button icon='remove' text='Cancel' onClick={cancel} disabled={isSaving} />
                       <Button
@@ -310,8 +302,7 @@ export default function ConfigureConnection () {
                         style={{ marginLeft: '10px' }}
                       />
                     </div>
-                  </div>
-
+                  </div> */}
                 </>
               )}
             </div>
