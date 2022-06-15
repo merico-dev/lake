@@ -25,7 +25,7 @@ import (
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
 
-var ExtractCommitsMeta = core.SubTaskMeta{
+var ExtractApiCommitsMeta = core.SubTaskMeta{
 	Name:             "extractApiCommits",
 	EntryPoint:       ExtractApiCommits,
 	EnabledByDefault: true,
@@ -61,6 +61,9 @@ func ExtractApiCommits(taskCtx core.SubTaskContext) error {
 			gitlabUserAuthor.Email = gitlabCommit.AuthorEmail
 			gitlabUserAuthor.Name = gitlabCommit.AuthorName
 
+			gitlabCommit.ConnectionId = data.Options.ConnectionId
+			gitlabProjectCommit.ConnectionId = data.Options.ConnectionId
+			gitlabUserAuthor.ConnectionId = data.Options.ConnectionId
 			results = append(results, gitlabCommit)
 			results = append(results, gitlabProjectCommit)
 			results = append(results, gitlabUserAuthor)
@@ -70,6 +73,7 @@ func ExtractApiCommits(taskCtx core.SubTaskContext) error {
 				gitlabUserCommitter := &models.GitlabUser{}
 				gitlabUserCommitter.Email = gitlabCommit.CommitterEmail
 				gitlabUserCommitter.Name = gitlabCommit.CommitterName
+				gitlabUserCommitter.ConnectionId = data.Options.ConnectionId
 				results = append(results, gitlabUserCommitter)
 			}
 

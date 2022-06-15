@@ -1,0 +1,1878 @@
+id,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark,base_repo_id,head_repo_id,status,title,description,url,author_name,author_id,parent_pr_id,pull_request_key,created_date,merged_date,closed_date,type,component,merge_commit_sha,head_ref,base_ref,base_commit_sha,head_commit_sha
+gitlab:GitlabMergeRequest:1:100988857,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,198,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,Adds open source license,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/49,paulGoertzen,,,49,2021-05-21T17:56:48.083+00:00,2021-05-21T17:57:07.204+00:00,,,,,add-license,master,,
+gitlab:GitlabMergeRequest:1:100990194,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,199,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,Fixes the license in package.json to match our actual license,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/50,paulGoertzen,,,50,2021-05-21T18:12:03.610+00:00,2021-05-21T18:12:12.477+00:00,,,,,fix-license-in-package-file,master,,
+gitlab:GitlabMergeRequest:1:114810750,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,200,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: date formatter not handling year-crossing week,"EE-5060
+
+详见 https://merico.atlassian.net/browse/EE-5060?focusedCommentId=24944",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/51,gerilleto,,,51,2021-09-01T03:42:52.752+00:00,2021-09-01T07:17:15.324+00:00,,,,,EE-5060,master,,
+gitlab:GitlabMergeRequest:1:121251088,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,201,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,EE-5501,为了支持数据下钻，给barchart和boxplot加上onClick参数。,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/52,saniac_mrc,,,52,2021-10-14T09:02:46.630+00:00,2021-10-14T09:06:01.555+00:00,,,,,feat/EE-5501,master,,
+gitlab:GitlabMergeRequest:1:121671891,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,202,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,支持 Sunburst,"![image](/uploads/743443ecb7c7f5cebdea152006927eae/image.png)
+
+数据下钻需要的支持Onclick的旭日图。",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/53,saniac_mrc,,,53,2021-10-18T08:24:42.490+00:00,,,,,,sunburst,master,,
+gitlab:GitlabMergeRequest:1:129837419,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,203,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,test: add tests for period formatter,"[EE-6174](https://merico.atlassian.net/browse/EE-6174)
+
+* 重构了 PeriodFormatter
+* 移除了星期周期的 short mode
+
+![image](/uploads/f1eefa141b1862f397a0325d71e88543/image.png)
+
+[在线预览](http://ee-6174-1004.web.ide.merico.cn/dashboard/)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/54,merico-zhutao,,,54,2021-12-08T01:54:38.330+00:00,2021-12-10T09:04:02.927+00:00,,,,,EE-6174,master,,
+gitlab:GitlabMergeRequest:1:130587347,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,204,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,build: 1.6.2,重新 build 并修改版本号,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/55,merico-zhutao,,,55,2021-12-13T03:21:34.930+00:00,2021-12-13T03:25:01.263+00:00,,,,,release/1.6.2,master,,
+gitlab:GitlabMergeRequest:1:130828361,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,205,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: show full date range for 1 week period,"EE-6174
+
+![image](/uploads/9e85c8b0b814f674ece7e95898ce707f/image.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/56,merico-zhutao,,,56,2021-12-14T06:07:55.800+00:00,2021-12-17T13:02:09.218+00:00,,,,,fix/EE-6174-tooltip,master,,
+gitlab:GitlabMergeRequest:1:134585617,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,206,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,Configure Renovate,"Welcome to [Renovate](https://github.com/renovatebot/renovate)! This is an onboarding MR to help you understand and configure settings before regular Merge Requests begin.
+
+🚦 To activate Renovate, merge this Merge Request. To disable Renovate, simply close this Merge Request unmerged.
+
+
+
+---
+### Detected Package Files
+
+ * `package.json` (npm)
+
+### Configuration Summary
+
+Based on the default config's presets, Renovate will:
+
+  - Start dependency updates only once this onboarding MR is merged
+  - Enable Renovate Dependency Dashboard creation
+  - If semantic commits detected, use semantic commit type <code>fix</code> for dependencies and <code>chore</code> for all others
+  - Ignore `node_modules`, `bower_components`, `vendor` and various test/tests directories
+  - Autodetect whether to pin dependencies or maintain ranges
+  - Rate limit MR creation to a maximum of two per hour
+  - Limit to maximum 10 open MRs at any time
+  - Group known monorepo packages together
+  - Use curated list of recommended non-monorepo package groupings
+  - Fix some problems with very old Maven commons versions
+  - Ignore spring cloud 1.x releases
+  - Ignore http4s digest-based 1.x milestones
+  - Use node versioning for @types/node
+  - Limit concurrent requests to reduce load on Repology servers until we can fix this properly, see issue 10133
+
+🔡 Would you like to change the way Renovate is upgrading your dependencies? Simply edit the `renovate.json` in this branch with your custom config and the list of Merge Requests in the ""What to Expect"" section below will be updated the next time Renovate runs.
+
+---
+
+### What to Expect
+
+With your current configuration, Renovate will create 58 Merge Requests:
+
+<details>
+<summary>chore(deps): pin dependencies</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/pin-dependencies`
+  - Merge into: `master`
+  - Pin [@ant-design/charts](https://github.com/ant-design/ant-design-charts) to `1.0.17`
+  - Pin [@antv/data-set](https://github.com/antvis/data-set) to `0.11.7`
+  - Pin [@babel/core](https://github.com/babel/babel) to `7.11.1`
+  - Pin [@babel/node](https://github.com/babel/babel) to `7.10.5`
+  - Pin [@babel/plugin-transform-runtime](https://github.com/babel/babel) to `7.11.0`
+  - Pin [@babel/preset-env](https://github.com/babel/babel) to `7.11.0`
+  - Pin [@babel/preset-react](https://github.com/babel/babel) to `7.10.4`
+  - Pin [@babel/preset-typescript](https://github.com/babel/babel) to `7.10.4`
+  - Pin [@babel/runtime-corejs2](https://github.com/babel/babel) to `7.11.1`
+  - Pin [@emotion/eslint-plugin](https://github.com/emotion-js/emotion) to `11.0.0`
+  - Pin [@storybook/addon-essentials](https://github.com/storybookjs/storybook) to `6.0.21`
+  - Pin [@storybook/react](https://github.com/storybookjs/storybook) to `6.0.21`
+  - Pin [@tulipjs/eslint-config](https://github.com/tulipretail/eslint-config) to `1.1.1`
+  - Pin [@types/d3-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) to `3.2.1`
+  - Pin [@types/d3-shape](https://github.com/DefinitelyTyped/DefinitelyTyped) to `2.0.0`
+  - Pin [@types/json-stable-stringify](https://github.com/DefinitelyTyped/DefinitelyTyped) to `1.0.32`
+  - Pin [@types/numeral](https://github.com/DefinitelyTyped/DefinitelyTyped) to `0.0.28`
+  - Pin [@types/react-resizable](https://github.com/DefinitelyTyped/DefinitelyTyped) to `1.7.2`
+  - Pin [@types/recharts-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) to `1.0.0`
+  - Pin [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint) to `4.9.0`
+  - Pin [@typescript-eslint/parser](https://github.com/typescript-eslint/typescript-eslint) to `4.9.0`
+  - Pin [babel-loader](https://github.com/babel/babel-loader) to `8.1.0`
+  - Pin [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) to `1.13.0`
+  - Pin [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) to `3.0.0`
+  - Pin [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) to `4.0.0`
+  - Pin [babel-plugin-react-wrapped-display-name](https://github.com/laiff/babel-plugin-react-wrapped-display-name) to `1.0.0`
+  - Pin [bizcharts](https://github.com/alibaba/BizCharts) to `3.5.9`
+  - Pin [css-loader](https://github.com/webpack-contrib/css-loader) to `4.2.0`
+  - Pin docz to `2.3.1`
+  - Pin docz-theme-default to `1.2.0`
+  - Pin [eslint](https://github.com/eslint/eslint) to `7.15.0`
+  - Pin [eslint-config-airbnb](https://github.com/airbnb/javascript) to `18.2.1`
+  - Pin [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) to `7.0.0`
+  - Pin [eslint-import-resolver-babel-module](https://github.com/tleunen/eslint-import-resolver-babel-module) to `5.2.0`
+  - Pin [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) to `5.3.1`
+  - Pin [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import) to `2.22.1`
+  - Pin [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) to `6.4.1`
+  - Pin eslint-plugin-merico to `1.0.2`
+  - Pin eslint-plugin-okay to `0.0.2`
+  - Pin [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) to `3.2.0`
+  - Pin [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) to `7.21.5`
+  - Pin [eslint-plugin-react-hooks](https://github.com/facebook/react) to `4.2.0`
+  - Pin [eslint-plugin-unicorn](https://github.com/sindresorhus/eslint-plugin-unicorn) to `23.0.0`
+  - Pin [husky](https://github.com/typicode/husky) to `4.3.5`
+  - Pin [jest](https://github.com/facebook/jest) to `27.4.3`
+  - Pin [lint-staged](https://github.com/okonet/lint-staged) to `10.5.3`
+  - Pin [lodash](https://github.com/lodash/lodash) to `4.17.19`
+  - Pin [moment](https://github.com/moment/moment) to `2.29.1`
+  - Pin [npm-run-all](https://github.com/mysticatea/npm-run-all) to `4.1.5`
+  - Pin [prettier](https://github.com/prettier/prettier) to `2.2.1`
+  - Pin [react](https://github.com/facebook/react) to `16.13.1`
+  - Pin [react-dom](https://github.com/facebook/react) to `16.13.1`
+  - Pin [recharts](https://github.com/recharts/recharts) to `2.0.0-beta.8`
+  - Pin [sass](https://github.com/sass/dart-sass) to `1.26.10`
+  - Pin [sass-loader](https://github.com/webpack-contrib/sass-loader) to `10.0.2`
+  - Pin [semantic-ui-css](https://github.com/Semantic-Org/Semantic-UI-CSS) to `2.4.1`
+  - Pin [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-React) to `2.0.1`
+  - Pin [shx](https://github.com/shelljs/shx) to `0.3.3`
+  - Pin [style-loader](https://github.com/webpack-contrib/style-loader) to `1.2.1`
+  - Pin [ts-jest](https://github.com/kulshekhar/ts-jest) to `27.1.0`
+  - Pin [ts-migrate](https://github.com/airbnb/ts-migrate) to `0.1.10`
+  - Pin [typescript](https://github.com/Microsoft/TypeScript) to `4.1.2`
+  - Pin [url-loader](https://github.com/webpack-contrib/url-loader) to `4.1.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): pin dependencies</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/jest-monorepo`
+  - Merge into: `master`
+  - Pin [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped) to `27.0.3`
+  - Upgrade [jest](https://github.com/facebook/jest) to `27.4.7`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;antv/data-set to v0.11.8</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/antv-data-set-0.x`
+  - Merge into: `master`
+  - Upgrade [@antv/data-set](https://github.com/antvis/data-set) to `0.11.8`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/json-stable-stringify to v1.0.33</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/json-stable-stringify-1.x`
+  - Merge into: `master`
+  - Upgrade [@types/json-stable-stringify](https://github.com/DefinitelyTyped/DefinitelyTyped) to `1.0.33`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/numeral to v0.0.30</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/numeral-0.x`
+  - Merge into: `master`
+  - Upgrade [@types/numeral](https://github.com/DefinitelyTyped/DefinitelyTyped) to `0.0.30`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/react-resizable to v1.7.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/react-resizable-1.x`
+  - Merge into: `master`
+  - Upgrade [@types/react-resizable](https://github.com/DefinitelyTyped/DefinitelyTyped) to `1.7.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency babel-plugin-import to v1.13.3</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/babel-plugin-import-1.x`
+  - Merge into: `master`
+  - Upgrade [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) to `1.13.3`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency bizcharts to v3.5.10</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/bizcharts-3.x`
+  - Merge into: `master`
+  - Upgrade [bizcharts](https://github.com/alibaba/BizCharts) to `3.5.10`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency husky to v4.3.8</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/husky-4.x`
+  - Merge into: `master`
+  - Upgrade [husky](https://github.com/typicode/husky) to `4.3.8`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency lint-staged to v10.5.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/lint-staged-10.x`
+  - Merge into: `master`
+  - Upgrade [lint-staged](https://github.com/okonet/lint-staged) to `10.5.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency lodash to v4.17.21</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/lodash-monorepo`
+  - Merge into: `master`
+  - Upgrade [lodash](https://github.com/lodash/lodash) to `4.17.21`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency semantic-ui-react to v2.0.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/semantic-ui-react-2.x`
+  - Merge into: `master`
+  - Upgrade [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-React) to `2.0.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency shx to v0.3.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/shx-0.x`
+  - Merge into: `master`
+  - Upgrade [shx](https://github.com/shelljs/shx) to `0.3.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency ts-jest to v27.1.2</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/ts-jest-27.x`
+  - Merge into: `master`
+  - Upgrade [ts-jest](https://github.com/kulshekhar/ts-jest) to `27.1.2`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency ts-migrate to v0.1.27</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/ts-migrate-0.x`
+  - Merge into: `master`
+  - Upgrade [ts-migrate](https://github.com/airbnb/ts-migrate) to `0.1.27`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency url-loader to v4.1.1</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/url-loader-4.x`
+  - Merge into: `master`
+  - Upgrade [url-loader](https://github.com/webpack-contrib/url-loader) to `4.1.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update babel monorepo</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/babel-monorepo`
+  - Merge into: `master`
+  - Upgrade [@babel/core](https://github.com/babel/babel) to `7.16.7`
+  - Upgrade [@babel/node](https://github.com/babel/babel) to `7.16.8`
+  - Upgrade [@babel/plugin-transform-runtime](https://github.com/babel/babel) to `7.16.8`
+  - Upgrade [@babel/preset-env](https://github.com/babel/babel) to `7.16.8`
+  - Upgrade [@babel/preset-react](https://github.com/babel/babel) to `7.16.7`
+  - Upgrade [@babel/preset-typescript](https://github.com/babel/babel) to `7.16.7`
+  - Upgrade [@babel/runtime-corejs2](https://github.com/babel/babel) to `7.16.7`
+  - Upgrade [babel-loader](https://github.com/babel/babel-loader) to `8.2.3`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @ant-design/charts to v1.3.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/ant-design-charts-1.x`
+  - Merge into: `master`
+  - Upgrade [@ant-design/charts](https://github.com/ant-design/ant-design-charts) to `1.3.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;emotion/eslint-plugin to v11.7.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/emotion-monorepo`
+  - Merge into: `master`
+  - Upgrade [@emotion/eslint-plugin](https://github.com/emotion-js/emotion) to `11.7.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/d3-scale to v3.3.2</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/d3-scale-3.x`
+  - Merge into: `master`
+  - Upgrade [@types/d3-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) to `3.3.2`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/d3-shape to v2.1.3</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/d3-shape-2.x`
+  - Merge into: `master`
+  - Upgrade [@types/d3-shape](https://github.com/DefinitelyTyped/DefinitelyTyped) to `2.1.3`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency babel-plugin-macros to v3.1.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/babel-plugin-macros-3.x`
+  - Merge into: `master`
+  - Upgrade [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) to `3.1.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency babel-plugin-module-resolver to v4.1.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/babel-plugin-module-resolver-4.x`
+  - Merge into: `master`
+  - Upgrade [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) to `4.1.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency css-loader to v4.3.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/css-loader-4.x`
+  - Merge into: `master`
+  - Upgrade [css-loader](https://github.com/webpack-contrib/css-loader) to `4.3.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint to v7.32.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-7.x`
+  - Merge into: `master`
+  - Upgrade [eslint](https://github.com/eslint/eslint) to `7.32.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-config-prettier to v7.2.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-config-prettier-7.x`
+  - Merge into: `master`
+  - Upgrade [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) to `7.2.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-import-resolver-babel-module to v5.3.1</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-import-resolver-babel-module-5.x`
+  - Merge into: `master`
+  - Upgrade [eslint-import-resolver-babel-module](https://github.com/tleunen/eslint-import-resolver-babel-module) to `5.3.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-import to v2.25.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-import-2.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import) to `2.25.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-jsx-a11y to v6.5.1</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-jsx-a11y-6.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) to `6.5.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-prettier to v3.4.1</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-prettier-3.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) to `3.4.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-react to v7.28.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-react-7.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) to `7.28.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency prettier to v2.5.1</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/prettier-2.x`
+  - Merge into: `master`
+  - Upgrade [prettier](https://github.com/prettier/prettier) to `2.5.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency recharts to v2.1.8</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/recharts-2.x`
+  - Merge into: `master`
+  - Upgrade [recharts](https://github.com/recharts/recharts) to `2.1.8`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency sass to v1.47.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/sass-1.x`
+  - Merge into: `master`
+  - Upgrade [sass](https://github.com/sass/dart-sass) to `1.47.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency sass-loader to v10.2.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/sass-loader-10.x`
+  - Merge into: `master`
+  - Upgrade [sass-loader](https://github.com/webpack-contrib/sass-loader) to `10.2.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency style-loader to v1.3.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/style-loader-1.x`
+  - Merge into: `master`
+  - Upgrade [style-loader](https://github.com/webpack-contrib/style-loader) to `1.3.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency typescript to v4.5.4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/typescript-4.x`
+  - Merge into: `master`
+  - Upgrade [typescript](https://github.com/Microsoft/TypeScript) to `4.5.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update react monorepo</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/react-monorepo`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-react-hooks](https://github.com/facebook/react) to `4.3.0`
+  - Upgrade [react](https://github.com/facebook/react) to `16.14.0`
+  - Upgrade [react-dom](https://github.com/facebook/react) to `16.14.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update storybook monorepo to v6.4.10</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/storybook-monorepo`
+  - Merge into: `master`
+  - Upgrade [@storybook/addon-essentials](https://github.com/storybookjs/storybook) to `6.4.10`
+  - Upgrade [@storybook/react](https://github.com/storybookjs/storybook) to `6.4.10`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update typescript-eslint monorepo to v4.33.0</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/typescript-eslint-monorepo`
+  - Merge into: `master`
+  - Upgrade [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint) to `4.33.0`
+  - Upgrade [@typescript-eslint/parser](https://github.com/typescript-eslint/typescript-eslint) to `4.33.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency @&#8203;types/numeral to v2</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/numeral-2.x`
+  - Merge into: `master`
+  - Upgrade [@types/numeral](https://github.com/DefinitelyTyped/DefinitelyTyped) to `2.0.2`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency bizcharts to v4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/bizcharts-4.x`
+  - Merge into: `master`
+  - Upgrade [bizcharts](https://github.com/alibaba/BizCharts) to `4.1.15`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency css-loader to v6</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/css-loader-6.x`
+  - Merge into: `master`
+  - Upgrade [css-loader](https://github.com/webpack-contrib/css-loader) to `6.5.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint to v8</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-8.x`
+  - Merge into: `master`
+  - Upgrade [eslint](https://github.com/eslint/eslint) to `8.6.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-config-airbnb to v19</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-config-airbnb-19.x`
+  - Merge into: `master`
+  - Upgrade [eslint-config-airbnb](https://github.com/airbnb/javascript) to `19.0.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-config-prettier to v8</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-config-prettier-8.x`
+  - Merge into: `master`
+  - Upgrade [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) to `8.3.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-prettier to v4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-prettier-4.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) to `4.0.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency eslint-plugin-unicorn to v40</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/eslint-plugin-unicorn-40.x`
+  - Merge into: `master`
+  - Upgrade [eslint-plugin-unicorn](https://github.com/sindresorhus/eslint-plugin-unicorn) to `40.0.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency husky to v7</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/husky-7.x`
+  - Merge into: `master`
+  - Upgrade [husky](https://github.com/typicode/husky) to `7.0.4`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency lint-staged to v12</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/lint-staged-12.x`
+  - Merge into: `master`
+  - Upgrade [lint-staged](https://github.com/okonet/lint-staged) to `12.1.7`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency sass-loader to v12</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/sass-loader-12.x`
+  - Merge into: `master`
+  - Upgrade [sass-loader](https://github.com/webpack-contrib/sass-loader) to `12.4.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update dependency style-loader to v3</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/style-loader-3.x`
+  - Merge into: `master`
+  - Upgrade [style-loader](https://github.com/webpack-contrib/style-loader) to `3.3.1`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update emotion monorepo (major)</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/major-emotion-monorepo`
+  - Merge into: `master`
+  - Upgrade [@emotion/core](https://github.com/emotion-js/emotion) to `^10.0.10 || ^11.0.0`
+  - Upgrade [@emotion/styled](https://github.com/emotion-js/emotion) to `^10.0.10 || ^11.0.0`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update react monorepo to v17 (major)</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/major-react-monorepo`
+  - Merge into: `master`
+  - Upgrade [react](https://github.com/facebook/react) to `17.0.2`
+  - Upgrade [react-dom](https://github.com/facebook/react) to `17.0.2`
+
+
+</details>
+
+<details>
+<summary>chore(deps): update typescript-eslint monorepo to v5 (major)</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/major-typescript-eslint-monorepo`
+  - Merge into: `master`
+  - Upgrade [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint) to `5.9.1`
+  - Upgrade [@typescript-eslint/parser](https://github.com/typescript-eslint/typescript-eslint) to `5.9.1`
+
+
+</details>
+
+<details>
+<summary>fix(deps): update dependency d3-scale to v4</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/d3-scale-4.x`
+  - Merge into: `master`
+  - Upgrade [d3-scale](https://github.com/d3/d3-scale) to `^4.0.0`
+  - Upgrade [@types/d3-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) to `4.0.2`
+
+
+</details>
+
+<details>
+<summary>fix(deps): update dependency d3-shape to v3</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/d3-shape-3.x`
+  - Merge into: `master`
+  - Upgrade [d3-shape](https://github.com/d3/d3-shape) to `^3.0.0`
+  - Upgrade [@types/d3-shape](https://github.com/DefinitelyTyped/DefinitelyTyped) to `3.0.2`
+
+
+</details>
+
+<details>
+<summary>fix(deps): update dependency react-resizable to v3</summary>
+
+  - Schedule: [""at any time""]
+  - Branch name: `renovate/react-resizable-3.x`
+  - Merge into: `master`
+  - Upgrade [react-resizable](https://github.com/react-grid-layout/react-resizable) to `^3.0.0`
+
+
+</details>
+
+<br />
+
+🚸 Branch creation will be limited to maximum 2 per hour, so it doesn't swamp any CI resources or spam the project. See docs for `prhourlylimit` for details.
+
+
+---
+
+❓ Got questions? Check out Renovate's [Docs](https://docs.renovatebot.com/), particularly the Getting Started section.
+If you need any further assistance then you can also [request help here](https://github.com/renovatebot/renovate/discussions).
+
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/57,gerilleto,,,57,2022-01-11T14:52:32.592+00:00,2022-01-11T14:58:00.542+00:00,,,,,renovate/configure,master,,
+gitlab:GitlabMergeRequest:1:134588752,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,207,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): pin dependencies,"This MR contains the following updates:
+
+| Package | Type | Update | Change |
+|---|---|---|---|
+| [@ant-design/charts](https://github.com/ant-design/ant-design-charts) | devDependencies | pin | [`^1.0.17` -> `1.0.17`](https://renovatebot.com/diffs/npm/@ant-design%2fcharts/1.0.17/1.0.17) |
+| [@antv/data-set](https://github.com/antvis/data-set) | devDependencies | pin | [`^0.11.4` -> `0.11.7`](https://renovatebot.com/diffs/npm/@antv%2fdata-set/0.11.7/0.11.7) |
+| [@babel/core](https://babel.dev/docs/en/next/babel-core) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.5` -> `7.11.1`](https://renovatebot.com/diffs/npm/@babel%2fcore/7.11.1/7.11.1) |
+| [@babel/node](https://babel.dev/docs/en/next/babel-node) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.5` -> `7.10.5`](https://renovatebot.com/diffs/npm/@babel%2fnode/7.10.5/7.10.5) |
+| [@babel/plugin-transform-runtime](https://babel.dev/docs/en/next/babel-plugin-transform-runtime) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.5` -> `7.11.0`](https://renovatebot.com/diffs/npm/@babel%2fplugin-transform-runtime/7.11.0/7.11.0) |
+| [@babel/preset-env](https://babel.dev/docs/en/next/babel-preset-env) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.4` -> `7.11.0`](https://renovatebot.com/diffs/npm/@babel%2fpreset-env/7.11.0/7.11.0) |
+| [@babel/preset-react](https://babel.dev/docs/en/next/babel-preset-react) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.4` -> `7.10.4`](https://renovatebot.com/diffs/npm/@babel%2fpreset-react/7.10.4/7.10.4) |
+| [@babel/preset-typescript](https://babel.dev/docs/en/next/babel-preset-typescript) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.4` -> `7.10.4`](https://renovatebot.com/diffs/npm/@babel%2fpreset-typescript/7.10.4/7.10.4) |
+| [@babel/runtime-corejs2](https://babel.dev/docs/en/next/babel-runtime-corejs2) ([source](https://github.com/babel/babel)) | devDependencies | pin | [`^7.10.5` -> `7.11.1`](https://renovatebot.com/diffs/npm/@babel%2fruntime-corejs2/7.11.1/7.11.1) |
+| [@emotion/eslint-plugin](https://github.com/emotion-js/emotion) | devDependencies | pin | [`^11.0.0` -> `11.0.0`](https://renovatebot.com/diffs/npm/@emotion%2feslint-plugin/11.0.0/11.0.0) |
+| [@storybook/addon-essentials](https://github.com/storybookjs/storybook) | devDependencies | pin | [`^6.0.21` -> `6.0.21`](https://renovatebot.com/diffs/npm/@storybook%2faddon-essentials/6.0.21/6.0.21) |
+| [@storybook/react](https://github.com/storybookjs/storybook) | devDependencies | pin | [`^6.0.21` -> `6.0.21`](https://renovatebot.com/diffs/npm/@storybook%2freact/6.0.21/6.0.21) |
+| [@tulipjs/eslint-config](https://github.com/tulipretail/eslint-config) | devDependencies | pin | [`^1.1.1` -> `1.1.1`](https://renovatebot.com/diffs/npm/@tulipjs%2feslint-config/1.1.1/1.1.1) |
+| [@types/d3-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^3.2.1` -> `3.2.1`](https://renovatebot.com/diffs/npm/@types%2fd3-scale/3.2.1/3.2.1) |
+| [@types/d3-shape](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^2.0.0` -> `2.0.0`](https://renovatebot.com/diffs/npm/@types%2fd3-shape/2.0.0/2.0.0) |
+| [@types/json-stable-stringify](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^1.0.32` -> `1.0.32`](https://renovatebot.com/diffs/npm/@types%2fjson-stable-stringify/1.0.32/1.0.32) |
+| [@types/numeral](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^0.0.28` -> `0.0.28`](https://renovatebot.com/diffs/npm/@types%2fnumeral/0.0.28/0.0.28) |
+| [@types/react-resizable](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^1.7.2` -> `1.7.2`](https://renovatebot.com/diffs/npm/@types%2freact-resizable/1.7.2/1.7.2) |
+| [@types/recharts-scale](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^1.0.0` -> `1.0.0`](https://renovatebot.com/diffs/npm/@types%2frecharts-scale/1.0.0/1.0.0) |
+| [@typescript-eslint/eslint-plugin](https://github.com/typescript-eslint/typescript-eslint) | devDependencies | pin | [`^4.9.0` -> `4.9.0`](https://renovatebot.com/diffs/npm/@typescript-eslint%2feslint-plugin/4.9.0/4.9.0) |
+| [@typescript-eslint/parser](https://github.com/typescript-eslint/typescript-eslint) | devDependencies | pin | [`^4.9.0` -> `4.9.0`](https://renovatebot.com/diffs/npm/@typescript-eslint%2fparser/4.9.0/4.9.0) |
+| [babel-loader](https://github.com/babel/babel-loader) | devDependencies | pin | [`^8.1.0` -> `8.1.0`](https://renovatebot.com/diffs/npm/babel-loader/8.1.0/8.1.0) |
+| [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) | devDependencies | pin | [`^1.13.0` -> `1.13.0`](https://renovatebot.com/diffs/npm/babel-plugin-import/1.13.0/1.13.0) |
+| [babel-plugin-macros](https://github.com/kentcdodds/babel-plugin-macros) | devDependencies | pin | [`^3.0.0` -> `3.0.0`](https://renovatebot.com/diffs/npm/babel-plugin-macros/3.0.0/3.0.0) |
+| [babel-plugin-module-resolver](https://github.com/tleunen/babel-plugin-module-resolver) | devDependencies | pin | [`^4.0.0` -> `4.0.0`](https://renovatebot.com/diffs/npm/babel-plugin-module-resolver/4.0.0/4.0.0) |
+| [babel-plugin-react-wrapped-display-name](https://github.com/laiff/babel-plugin-react-wrapped-display-name) | devDependencies | pin | [`^1.0.0` -> `1.0.0`](https://renovatebot.com/diffs/npm/babel-plugin-react-wrapped-display-name/1.0.0/1.0.0) |
+| [bizcharts](https://bizcharts.net) ([source](https://github.com/alibaba/BizCharts)) | devDependencies | pin | [`^3.5.9` -> `3.5.9`](https://renovatebot.com/diffs/npm/bizcharts/3.5.9/3.5.9) |
+| [css-loader](https://github.com/webpack-contrib/css-loader) | devDependencies | pin | [`^4.0.0` -> `4.2.0`](https://renovatebot.com/diffs/npm/css-loader/4.2.0/4.2.0) |
+| [docz](https://github.com/doczjs/docz) | devDependencies | pin | [`^2.3.1` -> `2.3.1`](https://renovatebot.com/diffs/npm/docz/2.3.1/2.3.1) |
+| docz-theme-default | devDependencies | pin | [`^1.2.0` -> `1.2.0`](https://renovatebot.com/diffs/npm/docz-theme-default/1.2.0/1.2.0) |
+| [eslint](https://eslint.org) ([source](https://github.com/eslint/eslint)) | devDependencies | pin | [`^7.15.0` -> `7.15.0`](https://renovatebot.com/diffs/npm/eslint/7.15.0/7.15.0) |
+| [eslint-config-airbnb](https://github.com/airbnb/javascript) | devDependencies | pin | [`^18.2.1` -> `18.2.1`](https://renovatebot.com/diffs/npm/eslint-config-airbnb/18.2.1/18.2.1) |
+| [eslint-config-prettier](https://github.com/prettier/eslint-config-prettier) | devDependencies | pin | [`^7.0.0` -> `7.0.0`](https://renovatebot.com/diffs/npm/eslint-config-prettier/7.0.0/7.0.0) |
+| [eslint-import-resolver-babel-module](https://github.com/tleunen/eslint-import-resolver-babel-module) | devDependencies | pin | [`^5.2.0` -> `5.2.0`](https://renovatebot.com/diffs/npm/eslint-import-resolver-babel-module/5.2.0/5.2.0) |
+| [eslint-plugin-babel](https://github.com/babel/eslint-plugin-babel) | devDependencies | pin | [`^5.3.1` -> `5.3.1`](https://renovatebot.com/diffs/npm/eslint-plugin-babel/5.3.1/5.3.1) |
+| [eslint-plugin-import](https://github.com/import-js/eslint-plugin-import) | devDependencies | pin | [`^2.22.1` -> `2.22.1`](https://renovatebot.com/diffs/npm/eslint-plugin-import/2.22.1/2.22.1) |
+| [eslint-plugin-jsx-a11y](https://github.com/jsx-eslint/eslint-plugin-jsx-a11y) | devDependencies | pin | [`^6.4.1` -> `6.4.1`](https://renovatebot.com/diffs/npm/eslint-plugin-jsx-a11y/6.4.1/6.4.1) |
+| eslint-plugin-merico | devDependencies | pin | [`^1.0.2` -> `1.0.2`](https://renovatebot.com/diffs/npm/eslint-plugin-merico/1.0.2/1.0.2) |
+| eslint-plugin-okay | devDependencies | pin | [`^0.0.2` -> `0.0.2`](https://renovatebot.com/diffs/npm/eslint-plugin-okay/0.0.2/0.0.2) |
+| [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) | devDependencies | pin | [`^3.2.0` -> `3.2.0`](https://renovatebot.com/diffs/npm/eslint-plugin-prettier/3.2.0/3.2.0) |
+| [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react) | devDependencies | pin | [`^7.21.5` -> `7.21.5`](https://renovatebot.com/diffs/npm/eslint-plugin-react/7.21.5/7.21.5) |
+| [eslint-plugin-react-hooks](https://reactjs.org/) ([source](https://github.com/facebook/react)) | devDependencies | pin | [`^4.2.0` -> `4.2.0`](https://renovatebot.com/diffs/npm/eslint-plugin-react-hooks/4.2.0/4.2.0) |
+| [eslint-plugin-unicorn](https://github.com/sindresorhus/eslint-plugin-unicorn) | devDependencies | pin | [`^23.0.0` -> `23.0.0`](https://renovatebot.com/diffs/npm/eslint-plugin-unicorn/23.0.0/23.0.0) |
+| [jest](https://jestjs.io/) ([source](https://github.com/facebook/jest)) | devDependencies | pin | [`^27.4.3` -> `27.4.3`](https://renovatebot.com/diffs/npm/jest/27.4.3/27.4.3) |
+| [lodash](https://lodash.com/) ([source](https://github.com/lodash/lodash)) | devDependencies | pin | [`^4.17.19` -> `4.17.19`](https://renovatebot.com/diffs/npm/lodash/4.17.19/4.17.19) |
+| [moment](https://momentjs.com) ([source](https://github.com/moment/moment)) | devDependencies | pin | [`^2.24.0` -> `2.29.1`](https://renovatebot.com/diffs/npm/moment/2.29.1/2.29.1) |
+| [npm-run-all](https://github.com/mysticatea/npm-run-all) | devDependencies | pin | [`^4.1.5` -> `4.1.5`](https://renovatebot.com/diffs/npm/npm-run-all/4.1.5/4.1.5) |
+| [prettier](https://prettier.io) ([source](https://github.com/prettier/prettier)) | devDependencies | pin | [`^2.2.1` -> `2.2.1`](https://renovatebot.com/diffs/npm/prettier/2.2.1/2.2.1) |
+| [react](https://reactjs.org/) ([source](https://github.com/facebook/react)) | devDependencies | pin | [`^16.12.0` -> `16.13.1`](https://renovatebot.com/diffs/npm/react/16.13.1/16.13.1) |
+| [react-dom](https://reactjs.org/) ([source](https://github.com/facebook/react)) | devDependencies | pin | [`^16.12.0` -> `16.13.1`](https://renovatebot.com/diffs/npm/react-dom/16.13.1/16.13.1) |
+| [recharts](https://github.com/recharts/recharts) | devDependencies | pin | [`^2.0.0-beta.8` -> `2.0.0-beta.8`](https://renovatebot.com/diffs/npm/recharts/2.0.0-beta.8/2.0.0-beta.8) |
+| [sass](https://github.com/sass/dart-sass) | devDependencies | pin | [`^1.26.10` -> `1.26.10`](https://renovatebot.com/diffs/npm/sass/1.26.10/1.26.10) |
+| [sass-loader](https://github.com/webpack-contrib/sass-loader) | devDependencies | pin | [`^10.0.2` -> `10.0.2`](https://renovatebot.com/diffs/npm/sass-loader/10.0.2/10.0.2) |
+| [semantic-ui-css](http://www.semantic-ui.com) ([source](https://github.com/Semantic-Org/Semantic-UI-CSS)) | devDependencies | pin | [`^2.4.1` -> `2.4.1`](https://renovatebot.com/diffs/npm/semantic-ui-css/2.4.1/2.4.1) |
+| [semantic-ui-react](https://github.com/Semantic-Org/Semantic-UI-React) | devDependencies | pin | [`^2.0.1` -> `2.0.1`](https://renovatebot.com/diffs/npm/semantic-ui-react/2.0.1/2.0.1) |
+| [shx](https://github.com/shelljs/shx) | devDependencies | pin | [`^0.3.3` -> `0.3.3`](https://renovatebot.com/diffs/npm/shx/0.3.3/0.3.3) |
+| [style-loader](https://github.com/webpack-contrib/style-loader) | devDependencies | pin | [`^1.2.1` -> `1.2.1`](https://renovatebot.com/diffs/npm/style-loader/1.2.1/1.2.1) |
+| [ts-jest](https://kulshekhar.github.io/ts-jest) ([source](https://github.com/kulshekhar/ts-jest)) | devDependencies | pin | [`^27.1.0` -> `27.1.0`](https://renovatebot.com/diffs/npm/ts-jest/27.1.0/27.1.0) |
+| [ts-migrate](https://github.com/airbnb/ts-migrate) | devDependencies | pin | [`^0.1.10` -> `0.1.10`](https://renovatebot.com/diffs/npm/ts-migrate/0.1.10/0.1.10) |
+| [typescript](https://www.typescriptlang.org/) ([source](https://github.com/Microsoft/TypeScript)) | devDependencies | pin | [`^4.1.2` -> `4.1.2`](https://renovatebot.com/diffs/npm/typescript/4.1.2/4.1.2) |
+| [url-loader](https://github.com/webpack-contrib/url-loader) | devDependencies | pin | [`^4.1.0` -> `4.1.0`](https://renovatebot.com/diffs/npm/url-loader/4.1.0/4.1.0) |
+
+📌 **Important**: Renovate will wait until you have merged this Pin MR before creating any *upgrade* MRs for the affected packages. Add the preset `:preserveSemverRanges` to your config if you instead don't wish to pin dependencies.
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+👻 **Immortal**: This MR will be recreated if closed unmerged. Get [config help](https://github.com/renovatebot/renovate/discussions) if that's undesired.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/58,gerilleto,,,58,2022-01-11T15:07:33.295+00:00,,,,,,renovate/pin-dependencies,master,,
+gitlab:GitlabMergeRequest:1:134588789,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,208,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): pin dependencies,"This MR contains the following updates:
+
+| Package | Type | Update | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|---|---|
+| [@types/jest](https://github.com/DefinitelyTyped/DefinitelyTyped) | devDependencies | pin | [`^27.0.3` -> `27.0.3`](https://renovatebot.com/diffs/npm/@types%2fjest/27.0.3/27.0.3) | [![age](https://badges.renovateapi.com/packages/npm/@types%2fjest/27.0.3/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@types%2fjest/27.0.3/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@types%2fjest/27.0.3/compatibility-slim/27.0.3)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@types%2fjest/27.0.3/confidence-slim/27.0.3)](https://docs.renovatebot.com/merge-confidence/) |
+| [jest](https://jestjs.io/) ([source](https://github.com/facebook/jest)) | devDependencies | minor | [`^27.4.3` -> `27.5.1`](https://renovatebot.com/diffs/npm/jest/27.4.3/27.5.1) | [![age](https://badges.renovateapi.com/packages/npm/jest/27.5.1/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/jest/27.5.1/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/jest/27.5.1/compatibility-slim/27.4.3)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/jest/27.5.1/confidence-slim/27.4.3)](https://docs.renovatebot.com/merge-confidence/) |
+
+📌 **Important**: Renovate will wait until you have merged this Pin MR before creating any *upgrade* MRs for the affected packages. Add the preset `:preserveSemverRanges` to your config if you instead don't wish to pin dependencies.
+
+---
+
+### Release Notes
+
+<details>
+<summary>facebook/jest</summary>
+
+### [`v27.5.1`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2751)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.5.0...v27.5.1)
+
+##### Features
+
+-   `[jest-config]` Support comments in JSON config file ([#&#8203;12316](https://github.com/facebook/jest/pull/12316))
+-   `[pretty-format]` Expose `ConvertAnsi` plugin ([#&#8203;12308](https://github.com/facebook/jest/pull/12308))
+
+##### Fixes
+
+-   `[expect]` Add type definitions for asymmetric `closeTo` matcher ([#&#8203;12304](https://github.com/facebook/jest/pull/12304))
+-   `[jest-cli]` Load binary via exported API ([#&#8203;12315](https://github.com/facebook/jest/pull/12315))
+-   `[jest-config]` Replace `jsonlint` with `parse-json` ([#&#8203;12316](https://github.com/facebook/jest/pull/12316))
+-   `[jest-repl]` Make module importable ([#&#8203;12311](https://github.com/facebook/jest/pull/12311) & [#&#8203;12315](https://github.com/facebook/jest/pull/12315))
+
+##### Chore & Maintenance
+
+-   `[*]` Avoid anonymous default exports ([#&#8203;12313](https://github.com/facebook/jest/pull/12313))
+
+### [`v27.5.0`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2750)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.4.7...v27.5.0)
+
+##### Features
+
+-   `[expect]` Add asymmetric matcher `expect.closeTo` ([#&#8203;12243](https://github.com/facebook/jest/pull/12243))
+-   `[jest-mock]` Added `mockFn.mock.lastCall` to retrieve last argument ([#&#8203;12285](https://github.com/facebook/jest/pull/12285))
+
+##### Fixes
+
+-   `[expect]` Add a fix for `.toHaveProperty('')` ([#&#8203;12251](https://github.com/facebook/jest/pull/12251))
+-   `[jest-each, @&#8203;jest/globals]` Allow passing `ReadonlyArray` type of a table to `describe.each` and `test.each` ([#&#8203;12297](https://github.com/facebook/jest/pull/12297))
+-   `[@jest/globals]` Add missing `options` argument to `jest.doMock` typing ([#&#8203;12292](https://github.com/facebook/jest/pull/12292))
+-   `[jest-environment-node]` Add `atob` and `btoa` ([#&#8203;12269](https://github.com/facebook/jest/pull/12269))
+-   `[jest-matcher-utils]` Correct diff for expected asymmetric matchers ([#&#8203;12264](https://github.com/facebook/jest/pull/12264))
+-   `[jest-message-util]` Fix `.getTopFrame()` (and `toMatchInlineSnapshot()`) with `mjs` files ([#&#8203;12277](https://github.com/facebook/jest/pull/12277))
+
+##### Chore & Maintenance
+
+-   `[*]` Update `graceful-fs` to `^4.2.9` ([#&#8203;11749](https://github.com/facebook/jest/pull/11749))
+
+##### Performance
+
+-   `[jest-resolve]` perf: skip error creation on not found `stat` calls ([#&#8203;11749](https://github.com/facebook/jest/pull/11749))
+
+### [`v27.4.7`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2747)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.4.6...v27.4.7)
+
+##### Fixes
+
+-   `jest-config` Add missing `@babel/core` dependency ([#&#8203;12216](https://github.com/facebook/jest/pull/12216))
+
+### [`v27.4.6`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2746)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.4.5...v27.4.6)
+
+##### Fixes
+
+-   `[jest-environment-node]` Add `AbortSignal` ([#&#8203;12157](https://github.com/facebook/jest/pull/12157))
+-   `[jest-environment-node]` Add Missing node global `performance` ([#&#8203;12002](https://github.com/facebook/jest/pull/12002))
+-   `[jest-runtime]` Handle missing `mocked` property ([#&#8203;12213](https://github.com/facebook/jest/pull/12213))
+-   `[@jest/transform]` Update dependency package `pirates` to 4.0.4 ([#&#8203;12002](https://github.com/facebook/jest/pull/12002))
+
+##### Performance
+
+-   `jest-config` perf: only register ts-node once when loading TS config files ([#&#8203;12160](https://github.com/facebook/jest/pull/12160))
+
+### [`v27.4.5`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2745)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.4.4...v27.4.5)
+
+##### Fixes
+
+-   `[jest-worker]` Stop explicitly passing `process.env` ([#&#8203;12141](https://github.com/facebook/jest/pull/12141))
+
+### [`v27.4.4`](https://github.com/facebook/jest/blob/HEAD/CHANGELOG.md#&#8203;2744)
+
+[Compare Source](https://github.com/facebook/jest/compare/v27.4.3...v27.4.4)
+
+##### Fixes
+
+-   `[babel-jest]` Add `process.version` chunk to the cache key ([#&#8203;12122](https://github.com/facebook/jest/pull/12122))
+-   `[jest-environment]` Add `mocked` to `jest` object ([#&#8203;12133](https://github.com/facebook/jest/pull/12133))
+-   `[jest-worker]` Stop explicitly passing `execArgv` ([#&#8203;12128](https://github.com/facebook/jest/pull/12128))
+
+##### Chore & Maintenance
+
+-   `[website]` Fix the card front that looks overlapping part of the card back
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Whenever MR is behind base branch, or you tick the rebase/retry checkbox.
+
+👻 **Immortal**: This MR will be recreated if closed unmerged. Get [config help](https://github.com/renovatebot/renovate/discussions) if that's undesired.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/59,gerilleto,,,59,2022-01-11T15:07:44.297+00:00,,,,,,renovate/jest-monorepo,master,,
+gitlab:GitlabMergeRequest:1:134604348,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,209,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @antv/data-set to v0.11.8,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@antv/data-set](https://github.com/antvis/data-set) | [`^0.11.4` -> `0.11.8`](https://renovatebot.com/diffs/npm/@antv%2fdata-set/0.11.7/0.11.8) | [![age](https://badges.renovateapi.com/packages/npm/@antv%2fdata-set/0.11.8/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@antv%2fdata-set/0.11.8/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@antv%2fdata-set/0.11.8/compatibility-slim/0.11.7)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@antv%2fdata-set/0.11.8/confidence-slim/0.11.7)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>antvis/data-set</summary>
+
+### [`v0.11.8`](https://github.com/antvis/data-set/compare/04126b4bb8d7b52c70390f88f79df312069503cc...d21e438ee46943e1d00aed944ff82512fd6086ab)
+
+[Compare Source](https://github.com/antvis/data-set/compare/04126b4bb8d7b52c70390f88f79df312069503cc...d21e438ee46943e1d00aed944ff82512fd6086ab)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/60,gerilleto,,,60,2022-01-11T16:07:44.334+00:00,,,,,,renovate/antv-data-set-0.x,master,,
+gitlab:GitlabMergeRequest:1:134604378,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,210,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @types/json-stable-stringify to v1.0.33,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@types/json-stable-stringify](https://github.com/DefinitelyTyped/DefinitelyTyped) | [`^1.0.32` -> `1.0.33`](https://renovatebot.com/diffs/npm/@types%2fjson-stable-stringify/1.0.32/1.0.33) | [![age](https://badges.renovateapi.com/packages/npm/@types%2fjson-stable-stringify/1.0.33/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@types%2fjson-stable-stringify/1.0.33/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@types%2fjson-stable-stringify/1.0.33/compatibility-slim/1.0.32)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@types%2fjson-stable-stringify/1.0.33/confidence-slim/1.0.32)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/61,gerilleto,,,61,2022-01-11T16:07:53.889+00:00,,,,,,renovate/json-stable-stringify-1.x,master,,
+gitlab:GitlabMergeRequest:1:134626514,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,211,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @types/numeral to v0.0.30,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@types/numeral](https://github.com/DefinitelyTyped/DefinitelyTyped) | [`^0.0.28` -> `0.0.30`](https://renovatebot.com/diffs/npm/@types%2fnumeral/0.0.28/0.0.30) | [![age](https://badges.renovateapi.com/packages/npm/@types%2fnumeral/0.0.30/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@types%2fnumeral/0.0.30/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@types%2fnumeral/0.0.30/compatibility-slim/0.0.28)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@types%2fnumeral/0.0.30/confidence-slim/0.0.28)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/62,gerilleto,,,62,2022-01-11T17:07:42.675+00:00,,,,,,renovate/numeral-0.x,master,,
+gitlab:GitlabMergeRequest:1:134626537,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,212,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @types/react-resizable to v1.7.4,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@types/react-resizable](https://github.com/DefinitelyTyped/DefinitelyTyped) | [`^1.7.2` -> `1.7.4`](https://renovatebot.com/diffs/npm/@types%2freact-resizable/1.7.2/1.7.4) | [![age](https://badges.renovateapi.com/packages/npm/@types%2freact-resizable/1.7.4/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@types%2freact-resizable/1.7.4/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@types%2freact-resizable/1.7.4/compatibility-slim/1.7.2)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@types%2freact-resizable/1.7.4/confidence-slim/1.7.2)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/63,gerilleto,,,63,2022-01-11T17:07:52.582+00:00,,,,,,renovate/react-resizable-1.x,master,,
+gitlab:GitlabMergeRequest:1:134634844,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,213,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency babel-plugin-import to v1.13.3,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [babel-plugin-import](https://github.com/ant-design/babel-plugin-import) | [`^1.13.0` -> `1.13.3`](https://renovatebot.com/diffs/npm/babel-plugin-import/1.13.0/1.13.3) | [![age](https://badges.renovateapi.com/packages/npm/babel-plugin-import/1.13.3/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/babel-plugin-import/1.13.3/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/babel-plugin-import/1.13.3/compatibility-slim/1.13.0)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/babel-plugin-import/1.13.3/confidence-slim/1.13.0)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>ant-design/babel-plugin-import</summary>
+
+### [`v1.13.3`](https://github.com/ant-design/babel-plugin-import/releases/v1.13.3)
+
+[Compare Source](https://github.com/ant-design/babel-plugin-import/compare/v1.13.2...v1.13.3)
+
+-   fix: publish with father-next ([#&#8203;555](https://github.com/ant-design/babel-plugin-import/issues/555))  [`a88ee15`](https://github.com/ant-design/babel-plugin-import/commit/a88ee15)
+
+### [`v1.13.2`](https://github.com/ant-design/babel-plugin-import/releases/v1.13.2)
+
+[Compare Source](https://github.com/ant-design/babel-plugin-import/compare/v1.13.1...v1.13.2)
+
+-   fix variable assignment supports comma expression, also fix istanbul conflicts ([#&#8203;549](https://github.com/ant-design/babel-plugin-import/issues/549))  [`3ac277e`](https://github.com/ant-design/babel-plugin-import/commit/3ac277e)
+
+### [`v1.13.1`](https://github.com/ant-design/babel-plugin-import/releases/v1.13.1)
+
+[Compare Source](https://github.com/ant-design/babel-plugin-import/compare/v1.13.0...v1.13.1)
+
+-   feat: add switch and switchCase treatment ([#&#8203;520](https://github.com/ant-design/babel-plugin-import/issues/520))  [`917e8dc`](https://github.com/ant-design/babel-plugin-import/commit/917e8dc)
+-   chore(deps-dev): bump eslint from 7.9.0 to 7.10.0 ([#&#8203;522](https://github.com/ant-design/babel-plugin-import/issues/522))  [`4a89311`](https://github.com/ant-design/babel-plugin-import/commit/4a89311)
+-   chore(deps-dev): bump eslint-plugin-import from 2.20.2 to 2.22.1 ([#&#8203;523](https://github.com/ant-design/babel-plugin-import/issues/523))  [`d3c3bde`](https://github.com/ant-design/babel-plugin-import/commit/d3c3bde)
+-   chore(deps-dev): bump prettier from 2.1.1 to 2.1.2 ([#&#8203;517](https://github.com/ant-design/babel-plugin-import/issues/517))  [`61a46a8`](https://github.com/ant-design/babel-plugin-import/commit/61a46a8)
+-   chore(deps-dev): bump lint-staged from 10.3.0 to 10.4.0 ([#&#8203;518](https://github.com/ant-design/babel-plugin-import/issues/518))  [`774b64a`](https://github.com/ant-design/babel-plugin-import/commit/774b64a)
+-   chore(deps-dev): bump eslint from 7.1.0 to 7.9.0 ([#&#8203;516](https://github.com/ant-design/babel-plugin-import/issues/516))  [`73ed061`](https://github.com/ant-design/babel-plugin-import/commit/73ed061)
+-   chore(deps-dev): bump husky from 4.2.5 to 4.3.0 ([#&#8203;515](https://github.com/ant-design/babel-plugin-import/issues/515))  [`cca51bd`](https://github.com/ant-design/babel-plugin-import/commit/cca51bd)
+-   chore(deps-dev): bump [@&#8203;babel/core](https://github.com/babel/core) from 7.8.4 to 7.11.6 ([#&#8203;513](https://github.com/ant-design/babel-plugin-import/issues/513))  [`8b0828e`](https://github.com/ant-design/babel-plugin-import/commit/8b0828e)
+-   chore(deps-dev): bump lint-staged from 10.2.13 to 10.3.0 ([#&#8203;514](https://github.com/ant-design/babel-plugin-import/issues/514))  [`731f2d0`](https://github.com/ant-design/babel-plugin-import/commit/731f2d0)
+-   chore(deps-dev): bump lint-staged from 10.2.11 to 10.2.13 ([#&#8203;511](https://github.com/ant-design/babel-plugin-import/issues/511))  [`a0ceb95`](https://github.com/ant-design/babel-plugin-import/commit/a0ceb95)
+-   chore(deps-dev): bump prettier from 2.0.5 to 2.1.1 ([#&#8203;512](https://github.com/ant-design/babel-plugin-import/issues/512))  [`a419e16`](https://github.com/ant-design/babel-plugin-import/commit/a419e16)
+-   Update README.md ([#&#8203;510](https://github.com/ant-design/babel-plugin-import/issues/510))  [`8096fdf`](https://github.com/ant-design/babel-plugin-import/commit/8096fdf)
+-   chore(deps): \[security] bump lodash from 4.17.15 to 4.17.19 ([#&#8203;491](https://github.com/ant-design/babel-plugin-import/issues/491))  [`0c2eabe`](https://github.com/ant-design/babel-plugin-import/commit/0c2eabe)
+-   chore(deps-dev): bump lint-staged from 10.2.8 to 10.2.11 ([#&#8203;469](https://github.com/ant-design/babel-plugin-import/issues/469))  [`f39e711`](https://github.com/ant-design/babel-plugin-import/commit/f39e711)
+-   chore: use Prettier format ([#&#8203;458](https://github.com/ant-design/babel-plugin-import/issues/458))  [`5cb2349`](https://github.com/ant-design/babel-plugin-import/commit/5cb2349)
+-   customName 参数添加透传 File 对象 ([#&#8203;413](https://github.com/ant-design/babel-plugin-import/issues/413))  [`39afe42`](https://github.com/ant-design/babel-plugin-import/commit/39afe42)
+-   chore(deps): bump [@&#8203;babel/helper-module-imports](https://github.com/babel/helper-module-imports) from 7.7.4 to 7.8.3 ([#&#8203;410](https://github.com/ant-design/babel-plugin-import/issues/410))  [`667e85e`](https://github.com/ant-design/babel-plugin-import/commit/667e85e)
+-   chore(deps-dev): bump np from 5.2.1 to 6.2.0 ([#&#8203;418](https://github.com/ant-design/babel-plugin-import/issues/418))  [`9f5825d`](https://github.com/ant-design/babel-plugin-import/commit/9f5825d)
+-   chore(deps): \[security] bump acorn from 5.7.3 to 5.7.4 ([#&#8203;425](https://github.com/ant-design/babel-plugin-import/issues/425))  [`55dd22d`](https://github.com/ant-design/babel-plugin-import/commit/55dd22d)
+-   Merge pull request [#&#8203;414](https://github.com/ant-design/babel-plugin-import/issues/414) from ant-design/dependabot/npm_and_yarn/babel/core-7.8.4  [`7300eba`](https://github.com/ant-design/babel-plugin-import/commit/7300eba)
+-   Merge pull request [#&#8203;415](https://github.com/ant-design/babel-plugin-import/issues/415) from ant-design/dependabot/npm_and_yarn/babel/runtime-7.8.4  [`30cfcbc`](https://github.com/ant-design/babel-plugin-import/commit/30cfcbc)
+-   chore(deps): bump [@&#8203;babel/runtime](https://github.com/babel/runtime) from 7.7.7 to 7.8.4  [`3b386d4`](https://github.com/ant-design/babel-plugin-import/commit/3b386d4)
+-   chore(deps-dev): bump [@&#8203;babel/core](https://github.com/babel/core) from 7.7.7 to 7.8.4  [`6b5e0c9`](https://github.com/ant-design/babel-plugin-import/commit/6b5e0c9)
+-   Merge pull request [#&#8203;412](https://github.com/ant-design/babel-plugin-import/issues/412) from Jeff-Tian/patch-1  [`654e3b1`](https://github.com/ant-design/babel-plugin-import/commit/654e3b1)
+-   fix: typo  [`d63dea6`](https://github.com/ant-design/babel-plugin-import/commit/d63dea6)
+-   Merge pull request [#&#8203;339](https://github.com/ant-design/babel-plugin-import/issues/339) from ant-design/dependabot/npm_and_yarn/umi-tools-0.4.0  [`53cb98b`](https://github.com/ant-design/babel-plugin-import/commit/53cb98b)
+-   Bump umi-tools from 0.1.4 to 0.4.0  [`ae74c70`](https://github.com/ant-design/babel-plugin-import/commit/ae74c70)
+-   Merge pull request [#&#8203;385](https://github.com/ant-design/babel-plugin-import/issues/385) from ant-design/dependabot/npm_and_yarn/babel/preset-react-7.7.4  [`b94b3a9`](https://github.com/ant-design/babel-plugin-import/commit/b94b3a9)
+-   Merge pull request [#&#8203;386](https://github.com/ant-design/babel-plugin-import/issues/386) from ant-design/dependabot/npm_and_yarn/babel/helper-module-imports-7.7.4  [`fbba486`](https://github.com/ant-design/babel-plugin-import/commit/fbba486)
+-   Merge pull request [#&#8203;398](https://github.com/ant-design/babel-plugin-import/issues/398) from ant-design/dependabot/npm_and_yarn/eslint-6.8.0  [`b1bf749`](https://github.com/ant-design/babel-plugin-import/commit/b1bf749)
+-   Merge pull request [#&#8203;401](https://github.com/ant-design/babel-plugin-import/issues/401) from ant-design/dependabot/npm_and_yarn/handlebars-4.6.0  [`9a1614b`](https://github.com/ant-design/babel-plugin-import/commit/9a1614b)
+-   \[Security] Bump handlebars from 4.0.12 to 4.6.0  [`4d28c84`](https://github.com/ant-design/babel-plugin-import/commit/4d28c84)
+-   Merge pull request [#&#8203;400](https://github.com/ant-design/babel-plugin-import/issues/400) from ant-design/dependabot/npm_and_yarn/babel-preset-umi-1.8.2  [`c146a35`](https://github.com/ant-design/babel-plugin-import/commit/c146a35)
+-   Bump babel-preset-umi from 1.6.1 to 1.8.2  [`4e36f25`](https://github.com/ant-design/babel-plugin-import/commit/4e36f25)
+-   Bump eslint from 6.7.2 to 6.8.0  [`58a97d7`](https://github.com/ant-design/babel-plugin-import/commit/58a97d7)
+-   Merge pull request [#&#8203;396](https://github.com/ant-design/babel-plugin-import/issues/396) from ant-design/dependabot/npm_and_yarn/babel/core-7.7.7  [`802f65f`](https://github.com/ant-design/babel-plugin-import/commit/802f65f)
+-   Merge pull request [#&#8203;397](https://github.com/ant-design/babel-plugin-import/issues/397) from ant-design/dependabot/npm_and_yarn/babel/runtime-7.7.7  [`b630173`](https://github.com/ant-design/babel-plugin-import/commit/b630173)
+-   Bump [@&#8203;babel/runtime](https://github.com/babel/runtime) from 7.7.6 to 7.7.7  [`d6b4a6f`](https://github.com/ant-design/babel-plugin-import/commit/d6b4a6f)
+-   Bump [@&#8203;babel/core](https://github.com/babel/core) from 7.7.5 to 7.7.7  [`cacc2a2`](https://github.com/ant-design/babel-plugin-import/commit/cacc2a2)
+-   Bump [@&#8203;babel/helper-module-imports](https://github.com/babel/helper-module-imports) from 7.0.0 to 7.7.4  [`f141108`](https://github.com/ant-design/babel-plugin-import/commit/f141108)
+-   Merge pull request [#&#8203;394](https://github.com/ant-design/babel-plugin-import/issues/394) from ant-design/dependabot/npm_and_yarn/babel/runtime-7.7.6  [`6bcf829`](https://github.com/ant-design/babel-plugin-import/commit/6bcf829)
+-   Merge pull request [#&#8203;395](https://github.com/ant-design/babel-plugin-import/issues/395) from ant-design/dependabot/npm_and_yarn/babel/core-7.7.5  [`70b347a`](https://github.com/ant-design/babel-plugin-import/commit/70b347a)
+-   Merge pull request [#&#8203;393](https://github.com/ant-design/babel-plugin-import/issues/393) from ant-design/dependabot/npm_and_yarn/eslint-6.7.2  [`5491ec0`](https://github.com/ant-design/babel-plugin-import/commit/5491ec0)
+-   Bump [@&#8203;babel/core](https://github.com/babel/core) from 7.6.0 to 7.7.5  [`c2e6592`](https://github.com/ant-design/babel-plugin-import/commit/c2e6592)
+-   Bump [@&#8203;babel/runtime](https://github.com/babel/runtime) from 7.6.0 to 7.7.6  [`96e5d9f`](https://github.com/ant-design/babel-plugin-import/commit/96e5d9f)
+-   Bump eslint from 4.18.2 to 6.7.2  [`0991ccb`](https://github.com/ant-design/babel-plugin-import/commit/0991ccb)
+-   Merge pull request [#&#8203;392](https://github.com/ant-design/babel-plugin-import/issues/392) from ant-design/dependabot/npm_and_yarn/eslint-4.18.2  [`082dd16`](https://github.com/ant-design/babel-plugin-import/commit/082dd16)
+-   Bump eslint from 2.13.1 to 4.18.2  [`c1bbafd`](https://github.com/ant-design/babel-plugin-import/commit/c1bbafd)
+-   Merge pull request [#&#8203;387](https://github.com/ant-design/babel-plugin-import/issues/387) from ant-design/dependabot/npm_and_yarn/coveralls-3.0.9  [`6531599`](https://github.com/ant-design/babel-plugin-import/commit/6531599)
+-   Bump coveralls from 3.0.6 to 3.0.9  [`19c42a9`](https://github.com/ant-design/babel-plugin-import/commit/19c42a9)
+-   Merge pull request [#&#8203;389](https://github.com/ant-design/babel-plugin-import/issues/389) from ant-design/dependabot/npm_and_yarn/np-5.2.1  [`9e83c59`](https://github.com/ant-design/babel-plugin-import/commit/9e83c59)
+-   Bump np from 5.0.3 to 5.2.1  [`c9e1db6`](https://github.com/ant-design/babel-plugin-import/commit/c9e1db6)
+-   Bump [@&#8203;babel/preset-react](https://github.com/babel/preset-react) from 7.0.0 to 7.7.4  [`40575ed`](https://github.com/ant-design/babel-plugin-import/commit/40575ed)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/64,gerilleto,,,64,2022-01-11T18:06:25.172+00:00,,,,,,renovate/babel-plugin-import-1.x,master,,
+gitlab:GitlabMergeRequest:1:134634863,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,214,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency bizcharts to v3.5.10,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [bizcharts](https://bizcharts.net) ([source](https://github.com/alibaba/BizCharts)) | [`^3.5.9` -> `3.5.10`](https://renovatebot.com/diffs/npm/bizcharts/3.5.9/3.5.10) | [![age](https://badges.renovateapi.com/packages/npm/bizcharts/3.5.10/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/bizcharts/3.5.10/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/bizcharts/3.5.10/compatibility-slim/3.5.9)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/bizcharts/3.5.10/confidence-slim/3.5.9)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>alibaba/BizCharts</summary>
+
+### [`v3.5.10`](https://github.com/alibaba/BizCharts/releases/v3.5.10)
+
+[Compare Source](https://github.com/alibaba/BizCharts/compare/30ac50d9fcd7cdb21b1d113c8f8314897f4389c0...v3.5.10)
+
+bugfix:
+升级g2依赖到[@&#8203;3](https://github.com/3).5.19，解决ios 15字体导致的问题。
+[#&#8203;1458](https://github.com/alibaba/BizCharts/issues/1458)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/65,gerilleto,,,65,2022-01-11T18:06:37.177+00:00,,,,,,renovate/bizcharts-3.x,master,,
+gitlab:GitlabMergeRequest:1:134643236,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,215,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,chore(deps): update dependency husky to v4.3.8,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [husky](https://typicode.github.io/husky) ([source](https://github.com/typicode/husky)) | [`^4.3.5` -> `4.3.8`](https://renovatebot.com/diffs/npm/husky/4.3.5/4.3.8) | [![age](https://badges.renovateapi.com/packages/npm/husky/4.3.8/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/husky/4.3.8/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/husky/4.3.8/compatibility-slim/4.3.5)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/husky/4.3.8/confidence-slim/4.3.5)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>typicode/husky</summary>
+
+### [`v4.3.8`](https://github.com/typicode/husky/releases/v4.3.8)
+
+[Compare Source](https://github.com/typicode/husky/compare/v4.3.7...v4.3.8)
+
+-   Fix `Cannot read property 'toString' of null`
+-   Improve error messages
+
+### [`v4.3.7`](https://github.com/typicode/husky/releases/v4.3.7)
+
+[Compare Source](https://github.com/typicode/husky/compare/v4.3.6...v4.3.7)
+
+-   Fix: upgrade find-versions to 4.0.0 https://github.com/typicode/husky/pull/837
+
+### [`v4.3.6`](https://github.com/typicode/husky/releases/v4.3.6)
+
+[Compare Source](https://github.com/typicode/husky/compare/v4.3.5...v4.3.6)
+
+-   Fix `prepare-commit-msg` on windows [#&#8203;737](https://github.com/typicode/husky/issues/737)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/66,gerilleto,,,66,2022-01-11T19:06:36.479+00:00,2022-01-27T01:00:16.134+00:00,,,,,renovate/husky-4.x,master,,
+gitlab:GitlabMergeRequest:1:134643256,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,216,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,chore(deps): update dependency lint-staged to v10.5.4,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [lint-staged](https://github.com/okonet/lint-staged) | [`^10.5.3` -> `10.5.4`](https://renovatebot.com/diffs/npm/lint-staged/10.5.3/10.5.4) | [![age](https://badges.renovateapi.com/packages/npm/lint-staged/10.5.4/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/lint-staged/10.5.4/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/lint-staged/10.5.4/compatibility-slim/10.5.3)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/lint-staged/10.5.4/confidence-slim/10.5.3)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>okonet/lint-staged</summary>
+
+### [`v10.5.4`](https://github.com/okonet/lint-staged/releases/v10.5.4)
+
+[Compare Source](https://github.com/okonet/lint-staged/compare/v10.5.3...v10.5.4)
+
+##### Bug Fixes
+
+-   concurrent option is not working correctly ([#&#8203;950](https://github.com/okonet/lint-staged/issues/950)) ([4383815](https://github.com/okonet/lint-staged/commit/43838158b4b2557bf09c06d0d15c4936069e8855))
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Renovate will not automatically rebase this PR, because other commits have been found.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/67,gerilleto,,,67,2022-01-11T19:06:46.943+00:00,2022-01-27T00:59:52.554+00:00,,,,,renovate/lint-staged-10.x,master,,
+gitlab:GitlabMergeRequest:1:137286748,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,217,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency lodash to v4.17.21,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [lodash](https://lodash.com/) ([source](https://github.com/lodash/lodash)) | [`^4.17.19` -> `4.17.21`](https://renovatebot.com/diffs/npm/lodash/4.17.19/4.17.21) | [![age](https://badges.renovateapi.com/packages/npm/lodash/4.17.21/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/lodash/4.17.21/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/lodash/4.17.21/compatibility-slim/4.17.19)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/lodash/4.17.21/confidence-slim/4.17.19)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>lodash/lodash</summary>
+
+### [`v4.17.21`](https://github.com/lodash/lodash/compare/4.17.20...4.17.21)
+
+[Compare Source](https://github.com/lodash/lodash/compare/4.17.20...4.17.21)
+
+### [`v4.17.20`](https://github.com/lodash/lodash/compare/4.17.19...4.17.20)
+
+[Compare Source](https://github.com/lodash/lodash/compare/4.17.19...4.17.20)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Whenever MR becomes conflicted, or you tick the rebase/retry checkbox.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/68,gerilleto,,,68,2022-01-27T10:07:27.651+00:00,,,,,,renovate/lodash-monorepo,master,,
+gitlab:GitlabMergeRequest:1:137286802,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,218,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency shx to v0.3.4,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [shx](https://github.com/shelljs/shx) | [`^0.3.3` -> `0.3.4`](https://renovatebot.com/diffs/npm/shx/0.3.3/0.3.4) | [![age](https://badges.renovateapi.com/packages/npm/shx/0.3.4/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/shx/0.3.4/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/shx/0.3.4/compatibility-slim/0.3.3)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/shx/0.3.4/confidence-slim/0.3.3)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>shelljs/shx</summary>
+
+### [`v0.3.4`](https://github.com/shelljs/shx/compare/v0.3.3...v0.3.4)
+
+[Compare Source](https://github.com/shelljs/shx/compare/v0.3.3...v0.3.4)
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Whenever MR becomes conflicted, or you tick the rebase/retry checkbox.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/69,gerilleto,,,69,2022-01-27T10:07:38.608+00:00,,,,,,renovate/shx-0.x,master,,
+gitlab:GitlabMergeRequest:1:141260805,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,219,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,Add CalendarHeatMap,"EE-6874 添加了热力图组件
+
+[详细的说明见此](http://charts.zhutao.ide.merico.cn/?path=/docs/charts-calendar-heat-map--default)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/70,merico-zhutao,,,70,2022-02-21T02:33:24.249+00:00,2022-02-28T02:01:46.389+00:00,,,,,EE-6874,master,,
+gitlab:GitlabMergeRequest:1:141260922,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,220,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,build: upgrade storybook to latest,"* 添加了新的 CSF story 支持
+* 更新了 storybook 到最新的版本
+* 更新了 babel/preset-env，使之跟 storybook 的版本匹配
+
+*如果在本地运行 storybook 发现报错，建议将 node_modules 删除后重试*",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/71,merico-zhutao,,,71,2022-02-21T02:35:58.513+00:00,2022-02-21T03:53:07.626+00:00,,,,,storybook-upgrade,master,,
+gitlab:GitlabMergeRequest:1:141265054,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,221,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,build: Add scripts to build docker image for storybook,添加了一些脚本，用来构建 storybook 的 docker 镜像，方便在云环境中部署 charts 的预览,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/72,merico-zhutao,,,72,2022-02-21T03:54:40.756+00:00,2022-02-22T03:37:38.011+00:00,,,,,storybook-dockerfile,master,,
+gitlab:GitlabMergeRequest:1:141893246,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,222,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,chore: export utils,改动影响太小了，不用review,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/73,gerilleto,,,73,2022-02-24T04:32:43.509+00:00,2022-02-24T04:33:06.284+00:00,,,,,export-utils,master,,
+gitlab:GitlabMergeRequest:1:142936128,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,223,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: use vite evolution,Related to EE-7121.,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/74,mintsweet,,,74,2022-03-02T14:32:08.692+00:00,2022-03-14T07:33:02.335+00:00,,,,,EE-7121,master,,
+gitlab:GitlabMergeRequest:1:143077117,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,224,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: amend tick's date of charts,"修正图表 X 轴的日期刻度，只看第一个 Commit 即可。
+
+Relates to EE-7187",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/75,zhangdingding,,,75,2022-03-03T09:12:05.143+00:00,2022-03-04T02:18:34.112+00:00,,,,,EE-7187,master,,
+gitlab:GitlabMergeRequest:1:144835808,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,225,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: update react version to 16.14.0,Related to EE-7120.,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/76,mintsweet,,,76,2022-03-14T08:13:43.835+00:00,2022-03-21T02:55:58.838+00:00,,,,,EE-7120,master,,
+gitlab:GitlabMergeRequest:1:144847345,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,226,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,为 echarts 添加 React Tooltip 支持,"* 添加了
+  - 将 React 组件渲染为 echarts tooltip 的组件
+  - 一个基于设计系统的[图表 Tooltip 组件](https://www.figma.com/file/hwI41JDZc2LCxkqpaekQwP/Charts%E8%A7%84%E8%8C%83?node-id=157%3A12)
+* 修改了 vite 配置，将所有的依赖都排除在了打包范围之外
+* 将 icons 添加到了 dependencies 中
+
+[在线预览](http://charts.zhutao.ide.merico.cn/?path=/story/charts-calendar-heat-map--tooltip)
+
+Closes EE-7303",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/77,merico-zhutao,,,77,2022-03-14T09:20:05.543+00:00,2022-03-16T03:18:26.252+00:00,,,,,EE-7303,master,,
+gitlab:GitlabMergeRequest:1:145606263,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,227,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,为 charts 的 SingleSeriesLineChart 增加类型定义,"
+
+EE-3284",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/78,gerilleto,,,78,2022-03-17T11:58:58.196+00:00,2022-03-21T09:29:56.230+00:00,,,,,EE-3284,master,,
+gitlab:GitlabMergeRequest:1:146023311,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,228,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,add package release pipeline,"添加了自动发布流水线
+
+Closes EE-7498",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/79,merico-zhutao,,,79,2022-03-21T03:54:40.734+00:00,2022-03-21T08:26:28.770+00:00,,,,,EE-7498,master,,
+gitlab:GitlabMergeRequest:1:146242817,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,229,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,根据设计稿改进日历热力图样式,"EE-7500
+
+* 优化了热力图格子的样式
+* 添加了热力图 tooltip
+
+http://charts.zhutao.ide.merico.cn/?path=/story/charts-calendar-heat-map--tooltip
+
+Closes EE-7500",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/80,merico-zhutao,,,80,2022-03-22T02:03:03.099+00:00,2022-03-23T00:57:49.240+00:00,,,,,EE-7500,master,,
+gitlab:GitlabMergeRequest:1:146490598,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,230,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: added sunburst map,"Related to EE-7380.
+
+添加旭日图和对应的说明文档。
+
+## 在线预览
+
+http://charts.junren.ide.merico.cn/?path=/story/charts-sunburst--basic",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/81,mintsweet,,,81,2022-03-23T01:54:26.434+00:00,2022-03-24T02:23:32.626+00:00,,,,,EE-7380,master,,
+gitlab:GitlabMergeRequest:1:146637876,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,231,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,为MultipleSeriesLineChart增加类型定义,"EE-3283
+
+Closes EE-3283",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/82,gerilleto,,,82,2022-03-23T16:26:14.314+00:00,2022-03-24T07:13:37.105+00:00,,,,,EE-3283,master,,
+gitlab:GitlabMergeRequest:1:147002607,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,232,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,closed,优化折线图样式,"EE-7386
+
+* 已通过设计 review
+* 在线预览 http://7386-charts.zhutao.ide.merico.cn/?path=/story/charts-line-multiple-series-new-design--default
+
+## 新增
+
+主要是根据新的设计提取了几个用来生成 chartConfiguration 的函数：
+
+* designSystem
+* referenceRange
+* referenceLine
+* regressionLine
+* regressionLine
+
+## 变更
+
+* 更新了色板
+* 给折线图添加了一些用来更进一步定义样式的选项",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/83,merico-zhutao,,,83,2022-03-25T02:15:05.993+00:00,,2022-04-07T01:52:16.123+00:00,,,,EE-7386,master,,
+gitlab:GitlabMergeRequest:1:147009365,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,233,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: add treemap,"Related to EE-7373.
+
+添加矩形树图。[在线预览](http://charts.junren.ide.merico.cn/?path=/story/charts-treemap--custom-style)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/84,mintsweet,,,84,2022-03-25T03:45:13.689+00:00,2022-03-30T15:19:54.828+00:00,,,,,EE-7373,master,,
+gitlab:GitlabMergeRequest:1:148053462,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,234,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,升级emotion系到11版,"# 备注
+发现个构建问题── `echarts*` 和 `react/jsx-runtime` 在构建结果中是 `../node_modules/xxx` 的形式存在，即没有被视作 external 依赖
+
+这可能是主干分支存在的错误，因为阻塞本MR，所以顺手修了
+
+
+Closes EE-7534",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/85,gerilleto,,,85,2022-03-31T11:50:40.979+00:00,2022-03-31T13:48:31.922+00:00,,,,,EE-7534,master,,
+gitlab:GitlabMergeRequest:1:148114994,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,235,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,chore: 修复SingleSeriesLineChart的tooltip参数类型,"EE-7534
+
+Closes EE-7534",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/86,gerilleto,,,86,2022-03-31T16:15:40.932+00:00,2022-04-01T01:32:12.594+00:00,,,,,EE-7534,master,,
+gitlab:GitlabMergeRequest:1:148192744,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,236,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,chore: 删除react-d3-speedometer,"EE-7534
+
+Closes EE-7534",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/87,gerilleto,,,87,2022-04-01T04:58:25.971+00:00,2022-04-01T05:38:38.111+00:00,,,,,EE-7534,master,,
+gitlab:GitlabMergeRequest:1:148277131,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,237,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,添加新设计系统中的线图、柱状图,"因为原来的柱状图太难改成新的模样，所以干脆整了一个功能简化的新版本
+
+* 添加了 `CartesianChart` 组件，使用 recharts 实现，可以通过插件在直角坐标系图表画各种各样的东西
+* 添加了 `buildCartesianChart` 函数：
+  * 提供了插件机制，用来生成 `CartesianChart` 的 props
+  * 在各个插件执行的过程中，共享某些状态（例如，series 配置、formatter 配置、色盘）
+* 添加了一些插件
+  * series：`line`、`bar`，自带新设计样式
+  * 标注：`referenceLine`、`referenceArea`、`referenceCursor`，自带新设计样式
+  * 其他：
+    * 主 Y 轴：`yAxis`
+    * 次 Y 轴：`secondYAxis`
+    * X 轴：`xAxis`
+    * 背景网格： `grid`
+    * legend
+    * tooltip
+
+* 添加了一些帮助编写自定义 recharts 组件的工具
+  * `ScalesHelper`，来自 recharts 源码，用来将数值坐标转换为画布坐标
+  * `customize`，用来生成仅需要修改 props 的插件
+
+## 目前状态
+
+目前仅实现了[设计稿](https://www.figma.com/file/i6zNQjkE1oWjXr9vc0W4Ul/%E6%95%88%E7%8E%87%E6%8A%A5%E8%A1%A8%EF%BC%88%E9%80%9A%E7%94%A8%EF%BC%89-Efficiency-Report?node-id=76%3A12910)中的直角坐标图表包含的元素，足够场景二使用。
+
+[在线预览](http://7386-charts.zhutao.ide.merico.cn/?path=/story/charts-new-design--pareto)
+
+
+Closes EE-7388",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/88,merico-zhutao,,,88,2022-04-01T11:47:09.810+00:00,2022-04-12T03:06:58.904+00:00,,,,,EE-7388,master,,
+gitlab:GitlabMergeRequest:1:149887696,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,238,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: treemap not exported,"Related to EE-7815.
+
+未导出`treemap`。",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/89,mintsweet,,,89,2022-04-12T02:34:06.350+00:00,2022-04-12T05:47:50.683+00:00,,,,,EE-7815,master,,
+gitlab:GitlabMergeRequest:1:150885428,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,239,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,story: 为SingleSeriesLineChart增加自定义yDomain的故事,"![CleanShot_2022-04-18_at_23.49.49_2x](/uploads/4f45f2e449631e466c808d16ae47da85/CleanShot_2022-04-18_at_23.49.49_2x.png)
+
+Closes EE-6768",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/90,gerilleto,,,90,2022-04-18T15:50:16.414+00:00,2022-04-18T16:29:42.318+00:00,,,,,EE-6768,master,,
+gitlab:GitlabMergeRequest:1:151864623,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,240,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @ant-design/charts to v1.3.6,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@ant-design/charts](https://github.com/ant-design/ant-design-charts) | [`^1.0.17` -> `1.3.6`](https://renovatebot.com/diffs/npm/@ant-design%2fcharts/1.3.5/1.3.6) | [![age](https://badges.renovateapi.com/packages/npm/@ant-design%2fcharts/1.3.6/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@ant-design%2fcharts/1.3.6/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@ant-design%2fcharts/1.3.6/compatibility-slim/1.3.5)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@ant-design%2fcharts/1.3.6/confidence-slim/1.3.5)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Release Notes
+
+<details>
+<summary>ant-design/ant-design-charts</summary>
+
+### [`v1.3.6`](https://github.com/ant-design/ant-design-charts/blob/HEAD/CHANGELOG.md#&#8203;136)
+
+[Compare Source](https://github.com/ant-design/ant-design-charts/compare/1.3.5...1.3.6)
+
+`2022-03-22`
+
+-   🆕 Flowchart 阅读态完善，支持取消键盘事件和画布事件
+-   🆕 Graph 支持自定义布局
+-   🐞 修复 TS 类型错误
+
+</details>
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Whenever MR becomes conflicted, or you tick the rebase/retry checkbox.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/91,gerilleto,,,91,2022-04-24T12:24:32.295+00:00,,,,,,renovate/ant-design-charts-1.x,master,,
+gitlab:GitlabMergeRequest:1:151864632,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,241,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,opened,chore(deps): update dependency @types/lodash to v4.14.182,"This MR contains the following updates:
+
+| Package | Change | Age | Adoption | Passing | Confidence |
+|---|---|---|---|---|---|
+| [@types/lodash](https://github.com/DefinitelyTyped/DefinitelyTyped) | [`^4.14.179` -> `4.14.182`](https://renovatebot.com/diffs/npm/@types%2flodash/4.14.179/4.14.182) | [![age](https://badges.renovateapi.com/packages/npm/@types%2flodash/4.14.182/age-slim)](https://docs.renovatebot.com/merge-confidence/) | [![adoption](https://badges.renovateapi.com/packages/npm/@types%2flodash/4.14.182/adoption-slim)](https://docs.renovatebot.com/merge-confidence/) | [![passing](https://badges.renovateapi.com/packages/npm/@types%2flodash/4.14.182/compatibility-slim/4.14.179)](https://docs.renovatebot.com/merge-confidence/) | [![confidence](https://badges.renovateapi.com/packages/npm/@types%2flodash/4.14.182/confidence-slim/4.14.179)](https://docs.renovatebot.com/merge-confidence/) |
+
+---
+
+### Configuration
+
+📅 **Schedule**: At any time (no schedule defined).
+
+🚦 **Automerge**: Disabled by config. Please merge this manually once you are satisfied.
+
+♻ **Rebasing**: Whenever MR becomes conflicted, or you tick the rebase/retry checkbox.
+
+🔕 **Ignore**: Close this MR and you won't be reminded about this update again.
+
+---
+
+ - [ ] <!-- rebase-check -->If you want to rebase/retry this MR, click this checkbox.
+
+---
+
+This MR has been generated by [Renovate Bot](https://github.com/renovatebot/renovate).",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/92,gerilleto,,,92,2022-04-24T12:24:43.575+00:00,,,,,,renovate/lodash-4.x,master,,
+gitlab:GitlabMergeRequest:1:154747090,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,242,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,修复 TS 类型无法解析的问题,"Closes EE-8106
+
+修复部分通过 path mapping 引用的类型无法在产物中被 IDE 识别的问题
+
+根本原因是 charts 中使用了 `tsconfig.paths` 这个选项来设置路径别名，但是目前 tsc [无法在转译结果中将别名替换为相对路径](https://github.com/Microsoft/TypeScript/issues/15479)，导致生成的 types 文件无法被第三方使用。
+
+根据[这位好心人的指点](https://github.com/Microsoft/TypeScript/issues/15479#issuecomment-766350699)，找到了 `tsc-alias`，这个工具可以读取 tsconfig.json 中的配置，将转译结果中的路径别名替换为相对路径",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/93,merico-zhutao,,,93,2022-05-12T02:55:24.852+00:00,2022-05-12T07:16:59.323+00:00,,,,,EE-8106,master,,
+gitlab:GitlabMergeRequest:1:155809177,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,243,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: display legend for regression line,"EE-8106 给趋势线添加了可选的图例功能
+
+鉴于趋势线往往需要跟数据线进行明显的区分，所以添加了 `seriesConfig` 选项，让趋势线可以像数据线一样在图例中展示。
+
+另外， `series` 字段标记为弃用，等后面全面清除了 frontend 中的引用再完全去掉。
+
+Closes EE-8106",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/94,merico-zhutao,,,94,2022-05-18T09:09:24.376+00:00,2022-05-23T23:44:16.776+00:00,,,,,EE-8106,master,,
+gitlab:GitlabMergeRequest:1:157776741,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,244,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,在箱线图中只使用单一颜色,"- fix: avoid multiple colors in box plot chart  
+
+
+Closes EE-8781",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/95,merico-zhutao,,,95,2022-05-30T07:50:34.387+00:00,2022-05-31T03:38:10.378+00:00,,,,,EE-8781,master,,
+gitlab:GitlabMergeRequest:1:72934330,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,150,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: change to uppercase the empty component files,"**Issue**
+
+For my setup on WSL 2 (Linux on Windows) the lowercase file name were not being found when trying to start storybook.
+
+**Solution**
+
+Change filename case to consistent across file and import.",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/1,ghost1,,,1,2020-10-01T19:06:24.470+00:00,2020-10-12T09:43:37.484+00:00,,,,065acf17e79bdb0471010c0f4bcdb149e3c7dc08,hotfix/empty-component-file-name,master,,
+gitlab:GitlabMergeRequest:1:79113414,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,151,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1678 extend Y Domain with prediction line,"# 效果图
+
+![CleanShot_2020-11-23_at_22.59.42_2x](/uploads/9d616addfc4d7641a1fc6484e6665856/CleanShot_2020-11-23_at_22.59.42_2x.png)
+
+# Jira
+https://merico.atlassian.net/browse/EE-1678",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/2,gerilleto,,,2,2020-11-23T12:17:31.972+00:00,2020-11-24T03:03:13.041+00:00,,,,1a4e012e06bc90cc3fe35c9137edb2de9a8a0988,EE-1678-2,master,,
+gitlab:GitlabMergeRequest:1:79248348,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,152,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: PredictionLine for MultipleSeriesLineChart,"# 效果图
+![CleanShot_2020-11-24_at_14.46.07_2x](/uploads/e76441f10c4ba12dc610bc5bf29b0d10/CleanShot_2020-11-24_at_14.46.07_2x.png)
+
+# Jira
+https://merico.atlassian.net/browse/EE-1679",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/3,gerilleto,,,3,2020-11-24T06:50:00.838+00:00,2020-11-25T03:14:37.770+00:00,,,,f02e985eb9367d94f21b110ba991674994ad2730,EE-1679,master,,
+gitlab:GitlabMergeRequest:1:79323397,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,153,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: add stackOffset to RechartsBarChart,![CleanShot_2020-11-24_at_23.24.45_2x](/uploads/11872b21eb5f1e9f5503ee56fae7234a/CleanShot_2020-11-24_at_23.24.45_2x.png),https://gitlab.com/merico-dev/ee/charts/-/merge_requests/4,gerilleto,,,4,2020-11-24T15:27:34.968+00:00,2020-11-25T03:15:35.784+00:00,,,,,EE-1742,master,,
+gitlab:GitlabMergeRequest:1:79642882,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,154,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1680 Add SeriesComposedChart,"# 设计稿
+![CleanShot_2020-11-26_at_22.04.18_2x](/uploads/a7b49ca21bb5d777c2c6539c961e1647/CleanShot_2020-11-26_at_22.04.18_2x.png)
+
+# 效果
+![CleanShot_2020-11-26_at_22.04.40_2x](/uploads/765daee490de8dbac43c14c1653bc8a5/CleanShot_2020-11-26_at_22.04.40_2x.png)
+
+# Review并修改后的效果
+![CleanShot_2020-11-27_at_14.05.30_2x](/uploads/5b6d8d54551b523d5417acb417762d41/CleanShot_2020-11-27_at_14.05.30_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/5,gerilleto,,,5,2020-11-26T14:04:00.790+00:00,2020-11-29T14:58:29.894+00:00,,,,,EE-1680,master,,
+gitlab:GitlabMergeRequest:1:79888010,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,155,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1744 Add Line Indicator to Legend for composed chart,"# Jira
+https://merico.atlassian.net/browse/EE-1744
+
+# 设计稿
+![CleanShot_2020-11-29_at_23.37.17_2x](/uploads/5bf1d1f4ec65145b60216941a8380b3e/CleanShot_2020-11-29_at_23.37.17_2x.png)
+
+# 效果图
+![CleanShot_2020-11-29_at_23.35.26_2x](/uploads/2a30701072a03d8f1682de17dff6117e/CleanShot_2020-11-29_at_23.35.26_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/6,gerilleto,,,6,2020-11-29T15:37:38.444+00:00,2020-11-30T06:01:28.208+00:00,,,,,EE-1744,master,,
+gitlab:GitlabMergeRequest:1:79917590,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,156,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1754 Add Gauge Chart,"# Jira
+https://merico.atlassian.net/browse/EE-1754
+
+# 设计稿
+![Lark20201130-133854](/uploads/3850ac66360ad2146e0f1673e7bd91da/Lark20201130-133854.png)
+
+# 效果图
+![CleanShot_2020-12-01_at_11.33.30_2x](/uploads/8f2c647d252f882d6f8e6ecba0fb226b/CleanShot_2020-12-01_at_11.33.30_2x.png)
+
+# 指针旋转效果
+![CleanShot_2020-11-30_at_22.43.33](/uploads/3ba1e4196e6b3bd8ca52cae7ac4aa85e/CleanShot_2020-11-30_at_22.43.33.mp4)
+
+# 值标签变化
+![CleanShot_2020-12-01_at_13.20.43](/uploads/426ca8efde79099fc5ce7505cddd4d4e/CleanShot_2020-12-01_at_13.20.43.mp4)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/7,gerilleto,,,7,2020-11-30T05:39:19.422+00:00,2020-12-01T06:31:08.471+00:00,,,,,EE-1754,master,,
+gitlab:GitlabMergeRequest:1:80184479,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,157,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1745 Add Brush to charts,"# Jira
+https://merico.atlassian.net/browse/EE-1745
+
+# 设计稿
+![CleanShot_2020-12-01_at_22.16.33_2x](/uploads/0d9bf027cad7970b1148d0d83685d182/CleanShot_2020-12-01_at_22.16.33_2x.png)
+（Brush 里显示图表缩略，没有工作量预算来做）
+
+# RechartsBarChart
+![CleanShot_2020-12-01_at_22.11.39](/uploads/f12b6b7aae54055a266b4f2315f42d85/CleanShot_2020-12-01_at_22.11.39.mp4)
+
+# SeriesComposedChart
+![CleanShot_2020-12-01_at_22.02.33](/uploads/27a56690fc625b9134ebaa70fd4be60f/CleanShot_2020-12-01_at_22.02.33.mp4)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/8,gerilleto,,,8,2020-12-01T14:17:20.936+00:00,2020-12-02T02:27:35.319+00:00,,,,,EE-1745,master,,
+gitlab:GitlabMergeRequest:1:80472210,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,158,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: EE-1965 let eslint work,"https://merico.atlassian.net/browse/EE-1965
+
+综合考虑了一下，不搞 githook+lint 的组合，而是之后想想办法配个 lint 的 pipeline
+
+# Review 建议
+只看 eslintrc",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/9,gerilleto,,,9,2020-12-03T11:17:19.064+00:00,2020-12-04T02:23:11.201+00:00,,,,,EE-1965,master,,
+gitlab:GitlabMergeRequest:1:80769193,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,159,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-1758 Add BubbleChart,"# https://merico.atlassian.net/browse/EE-1758
+
+# 设计稿
+![CleanShot_2020-12-07_at_17.41.45_2x](/uploads/2b76183cfcdd418b75f04423963ef05c/CleanShot_2020-12-07_at_17.41.45_2x.png)
+
+# 效果图
+![CleanShot_2020-12-07_at_14.28.04_2x](/uploads/f5df7735a83465ea4d764e5e6da2edc9/CleanShot_2020-12-07_at_14.28.04_2x.png)
+
+# 遭遇灾害
+ant-design/charts 从 0.x 升级到 1.x 了，原先的 `<Bubble />` 改为使用 `<Scatter />` 实现，不得不调整 QuadrantChart 的实现
+
+# 计算规则
+在 BubbleChart 的 Basic 故事里，值与边界的计算规则是与郑屹联调确定的",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/10,gerilleto,,,10,2020-12-07T03:38:23.185+00:00,2020-12-08T02:30:30.281+00:00,,,,,EE-1758,master,,
+gitlab:GitlabMergeRequest:1:80924395,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,160,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: migrate project to TypeScript,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/11,Runjuuuu,,,11,2020-12-08T06:28:32.740+00:00,2020-12-08T07:16:22.226+00:00,,,,,ts-migrate,master,,
+gitlab:GitlabMergeRequest:1:80931125,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,161,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: migrate project to TypeScript,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/12,Runjuuuu,,,12,2020-12-08T07:56:08.674+00:00,2020-12-08T07:56:22.175+00:00,,,,,ts-migrate,master,,
+gitlab:GitlabMergeRequest:1:81061190,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,162,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,dev: update eslint config,"`no-unused-vars` ignore variable name which start from `_`
+
+https://eslint.org/docs/rules/no-unused-vars",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/13,Runjuuuu,,,13,2020-12-09T05:36:19.825+00:00,2020-12-09T06:05:59.505+00:00,,,,,feat/update-eslint-config,master,,
+gitlab:GitlabMergeRequest:1:81790881,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,163,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: update build process,use `babel` for transpiling,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/14,Runjuuuu,,,14,2020-12-15T11:12:05.642+00:00,2020-12-15T11:49:36.964+00:00,,,,,feat/update-build-process,master,,
+gitlab:GitlabMergeRequest:1:82091051,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,164,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: EE-2086,"https://merico.atlassian.net/browse/EE-2086
+
+# 两个改动点，都是跟antd/charts升级有关
+## regionStyle 里的次序变了，变成了正常的一二三四象限顺序
+## label 变成 labels
+
+![CleanShot_2020-12-17_at_16.08.17_2x](/uploads/e89ee039729974d871f7950e81566798/CleanShot_2020-12-17_at_16.08.17_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/15,gerilleto,,,15,2020-12-17T08:09:58.187+00:00,2020-12-17T08:54:37.283+00:00,,,,,EE-2086,master,,
+gitlab:GitlabMergeRequest:1:82218188,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,165,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: EE-2102 update RadarChart props,"https://merico.atlassian.net/browse/EE-2102
+
+@ant-design/charts 升级到 1.0.x 后，参数改变了
+
+# story
+![CleanShot_2020-12-18_at_12.42.38_2x](/uploads/7c0363b21940dd0604c0640370cbbb81/CleanShot_2020-12-18_at_12.42.38_2x.png)
+
+# demo 环境截图（升级前的样子）
+![CleanShot_2020-12-18_at_12.44.15_2x](/uploads/e8b95d0b4c1d5220a9b24b31cdf4c3a9/CleanShot_2020-12-18_at_12.44.15_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/16,gerilleto,,,16,2020-12-18T04:44:01.655+00:00,2020-12-18T05:17:12.219+00:00,,,,,EE-2102,master,,
+gitlab:GitlabMergeRequest:1:82594351,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,166,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2142 add area to SeriesComposedChart,"https://merico.atlassian.net/browse/EE-2142
+
+http://localhost:9001/?path=/story/charts-composed-series--lines-and-areas
+
+![CleanShot_2020-12-22_at_13.21.56_2x](/uploads/62facd0d028434fd59019671a540c217/CleanShot_2020-12-22_at_13.21.56_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/17,gerilleto,,,17,2020-12-22T05:22:21.146+00:00,2020-12-23T07:28:35.822+00:00,,,,,EE-2142,master,,
+gitlab:GitlabMergeRequest:1:83059639,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,167,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2163 add predictionLine to SeriesComposedChart,![CleanShot_2020-12-28_at_17.03.15_2x](/uploads/82fa572451fbeb77c6b98cc69428fa4f/CleanShot_2020-12-28_at_17.03.15_2x.png),https://gitlab.com/merico-dev/ee/charts/-/merge_requests/18,gerilleto,,,18,2020-12-28T09:03:55.102+00:00,2020-12-28T09:08:32.106+00:00,,,,,EE-2163,master,,
+gitlab:GitlabMergeRequest:1:83201206,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,168,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2100 custom tick for bar chart,"https://merico.atlassian.net/browse/EE-2100
+
+设计稿：
+
+![image](/uploads/3d46253a295c29c6981ac9ec1dc8787f/image.png)
+
+实现：
+![image](/uploads/d06ff59995e0cfb3afc9be7b5ca14783/image.png)
+
+组件中新增支持：
+- 坐标轴的tick支持渲染`getCostomTick({ x, y, valueText })`返回的组件
+- `tickTextColor`设置tick的文字颜色
+- `borderRadius`设置bar的圆角大小
+
+story中实现：
+- 使用`getCostomTick`还原设计稿中的icon和名字
+- 使用上述其他api还原设计搞中的圆角、颜色等
+- 使用`yAxis.axisLine.stroke`设置坐标轴颜色
+- 使用`xAxis.mirror` `xAxis.padding`设置tick位置",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/19,saniac_mrc,,,19,2020-12-29T17:14:31.464+00:00,2020-12-31T02:59:09.285+00:00,,,,,EE-2100,master,,
+gitlab:GitlabMergeRequest:1:83665444,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,169,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: PredictionLine's issues,"由于 `renderPredictionLines` 和 `calculateAndRenderPredictionLine` 的调用都是直接执行函数，并不是渲染 React 组件；导致多次渲染 React 组件时出现 hooks 调用栈不一致的情况。为了不改变这些函数行为，目前将这两个函数内部的 hooks 都移除掉了。
+
+![image](/uploads/ba8c638792cac24a58f0312f8a4d0309/image.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/20,Runjuuuu,,,20,2021-01-05T11:08:23.717+00:00,2021-01-06T04:39:31.622+00:00,,,,,feat/hooks-issue,master,,
+gitlab:GitlabMergeRequest:1:83776368,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,170,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: fix position of BarLabel in negative yAxis,"https://merico.atlassian.net/browse/EE-2296
+
+# 已知问题
+正轴大于零，负轴等于零时，负轴显示的数据错误
+![CleanShot_2021-01-06_at_15.12.25_2x](/uploads/1b2bb8cd34f1aec3ba6753b4ba6f079d/CleanShot_2021-01-06_at_15.12.25_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/21,gerilleto,,,21,2021-01-06T07:11:20.911+00:00,2021-01-06T07:16:00.419+00:00,,,,,EE-2296,master,,
+gitlab:GitlabMergeRequest:1:85036496,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,171,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2296 RechartsBarChart & SeriesComposedChart,"`subSeries.valueLabel` accepts `valueAccessor` & `formatter` props
+
+# bug 界面
+![CleanShot_2021-01-18_at_00.56.03_2x](/uploads/7767402b7dc1e8893b3f60df63f66984/CleanShot_2021-01-18_at_00.56.03_2x.png)
+
+# 效果图
+![CleanShot_2021-01-18_at_01.09.00_2x](/uploads/b3ebfe623c2f77a557b54e6463490fb1/CleanShot_2021-01-18_at_01.09.00_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/22,gerilleto,,,22,2021-01-17T17:13:55.184+00:00,2021-01-18T02:53:06.312+00:00,,,,,EE-2296,master,,
+gitlab:GitlabMergeRequest:1:85117420,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,172,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: update SeriesComposedChart,"- `SeriesComposedChart` 增加了类型标注
+- `SeriesComposedChart` 支持自定义 X/Y 轴名称的样式 EE-2167",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/23,Runjuuuu,,,23,2021-01-18T11:38:04.536+00:00,2021-01-19T06:54:18.745+00:00,,,,,feat/series-composed-chart,master,,
+gitlab:GitlabMergeRequest:1:85311960,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,173,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2175 filter PredictionLine,"https://merico.atlassian.net/browse/EE-2175
+
+
+# 为啥不在charts内部实现这个功能（隐藏线时，自动隐藏相关的预测线）
+
+Legend 是按照 subSeries 渲染的
+
+而 PredictionLine 是按照 value 计算&渲染的，与 subSeries 没有关联关系（一个 value 可以有多个 subSeries）
+
+从而搞不了
+
+![CleanShot_2021-01-19_at_23.33.18](/uploads/a23c4bfe418caece1fb56c3925516166/CleanShot_2021-01-19_at_23.33.18.gif)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/24,gerilleto,,,24,2021-01-19T15:39:40.545+00:00,2021-01-20T04:05:01.876+00:00,,,,,EE-2175,master,,
+gitlab:GitlabMergeRequest:1:85472863,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,174,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2183 custom content for Legend,"https://merico.atlassian.net/browse/EE-2183
+
+没想到重点全在 story
+
+![CleanShot_2021-01-21_at_00.53.02](/uploads/0452a20a58672430a9a6a81d900b1a9e/CleanShot_2021-01-21_at_00.53.02.gif)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/25,gerilleto,,,25,2021-01-20T16:57:15.264+00:00,2021-01-21T02:29:23.647+00:00,,,,,EE-2183,master,,
+gitlab:GitlabMergeRequest:1:85730593,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,175,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: RechartsBarChart support custom tooltip's label & value,Sprint 3.0 的「项目组成员工作量」因为自定义了 `tick` 的展示，需要和 `tooltip` 的展示有所区分。但目前 `tooltip` 因为直接使用了 `labelFormatter`，导致无法单独定义 `tooltip` 的内容展示。所以为 `tooltip` 新增两个字段去覆盖默认的 formatter 。,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/26,Runjuuuu,,,26,2021-01-22T09:24:46.884+00:00,2021-01-24T13:45:42.954+00:00,,,,,feat/recharts-bar-chart,master,,
+gitlab:GitlabMergeRequest:1:85899597,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,176,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2559 add excludeBy to Legend,![CleanShot_2021-01-24_at_22.47.04](/uploads/95a8319b3c07af00debeb853f3c1fdc1/CleanShot_2021-01-24_at_22.47.04.gif),https://gitlab.com/merico-dev/ee/charts/-/merge_requests/27,gerilleto,,,27,2021-01-24T14:47:50.695+00:00,2021-01-25T03:06:44.132+00:00,,,,,EE-2559,master,,
+gitlab:GitlabMergeRequest:1:85942770,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,177,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2625 add cardinal interpolation types,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/28,gerilleto,,,28,2021-01-25T06:38:14.211+00:00,2021-01-25T06:41:08.274+00:00,,,,,EE-2625,master,,
+gitlab:GitlabMergeRequest:1:86095828,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,178,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: use RegressionLine in SeriesComposedChart,"https://merico.atlassian.net/browse/EE-2620
+
+![CleanShot_2021-01-26_at_14.58.38_2x](/uploads/abf413523770131a525cfc19869876bf/CleanShot_2021-01-26_at_14.58.38_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/29,gerilleto,,,29,2021-01-26T07:00:47.916+00:00,2021-01-26T13:53:36.184+00:00,,,,,EE-2620,master,,
+gitlab:GitlabMergeRequest:1:86158107,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,179,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2622 ReferenceLine accepts yAxisId prop,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/30,gerilleto,,,30,2021-01-26T14:19:30.478+00:00,2021-01-26T14:19:37.088+00:00,,,,,EE-2622,master,,
+gitlab:GitlabMergeRequest:1:86423907,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,180,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,story: add CustomLegend story to BubbleChart,EE-2627,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/31,gerilleto,,,31,2021-01-28T01:54:04.332+00:00,2021-01-28T01:54:09.475+00:00,,,,,EE-2627,master,,
+gitlab:GitlabMergeRequest:1:86436578,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,181,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,story: next version of XAxisTickCount,EE-2165,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/32,gerilleto,,,32,2021-01-28T05:06:36.541+00:00,2021-01-28T05:07:04.466+00:00,,,,,EE-2165,master,,
+gitlab:GitlabMergeRequest:1:86529308,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,182,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: getNickTicks for XAxis,"https://merico.atlassian.net/browse/EE-2165
+
+# 构建
+通过，但就不在这个 MR 里提交构建结果了，合完再build
+
+# 效果
+![CleanShot_2021-01-28_at_23.09.29](/uploads/fcd6920865e563a7fcb0b431f56e598d/CleanShot_2021-01-28_at_23.09.29.mp4)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/33,gerilleto,,,33,2021-01-28T15:01:44.137+00:00,2021-01-29T02:31:46.653+00:00,,,,,EE-2165,master,,
+gitlab:GitlabMergeRequest:1:86595117,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,183,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-2165,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/34,gerilleto,,,34,2021-01-29T04:24:12.946+00:00,2021-01-29T04:24:18.475+00:00,,,,,EE-2165,master,,
+gitlab:GitlabMergeRequest:1:86767317,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,184,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: tooltip not showing in BarChart,EE-2962,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/35,gerilleto,,,35,2021-01-31T12:07:30.707+00:00,2021-01-31T12:07:35.741+00:00,,,,,EE-2962,master,,
+gitlab:GitlabMergeRequest:1:87297337,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,185,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: add isSeriesClickable prop to Legend,![CleanShot_2021-02-04_at_15.42.05](/uploads/fd0ecfc444b50418a7b57ad2f005977f/CleanShot_2021-02-04_at_15.42.05.mp4),https://gitlab.com/merico-dev/ee/charts/-/merge_requests/36,gerilleto,,,36,2021-02-04T07:42:29.159+00:00,2021-02-04T07:45:20.722+00:00,,,,,EE-3055,master,,
+gitlab:GitlabMergeRequest:1:87827741,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,186,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: EE-3184 set interval to 0 for XAxis ticks,"https://merico.atlassian.net/browse/EE-3184
+
+故障情况见jira事务截图
+
+之前 tick 没有按照 ticks 参数完全展示，而我当时疏忽了没细看，才设置了 `vertical:true`
+
+实际的修复方式就是设置这个 `interval:0`
+
+`RechartsBarChart` 没有修改是因为相关图表一直是按照 `vertical:true` 在用",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/37,gerilleto,,,37,2021-02-09T02:21:13.276+00:00,2021-02-09T02:34:12.562+00:00,,,,,EE-3184,master,,
+gitlab:GitlabMergeRequest:1:89505600,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,187,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: add story of Interpolation Type,"to SingleSeriesLineChart
+
+没啥可review的，直接合了",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/38,gerilleto,,,38,2021-02-23T06:19:17.428+00:00,2021-02-23T06:19:37.226+00:00,,,,,EE-3091,master,,
+gitlab:GitlabMergeRequest:1:89574262,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,188,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat(LineCharts): click chart to pin tooltip,EE-2902,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/39,gerilleto,,,39,2021-02-23T14:46:57.600+00:00,2021-02-23T14:47:10.840+00:00,,,,,EE-2902,master,,
+gitlab:GitlabMergeRequest:1:89737835,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,189,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: EE-3285 encapsulate tooltip props,"- [x] 调整参数类型
+- [x] 增加参数解析
+- [x] 增加废弃字段警告
+- [x] 修正调用",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/40,gerilleto,,,40,2021-02-24T15:41:01.005+00:00,2021-02-25T06:33:19.120+00:00,,,,,EE-3285,master,,
+gitlab:GitlabMergeRequest:1:89841762,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,190,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,Rename files from camelCase to kebab-case,,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/41,Runjuuuu,,,41,2021-02-25T08:16:33.687+00:00,2021-02-25T08:18:26.337+00:00,,,,,feat/rename-files,master,,
+gitlab:GitlabMergeRequest:1:90441121,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,191,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,build: 1.5.1,fix git's case insensitive issues,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/42,Runjuuuu,,,42,2021-03-02T13:52:13.826+00:00,2021-03-02T13:52:33.292+00:00,,,,,feat/build,master,,
+gitlab:GitlabMergeRequest:1:90515469,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,192,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: bump version to 1.5.1,previous build forgot to bump version.,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/43,Runjuuuu,,,43,2021-03-03T02:05:36.911+00:00,2021-03-03T02:05:50.454+00:00,,,,,feat/build,master,,
+gitlab:GitlabMergeRequest:1:90599623,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,193,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: change default date period format,"相关需求见issue描述：https://merico.atlassian.net/browse/EE-3387
+
+已经和 Lucas Rosa 确认过了，CE 那边没有使用这个函数",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/44,gerilleto,,,44,2021-03-03T14:32:27.435+00:00,2021-03-04T02:45:53.854+00:00,,,,,EE-3387,master,,
+gitlab:GitlabMergeRequest:1:91272146,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,194,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: custom tooltip content,"https://merico.atlassian.net/browse/EE-3450
+
+# 效果
+![CleanShot_2021-03-09_at_11.22.33_2x](/uploads/d4f5286fe79cbec381b54ec1e82675e4/CleanShot_2021-03-09_at_11.22.33_2x.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/45,gerilleto,,,45,2021-03-09T03:24:13.723+00:00,2021-03-09T13:52:21.672+00:00,,,,,EE-3450,master,,
+gitlab:GitlabMergeRequest:1:91787153,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,195,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,fix: tooltipExcludedNames not working,"https://merico.atlassian.net/browse/EE-3485
+
+# 原因
+
+`lodash.get(object, path, fallback)`
+
+初始化时，`tooltip.excludedNames` 是 `[]`, 不是 `falsy`，所以不会用到作为 `fallback` 的 `tooltipExcludedNames`
+
+# 自测
+
+按照 `tooltipExcludeNames` 关键词搜了个 story：
+1. 注释掉 `tooltipExcludeNames`，表现正确
+2. 将 `tooltipExcludeNames` 改成 `tooltip.excludeNames`，同时 `tooltip.enabled = true`，表现正确",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/46,gerilleto,,,46,2021-03-12T03:28:06.647+00:00,2021-03-12T03:41:50.658+00:00,,,,,EE-3485,master,,
+gitlab:GitlabMergeRequest:1:91950527,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,196,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,merged,feat: add baseLine props to QuadrantChart,"for origin point
+
+
+略急 & MR简单，先合了",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/47,gerilleto,,,47,2021-03-13T12:41:01.940+00:00,2021-03-13T12:45:54.089+00:00,,,,,EE-3326,master,,
+gitlab:GitlabMergeRequest:1:99174624,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,197,,gitlab:GitlabProject:1:20171709,gitlab:GitlabProject:1:20171709,closed,fix(EE-4088),"默认使用`interval: preserveEnd`
+
+before:
+
+![image](/uploads/0e22f6915905000639d23202a88bbd60/image.png)
+
+after:
+
+![image](/uploads/64ef693ac77a3bc80c8f7e82b3f5e6fd/image.png)",https://gitlab.com/merico-dev/ee/charts/-/merge_requests/48,saniac_mrc,,,48,2021-05-08T06:41:59.689+00:00,,2021-05-10T03:00:53.281+00:00,,,,EE-4088,master,,

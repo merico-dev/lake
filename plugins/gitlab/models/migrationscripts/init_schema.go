@@ -19,8 +19,6 @@ package migrationscripts
 
 import (
 	"context"
-	"fmt"
-
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/gitlab/models/migrationscripts/archived"
@@ -31,24 +29,6 @@ import (
 type InitSchemas struct{}
 
 func (*InitSchemas) Up(ctx context.Context, db *gorm.DB) error {
-	rawTableList := []string{
-		"_raw_gitlab_api_children_on_pipeline",
-		"_raw_gitlab_api_commit",
-		"_raw_gitlab_api_issues",
-		"_raw_gitlab_api_merge_request_commits",
-		"_raw_gitlab_api_merge_request_notes",
-		"_raw_gitlab_api_merge_requests",
-		"_raw_gitlab_api_pipeline",
-		"_raw_gitlab_api_project",
-		"_raw_gitlab_api_tag",
-	}
-	for _, v := range rawTableList {
-		err := db.Exec(fmt.Sprintf("DROP TABLE IF EXISTS %s CASCADE", v)).Error
-		if err != nil {
-			return err
-		}
-	}
-
 	err := db.Migrator().DropTable(
 		&archived.GitlabProject{},
 		&archived.GitlabMergeRequest{},
@@ -64,6 +44,15 @@ func (*InitSchemas) Up(ctx context.Context, db *gorm.DB) error {
 		&archived.GitlabConnection{},
 		&archived.GitlabIssue{},
 		&archived.GitlabIssueLabel{},
+		"_raw_gitlab_api_children_on_pipeline",
+		"_raw_gitlab_api_commit",
+		"_raw_gitlab_api_issues",
+		"_raw_gitlab_api_merge_request_commits",
+		"_raw_gitlab_api_merge_request_notes",
+		"_raw_gitlab_api_merge_requests",
+		"_raw_gitlab_api_pipeline",
+		"_raw_gitlab_api_project",
+		"_raw_gitlab_api_tag",
 	)
 
 	if err != nil {

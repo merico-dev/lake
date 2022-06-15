@@ -44,7 +44,9 @@ func ConvertApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 		dal.Join(`left join _tool_gitlab_merge_requests 
 			on _tool_gitlab_merge_requests.gitlab_id = 
 			_tool_gitlab_merge_request_commits.merge_request_id`),
-		dal.Where("_tool_gitlab_merge_requests.project_id = ?", data.Options.ProjectId),
+		dal.Where(`_tool_gitlab_merge_requests.project_id = ? 
+			and _tool_gitlab_merge_requests.connection_id = ?`,
+			data.Options.ProjectId, data.Options.ConnectionId),
 		dal.Orderby("merge_request_id ASC"),
 	}
 
@@ -52,7 +54,6 @@ func ConvertApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 	if err != nil {
 		return err
 	}
-	defer cursor.Close()
 
 	// TODO: adopt batch indate operation
 	domainIdGenerator := didgen.NewDomainIdGenerator(&models.GitlabMergeRequest{})
@@ -66,7 +67,7 @@ func ConvertApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 			gitlabMergeRequestCommit := inputRow.(*models.GitlabMergeRequestCommit)
 			domainPrcommit := &code.PullRequestCommit{
 				CommitSha:     gitlabMergeRequestCommit.CommitSha,
-				PullRequestId: domainIdGenerator.Generate(gitlabMergeRequestCommit.MergeRequestId),
+				PullRequestId: domainIdGenerator.Generate(data.Options.ConnectionId, gitlabMergeRequestCommit.MergeRequestId),
 			}
 			return []interface{}{
 				domainPrcommit,

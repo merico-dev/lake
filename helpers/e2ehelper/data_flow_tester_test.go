@@ -18,6 +18,7 @@ limitations under the License.
 package e2ehelper
 
 import (
+	gitlabModels "github.com/apache/incubator-devlake/plugins/gitlab/models"
 	"testing"
 
 	"github.com/apache/incubator-devlake/plugins/core"
@@ -37,13 +38,13 @@ func ExampleDataFlowTester() {
 	}
 
 	// import raw data table
-	dataflowTester.ImportCsv("./tables/_raw_gitlab_api_projects.csv", "_raw_gitlab_api_project")
+	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_projects.csv", "_raw_gitlab_api_project")
 
 	// verify extraction
-	dataflowTester.FlushTable("_tool_gitlab_projects")
+	dataflowTester.FlushTabler(gitlabModels.GitlabProject{})
 	dataflowTester.Subtask(tasks.ExtractProjectMeta, taskData)
 	dataflowTester.VerifyTable(
-		"_tool_gitlab_projects",
+		gitlabModels.GitlabProject{},
 		"tables/_tool_gitlab_projects.csv",
 		[]string{"gitlab_id"},
 		[]string{

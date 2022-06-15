@@ -28,7 +28,7 @@ import (
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
 
-var ConvertApiCommitsMeta = core.SubTaskMeta{
+var ConvertCommitsMeta = core.SubTaskMeta{
 	Name:             "convertApiCommits",
 	EntryPoint:       ConvertApiCommits,
 	EnabledByDefault: true,
@@ -46,7 +46,8 @@ func ConvertApiCommits(taskCtx core.SubTaskContext) error {
 		dal.Join(`left join _tool_gitlab_project_commits gpc on (
 			gpc.commit_sha = gc.sha
 		)`),
-		dal.Where("gpc.gitlab_project_id = ?", data.Options.ProjectId),
+		dal.Where("gpc.gitlab_project_id = ? and gc.connection_id = ? ",
+			data.Options.ProjectId, data.Options.ConnectionId),
 	}
 	cursor, err := db.Cursor(clauses...)
 	if err != nil {
@@ -71,18 +72,18 @@ func ConvertApiCommits(taskCtx core.SubTaskContext) error {
 			commit.Message = gitlabCommit.Message
 			commit.Additions = gitlabCommit.Additions
 			commit.Deletions = gitlabCommit.Deletions
-			commit.AuthorId = userDidGen.Generate(gitlabCommit.AuthorEmail)
+			commit.AuthorId = userDidGen.Generate(data.Options.ConnectionId, gitlabCommit.AuthorEmail)
 			commit.AuthorName = gitlabCommit.AuthorName
 			commit.AuthorEmail = gitlabCommit.AuthorEmail
 			commit.AuthoredDate = gitlabCommit.AuthoredDate
 			commit.CommitterName = gitlabCommit.CommitterName
 			commit.CommitterEmail = gitlabCommit.CommitterEmail
 			commit.CommittedDate = gitlabCommit.CommittedDate
-			commit.CommitterId = userDidGen.Generate(gitlabCommit.AuthorEmail)
+			commit.CommitterId = userDidGen.Generate(data.Options.ConnectionId, gitlabCommit.AuthorEmail)
 
 			// convert repo / commits relationship
 			repoCommit := &code.RepoCommit{
-				RepoId:    didgen.NewDomainIdGenerator(&models.GitlabProject{}).Generate(data.Options.ProjectId),
+				RepoId:    didgen.NewDomainIdGenerator(&models.GitlabProject{}).Generate(data.Options.ConnectionId, data.Options.ProjectId),
 				CommitSha: gitlabCommit.Sha,
 			}
 

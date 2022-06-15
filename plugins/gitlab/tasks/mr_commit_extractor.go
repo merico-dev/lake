@@ -33,7 +33,7 @@ var ExtractApiMergeRequestsCommitsMeta = core.SubTaskMeta{
 }
 
 func ExtractApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
-	rawDataSubTaskArgs, _ := CreateRawDataSubTaskArgs(taskCtx, RAW_MERGE_REQUEST_COMMITS_TABLE)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_MERGE_REQUEST_COMMITS_TABLE)
 
 	extractor, err := helper.NewApiExtractor(helper.ApiExtractorArgs{
 		RawDataSubTaskArgs: *rawDataSubTaskArgs,
@@ -48,7 +48,7 @@ func ExtractApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 			if err != nil {
 				return nil, err
 			}
-
+			gitlabCommit.ConnectionId = data.Options.ConnectionId
 			// get input info
 			input := &GitlabInput{}
 			err = json.Unmarshal(row.Input, input)
@@ -59,6 +59,7 @@ func ExtractApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 			gitlabMrCommit := &models.GitlabMergeRequestCommit{
 				CommitSha:      gitlabApiCommit.GitlabId,
 				MergeRequestId: input.GitlabId,
+				ConnectionId:   data.Options.ConnectionId,
 			}
 
 			// need to extract 2 kinds of entities here

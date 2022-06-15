@@ -41,7 +41,7 @@ func TestGitlabProjectDataFlow(t *testing.T) {
 	}
 
 	// import raw data table
-	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_projects.csv",
+	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_projects.csv",
 		"_raw_gitlab_api_project")
 
 	// verify extraction

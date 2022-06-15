@@ -24,7 +24,7 @@ import (
 
 const RAW_COMMIT_TABLE = "gitlab_api_commit"
 
-var CollectCommitsMeta = core.SubTaskMeta{
+var CollectApiCommitsMeta = core.SubTaskMeta{
 	Name:             "collectApiCommits",
 	EntryPoint:       CollectApiCommits,
 	EnabledByDefault: true,
@@ -61,7 +61,6 @@ func CollectApiCommits(taskCtx core.SubTaskContext) error {
 		Incremental:        false,
 		UrlTemplate:        "projects/{{ .Params.ProjectId }}/repository/commits",
 		Query:              GetQuery,
-		Concurrency:        20,
 		ResponseParser:     GetRawMessageFromResponse,
 	})
 

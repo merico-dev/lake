@@ -40,7 +40,7 @@ func TestGitlabMrNoteDataFlow(t *testing.T) {
 		},
 	}
 	// import raw data table
-	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_merge_requests.csv",
+	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_merge_requests.csv",
 		"_raw_gitlab_api_merge_requests")
 
 	// verify extraction
@@ -115,7 +115,7 @@ func TestGitlabMrNoteDataFlow(t *testing.T) {
 		},
 	)
 	// import raw data table
-	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_merge_request_notes.csv",
+	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_merge_request_notes.csv",
 		"_raw_gitlab_api_merge_request_notes")
 
 	// verify extraction
