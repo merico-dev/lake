@@ -83,7 +83,8 @@ function useBlueprintValidation ({
     cronConfig,
     customCronConfig,
     tasks,
-    enable
+    enable,
+    mode
   ])
 
   const fieldHasError = useCallback((fieldId) => {

@@ -42,7 +42,7 @@ function useConnectionValidation ({
 
   const validate = useCallback(() => {
     const errs = []
-    console.log('>> VALIDATING PROVIDER ID: ', activeProvider.id)
+    console.log('>> VALIDATING PROVIDER ID: ', activeProvider?.id)
     console.log('>> RUNNING FORM VALIDATIONS AGAINST FIELD VALUES...')
     console.log(
       'NAME', name,
@@ -77,7 +77,7 @@ function useConnectionValidation ({
       errs.push('Proxy URL must be valid HTTP/S protocol')
     }
 
-    switch (activeProvider.id) {
+    switch (activeProvider?.id) {
       case Providers.GITHUB:
       case Providers.GITLAB:
         if (!token || token.length <= 2) {

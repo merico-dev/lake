@@ -69,6 +69,8 @@ import Content from '@/components/Content'
 import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
 import { NullBlueprint } from '@/data/NullBlueprint'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
+import { NullConnection } from '@/data/NullConnection'
+
 import { WorkflowSteps, DEFAULT_DATA_ENTITIES, DEFAULT_BOARDS } from '@/data/BlueprintWorkflow'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
@@ -211,7 +213,7 @@ const CreateBlueprint = (props) => {
     saveBlueprint,
     deleteBlueprint,
     isDeleting: isDeletingBlueprint,
-    saveComplete: saveBlueprintComplete,
+    saveComplete: saveBlueprintComplete
   } = useBlueprintManager()
 
   const {
@@ -300,8 +302,9 @@ const CreateBlueprint = (props) => {
   const {
     testConnection,
     saveConnection,
+    fetchConnection,
     allProviderConnections,
-    errors,
+    errors: connectionErrors,
     isSaving: isSavingConnection,
     isTesting: isTestingConnection,
     showError,
@@ -312,6 +315,9 @@ const CreateBlueprint = (props) => {
     token,
     username,
     password,
+    provider,
+    setActiveConnection,
+    setProvider,
     setName,
     setEndpointUrl,
     setProxy,
@@ -320,16 +326,25 @@ const CreateBlueprint = (props) => {
     setToken,
     fetchAllConnections,
     connectionLimitReached,
-    // Providers
+    clearConnection: clearActiveConnection
   } = useConnectionManager({
     activeProvider,
-  })
+    connectionId: managedConnection?.id
+  }, manageConnection?.id !== null ? true : false)
 
   const {
     validate: validateConnection,
-    errors: connectionErrors,
+    errors: connectionValidationErrors,
     isValid: isValidConnection,
-  } = useConnectionValidation(managedConnection)
+  } = useConnectionValidation({
+      activeProvider,
+      name: connectionName,
+      endpointUrl,
+      proxy,
+      token,
+      username,
+      password
+  })
 
   const isValidStep = useCallback((stepId) => {}, [])
 
@@ -361,6 +376,7 @@ const CreateBlueprint = (props) => {
   const handleConnectionDialogClose = () => {
     setConnectionDialogIsOpen(false)
     setManagedConnection(NullBlueprintConnection)
+    clearActiveConnection()
   }
 
   const getRestrictedDataEntities = useCallback(() => {
@@ -450,6 +466,9 @@ const CreateBlueprint = (props) => {
   const manageConnection = useCallback((connection) => {
     console.log('>> MANAGE CONNECTION...', connection)
     if (connection?.id !== null) {
+      setActiveProvider(integrationsData.find(p => p.id === connection.provider))
+      setProvider(integrationsData.find(p => p.id === connection.provider))
+      // fetchConnection(true, false, connection.id)
       setManagedConnection(connection)
       setConnectionDialogIsOpen(true)
     }
@@ -642,6 +661,10 @@ const CreateBlueprint = (props) => {
   useEffect(() => {
     setConfiguredProject(projects.length > 0 ? projects[0] : null)
   }, [projects])
+  
+  useEffect(() => {
+    
+  }, [managedConnection])
 
   return (
     <>
@@ -1531,8 +1554,12 @@ const CreateBlueprint = (props) => {
         </Content>
       </div>
       <ConnectionDialog
+        integrations={integrationsData}
+        activeProvider={activeProvider}
+        setProvider={setActiveProvider}
         connection={managedConnection}
         errors={connectionErrors}
+        validationErrors={connectionValidationErrors}
         endpointUrl={endpointUrl}
         name={connectionName}
         proxy={proxy}

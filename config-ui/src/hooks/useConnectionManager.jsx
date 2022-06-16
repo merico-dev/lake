@@ -34,24 +34,13 @@ function useConnectionManager(
   {
     activeProvider,
     connectionId,
-    // activeConnection,
-    // setActiveConnection,
-    // name = null,
-    // endpointUrl = null,
-    // token = null,
-    // username = null,
-    // password = null,
-    // isTesting, setIsTesting,
-    // isSaving, setIsSaving,
-    // testStatus, setTestStatus,
-    // errors, setErrors,
-    // showError, setShowError
   },
   updateMode = false
 ) {
   const history = useHistory()
   const { handleOfflineMode } = useNetworkOfflineMode()
 
+  const [provider, setProvider] = useState(activeProvider)
   const [name, setName] = useState()
   const [endpointUrl, setEndpointUrl] = useState()
   const [proxy, setProxy] = useState()
@@ -94,7 +83,7 @@ function useConnectionManager(
       // TODO: run Save first
       const runTest = async () => {
         let connectionPayload
-        switch (activeProvider.id) {
+        switch (provider.id) {
           case Providers.JIRA:
             connectionPayload = {
               endpoint: endpointUrl,
@@ -125,7 +114,7 @@ function useConnectionManager(
             break
         }
         connectionPayload = { ...connectionPayload, ...manualPayload }
-        const testUrl = `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/test`
+        const testUrl = `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/test`
         console.log(
           'INFO >>> Endopoint URL & Payload for testing: ',
           testUrl,
@@ -161,13 +150,13 @@ function useConnectionManager(
       }
       runTest()
     },
-    [activeProvider.id, endpointUrl, password, proxy, token, username]
+    [provider.id, endpointUrl, password, proxy, token, username]
   )
 
   const saveConnection = (configurationSettings = {}) => {
     setIsSaving(true)
     let connectionPayload = { ...configurationSettings }
-    switch (activeProvider.id) {
+    switch (provider.id) {
       case Providers.JIRA:
         connectionPayload = {
           name: name,
@@ -221,7 +210,7 @@ function useConnectionManager(
         setErrors([])
         ToastNotification.clear()
         const s = await request.post(
-          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`,
+          `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections`,
           configPayload
         )
         console.log('>> CONFIGURATION SAVED SUCCESSFULLY', configPayload, s)
@@ -245,7 +234,7 @@ function useConnectionManager(
         ToastNotification.clear()
         // eslint-disable-next-line max-len
         const s = await request.patch(
-          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${
+          `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections/${
             activeConnection.id || activeConnection.ID
           }`,
           configPayload
@@ -283,14 +272,14 @@ function useConnectionManager(
         setIsSaving(false)
         setSaveComplete(saveResponse.connection)
         if (
-          [Providers.GITHUB, Providers.JIRA].includes(activeProvider.id) &&
+          [Providers.GITHUB, Providers.JIRA].includes(provider.id) &&
           token !== '' &&
           token?.toString().split(',').length > 1
         ) {
           testConnection()
         }
         if (!updateMode) {
-          history.push(`/integrations/${activeProvider.id}`)
+          history.push(`/integrations/${provider.id}`)
         }
       } else {
         ToastNotification.show({
@@ -317,8 +306,8 @@ function useConnectionManager(
   }
 
   const fetchConnection = useCallback(
-    (silent = false, notify = false) => {
-      console.log('>> FETCHING CONNECTION....')
+    (silent = false, notify = false, cId = null) => {
+      console.log(`>> FETCHING CONNECTION [PROVIDER = ${provider.id}]....`)
       try {
         setIsFetching(!silent)
         setErrors([])
@@ -326,7 +315,7 @@ function useConnectionManager(
         console.log('>> FETCHING CONNECTION SOURCE')
         const fetch = async () => {
           const f = await request.get(
-            `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${connectionId}`
+            `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections/${cId || connectionId}`
           )
           const connectionData = f.data
           console.log('>> RAW CONNECTION DATA FROM API...', connectionData)
@@ -356,7 +345,7 @@ function useConnectionManager(
         console.log('>> FAILED TO FETCH CONNECTION', e)
       }
     },
-    [activeProvider.id, connectionId]
+    [provider.id, connectionId]
   )
 
   const fetchAllConnections = useCallback(
@@ -367,7 +356,7 @@ function useConnectionManager(
         ToastNotification.clear()
         console.log('>> FETCHING ALL CONNECTION SOURCES')
         const c = await request.get(
-          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections`
+          `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections`
         )
         if (allSources) {
           const aC = await Promise.all([
@@ -423,8 +412,8 @@ function useConnectionManager(
         setAllConnections(providerConnections)
         setConnectionCount(c.data?.length)
         setConnectionLimitReached(
-          sourceLimits[activeProvider.id] &&
-            c.data?.length >= sourceLimits[activeProvider.id]
+          sourceLimits[provider.id] &&
+            c.data?.length >= sourceLimits[provider.id]
         )
         setIsFetching(false)
       } catch (e) {
@@ -442,7 +431,7 @@ function useConnectionManager(
         handleOfflineMode(e.response.status, e.response)
       }
     },
-    [activeProvider.id, sourceLimits, handleOfflineMode]
+    [provider.id, sourceLimits, handleOfflineMode]
   )
 
   const deleteConnection = useCallback(
@@ -452,7 +441,7 @@ function useConnectionManager(
         setErrors([])
         console.log('>> TRYING TO DELETE CONNECTION...', connection)
         const d = await request.delete(
-          `${DEVLAKE_ENDPOINT}/plugins/${activeProvider.id}/connections/${
+          `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections/${
             connection.ID || connection.id
           }`
         )
@@ -469,7 +458,7 @@ function useConnectionManager(
         console.log('>> FAILED TO DELETE CONNECTION', e)
       }
     },
-    [activeProvider.id]
+    [provider.id]
   )
 
   const getConnectionName = useCallback((connectionId, connections) => {
@@ -539,12 +528,21 @@ function useConnectionManager(
       console.log('>> FAILED TO FETCH DOMAIN LAYER REPOS', e)
     }
   }, [])
+  
+  const clearConnection = useCallback(() => {
+    setName('')
+    setEndpointUrl('')
+    setUsername('')
+    setPassword('')
+    setToken('')
+    setProxy('')
+  }, [])
 
   useEffect(() => {
     if (activeConnection && activeConnection.ID !== null) {
       setName(activeConnection.name)
       setEndpointUrl(activeConnection.endpoint)
-      switch (activeProvider.id) {
+      switch (provider.id) {
         case Providers.JENKINS:
           setUsername(activeConnection.username)
           setPassword(activeConnection.password)
@@ -566,7 +564,7 @@ function useConnectionManager(
       // ToastNotification.show({ message: `Fetched settings for ${activeConnection.name}.`, intent: 'success', icon: 'small-tick' })
       console.log('>> FETCHED CONNECTION FOR MODIFY', activeConnection)
     }
-  }, [activeConnection, activeProvider.id])
+  }, [activeConnection, provider.id])
 
   useEffect(() => {
     if (saveComplete && saveComplete.ID) {
@@ -583,15 +581,15 @@ function useConnectionManager(
   useEffect(() => {
     console.log(
       '>> CONNECTION MANAGER - RECEIVED ACTIVE PROVIDER...',
-      activeProvider
+      provider
     )
-    if (activeProvider && activeProvider.id) {
+    if (provider && provider.id) {
       // console.log(activeProvider)
     }
-  }, [activeProvider])
+  }, [provider])
 
   useEffect(() => {
-    if (connectionId) {
+    if (connectionId !== null && connectionId !== undefined) {
       console.log('>>>> CONFIGURING CONNECTION ID ... ', connectionId)
       fetchConnection()
     }
@@ -623,6 +621,9 @@ function useConnectionManager(
     username,
     password,
     token,
+    provider,
+    setActiveConnection,
+    setProvider,
     setName,
     setEndpointUrl,
     setProxy,
@@ -647,6 +648,7 @@ function useConnectionManager(
     saveComplete,
     deleteComplete,
     getConnectionName,
+    clearConnection
   }
 }
 

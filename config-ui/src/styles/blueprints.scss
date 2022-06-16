@@ -197,7 +197,12 @@
 .bp3-dialog {
   &.dialog-manage-connection {
     .bp3-form-group {
-      margin: 0 0 8px
+      margin: 0 0 8px;
+      flex: 1;
+      
+      .bp3-form-content {
+        flex: 1;
+      }
     }
   }
 }

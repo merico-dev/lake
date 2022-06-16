@@ -7,6 +7,14 @@
     display: flex;
     max-width: none;
     margin-bottom: 10px;
+    
+    &.bp3-inline {
+      .bp3-form-content {
+        .bp3-input-group {
+          margin-left: 0.75rem;
+        }
+      }
+    }
 
     .bp3-form-content {
       width: 100%;

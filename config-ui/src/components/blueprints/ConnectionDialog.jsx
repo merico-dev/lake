@@ -42,12 +42,15 @@ import {
   Providers,
   ProviderTypes,
   ProviderLabels,
+  ProviderFormLabels,
   ProviderFormPlaceholders,
+  ProviderConnectionLimits,
   ProviderIcons,
 } from '@/data/Providers'
+import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 import InputValidationError from '@/components/validation/InputValidationError'
 import ContentLoader from '@/components/loaders/ContentLoader'
-import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
+import ConnectionForm from '@/pages/configure/connections/ConnectionForm'
 
 const Modes = {
   CREATE: 'create',
@@ -57,6 +60,9 @@ const Modes = {
 const ConnectionDialog = (props) => {
   const {
     isOpen = false,
+    activeProvider,
+    integrations = [],
+    setProvider = () => {},
     connection = NullBlueprintConnection,
     name,
     endpointUrl,
@@ -101,11 +107,24 @@ const ConnectionDialog = (props) => {
     onTest = () => {},
     onSave = () => {},
     onClose = () => {},
+    onCancel = () => {},
+    onValidate = () => {},
+    onNameChange=() => {},
+    onEndpointChange=() => {},
+    onProxyChange=() => {},
+    onTokenChange=() => {},
+    onUsernameChange=() => {},
+    onPasswordChange=() => {},
+    showConnectionError = false,
+    testStatus,
     errors = [],
+    validationErrors = [],
+    // authType,
+    // showLimitWarning = false
   } = props
 
-  const connectionNameRef = useRef()
-  const connectionEndpointRef = useRef()
+  {/* const connectionNameRef = useRef()
+  const connectionEndpointRef = useRef() */}
 
   const [datasource, setDatasource] = useState(
     connection?.id
@@ -125,8 +144,6 @@ const ConnectionDialog = (props) => {
     setStateErrored(elementId || false)
   }
 
-  useEffect(() => {}, [datasource])
-
   useEffect(() => {
     if (connection?.id !== null && connection?.id !== undefined) {
       setMode(Modes.EDIT)
@@ -137,6 +154,11 @@ const ConnectionDialog = (props) => {
       setMode(Modes.CREATE)
     }
   }, [connection])
+  
+  useEffect(() => {
+    console.log('>>> DATASOURCE CHANGED....', datasource)
+    setProvider(integrations.find(p => p.id === datasource.value))
+  }, [datasource])
 
   return (
     <>
@@ -156,77 +178,13 @@ const ConnectionDialog = (props) => {
         <div className={Classes.DIALOG_BODY}>
           {isLoading || isSaving ? (
             <ContentLoader
-              title='Loading Connection...'
+              title={`${isSaving ? 'Saving' : 'Loading'} Connection...`}
               elevation={Elevation.ZERO}
-              message='Please wait for connection.'
+              message='Please wait.'
             />
           ) : (
             <>
               <div className='manage-connection'>
-                <div className='formContainer'>
-                  <FormGroup
-                    disabled={isTesting || isSaving || isLocked}
-                    readOnly={[
-                      Providers.GITHUB,
-                      Providers.GITLAB,
-                      Providers.JENKINS,
-                    ].includes(connection.id)}
-                    label=''
-                    inline={true}
-                    labelFor='connection-name'
-                    className='formGroup-inline'
-                    contentClassName='formGroupContent'
-                  >
-                    <Label style={{ display: 'inline', marginRight: 0 }}>
-                      {labels ? labels.name : <>Connection&nbsp;Name</>}
-                      <span className='requiredStar'>*</span>
-                    </Label>
-                    <p>
-                      Give your connection a unique name to help you identify it
-                      in the future.
-                    </p>
-                    <InputGroup
-                      id='connection-name'
-                      inputRef={connectionNameRef}
-                      disabled={isTesting || isSaving || isLocked}
-                      readOnly={[
-                        Providers.GITHUB,
-                        Providers.GITLAB,
-                        Providers.JENKINS,
-                      ].includes(connection.provider)}
-                      placeholder={
-                        placeholders ? placeholders.name : 'Enter Instance Name'
-                      }
-                      value={connection.title}
-                      onChange={(e) => onNameChange(e.target.value)}
-                      className={`connection-name-input ${
-                        stateErrored === 'connection-name'
-                          ? 'invalid-field'
-                          : ''
-                      }`}
-                      leftIcon={
-                        [
-                          Providers.GITHUB,
-                          Providers.GITLAB,
-                          Providers.JENKINS,
-                        ].includes(connection.provider)
-                          ? 'lock'
-                          : null
-                      }
-                      inline={true}
-                      rightElement={
-                        <InputValidationError
-                          error={getFieldError('Connection')}
-                          elementRef={connectionNameRef}
-                          onError={activateErrorStates}
-                          onSuccess={() => setStateErrored(null)}
-                          validateOnFocus
-                        />
-                      }
-                      // fill
-                    />
-                  </FormGroup>
-                </div>
 
                 <div className='formContainer'>
                   <FormGroup
@@ -268,10 +226,10 @@ const ConnectionDialog = (props) => {
                       onItemSelect={(item) => {
                         setDatasource(item)
                       }}
-                      readOnly={connection?.id && mode === Modes.EDIT}
+                      readOnly={connection?.id !== null && mode === Modes.EDIT}
                     >
                       <Button
-                        disabled={connection?.id && mode === Modes.EDIT}
+                        disabled={connection?.id !== null && mode === Modes.EDIT}
                         className='btn-select-datasource'
                         intent={Intent.NONE}
                         style={{ maxWidth: '260px' }}
@@ -291,50 +249,44 @@ const ConnectionDialog = (props) => {
                   </FormGroup>
                 </div>
 
-                {[Providers.JIRA].includes(datasource.value) && (
-                  <div className='formContainer'>
-                    <FormGroup
-                      disabled={isTesting || isSaving || isLocked}
-                      label=''
-                      inline={true}
-                      labelFor='connection-endpoint'
-                      className='formGroup-inline formGroup-full'
-                      contentClassName='formGroupContent'
-                    >
-                      <Label>
-                        {labels ? labels.endpoint : <>Endpoint&nbsp;URL</>}
-                        <span className='requiredStar'>*</span>
-                      </Label>
-                      <InputGroup
-                        id='connection-endpoint'
-                        inputRef={connectionEndpointRef}
-                        disabled={isTesting || isSaving || isLocked}
-                        placeholder={
-                          placeholders
-                            ? placeholders.endpoint
-                            : 'Enter Endpoint URL'
-                        }
-                        value={endpointUrl}
-                        onChange={(e) => onEndpointChange(e.target.value)}
-                        className={`endpoint-url-input ${
-                          stateErrored === 'connection-endpoint'
-                            ? 'invalid-field'
-                            : ''
-                        }`}
-                        fill
-                        rightElement={
-                          <InputValidationError
-                            error={getFieldError('Endpoint')}
-                            elementRef={connectionEndpointRef}
-                            onError={activateErrorStates}
-                            onSuccess={() => setStateErrored(null)}
-                            validateOnFocus
-                          />
-                        }
-                      />
-                    </FormGroup>
-                  </div>
-                )}
+                
+                <div className='connection-form-wrapper' style={{ display: 'flex' }}>
+                 <ConnectionForm
+                   isValid={isValid}
+                   validationErrors={validationErrors}
+                   activeProvider={activeProvider}
+                   name={name}
+                   endpointUrl={endpointUrl}
+                   proxy={proxy}
+                   token={token}
+                   username={username}
+                   password={password}
+                   onSave={onSave}
+                   onTest={onTest}
+                   onCancel={onCancel}
+                   onValidate={onValidate}
+                   onNameChange={onNameChange}
+                   onEndpointChange={onEndpointChange}
+                   onProxyChange={onProxyChange}
+                   onTokenChange={onTokenChange}
+                   onUsernameChange={onUsernameChange}
+                   onPasswordChange={onPasswordChange}
+                   isSaving={isSaving}
+                   isTesting={isTesting}
+                   testStatus={testStatus}
+                   errors={errors}
+                   showError={showConnectionError}
+                   authType={activeProvider?.id === Providers.JENKINS ? 'plain' : 'token'}
+                   showLimitWarning={false}
+                   sourceLimits={ProviderConnectionLimits}
+                   labels={ProviderFormLabels[activeProvider?.id]}
+                   placeholders={ProviderFormPlaceholders[activeProvider?.id]}
+                   enableActions={false}
+                   // formGroupClassName='formGroup-inline'
+                   showHeadline={false}
+                 />
+                </div>
+                
               </div>
             </>
           )}
