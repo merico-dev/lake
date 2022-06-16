@@ -15,7 +15,7 @@
  * limitations under the License.
  *
  */
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import dayjs from '@/utils/time'
 import {
   Button,
@@ -143,6 +143,23 @@ const ConnectionDialog = (props) => {
   const activateErrorStates = (elementId) => {
     setStateErrored(elementId || false)
   }
+  
+  const getConnectionStatusIcon = useCallback(() => {
+    let i = <Icon icon='full-circle' size='10' color={Colors.RED3} />
+    switch (testStatus) {
+      case 1:
+        i = <Icon icon='full-circle' size='10' color={Colors.GREEN3} />
+        break
+      case 2:
+        i = <Icon icon='full-circle' size='10' color={Colors.RED3} />
+        break
+      case 0:
+      default:
+        i = <Icon icon='full-circle' size='10' color={Colors.GRAY3} />
+        break
+    }
+    return i
+  }, [testStatus])
 
   useEffect(() => {
     if (connection?.id !== null && connection?.id !== undefined) {
@@ -159,6 +176,10 @@ const ConnectionDialog = (props) => {
     console.log('>>> DATASOURCE CHANGED....', datasource)
     setProvider(integrations.find(p => p.id === datasource.value))
   }, [datasource])
+
+  useEffect(() => {
+    
+  }, [testStatus])
 
   return (
     <>
@@ -276,7 +297,7 @@ const ConnectionDialog = (props) => {
                    testStatus={testStatus}
                    errors={errors}
                    showError={showConnectionError}
-                   authType={activeProvider?.id === Providers.JENKINS ? 'plain' : 'token'}
+                   authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider?.id) ? 'plain' : 'token'}
                    showLimitWarning={false}
                    sourceLimits={ProviderConnectionLimits}
                    labels={ProviderFormLabels[activeProvider?.id]}
@@ -294,16 +315,21 @@ const ConnectionDialog = (props) => {
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button
+              className='btn-test'
+              icon={getConnectionStatusIcon()}
               disabled={isSaving || isTesting}
               onClick={() => onTest(false)}
+              loading={isTesting}
             >
               Test Connection
             </Button>
             <Button
+              className='btn-save'
               disabled={isSaving || !isValid || isTesting}
               icon='cloud-upload'
               intent={Intent.PRIMARY}
               onClick={() => onSave(connection ? connection.id : null)}
+              loading={isSaving}
             >
               {'Save Connection'}
             </Button>

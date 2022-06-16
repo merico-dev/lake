@@ -381,7 +381,7 @@ export default function ConnectionForm (props) {
                 className={formGroupClassName}
                 contentClassName='formGroupContent'
               >
-                <Label style={{ display: 'inline' }}>
+                <Label>
                   {labels
                     ? labels.username
                     : (
@@ -414,7 +414,7 @@ export default function ConnectionForm (props) {
                 className={formGroupClassName}
                 contentClassName='formGroupContent'
               >
-                <Label style={{ display: 'inline' }}>
+                <Label>
                   {labels
                     ? labels.password
                     : (

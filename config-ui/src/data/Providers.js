@@ -99,8 +99,29 @@ const ProviderFormLabels = {
     endpoint: 'Endpoint URL',
     proxy: 'Proxy URL',
     token: 'Basic Auth Token',
-    username: 'Username',
-    password: 'Password'
+    username: 'Username / E-mail',
+    // password; 'Password',
+    password: (
+      <>
+        <Tooltip
+          content={(<span>If you are using JIRA Cloud or JIRA Server, <br />your API Token should be used as password.</span>)}
+          intent='primary'
+        >
+          <Icon
+            icon='info-sign'
+            size={12}
+            style={{
+              float: 'left',
+              display: 'inline-block',
+              alignContent: 'center',
+              marginBottom: '4px',
+              marginRight: '8px',
+              color: '#999'
+            }}
+          />
+        </Tooltip>
+        Password
+      </>),
   },
   github: {
     name: 'Connection Name',

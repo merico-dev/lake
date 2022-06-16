@@ -1581,6 +1581,7 @@ const CreateBlueprint = (props) => {
         onTokenChange={setToken}
         onUsernameChange={setUsername}
         onPasswordChange={setPassword}
+        testStatus={testStatus}
       />
 
       <CodeInspector
