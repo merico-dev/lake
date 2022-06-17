@@ -31,7 +31,8 @@ RUN npm ci
 COPY . /home/node/code
 RUN npm run build-production
 
-FROM nginx:latest
+FROM nginxinc/nginx-unprivileged:1.21
+USER 0
 #ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
 #RUN chmod +x /wait
 RUN rm /etc/nginx/conf.d/default.conf
@@ -43,4 +44,5 @@ EXPOSE 80 443
 RUN apt update && apt install -y apache2-utils
 COPY ./nginx.sh /usr/bin/nginx.sh
 RUN chmod +x /usr/bin/nginx.sh
+USER 101
 CMD nginx.sh
