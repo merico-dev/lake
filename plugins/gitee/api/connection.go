@@ -23,29 +23,23 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/apache/incubator-devlake/config"
-	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/gitee/models"
+
 	"github.com/apache/incubator-devlake/plugins/helper"
-
-	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
-)
 
-var vld = validator.New()
+	"github.com/apache/incubator-devlake/plugins/core"
+)
 
 /*
 POST /plugins/gitee/test
 */
 func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
-	// decode
-	var err error
 	var connection models.TestConnectionRequest
-	err = mapstructure.Decode(input.Body, &connection)
+	err := mapstructure.Decode(input.Body, &connection)
 	if err != nil {
 		return nil, err
 	}
-	// validate
 	err = vld.Struct(connection)
 	if err != nil {
 		return nil, err
@@ -61,8 +55,9 @@ func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, erro
 	if err != nil {
 		return nil, err
 	}
-	query := make(url.Values)
-	query["access_token"] = []string{connection.Auth}
+
+	query := url.Values{}
+	query.Set("access_token", connection.Token)
 
 	res, err := apiClient.Get("user", query, nil)
 	if err != nil {
@@ -81,68 +76,63 @@ func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, erro
 }
 
 /*
+POST /plugins/gitee/connections
+*/
+func PostConnections(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
+	connection := &models.GiteeConnection{}
+	err := connectionHelper.Create(connection, input)
+	if err != nil {
+		return nil, err
+	}
+	return &core.ApiResourceOutput{Body: connection, Status: http.StatusOK}, nil
+}
+
+/*
 PATCH /plugins/gitee/connections/:connectionId
 */
 func PatchConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
-	v := config.GetConfig()
 	connection := &models.GiteeConnection{}
-	err := helper.EncodeStruct(v, connection, "env")
+	err := connectionHelper.Patch(connection, input)
 	if err != nil {
 		return nil, err
 	}
-	// update from request and save to .env
-	err = helper.DecodeStruct(v, connection, input.Body, "env")
+	return &core.ApiResourceOutput{Body: connection, Status: http.StatusOK}, nil
+}
+
+/*
+DELETE /plugins/gitee/connections/:connectionId
+*/
+func DeleteConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
+	connection := &models.GiteeConnection{}
+	err := connectionHelper.First(connection, input.Params)
 	if err != nil {
 		return nil, err
 	}
-	err = config.WriteConfig(v)
-	if err != nil {
-		return nil, err
-	}
-	response := models.GiteeResponse{
-		GiteeConnection: *connection,
-		Name:            "Gitee",
-		ID:              1,
-	}
-	return &core.ApiResourceOutput{Body: response, Status: http.StatusOK}, nil
+	err = connectionHelper.Delete(connection)
+	return &core.ApiResourceOutput{Body: connection}, err
 }
 
 /*
 GET /plugins/gitee/connections
 */
 func ListConnections(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
-	// RETURN ONLY 1 SOURCE (FROM ENV) until multi-connection is developed.
-	v := config.GetConfig()
-	connection := &models.GiteeConnection{}
-
-	err := helper.EncodeStruct(v, connection, "env")
+	var connections []models.GiteeConnection
+	err := connectionHelper.List(&connections)
 	if err != nil {
 		return nil, err
 	}
-	response := models.GiteeResponse{
-		GiteeConnection: *connection,
-		Name:            "Gitee",
-		ID:              1,
-	}
 
-	return &core.ApiResourceOutput{Body: []models.GiteeResponse{response}}, nil
+	return &core.ApiResourceOutput{Body: connections}, nil
 }
 
 /*
 GET /plugins/gitee/connections/:connectionId
 */
 func GetConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
-	//  RETURN ONLY 1 SOURCE FROM ENV (Ignore ID until multi-connection is developed.)
-	v := config.GetConfig()
 	connection := &models.GiteeConnection{}
-	err := helper.EncodeStruct(v, connection, "env")
+	err := connectionHelper.First(connection, input.Params)
 	if err != nil {
 		return nil, err
 	}
-	response := &models.GiteeResponse{
-		GiteeConnection: *connection,
-		Name:            "Gitee",
-		ID:              1,
-	}
-	return &core.ApiResourceOutput{Body: response}, nil
+	return &core.ApiResourceOutput{Body: connection}, err
 }
