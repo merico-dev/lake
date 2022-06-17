@@ -1,0 +1,27 @@
+id,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark,pull_request_id,body,user_id,created_date,commit_sha,position
+gitlab:GitlabMergeRequestComment:1:427956607,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,557,,gitlab:GitlabMergeRequest:1:72934330,"@lucas.rosa.merico sorry for the late response, i didn't notice this MR
+
+let me rebase this MR onto master before accepting",gitlab:GitlabUser:1:gerilleto,2020-10-12T08:11:39.882+00:00,,0
+gitlab:GitlabMergeRequestComment:1:452801466,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,571,,gitlab:GitlabMergeRequest:1:79113414,story 的改动可以忽略代码只看渲染出来的效果,gitlab:GitlabUser:1:gerilleto,2020-11-23T15:00:50.481+00:00,,0
+gitlab:GitlabMergeRequestComment:1:452803681,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,572,,gitlab:GitlabMergeRequest:1:79113414,Recharts 的 ReferenceLine 只接受长度为 2 的 segment 参数，即首尾两个点,gitlab:GitlabUser:1:gerilleto,2020-11-23T15:02:37.040+00:00,,0
+gitlab:GitlabMergeRequestComment:1:452965386,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,576,,gitlab:GitlabMergeRequest:1:79113414,"没太理解为啥参考线是要过`body`的最后一个点的只画尾部的一截，不应该是`const { slope, intercept } = callRegression({ type, data: body, x, y })`然后画出`slope * x + intercept`的一整条才有意义么？
+不然最后一个点是个异常点或者波动大的曲线后面预测应该会差很多吧",gitlab:GitlabUser:1:saniac_mrc,2020-11-23T18:45:23.853+00:00,,0
+gitlab:GitlabMergeRequestComment:1:453620267,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,553,,gitlab:GitlabMergeRequest:1:79323397,虽然数据的意义是正值（解决的缺陷数量），但为了让它出现在负Y轴，需要它的数据为负,gitlab:GitlabUser:1:gerilleto,2020-11-24T15:30:26.418+00:00,,0
+gitlab:GitlabMergeRequestComment:1:453621297,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,554,,gitlab:GitlabMergeRequest:1:79323397,为了使用 stackOffset 这个参数，需要升级 recharts，详见[recharts更新日志](https://github.com/recharts/recharts/compare/v2.0.0-beta.6...v2.0.0-beta.8#diff-06572a96a58dc510037d5efa622f9bec8519bc1beab13c9f251e97e657a9d4edR6),gitlab:GitlabUser:1:gerilleto,2020-11-24T15:31:44.462+00:00,,0
+gitlab:GitlabMergeRequestComment:1:453771076,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,562,,gitlab:GitlabMergeRequest:1:79248348,为啥 `filteredSeriesSet` 里面有的反而不画预测线呢,gitlab:GitlabUser:1:saniac_mrc,2020-11-24T19:18:18.002+00:00,,0
+gitlab:GitlabMergeRequestComment:1:453926909,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,563,,gitlab:GitlabMergeRequest:1:79248348,那个是指被通过 legend 过滤掉的系列,gitlab:GitlabUser:1:gerilleto,2020-11-25T02:34:23.533+00:00,,0
+gitlab:GitlabMergeRequestComment:1:457339341,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,612,,gitlab:GitlabMergeRequest:1:79917590,"`const percentages = useMemo(() => segments.map(percentScale), [segments]);` 是不是就可以了？",gitlab:GitlabUser:1:saniac_mrc,2020-11-30T17:43:19.774+00:00,,0
+gitlab:GitlabMergeRequestComment:1:457339346,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,613,,gitlab:GitlabMergeRequest:1:79917590,这个`backgroundArc`是想加个阴影么？貌似实际没有效果,gitlab:GitlabUser:1:saniac_mrc,2020-11-30T17:43:20.136+00:00,,0
+gitlab:GitlabMergeRequestComment:1:457339351,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,614,,gitlab:GitlabMergeRequest:1:79917590,"看起来刻度线的需求是『画在内半径 长度维1/4圆环宽度』这样的话，
+
+14行改为 `tick.location = getCoordsOnArc(tick.angle, INNER_RADIUS);`
+然后这里改为
+```
+      x1={cx}
+      y1={cy}
+      x2={cx}
+      y2={cy - RING_WIDTH / 4}
+```
+是不是好一些？",gitlab:GitlabUser:1:saniac_mrc,2020-11-30T17:43:20.418+00:00,,0
+gitlab:GitlabMergeRequestComment:1:457339361,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_notes,615,,gitlab:GitlabMergeRequest:1:79917590,"是不是这个`renderValueLabel`用一个类似`getValueLabel`函数取代更好些，把value、当前分区的名称等属性作为参数。
+如果是用现在得方式传进去，貌似和直接在组件外面加东西没啥区别？",gitlab:GitlabUser:1:saniac_mrc,2020-11-30T17:43:20.747+00:00,,0

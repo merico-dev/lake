@@ -45,7 +45,9 @@ func ConvertApiNotes(taskCtx core.SubTaskContext) error {
 		dal.Join(`left join _tool_gitlab_merge_requests 
 			on _tool_gitlab_merge_requests.gitlab_id = 
 			_tool_gitlab_merge_request_notes.merge_request_id`),
-		dal.Where("_tool_gitlab_merge_requests.project_id = ?", data.Options.ProjectId),
+		dal.Where(`_tool_gitlab_merge_requests.project_id = ? 
+			and _tool_gitlab_merge_request_notes.connection_id = ? `,
+			data.Options.ProjectId, data.Options.ConnectionId),
 	}
 
 	cursor, err := db.Cursor(clauses...)
@@ -67,11 +69,11 @@ func ConvertApiNotes(taskCtx core.SubTaskContext) error {
 			gitlabNotes := inputRow.(*models.GitlabMergeRequestNote)
 			domainNote := &code.Note{
 				DomainEntity: domainlayer.DomainEntity{
-					Id: domainIdGeneratorNote.Generate(gitlabNotes.GitlabId),
+					Id: domainIdGeneratorNote.Generate(data.Options.ConnectionId, gitlabNotes.GitlabId),
 				},
-				PrId:        prIdGen.Generate(gitlabNotes.MergeRequestId),
+				PrId:        prIdGen.Generate(data.Options.ConnectionId, gitlabNotes.MergeRequestId),
 				Type:        gitlabNotes.NoteableType,
-				Author:      userIdGen.Generate(gitlabNotes.AuthorUsername),
+				Author:      userIdGen.Generate(data.Options.ConnectionId, gitlabNotes.AuthorUsername),
 				Body:        gitlabNotes.Body,
 				Resolvable:  gitlabNotes.Resolvable,
 				IsSystem:    gitlabNotes.IsSystem,

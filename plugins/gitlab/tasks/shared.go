@@ -111,7 +111,6 @@ func GetMergeRequestsIterator(taskCtx core.SubTaskContext) (*helper.DalCursorIte
 	if err != nil {
 		return nil, err
 	}
-	defer cursor.Close()
 
 	return helper.NewDalCursorIterator(db, cursor, reflect.TypeOf(GitlabInput{}))
 }

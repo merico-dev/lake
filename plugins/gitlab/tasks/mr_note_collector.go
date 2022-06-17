@@ -38,6 +38,7 @@ func CollectApiMergeRequestsNotes(taskCtx core.SubTaskContext) error {
 	if err != nil {
 		return err
 	}
+	defer iterator.Close()
 
 	collector, err := helper.NewApiCollector(helper.ApiCollectorArgs{
 		RawDataSubTaskArgs: *rawDataSubTaskArgs,

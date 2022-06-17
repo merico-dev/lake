@@ -28,7 +28,7 @@ import (
 	"github.com/apache/incubator-devlake/plugins/gitlab/tasks"
 )
 
-func TestGitlabMrDataFlow(t *testing.T) {
+func TestGitlabMrNoteDataFlow(t *testing.T) {
 
 	var gitlab impl.Gitlab
 	dataflowTester := e2ehelper.NewDataFlowTester(t, "gitlab", gitlab)
@@ -36,10 +36,9 @@ func TestGitlabMrDataFlow(t *testing.T) {
 	taskData := &tasks.GitlabTaskData{
 		Options: &tasks.GitlabOptions{
 			ConnectionId: 1,
-			ProjectId:    18524154,
+			ProjectId:    20171709,
 		},
 	}
-
 	// import raw data table
 	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_merge_requests.csv",
 		"_raw_gitlab_api_merge_requests")
@@ -113,6 +112,95 @@ func TestGitlabMrDataFlow(t *testing.T) {
 			"base_ref",
 			"base_commit_sha",
 			"head_commit_sha",
+		},
+	)
+	// import raw data table
+	dataflowTester.ImportCsvIntoRawTable("./tables/_raw_gitlab_api_merge_request_notes.csv",
+		"_raw_gitlab_api_merge_request_notes")
+
+	// verify extraction
+	dataflowTester.FlushTabler(&models.GitlabMergeRequestNote{})
+	dataflowTester.FlushTabler(&models.GitlabMergeRequestComment{})
+	dataflowTester.Subtask(tasks.ExtractApiMergeRequestsNotesMeta, taskData)
+	dataflowTester.VerifyTable(
+		models.GitlabMergeRequestNote{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabMergeRequestNote{}.TableName()),
+		[]string{"connection_id", "gitlab_id"},
+		[]string{
+			"merge_request_id",
+			"merge_request_iid",
+			"noteable_type",
+			"author_username",
+			"body",
+			"gitlab_created_at",
+			"confidential",
+			"resolvable",
+			"is_system",
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+		},
+	)
+	dataflowTester.VerifyTable(
+		models.GitlabMergeRequestComment{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabMergeRequestComment{}.TableName()),
+		[]string{"connection_id", "gitlab_id"},
+		[]string{
+			"merge_request_id",
+			"merge_request_iid",
+			"body",
+			"author_username",
+			"author_user_id",
+			"gitlab_created_at",
+			"resolvable",
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+		},
+	)
+
+	// verify conversion
+	dataflowTester.FlushTabler(&code.Note{})
+	dataflowTester.Subtask(tasks.ConvertApiNotesMeta, taskData)
+	dataflowTester.VerifyTable(
+		code.Note{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", code.Note{}.TableName()),
+		[]string{"id"},
+		[]string{
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+			"pr_id",
+			"type",
+			"author",
+			"body",
+			"resolvable",
+			"is_system",
+			"created_date",
+		},
+	)
+
+	// verify conversion
+	dataflowTester.FlushTabler(&code.PullRequestComment{})
+	dataflowTester.Subtask(tasks.ConvertMergeRequestCommentMeta, taskData)
+	dataflowTester.VerifyTable(
+		code.PullRequestComment{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", code.PullRequestComment{}.TableName()),
+		[]string{"id"},
+		[]string{
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+			"pull_request_id",
+			"body",
+			"user_id",
+			"created_date",
+			"commit_sha",
+			"position",
 		},
 	)
 }

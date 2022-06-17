@@ -45,7 +45,9 @@ func ConvertMergeRequestComment(taskCtx core.SubTaskContext) error {
 		dal.Join(`left join _tool_gitlab_merge_requests on 
 			_tool_gitlab_merge_requests.gitlab_id = 
 			_tool_gitlab_merge_request_comments.merge_request_id`),
-		dal.Where("_tool_gitlab_merge_requests.project_id = ?", data.Options.ProjectId),
+		dal.Where(`_tool_gitlab_merge_requests.project_id = ? 
+			and _tool_gitlab_merge_request_comments.connection_id = ?`,
+			data.Options.ProjectId, data.Options.ConnectionId),
 	}
 
 	cursor, err := db.Cursor(clauses...)
@@ -68,11 +70,11 @@ func ConvertMergeRequestComment(taskCtx core.SubTaskContext) error {
 
 			domainComment := &code.PullRequestComment{
 				DomainEntity: domainlayer.DomainEntity{
-					Id: domainIdGeneratorComment.Generate(gitlabComments.GitlabId),
+					Id: domainIdGeneratorComment.Generate(data.Options.ConnectionId, gitlabComments.GitlabId),
 				},
-				PullRequestId: prIdGen.Generate(gitlabComments.MergeRequestId),
+				PullRequestId: prIdGen.Generate(data.Options.ConnectionId, gitlabComments.MergeRequestId),
 				Body:          gitlabComments.Body,
-				UserId:        userIdGen.Generate(gitlabComments.AuthorUsername),
+				UserId:        userIdGen.Generate(data.Options.ConnectionId, gitlabComments.AuthorUsername),
 				CreatedDate:   gitlabComments.GitlabCreatedAt,
 			}
 			return []interface{}{

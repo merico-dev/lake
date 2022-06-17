@@ -48,7 +48,7 @@ var ExtractApiMergeRequestsNotesMeta = core.SubTaskMeta{
 }
 
 func ExtractApiMergeRequestsNotes(taskCtx core.SubTaskContext) error {
-	rawDataSubTaskArgs, _ := CreateRawDataSubTaskArgs(taskCtx, RAW_MERGE_REQUEST_NOTES_TABLE)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_MERGE_REQUEST_NOTES_TABLE)
 
 	extractor, err := helper.NewApiExtractor(helper.ApiExtractorArgs{
 		RawDataSubTaskArgs: *rawDataSubTaskArgs,
@@ -60,6 +60,7 @@ func ExtractApiMergeRequestsNotes(taskCtx core.SubTaskContext) error {
 			}
 
 			toolMrNote, err := convertMergeRequestNote(mrNote)
+			toolMrNote.ConnectionId = data.Options.ConnectionId
 			if err != nil {
 				return nil, err
 			}
@@ -73,11 +74,11 @@ func ExtractApiMergeRequestsNotes(taskCtx core.SubTaskContext) error {
 					AuthorUsername:  toolMrNote.AuthorUsername,
 					GitlabCreatedAt: toolMrNote.GitlabCreatedAt,
 					Resolvable:      toolMrNote.Resolvable,
+					ConnectionId:    data.Options.ConnectionId,
 				}
 				results = append(results, toolMrComment)
 
 			}
-
 			results = append(results, toolMrNote)
 
 			return results, nil
