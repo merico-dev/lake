@@ -49,7 +49,7 @@ function useSettingsManager ({
           ...connectionPayload,
           name: connection.name,
           endpoint: connection.endpoint,
-          auth: connection.token,
+          token: connection.token,
           proxy: connection.proxy || connection.Proxy
         }
         break

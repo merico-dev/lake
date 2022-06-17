@@ -62,9 +62,11 @@ const ProviderLabels = {
 }
 
 const ProviderConnectionLimits = {
-  jenkins: 1,
-  // jira: null, // (Multi-connection, no-limit)
+  // (All providers are mult-connection, no source limits defined)
+  // jenkins: null,
+  // jira: null,
   // github: null
+  // gitlab: null
 }
 
 // NOTE: Not all fields may be referenced/displayed for a provider,

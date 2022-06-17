@@ -55,7 +55,7 @@ const integrationsData = [
     id: Providers.JENKINS,
     type: ProviderTypes.INTEGRATION,
     enabled: true,
-    multiConnection: false,
+    multiConnection: true,
     name: ProviderLabels.JENKINS,
     icon: <JenkinsProvider className='providerIconSvg' width='30' height='30' style={{ float: 'left', marginTop: '5px' }} />,
     iconDashboard: <JenkinsProvider className='providerIconSvg' width='40' height='40' />,

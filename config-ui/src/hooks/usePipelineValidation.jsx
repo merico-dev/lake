@@ -106,6 +106,11 @@ function usePipelineValidation ({
       errs.push('GitHub: Entered Repository Name Invalid Format (owner/repo)')
     }
 
+    // @todo: fix this, technically this rule isn't valid connectionId is only for 1 provider
+    // if (mode === null && enabledProviders.includes(Providers.GITLAB) && (!connectionId || isNaN(connectionId))) {
+    //   errs.push('GitLab: Select a valid Connection ID (Numeric)')
+    // }
+
     if (mode === null && enabledProviders.includes(Providers.GITLAB) && (!projectId || projectId.length !== 1 || projectId.toString() === '')) {
       errs.push('GitLab: Enter one valid Project ID (Numeric)')
     }

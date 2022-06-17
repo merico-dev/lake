@@ -128,6 +128,9 @@ config/local.js
 .idea
 *.iml
 .vscode
+/.nova
+*.sublime*
+
 
 # OS metadata
 .DS_Store

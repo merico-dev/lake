@@ -87,14 +87,14 @@ function useConnectionManager(
           case Providers.JIRA:
             connectionPayload = {
               endpoint: endpointUrl,
-              auth: token,
+              token: token,
               proxy: proxy,
             }
             break
           case Providers.GITHUB:
             connectionPayload = {
               endpoint: endpointUrl,
-              auth: token,
+              token: token,
               proxy: proxy,
             }
             break
@@ -108,7 +108,7 @@ function useConnectionManager(
           case Providers.GITLAB:
             connectionPayload = {
               endpoint: endpointUrl,
-              auth: token,
+              token: token,
               proxy: proxy,
             }
             break
@@ -272,7 +272,7 @@ function useConnectionManager(
         setIsSaving(false)
         setSaveComplete(saveResponse.connection)
         if (
-          [Providers.GITHUB, Providers.JIRA].includes(provider.id) &&
+          [Providers.GITHUB, Providers.JIRA, Providers.GITLAB].includes(provider.id) &&
           token !== '' &&
           token?.toString().split(',').length > 1
         ) {
@@ -548,15 +548,15 @@ function useConnectionManager(
           setPassword(activeConnection.password)
           break
         case Providers.GITLAB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.GITHUB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.auth)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
       }

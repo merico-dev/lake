@@ -81,7 +81,7 @@ export default function EditConnection () {
         setPassword(activeConnection.password)
         break
       case Providers.GITLAB:
-        setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+        setToken(activeConnection.token)
         break
     }
   }, [activeConnection, activeProvider.id])
