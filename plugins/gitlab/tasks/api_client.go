@@ -19,36 +19,22 @@ package tasks
 
 import (
 	"fmt"
+	"github.com/apache/incubator-devlake/plugins/gitlab/models"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
-	"github.com/apache/incubator-devlake/utils"
 )
 
-func NewGitlabApiClient(taskCtx core.TaskContext) (*helper.ApiAsyncClient, error) {
-	// load configuration
-	endpoint := taskCtx.GetConfig("GITLAB_ENDPOINT")
-	if endpoint == "" {
-		return nil, fmt.Errorf("endpint is required")
-	}
-	userRateLimit, err := utils.StrToIntOr(taskCtx.GetConfig("GITLAB_API_REQUESTS_PER_HOUR"), 0)
-	if err != nil {
-		return nil, err
-	}
-	auth := taskCtx.GetConfig("GITLAB_AUTH")
-	if auth == "" {
-		return nil, fmt.Errorf("GITLAB_AUTH is required")
-	}
-	proxy := taskCtx.GetConfig("GITLAB_PROXY")
-
+func NewGitlabApiClient(taskCtx core.TaskContext, connection *models.GitlabConnection) (*helper.ApiAsyncClient, error) {
 	// create synchronize api client so we can calculate api rate limit dynamically
 	headers := map[string]string{
-		"Authorization": fmt.Sprintf("Bearer %v", auth),
+		"Authorization": fmt.Sprintf("Bearer %v", connection.Token),
 	}
-	apiClient, err := helper.NewApiClient(endpoint, headers, 0, proxy, taskCtx.GetContext())
+	apiClient, err := helper.NewApiClient(
+		connection.Endpoint, headers, 0, connection.Proxy, taskCtx.GetContext())
 	if err != nil {
 		return nil, err
 	}
@@ -61,7 +47,7 @@ func NewGitlabApiClient(taskCtx core.TaskContext) (*helper.ApiAsyncClient, error
 
 	// create rate limit calculator
 	rateLimiter := &helper.ApiRateLimitCalculator{
-		UserRateLimitPerHour: userRateLimit,
+		UserRateLimitPerHour: connection.RateLimit,
 		DynamicRateLimit: func(res *http.Response) (int, time.Duration, error) {
 			rateLimitHeader := res.Header.Get("RateLimit-Limit")
 			if rateLimitHeader == "" {

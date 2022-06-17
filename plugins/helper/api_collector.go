@@ -223,7 +223,12 @@ func (collector *ApiCollector) fetchPagesUndetermined(reqData *RequestData) {
 		if collector.args.Input != nil {
 			concurrency = 2
 		} else {
-			concurrency = apiClient.GetNumOfWorkers()
+			cap := apiClient.GetNumOfWorkers() / 10
+			if cap < 10 {
+				concurrency = 10
+			} else {
+				concurrency = cap
+			}
 		}
 	}
 	for i := 0; i < concurrency; i++ {

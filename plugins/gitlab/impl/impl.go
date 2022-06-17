@@ -100,7 +100,7 @@ func (plugin Gitlab) PrepareTaskData(taskCtx core.TaskContext, options map[strin
 	if err != nil {
 		return nil, err
 	}
-	apiClient, err := tasks.NewGitlabApiClient(taskCtx)
+	apiClient, err := tasks.NewGitlabApiClient(taskCtx, connection)
 
 	if err != nil {
 		return nil, err
