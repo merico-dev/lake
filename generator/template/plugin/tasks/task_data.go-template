@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package plugin
+package tasks
 
 import (
 	"github.com/apache/incubator-devlake/plugins/helper"

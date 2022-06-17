@@ -18,8 +18,6 @@ limitations under the License.
 package main
 
 import (
-	"context"
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/{{ .pluginName }}/tasks"
 	"github.com/apache/incubator-devlake/runner"
@@ -27,7 +25,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
-	"time"
 )
 
 // make sure interface is implemented
