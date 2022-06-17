@@ -48,7 +48,6 @@ type GiteeCommit struct {
 
 type GiteeApiCommitResponse struct {
 	Author      *models.GiteeUser `json:"author"`
-	AuthorId    int
 	CommentsUrl string            `json:"comments_url"`
 	Commit      GiteeCommit       `json:"commit"`
 	Committer   *models.GiteeUser `json:"committer"`
@@ -114,7 +113,6 @@ func ExtractApiCommits(taskCtx core.SubTaskContext) error {
 func ConvertCommit(commit *GiteeApiCommitResponse) (*models.GiteeCommit, error) {
 	giteeCommit := &models.GiteeCommit{
 		Sha:            commit.Sha,
-		AuthorId:       commit.Author.Id,
 		Message:        commit.Commit.Message,
 		AuthorName:     commit.Commit.Author.Name,
 		AuthorEmail:    commit.Commit.Author.Email,

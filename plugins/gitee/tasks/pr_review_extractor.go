@@ -38,10 +38,11 @@ type PullRequestReview struct {
 	User    struct {
 		Id    int
 		Login string
+		Name  string
 	}
-	Body        string
-	State       string
-	SubmittedAt helper.Iso8601Time `json:"submitted_at"`
+	Content    string
+	ActionType string             `json:"action_type"`
+	CreatedAt  helper.Iso8601Time `json:"created_at"`
 }
 
 func ExtractApiPullRequestReviews(taskCtx core.SubTaskContext) error {
@@ -62,7 +63,6 @@ func ExtractApiPullRequestReviews(taskCtx core.SubTaskContext) error {
 			if err != nil {
 				return nil, err
 			}
-			// need to extract 2 kinds of entities here
 			results := make([]interface{}, 0, 1)
 
 			giteeReviewer := &models.GiteeReviewer{
