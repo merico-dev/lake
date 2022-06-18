@@ -26,7 +26,7 @@ import (
 var PluginEntry impl.Gitee //nolint
 
 func main() {
-	cmd := &cobra.Command{Use: "github"}
+	cmd := &cobra.Command{Use: "gitee"}
 	connectionId := cmd.Flags().Uint64P("connectionId", "c", 0, "gitee connection id")
 	owner := cmd.Flags().StringP("owner", "o", "", "gitee owner")
 	repo := cmd.Flags().StringP("repo", "r", "", "gitee repo")
