@@ -71,6 +71,7 @@ func setDefaultValue(v *viper.Viper) {
 	v.SetDefault("TEMPORAL_TASK_QUEUE", "DEVLAKE_TASK_QUEUE")
 	v.SetDefault("GITLAB_ENDPOINT", "https://gitlab.com/api/v4/")
 	v.SetDefault("GITHUB_ENDPOINT", "https://api.github.com/")
+	v.SetDefault("GITEE_ENDPOINT", "https://gitee.com/api/v5/")
 }
 
 // replaceNewEnvItemInOldContent replace old config to new config in env file content
