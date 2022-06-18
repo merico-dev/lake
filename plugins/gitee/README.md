@@ -57,8 +57,7 @@ In order to collect data, you have to compose a JSON looks like following one, a
       "plugin": "gitee",
       "options": {
         "repo": "lake",
-        "owner": "merico-dev",
-        "token": "xxxx"
+        "owner": "merico-dev"
       }
     }
   ]
@@ -73,8 +72,7 @@ and if you want to perform certain subtasks.
       "subtasks": ["collectXXX", "extractXXX", "convertXXX"],
       "options": {
         "repo": "lake",
-        "owner": "merico-dev",
-        "token": "xxxx"
+        "owner": "merico-dev"
       }
     }
   ]
@@ -94,7 +92,6 @@ curl --location --request POST 'localhost:8080/pipelines' \
         "options": {
             "repo": "lake",
             "owner": "merico-dev"
-            "token": "xxxx"
         }
     }]]
 }
@@ -113,7 +110,6 @@ curl --location --request POST 'localhost:8080/pipelines' \
         "options": {
             "repo": "lake",
             "owner": "merico-dev"
-            "token": "xxxx"
         }
     }]]
 }

@@ -71,7 +71,6 @@ func CollectApiPullRequestCommits(taskCtx core.SubTaskContext) error {
 
 		Query: func(reqData *helper.RequestData) (url.Values, error) {
 			query := url.Values{}
-			query.Set("access_token", data.Options.Token)
 			query.Set("state", "all")
 			query.Set("page", fmt.Sprintf("%v", reqData.Pager.Page))
 			query.Set("direction", "asc")

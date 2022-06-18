@@ -18,11 +18,15 @@ limitations under the License.
 package impl
 
 import (
+	"fmt"
+
 	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/gitee/api"
+	"github.com/apache/incubator-devlake/plugins/gitee/models"
 	"github.com/apache/incubator-devlake/plugins/gitee/models/migrationscripts"
 	"github.com/apache/incubator-devlake/plugins/gitee/tasks"
+	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -37,6 +41,7 @@ var _ core.Migratable = (*Gitee)(nil)
 type Gitee string
 
 func (plugin Gitee) Init(config *viper.Viper, logger core.Logger, db *gorm.DB) error {
+	api.Init(config, logger, db)
 	return nil
 }
 
@@ -86,7 +91,67 @@ func (plugin Gitee) PrepareTaskData(taskCtx core.TaskContext, options map[string
 		return nil, err
 	}
 
-	apiClient, err := tasks.NewGiteeApiClient(taskCtx)
+	if op.Owner == "" {
+		return nil, fmt.Errorf("owner is required for Gitee execution")
+	}
+
+	if op.Repo == "" {
+		return nil, fmt.Errorf("repo is required for Gitee execution")
+	}
+
+	if op.PrType == "" {
+		op.PrType = "type/(.*)$"
+	}
+
+	if op.PrComponent == "" {
+		op.PrComponent = "component/(.*)$"
+	}
+
+	if op.IssueSeverity == "" {
+		op.IssueSeverity = "severity/(.*)$"
+	}
+
+	if op.IssuePriority == "" {
+		op.IssuePriority = "^(highest|high|medium|low)$"
+	}
+
+	if op.IssueComponent == "" {
+		op.IssueComponent = "component/(.*)$"
+	}
+
+	if op.IssueTypeBug == "" {
+		op.IssueTypeBug = "^(bug|failure|error)$"
+	}
+
+	if op.IssueTypeIncident == "" {
+		op.IssueTypeIncident = ""
+	}
+
+	if op.IssueTypeRequirement == "" {
+		op.IssueTypeRequirement = "^(feat|feature|proposal|requirement)$"
+	}
+
+	if op.ConnectionId == 0 {
+		return nil, fmt.Errorf("connectionId is invalid")
+	}
+
+	connection := &models.GiteeConnection{}
+	connectionHelper := helper.NewConnectionHelper(
+		taskCtx,
+		nil,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	err = connectionHelper.FirstById(connection, op.ConnectionId)
+
+	if err != nil {
+		return nil, err
+	}
+	apiClient, err := tasks.NewGiteeApiClient(taskCtx, connection)
+
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +167,9 @@ func (plugin Gitee) RootPkgPath() string {
 }
 
 func (plugin Gitee) MigrationScripts() []migration.Script {
-	return []migration.Script{new(migrationscripts.InitSchemas), new(migrationscripts.InitSchemas)}
+	return []migration.Script{
+		new(migrationscripts.InitSchemas),
+	}
 }
 
 func (plugin Gitee) ApiResources() map[string]map[string]core.ApiResourceHandler {
@@ -111,11 +178,13 @@ func (plugin Gitee) ApiResources() map[string]map[string]core.ApiResourceHandler
 			"POST": api.TestConnection,
 		},
 		"connections": {
-			"GET": api.ListConnections,
+			"POST": api.PostConnections,
+			"GET":  api.ListConnections,
 		},
 		"connections/:connectionId": {
-			"GET":   api.GetConnection,
-			"PATCH": api.PatchConnection,
+			"GET":    api.GetConnection,
+			"PATCH":  api.PatchConnection,
+			"DELETE": api.DeleteConnection,
 		},
 	}
 }

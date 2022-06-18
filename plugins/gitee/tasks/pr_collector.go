@@ -68,7 +68,6 @@ func CollectApiPullRequests(taskCtx core.SubTaskContext) error {
 
 		Query: func(reqData *helper.RequestData) (url.Values, error) {
 			query := url.Values{}
-			query.Set("access_token", data.Options.Token)
 			query.Set("state", "all")
 			if since != nil {
 				query.Set("since", since.String())

@@ -26,19 +26,39 @@ import (
 var PluginEntry impl.Gitee //nolint
 
 func main() {
-	giteeCmd := &cobra.Command{Use: "gitee"}
-	owner := giteeCmd.Flags().StringP("owner", "o", "", "gitee owner")
-	repo := giteeCmd.Flags().StringP("repo", "r", "", "gitee repo")
-	token := giteeCmd.Flags().StringP("auth", "a", "", "access token")
-	_ = giteeCmd.MarkFlagRequired("owner")
-	_ = giteeCmd.MarkFlagRequired("repo")
+	cmd := &cobra.Command{Use: "github"}
+	connectionId := cmd.Flags().Uint64P("connectionId", "c", 0, "gitee connection id")
+	owner := cmd.Flags().StringP("owner", "o", "", "gitee owner")
+	repo := cmd.Flags().StringP("repo", "r", "", "gitee repo")
+	_ = cmd.MarkFlagRequired("connectionId")
+	_ = cmd.MarkFlagRequired("owner")
+	_ = cmd.MarkFlagRequired("repo")
 
-	giteeCmd.Run = func(cmd *cobra.Command, args []string) {
+	prType := cmd.Flags().String("prType", "type/(.*)$", "pr type")
+	prComponent := cmd.Flags().String("prComponent", "component/(.*)$", "pr component")
+	prBodyClosePattern := cmd.Flags().String("prBodyClosePattern", "(?mi)(fix|close|resolve|fixes|closes|resolves|fixed|closed|resolved)[\\s]*.*(((and )?(#|https:\\/\\/github.com\\/%s\\/%s\\/issues\\/)\\d+[ ]*)+)", "pr body close pattern")
+	issueSeverity := cmd.Flags().String("issueSeverity", "severity/(.*)$", "issue severity")
+	issuePriority := cmd.Flags().String("issuePriority", "^(highest|high|medium|low)$", "issue priority")
+	issueComponent := cmd.Flags().String("issueComponent", "component/(.*)$", "issue component")
+	issueTypeBug := cmd.Flags().String("issueTypeBug", "^(bug|failure|error)$", "issue type bug")
+	issueTypeIncident := cmd.Flags().String("issueTypeIncident", "", "issue type incident")
+	issueTypeRequirement := cmd.Flags().String("issueTypeRequirement", "^(feat|feature|proposal|requirement)$", "issue type requirement")
+
+	cmd.Run = func(cmd *cobra.Command, args []string) {
 		runner.DirectRun(cmd, args, PluginEntry, map[string]interface{}{
-			"owner": *owner,
-			"repo":  *repo,
-			"token": *token,
+			"connectionId":         *connectionId,
+			"owner":                *owner,
+			"repo":                 *repo,
+			"prType":               *prType,
+			"prComponent":          *prComponent,
+			"prBodyClosePattern":   *prBodyClosePattern,
+			"issueSeverity":        *issueSeverity,
+			"issuePriority":        *issuePriority,
+			"issueComponent":       *issueComponent,
+			"issueTypeBug":         *issueTypeBug,
+			"issueTypeIncident":    *issueTypeIncident,
+			"issueTypeRequirement": *issueTypeRequirement,
 		})
 	}
-	runner.RunCmd(giteeCmd)
+	runner.RunCmd(cmd)
 }

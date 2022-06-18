@@ -15,30 +15,44 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package models
+package archived
 
-import "github.com/apache/incubator-devlake/plugins/helper"
+import (
+	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
+)
 
 type GiteeConnection struct {
-	helper.RestConnection `mapstructure:",squash"`
-	helper.AccessToken    `mapstructure:",squash"`
+	RestConnection `mapstructure:",squash"`
+	AccessToken    `mapstructure:",squash"`
 }
 
-type GiteeResponse struct {
+type RestConnection struct {
+	BaseConnection `mapstructure:",squash"`
+	Endpoint       string `mapstructure:"endpoint" validate:"required" json:"endpoint"`
+	Proxy          string `mapstructure:"proxy" json:"proxy"`
+	RateLimit      int    `comment:"api request rate limt per hour" json:"rateLimit"`
+}
+
+type BaseConnection struct {
+	Name string `gorm:"type:varchar(100);uniqueIndex" json:"name" validate:"required"`
+	archived.Model
+}
+
+type AccessToken struct {
+	Token string `mapstructure:"token" validate:"required" json:"token" encrypt:"yes"`
+}
+
+// This object conforms to what the frontend currently expects.
+type GitlabResponse struct {
 	Name string `json:"name"`
 	ID   int    `json:"id"`
 	GiteeConnection
 }
 
+// Using User because it requires authentication.
 type ApiUserResponse struct {
 	Id   int
 	Name string `json:"name"`
-}
-
-type TestConnectionRequest struct {
-	Endpoint           string `json:"endpoint" validate:"required"`
-	Proxy              string `json:"proxy"`
-	helper.AccessToken `mapstructure:",squash"`
 }
 
 type Config struct {

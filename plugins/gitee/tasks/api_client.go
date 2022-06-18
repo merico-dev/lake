@@ -23,32 +23,26 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/apache/incubator-devlake/plugins/gitee/models"
+
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
-	"github.com/apache/incubator-devlake/utils"
 )
 
-func NewGiteeApiClient(taskCtx core.TaskContext) (*helper.ApiAsyncClient, error) {
-	endpoint := taskCtx.GetConfig("GITEE_ENDPOINT")
-	if endpoint == "" {
-		return nil, fmt.Errorf("endpint is required")
-	}
-	userRateLimit, err := utils.StrToIntOr(taskCtx.GetConfig("GITEE_API_REQUESTS_PER_HOUR"), 0)
+func NewGiteeApiClient(taskCtx core.TaskContext, connection *models.GiteeConnection) (*helper.ApiAsyncClient, error) {
+
+	apiClient, err := helper.NewApiClient(connection.Endpoint, nil, 0, connection.Proxy, taskCtx.GetContext())
 	if err != nil {
 		return nil, err
 	}
-	auth := taskCtx.GetConfig("GITEE_AUTH")
-	if auth == "" {
-		return nil, fmt.Errorf("GITEE_AUTH is required")
-	}
-	proxy := taskCtx.GetConfig("GITEE_PROXY")
 
-	headers := map[string]string{}
+	apiClient.SetBeforeFunction(func(req *http.Request) error {
+		query := req.URL.Query()
+		query.Set("access_token", connection.Token)
+		req.URL.RawQuery = query.Encode()
+		return nil
+	})
 
-	apiClient, err := helper.NewApiClient(endpoint, headers, 0, proxy, taskCtx.GetContext())
-	if err != nil {
-		return nil, err
-	}
 	apiClient.SetAfterFunction(func(res *http.Response) error {
 		if res.StatusCode == http.StatusUnauthorized {
 			return fmt.Errorf("authentication failed, please check your Basic Auth Token")
@@ -57,7 +51,7 @@ func NewGiteeApiClient(taskCtx core.TaskContext) (*helper.ApiAsyncClient, error)
 	})
 
 	rateLimiter := &helper.ApiRateLimitCalculator{
-		UserRateLimitPerHour: userRateLimit,
+		UserRateLimitPerHour: connection.RateLimit,
 		DynamicRateLimit: func(res *http.Response) (int, time.Duration, error) {
 			rateLimitHeader := res.Header.Get("RateLimit-Limit")
 			if rateLimitHeader == "" {

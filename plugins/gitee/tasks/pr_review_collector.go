@@ -67,7 +67,6 @@ func CollectApiPullRequestReviews(taskCtx core.SubTaskContext) error {
 
 		Query: func(reqData *helper.RequestData) (url.Values, error) {
 			query := url.Values{}
-			query.Set("access_token", data.Options.Token)
 			query.Set("page", fmt.Sprintf("%v", reqData.Pager.Page))
 			query.Set("per_page", fmt.Sprintf("%v", reqData.Pager.Size))
 			query.Set("sort", "asc")

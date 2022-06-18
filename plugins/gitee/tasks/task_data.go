@@ -25,12 +25,13 @@ import (
 )
 
 type GiteeOptions struct {
-	Tasks []string `json:"tasks,omitempty"`
-	Since string
-	Owner string
-	Repo  string
-	Token string
-	models.Config
+	ConnectionId  uint64   `json:"connectionId"`
+	Tasks         []string `json:"tasks,omitempty"`
+	Since         string
+	Owner         string
+	Repo          string
+	Token         string
+	models.Config `mapstructure:",squash"`
 }
 
 type GiteeTaskData struct {

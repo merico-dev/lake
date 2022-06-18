@@ -45,7 +45,6 @@ func CollectApiCommits(taskCtx core.SubTaskContext) error {
 		UrlTemplate:        "repos/{{ .Params.Owner }}/{{ .Params.Repo }}/commits",
 		Query: func(reqData *helper.RequestData) (url.Values, error) {
 			query := url.Values{}
-			query.Set("access_token", data.Options.Token)
 			query.Set("with_stats", "true")
 			query.Set("sort", "asc")
 			query.Set("page", strconv.Itoa(reqData.Pager.Page))

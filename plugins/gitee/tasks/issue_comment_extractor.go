@@ -36,11 +36,21 @@ var ExtractApiIssueCommentsMeta = core.SubTaskMeta{
 type IssueComment struct {
 	GiteeId int `json:"id"`
 	Body    string
-	User    struct {
+
+	User struct {
 		Login string
 		Id    int
 	}
-	IssueUrl       string             `json:"issue_url"`
+
+	Target struct {
+		Issue struct {
+			Id     int    `json:"id"`
+			Title  string `json:"title"`
+			Number string `json:"number"`
+		}
+		PullRequest string `json:"pull_request"`
+	}
+
 	GiteeCreatedAt helper.Iso8601Time `json:"created_at"`
 	GiteeUpdatedAt helper.Iso8601Time `json:"updated_at"`
 }
@@ -69,7 +79,7 @@ func ExtractApiIssueComments(taskCtx core.SubTaskContext) error {
 				return nil, nil
 			}
 			//If this is a pr, ignore
-			issueINumber, err := GetIssueIdByIssueUrl(apiComment.IssueUrl)
+			issueINumber := apiComment.Target.Issue.Number
 			if err != nil {
 				return nil, err
 			}
