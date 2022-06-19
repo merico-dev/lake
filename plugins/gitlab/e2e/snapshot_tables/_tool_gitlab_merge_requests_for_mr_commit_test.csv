@@ -1,0 +1,24 @@
+connection_id,gitlab_id,iid,project_id,source_project_id,target_project_id,state,title,web_url,user_notes_count,work_in_progress,source_branch,target_branch,merge_commit_sha,merged_at,gitlab_created_at,closed_at,merged_by_username,description,author_username,author_user_id,component,first_comment_time,review_rounds,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,79323397,4,20171709,20171709,20171709,merged,feat: add stackOffset to RechartsBarChart,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/4,2,0,EE-1742,master,,2020-11-25T03:15:35.784+00:00,2020-11-24T15:27:34.968+00:00,,gerilleto,![CleanShot_2020-11-24_at_23.24.45_2x](/uploads/11872b21eb5f1e9f5503ee56fae7234a/CleanShot_2020-11-24_at_23.24.45_2x.png),gerilleto,1533989,,,0,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,153,
+1,79888010,6,20171709,20171709,20171709,merged,feat: EE-1744 Add Line Indicator to Legend for composed chart,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/6,0,0,EE-1744,master,,2020-11-30T06:01:28.208+00:00,2020-11-29T15:37:38.444+00:00,,gerilleto,"# Jira
+https://merico.atlassian.net/browse/EE-1744
+
+# 设计稿
+![CleanShot_2020-11-29_at_23.37.17_2x](/uploads/5bf1d1f4ec65145b60216941a8380b3e/CleanShot_2020-11-29_at_23.37.17_2x.png)
+
+# 效果图
+![CleanShot_2020-11-29_at_23.35.26_2x](/uploads/2a30701072a03d8f1682de17dff6117e/CleanShot_2020-11-29_at_23.35.26_2x.png)",gerilleto,1533989,,,0,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,155,
+1,80769193,10,20171709,20171709,20171709,merged,feat: EE-1758 Add BubbleChart,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/10,0,0,EE-1758,master,,2020-12-08T02:30:30.281+00:00,2020-12-07T03:38:23.185+00:00,,gerilleto,"# https://merico.atlassian.net/browse/EE-1758
+
+# 设计稿
+![CleanShot_2020-12-07_at_17.41.45_2x](/uploads/2b76183cfcdd418b75f04423963ef05c/CleanShot_2020-12-07_at_17.41.45_2x.png)
+
+# 效果图
+![CleanShot_2020-12-07_at_14.28.04_2x](/uploads/f5df7735a83465ea4d764e5e6da2edc9/CleanShot_2020-12-07_at_14.28.04_2x.png)
+
+# 遭遇灾害
+ant-design/charts 从 0.x 升级到 1.x 了，原先的 `<Bubble />` 改为使用 `<Scatter />` 实现，不得不调整 QuadrantChart 的实现
+
+# 计算规则
+在 BubbleChart 的 Basic 故事里，值与边界的计算规则是与郑屹联调确定的",gerilleto,1533989,,,0,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,159,
+1,80924395,11,20171709,20171709,20171709,merged,feat: migrate project to TypeScript,https://gitlab.com/merico-dev/ee/charts/-/merge_requests/11,0,0,ts-migrate,master,,2020-12-08T07:16:22.226+00:00,2020-12-08T06:28:32.740+00:00,,gerilleto,,Runjuuuu,7658236,,,0,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_requests,160,

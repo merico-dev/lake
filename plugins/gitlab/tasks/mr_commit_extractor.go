@@ -19,7 +19,6 @@ package tasks
 
 import (
 	"encoding/json"
-
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/gitlab/models"
 	"github.com/apache/incubator-devlake/plugins/helper"
@@ -48,7 +47,6 @@ func ExtractApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 			if err != nil {
 				return nil, err
 			}
-			gitlabCommit.ConnectionId = data.Options.ConnectionId
 			// get input info
 			input := &GitlabInput{}
 			err = json.Unmarshal(row.Input, input)
@@ -61,13 +59,16 @@ func ExtractApiMergeRequestsCommits(taskCtx core.SubTaskContext) error {
 				MergeRequestId: input.GitlabId,
 				ConnectionId:   data.Options.ConnectionId,
 			}
+			gitlabProjectCommit := &models.GitlabProjectCommit{
+				ConnectionId:    data.Options.ConnectionId,
+				GitlabProjectId: data.Options.ProjectId,
+				CommitSha:       gitlabCommit.Sha,
+			}
 
 			// need to extract 2 kinds of entities here
-			results := make([]interface{}, 0, 2)
+			results := make([]interface{}, 0, 3)
 
-			results = append(results, gitlabCommit)
-			results = append(results, gitlabMrCommit)
-
+			results = append(results, gitlabCommit, gitlabProjectCommit, gitlabMrCommit)
 			return results, nil
 		},
 	})

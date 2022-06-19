@@ -1,64 +1,71 @@
 sha,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark,additions,deletions,dev_eq,message,author_name,author_email,authored_date,author_id,committer_name,committer_email,committed_date,committer_id
-03b566ec2af3106808f385dacdbd3edf54f4c2c4,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,3,,7,1,0,"update README.md
-",leto,gerile.tu@meri.co,2020-07-28T10:20:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,leto,gerile.tu@meri.co,2020-07-28T10:20:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-0c25e06c2cb86b5680f474aa1cd3e9932a2b345b,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,23,,1,0,0,"fix(SeriesComposedChart) bars missing in tooltip
-",Leto,gerile.tu@meri.co,2021-02-02T08:51:28.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-02T08:51:28.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-1297b2de8649a1b1abf47861964d987c878ad730,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,29,,336,129,0,"build: 1.3.2
-",Leto,gerile.tu@meri.co,2021-01-29T04:02:31.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-01-29T04:02:31.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-16e2964adbb44863767bd71c501fabf113162270,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,17,,26,16,0,"build: 1.3.7
-",Leto,gerile.tu@meri.co,2021-02-07T17:46:21.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-07T17:46:21.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-2280ee56eaa3352cf6d74c5725b857341b8cffd6,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,22,,5,4,0,"build: 1.3.5
-",Leto,gerile.tu@meri.co,2021-02-02T08:54:18.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-02T08:54:18.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-304e1e1d267049b26273c7b29ac453949ff41984,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,14,,62,0,0,"feat: add story of Interpolation Type
+0863515da4849ae0fc4912d0db1f10f7a682734d,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1044,,0,0,0,"update
+",Leto,gerile.tu@meri.co,2020-12-07T07:04:03.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-07T07:04:03.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+1ab18b1106ee7c02ad1f25c5d848fb45076d4cc6,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1022,,0,0,0,"upgrade recharts version
+",Leto,gerile.tu@meri.co,2020-11-24T15:25:44.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Geril Leto,gerile.tu@meri.co,2020-11-25T03:15:21.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+251c726a47f691e674bcbd6b76daa07256a712ed,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1053,,0,0,0,"fix label prop
+",Leto,gerile.tu@meri.co,2020-12-06T16:54:37.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T16:54:37.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+30878bf8a35d1dafe937d45383f337a2b0f6a28e,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1023,,0,0,0,"add Indicator: Line
+",Leto,gerile.tu@meri.co,2020-11-29T15:35:23.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-11-29T15:35:23.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+3afec3448e02be6190f66c7fac40ac8beb46a742,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1024,,0,0,0,"add second line to story for debugging legend
+",Leto,gerile.tu@meri.co,2020-11-29T15:35:05.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-11-29T15:35:05.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+4aa88e8b0db2f71e5bf85f803c3bcc8849b8c319,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1025,,0,0,0,"extract renderIcon from Legend
+",Leto,gerile.tu@meri.co,2020-11-29T15:13:14.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-11-29T15:13:14.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+4fa37c521dc0d6fa8e22198a66d343aa5a557fa7,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1049,,0,0,0,"pointSize -> size
+",Leto,gerile.tu@meri.co,2020-12-06T17:15:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T17:15:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+601b144160734ed4e65a176a9d927470a9e77552,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1045,,0,0,0,"update
+",Leto,gerile.tu@meri.co,2020-12-07T04:08:54.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-07T04:08:54.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+77758e0fbbf32b68562c8704672d8f87c63b1ba0,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1021,,0,0,0,"feat: add stackOffset to RechartsBarChart
+",Leto,gerile.tu@meri.co,2020-11-24T15:26:33.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Geril Leto,gerile.tu@meri.co,2020-11-25T03:15:21.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+7a740e283c52f83e4713398146fced23cbb270dd,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1036,,0,0,0,"fix(ts-migrate): react-resize-aware type issue
 
-to SingleSeriesLineChart
-",Leto,gerile.tu@meri.co,2021-02-23T06:18:59.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-23T06:18:59.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-34a5340e8271555db33df5a259af01ba74e5d0b8,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,25,,1,0,0,"fix: tooltip not showing in BarChart
+https://github.com/FezVrasta/react-resize-aware/releases/tag/v3.1.0
+",Runjuu,hi@runjuu.com,2020-12-08T02:43:56.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+88213f1d595f35930177c0703dd03fd4253c2726,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1035,,0,0,0,"fix(ts-migrate): storybook issues
+",Runjuu,hi@runjuu.com,2020-12-08T03:44:03.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+8cb62d7897529d6652d2f5f904553a053c2e9c31,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1048,,0,0,0,"make basic story work
+",Leto,gerile.tu@meri.co,2020-12-06T17:16:08.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T17:16:08.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+8f1d6f2b71e38cba100c4a7c68ecd68a2dcc1d08,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1043,,0,0,0,"feat(ts-migrate): prepare for migration
+",Runjuu,hi@runjuu.com,2020-12-07T15:07:08.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+9991061c369241b2f1086ed2b92871b149cb5b76,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1041,,0,0,0,"feat(ts-migrate): replace pipe expression with nested calls
+",Runjuu,hi@runjuu.com,2020-12-07T15:50:16.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+99ebda06c160d49cccac100368b05e2c3bd5c3c2,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1030,,0,0,0,"feat(ts-migrate): using emotion to replace scss
+",Runjuu,hi@runjuu.com,2020-12-08T05:43:56.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:35.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ac000601d840f875d743f426244e96d8d3e33a7a,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1026,,0,0,0,"build: 1.0.6
+",Runjuu,hi@runjuu.com,2020-12-08T06:20:49.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:49:15.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ae0cc25226e0900672236b6093123d8430149d76,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1046,,0,0,0,"label
+",Leto,gerile.tu@meri.co,2020-12-07T03:35:04.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-07T03:35:04.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+b2d267c3789dc73a0c6b247168be0be4c538f676,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1031,,0,0,0,"feat(ts-migrate): webpack support compile `ts` files
+",Runjuu,hi@runjuu.com,2020-12-08T04:48:25.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:35.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+b4d7bd62bd48e1b9d63a320650d3acdc966f8c7f,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1034,,0,0,0,"fix: eslint related issues
+",Runjuu,hi@runjuu.com,2020-12-08T03:45:36.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:22:22.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+c20b115bb520349419df356c4eecbed242826e9b,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1028,,0,0,0,"chore: run prettier to format all files
+",Runjuu,hi@runjuu.com,2020-12-08T06:30:39.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:36.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+c47e011ca4bc3aa80dc94493853ea79917966047,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1042,,0,0,0,"feat(ts-migrate): refactor do expresstion by using IIFE
+",Runjuu,hi@runjuu.com,2020-12-07T15:46:38.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+c7f9831c4d4ce3de0c0070324876ffc0da625497,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1040,,0,0,0,"feat(ts-migrate): rename files from JS/JSX to TS/TSX
+",Runjuu,hi@runjuu.com,2020-12-08T02:48:32.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ca5e2d39d0770e298d83c9be04c8c8ccb1c26b09,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1052,,0,0,0,"fix tooltip
+",Leto,gerile.tu@meri.co,2020-12-06T16:56:51.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T16:56:51.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+cc3d5f5651ebdba560ddcd2fec48312d6b29f6f3,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1038,,0,0,0,"fix(ts-migrate): add missed `@types` deps
+",Runjuu,hi@runjuu.com,2020-12-07T16:28:37.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ce0367bce5932faed6f6de171a60991e374a67aa,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1027,,0,0,0,"feat(ts-migrate): update eslint config
 
-EE-2962
-",Leto,gerile.tu@meri.co,2021-01-31T12:06:38.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-01-31T12:07:10.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-359cbd103b282bc129819008977edb93154e766b,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,1,,1,1,0,"fix: typo
-",leto,gerile.tu@meri.co,2020-07-28T10:26:54.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,leto,gerile.tu@meri.co,2020-07-28T10:26:54.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-40c6a34a04602d27ad424044a588e895f0f7fb6a,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,7,,3,2,0,"feat: export types from Tooltip/index
-",Leto,gerile.tu@meri.co,2021-02-25T06:32:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-25T06:32:58.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-4db0139eca7d668dc267576dea542172a1b2cb73,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,12,,202,12,0,"build: 1.3.9
-",Leto,gerile.tu@meri.co,2021-02-23T14:48:01.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-23T14:48:01.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-566a85792ecc63a684f091120bc92ea6c777024c,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,18,,6,0,0,"feat: add onReady prop to BubbleChart
-",Leto,gerile.tu@meri.co,2021-02-07T17:45:06.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-07T17:45:06.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-692f4f0622ae848f2fb170ae2080a9160200cee6,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,6,,397,219,0,"build: 1.4.0
-",Leto,gerile.tu@meri.co,2021-02-25T06:34:17.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-25T06:34:17.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-7188644485c8aca21ff55bc97623aff74a87d141,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,28,,4,0,0,"fix: missing ticks when xTickCount is absent
-",Leto,gerile.tu@meri.co,2021-01-29T04:22:23.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-01-29T04:22:23.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-7230a8e8c4097b3ba35d8cb253b5a4c38c781b60,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,21,,129,16,0,"feat: add isSeriesClickable prop to Legend
-",Leto,gerile.tu@meri.co,2021-02-04T07:41:07.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-04T07:41:07.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-7cab41a06bf29860a827f150e7586e4068e339f9,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,5,,7,0,0,init with readme,Geril Leto,gerile.tu@meri.co,2020-07-27T03:07:47.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Geril Leto,gerile.tu@meri.co,2020-07-27T03:07:47.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-9c5e0f61acee2c9ae71839673c05967561cfde9f,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,11,,68,60,0,"feat: folderize Tooltip
-",Leto,gerile.tu@meri.co,2021-02-23T15:55:37.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-23T15:55:37.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-a35833a0986953492a23c7cb2ff7d57eaff95581,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,27,,9,9,0,"fix: xAxis prop overrides to-be-deprecated props
-",Leto,gerile.tu@meri.co,2021-01-29T04:23:40.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-01-29T04:23:40.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-af65844d8769566871d96a89e06d1edcfcaf65bd,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,8,,35,65,0,"feat: update callings of renderTooltip
-",Leto,gerile.tu@meri.co,2021-02-24T15:39:47.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-24T15:39:47.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-b19404dbe13d6265e67885ca2ebb195cda7a23ff,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,16,,7,4,0,"fix: EE-3184 set interval to 0 for XAxis ticks
-",Leto,gerile.tu@meri.co,2021-02-09T02:06:41.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-09T02:06:41.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-b2e86e63423c7511583a1374641556d81390d8b6,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,19,,4,4,0,"lint: enable react-hooks/exhaustive-deps
-",Leto,gerile.tu@meri.co,2021-02-07T10:15:51.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-07T10:15:51.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-b3512476030bb852a86e0f0e0147cebf5fed1d40,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,15,,15,12,0,"build: 1.3.8
-",Leto,gerile.tu@meri.co,2021-02-09T02:35:00.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-09T02:35:00.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-b6bc6ed62f7a29387baf2b5be0336e11eb7ccf20,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,26,,23,19,0,"build: 1.3.3
-",Leto,gerile.tu@meri.co,2021-01-29T04:25:49.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-01-29T04:25:49.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-b9bbc4a89a2fedaf3a0fe6380318a6ab05748fbe,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,10,,123,8,0,"feat: add props parsing to Tooltip w/ type changes
-",Leto,gerile.tu@meri.co,2021-02-24T15:34:42.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-24T15:34:42.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-cd6228e2f418ac430c2f0d10e3a16d7078cbf220,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,13,,44,3,0,"feat(LineCharts): click to pin tooltip
-
-EE-2902
-",Leto,gerile.tu@meri.co,2021-02-23T14:46:22.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-23T14:46:22.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-d40a40ebb660dbd9b7723764e4cdba8070c76374,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,2,,2,2,0,"typo
-",leto,gerile.tu@meri.co,2020-07-28T10:22:00.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,leto,gerile.tu@meri.co,2020-07-28T10:22:00.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-d53eb88d924ddb31b6508d6aae2cd5a2e2cf460a,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,9,,6,6,0,"feat: update types of Tooltip
-",Leto,gerile.tu@meri.co,2021-02-24T15:39:03.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-24T15:39:03.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-d9ac2006a6fa79514e996fd271696ed7bbe2b9ca,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,20,,227,36,0,"build: 1.3.6
-",Leto,gerile.tu@meri.co,2021-02-04T07:47:31.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-04T07:47:31.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-e9a40a449e623780e57dcb398bafa4f6c9c92e63,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,24,,4,3,0,"build: 1.3.4
-",Leto,gerile.tu@meri.co,2021-02-01T02:48:52.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2021-02-01T02:48:52.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
-ffc7765d501b2b32d56ca0d1cd5f58ca29cc8d74,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_commit,4,,41313,0,0,"init with rinse
-",leto,gerile.tu@meri.co,2020-07-28T10:19:33.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,leto,gerile.tu@meri.co,2020-07-28T10:19:33.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+using `@emotion/eslint-plugin` instead of `eslint-plugin-emotion`
+",Runjuu,hi@runjuu.com,2020-12-08T06:47:10.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:49:15.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ceec18c8663dbcd1f4869ff7fc05c78a2b44c14d,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1047,,0,0,0,"Basic story is almost done
+",Leto,gerile.tu@meri.co,2020-12-06T17:25:38.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T17:25:38.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+d3ebd9dfe6fac2489dc81347e7669b544e78f735,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1032,,0,0,0,"dev: run prettier at pre-commit
+",Runjuu,hi@runjuu.com,2020-12-08T04:33:20.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:35.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+d5c676e162318ffc7c0ee9bac8b3caa946f9d915,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1050,,0,0,0,"Bubble props (no need to review)
+",Leto,gerile.tu@meri.co,2020-12-06T17:08:32.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T17:08:32.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+e009ad82a20eef9e4ad06e875dffb3a20d4d059d,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1029,,0,0,0,"feat(ts-migrate): using `tsc` to compile project
+",Runjuu,hi@runjuu.com,2020-12-08T06:20:00.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:35.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+e05b17768b63baaf212442637046bee04e2124d3,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1039,,0,0,0,"feat(ts-migrate): eslint support ts files
+",Runjuu,hi@runjuu.com,2020-12-07T16:16:54.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+e3ddaed6b52a3b3e4cd04ca2e549c1359ce17dd4,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1051,,0,0,0,"re-init BubbleChart from QuadrantChart
+",Leto,gerile.tu@meri.co,2020-12-06T16:58:34.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co,Leto,gerile.tu@meri.co,2020-12-06T16:58:34.000+00:00,gitlab:GitlabUser:1:gerile.tu@meri.co
+edf4123702f9ad2040cfef9b01538d2b2feb4eb3,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1037,,0,0,0,"feat(ts-migrate): run TS Migrate
+",Runjuu,hi@runjuu.com,2020-12-08T02:59:57.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T04:43:11.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com
+ffeb3b37d65f9ecf00db745f0cdda0913d63b583,"{""ConnectionId"":1,""ProjectId"":20171709}",_raw_gitlab_api_merge_request_commits,1033,,0,0,0,"dev: introduce prettier
+",Runjuu,hi@runjuu.com,2020-12-08T04:31:56.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com,Runjuu,hi@runjuu.com,2020-12-08T06:42:35.000+00:00,gitlab:GitlabUser:1:hi@runjuu.com

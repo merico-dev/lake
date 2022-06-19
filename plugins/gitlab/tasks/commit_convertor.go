@@ -46,7 +46,7 @@ func ConvertApiCommits(taskCtx core.SubTaskContext) error {
 		dal.Join(`left join _tool_gitlab_project_commits gpc on (
 			gpc.commit_sha = gc.sha
 		)`),
-		dal.Where("gpc.gitlab_project_id = ? and gc.connection_id = ? ",
+		dal.Where("gpc.gitlab_project_id = ? and gpc.connection_id = ? ",
 			data.Options.ProjectId, data.Options.ConnectionId),
 	}
 	cursor, err := db.Cursor(clauses...)

@@ -61,7 +61,6 @@ func ExtractApiCommits(taskCtx core.SubTaskContext) error {
 			gitlabUserAuthor.Email = gitlabCommit.AuthorEmail
 			gitlabUserAuthor.Name = gitlabCommit.AuthorName
 
-			gitlabCommit.ConnectionId = data.Options.ConnectionId
 			gitlabProjectCommit.ConnectionId = data.Options.ConnectionId
 			gitlabUserAuthor.ConnectionId = data.Options.ConnectionId
 			results = append(results, gitlabCommit)

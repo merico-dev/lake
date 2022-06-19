@@ -28,7 +28,7 @@ import (
 	"github.com/apache/incubator-devlake/plugins/gitlab/tasks"
 )
 
-func TestGitlabCommitDataFlow(t *testing.T) {
+func TestGitlabMrCommitDataFlow(t *testing.T) {
 
 	var gitlab impl.Gitlab
 	dataflowTester := e2ehelper.NewDataFlowTester(t, "gitlab", gitlab)
@@ -39,19 +39,61 @@ func TestGitlabCommitDataFlow(t *testing.T) {
 			ProjectId:    20171709,
 		},
 	}
+
+	// Prepare _tool_gitlab_pull_requests for mr_commit convertor test
 	// import raw data table
-	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_commit.csv",
-		"_raw_gitlab_api_commit")
+	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_merge_requests_for_mr_commit_test.csv",
+		"_raw_gitlab_api_merge_requests")
+	// verify extraction
+	dataflowTester.FlushTabler(&models.GitlabMergeRequest{})
+	dataflowTester.Subtask(tasks.ExtractApiMergeRequestsMeta, taskData)
+	dataflowTester.VerifyTable(
+		models.GitlabMergeRequest{},
+		fmt.Sprintf("./snapshot_tables/%s_for_mr_commit_test.csv", models.GitlabMergeRequest{}.TableName()),
+		[]string{"connection_id", "gitlab_id"},
+		[]string{
+			"iid",
+			"project_id",
+			"source_project_id",
+			"target_project_id",
+			"state",
+			"title",
+			"web_url",
+			"user_notes_count",
+			"work_in_progress",
+			"source_branch",
+			"target_branch",
+			"merge_commit_sha",
+			"merged_at",
+			"gitlab_created_at",
+			"closed_at",
+			"merged_by_username",
+			"description",
+			"author_username",
+			"author_user_id",
+			"component",
+			"first_comment_time",
+			"review_rounds",
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+		},
+	)
+
+	// import raw data table
+	dataflowTester.ImportCsvIntoRawTable("./raw_tables/_raw_gitlab_api_merge_request_commits.csv",
+		"_raw_gitlab_api_merge_request_commits")
 
 	// verify extraction
 	dataflowTester.FlushTabler(&models.GitlabCommit{})
 	dataflowTester.FlushTabler(&models.GitlabProjectCommit{})
-	dataflowTester.FlushTabler(&models.GitlabUser{})
-	dataflowTester.Subtask(tasks.ExtractApiCommitsMeta, taskData)
+	dataflowTester.FlushTabler(&models.GitlabMergeRequestCommit{})
+	dataflowTester.Subtask(tasks.ExtractApiMergeRequestsCommitsMeta, taskData)
 	dataflowTester.VerifyTable(
 		models.GitlabCommit{},
 		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabCommit{}.TableName()),
-		[]string{"connection_id", "sha"},
+		[]string{"sha"},
 		[]string{
 			"title",
 			"message",
@@ -72,7 +114,6 @@ func TestGitlabCommitDataFlow(t *testing.T) {
 			"_raw_data_remark",
 		},
 	)
-
 	dataflowTester.VerifyTable(
 		models.GitlabProjectCommit{},
 		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabProjectCommit{}.TableName()),
@@ -86,11 +127,26 @@ func TestGitlabCommitDataFlow(t *testing.T) {
 	)
 
 	dataflowTester.VerifyTable(
-		models.GitlabUser{},
-		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabUser{}.TableName()),
-		[]string{"connection_id", "email"},
+		models.GitlabMergeRequestCommit{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", models.GitlabMergeRequestCommit{}.TableName()),
+		[]string{"connection_id", "merge_request_id", "commit_sha"},
 		[]string{
-			"name",
+			"_raw_data_params",
+			"_raw_data_table",
+			"_raw_data_id",
+			"_raw_data_remark",
+		},
+	)
+
+	// verify conversion
+	dataflowTester.FlushTabler(&code.PullRequestCommit{})
+	dataflowTester.Subtask(tasks.ConvertApiMergeRequestsCommitsMeta, taskData)
+	dataflowTester.VerifyTable(
+		code.PullRequestCommit{},
+		fmt.Sprintf("./snapshot_tables/%s.csv", code.PullRequestCommit{}.TableName()),
+		[]string{"commit_sha",
+			"pull_request_id"},
+		[]string{
 			"_raw_data_params",
 			"_raw_data_table",
 			"_raw_data_id",
@@ -137,5 +193,4 @@ func TestGitlabCommitDataFlow(t *testing.T) {
 			"_raw_data_remark",
 		},
 	)
-
 }
