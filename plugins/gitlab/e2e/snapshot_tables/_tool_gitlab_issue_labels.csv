@@ -1,0 +1,10 @@
+connection_id,issue_id,label_name,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,20589705,P0 - blocking,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,3,
+1,20654851,P0 - blocking,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,4,
+1,21317058,P2 - improvement,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,16,
+1,21390168,Feature,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,18,
+1,21390176,Feature,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,19,
+1,21439510,P0 - blocking,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,20,
+1,21788574,P0 - blocking,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,28,
+1,21800987,P0 - blocking,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,31,
+1,22115913,Feature,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,34,

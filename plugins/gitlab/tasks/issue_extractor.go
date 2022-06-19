@@ -124,23 +124,10 @@ type IssuesResponse struct {
 }
 
 func ExtractApiIssues(taskCtx core.SubTaskContext) error {
-	data := taskCtx.GetData().(*GitlabTaskData)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_ISSUE_TABLE)
 
 	extractor, err := helper.NewApiExtractor(helper.ApiExtractorArgs{
-		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
-			Ctx: taskCtx,
-			/*
-				This struct will be JSONEncoded and stored into database along with raw data itself, to identity minimal
-				set of data to be process, for example, we process JiraIssues by Board
-			*/
-			Params: GitlabApiParams{
-				ProjectId: data.Options.ProjectId,
-			},
-			/*
-				Table store raw data
-			*/
-			Table: RAW_ISSUE_TABLE,
-		},
+		RawDataSubTaskArgs: *rawDataSubTaskArgs,
 		Extract: func(row *helper.RawData) ([]interface{}, error) {
 			body := &IssuesResponse{}
 			err := json.Unmarshal(row.Data, body)
@@ -163,11 +150,13 @@ func ExtractApiIssues(taskCtx core.SubTaskContext) error {
 
 			for _, label := range body.Labels {
 				results = append(results, &models.GitlabIssueLabel{
-					IssueId:   gitlabIssue.GitlabId,
-					LabelName: label,
+					IssueId:      gitlabIssue.GitlabId,
+					LabelName:    label,
+					ConnectionId: data.Options.ConnectionId,
 				})
 
 			}
+			gitlabIssue.ConnectionId = data.Options.ConnectionId
 			results = append(results, gitlabIssue)
 
 			return results, nil

@@ -46,7 +46,7 @@ var CollectApiIssuesMeta = core.SubTaskMeta{
 
 func CollectApiIssues(taskCtx core.SubTaskContext) error {
 	db := taskCtx.GetDal()
-	data := taskCtx.GetData().(*GitlabTaskData)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_ISSUE_TABLE)
 
 	since := data.Since
 	incremental := false
@@ -67,23 +67,10 @@ func CollectApiIssues(taskCtx core.SubTaskContext) error {
 	}
 
 	collector, err := helper.NewApiCollector(helper.ApiCollectorArgs{
-		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
-			Ctx: taskCtx,
-			/*
-				This struct will be JSONEncoded and stored into database along with raw data itself, to identity minimal
-				set of data to be process, for example, we process JiraIssues by Board
-			*/
-			Params: GitlabApiParams{
-				ProjectId: data.Options.ProjectId,
-			},
-			/*
-				Table store raw data
-			*/
-			Table: RAW_ISSUE_TABLE,
-		},
-		ApiClient:   data.ApiClient,
-		PageSize:    100,
-		Incremental: incremental,
+		RawDataSubTaskArgs: *rawDataSubTaskArgs,
+		ApiClient:          data.ApiClient,
+		PageSize:           100,
+		Incremental:        incremental,
 
 		UrlTemplate: "projects/{{ .Params.ProjectId }}/issues",
 		/*

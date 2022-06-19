@@ -1,0 +1,630 @@
+connection_id,gitlab_id,project_id,number,state,title,body,priority,type,status,assignee_id,assignee_name,lead_time_minutes,url,closed_at,gitlab_created_at,gitlab_updated_at,severity,component,time_estimate,total_time_spent,created_at,updated_at,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,20154666,11624398,1,closed,Call-commit graph spec v2.0,"Here is the [alpha version of v2.0](https://paper.dropbox.com/doc/Call-Commit-Graph-Specification--AbdAXg1s2CAz97ZkRS9H0RzuAg-E3EIqOD2MrNXXGwYXRSED#:uid=336346991861768974394903&h2=v2.0-Alpha-(4/17/19)). Let's use this issue for discussion and feedback.
+
+Overview
+The major changes in this version:
+
+1. Before, a multi-language project has multiple call-commit graphs, one for each language. In this version 2.0, we’re merging call-commit graphs of different languages into a single call-commit graph and provide the ability to do node/edge queries by language. This will simplify our data storage and share computation process.
+2. A `Node` in the graph can be uniquely identified by its `id` together with `language` attribute
+3. `NodeId` is added to represent the info needed to uniquely identify a `Node`
+4. `HistoryEntry` is added to represent a function’s changes in a commit
+5. `addedBy` is added to `Node`
+6. `Commit` has several new attributes to store all relevant meta info, including: `committerName`, `committerEmail`, `parents`, `authorDate`, `commitDate`",,,,0,,149525,,2019-07-30T20:22:02.465+00:00,2019-04-18T00:16:04.745+00:00,2020-02-26T07:08:40.176+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,1,
+1,20487839,11624398,2,closed,集成star-rank数据,,,,,3463231,xzheng,13639,,2019-05-10T14:57:35.763+00:00,2019-05-01T03:38:16.909+00:00,2019-05-10T14:57:35.790+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,2,
+1,20589705,11624398,3,closed,AttributeError: 'NoneType' object has no attribute 'getText',"项目: 
+`https://github.com/ethereum/ethereumj.git`
+
+traceback:
+```
+Traceback (most recent call last):
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/rq/worker.py"", line 799, in perform_job
+    rv = job.perform()
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/rq/job.py"", line 600, in perform
+    self._result = self._execute()
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/rq/job.py"", line 606, in _execute
+    return self.func(*self.args, **self.kwargs)
+  File ""/vdev.co/code_analysis/code_analytics_server.py"", line 246, in analyzing
+    raise e
+  File ""/vdev.co/code_analysis/code_analytics_server.py"", line 238, in analyzing
+    analyzing_repo(git_url, batch_time, callback_address, auth_type, username, password, private_key)
+  File ""/vdev.co/code_analysis/code_analytics_server.py"", line 206, in analyzing_repo
+    raise e
+  File ""/vdev.co/code_analysis/code_analytics_server.py"", line 190, in analyzing_repo
+    loop.run_until_complete(az.analyzing(new_pickle_path))
+  File ""/usr/lib/python3.6/asyncio/base_events.py"", line 473, in run_until_complete
+    return future.result()
+  File ""/code-analytics/persper/analytics/multi_analyzer.py"", line 58, in analyzing
+    await analyzer.analyze()
+  File ""/code-analytics/persper/analytics/analyzer2.py"", line 180, in analyze
+    await self._analyzeCommit(commit, expectedParentCommit, CommitSeekingMode.NormalForward)
+  File ""/code-analytics/persper/analytics/analyzer2.py"", line 243, in _analyzeCommit
+    old_fname, old_src, new_fname, new_src, diff.diff)
+  File ""/meta-analytics/merico/graphserver/java/java_graph_server.py"", line 67, in update_graph
+    get_function_range_java)
+  File ""/code-analytics/persper/analytics/c.py"", line 27, in function_change_stats
+    *ranges_func(new_ast), inv_adds, inv_dels, separate=True)
+  File ""/meta-analytics/merico/graphserver/java/java_helper.py"", line 125, in get_function_range_java
+    walker.walk(collector, tree)
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/antlr4/tree/Tree.py"", line 151, in walk
+    self.walk(listener, child)
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/antlr4/tree/Tree.py"", line 151, in walk
+    self.walk(listener, child)
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/antlr4/tree/Tree.py"", line 151, in walk
+    self.walk(listener, child)
+  [Previous line repeated 3 more times]
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/antlr4/tree/Tree.py"", line 149, in walk
+    self.enterRule(listener, t)
+  File ""/root/.local/share/virtualenvs/code_analysis-f-DU2e54/lib/python3.6/site-packages/antlr4/tree/Tree.py"", line 163, in enterRule
+    ctx.enterRule(listener)
+  File ""/meta-analytics/merico/parser/java/JavaParser.py"", line 2614, in enterRule
+    listener.enterMethodDeclaration(self)
+  File ""/meta-analytics/merico/graphserver/java/java_helper.py"", line 40, in enterMethodDeclaration
+    name = ctx.IDENTIFIER().getText()
+AttributeError: 'NoneType' object has no attribute 'getText'
+```",,,,3407892,farhaanbukhsh,2596,,2019-05-07T03:06:40.441+00:00,2019-05-05T07:49:57.735+00:00,2019-05-07T03:06:40.476+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,3,
+1,20654851,11624398,4,closed,Remove developers who do not have an email,,,,,3455322,doubleqiang,13,,2019-05-07T13:54:34.254+00:00,2019-05-07T13:40:45.484+00:00,2019-05-07T13:54:34.347+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,4,
+1,20762881,11624398,5,closed,grpc server启动失败,"```
+th (from tensorflow.python.framework.ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Colocations handled automatically by placer.
+Traceback (most recent call last):
+  File ""server.py"", line 11, in <module>
+    from merico.grpc.api import *
+  File ""/meta-analytics/merico/grpc/api/__init__.py"", line 1, in <module>
+    from .commits import *
+  File ""/meta-analytics/merico/grpc/api/commits.py"", line 3, in <module>
+    from merico.grpc.repository import Repository
+  File ""/meta-analytics/merico/grpc/repository.py"", line 13, in <module>
+    from merico.analyzer.meta_analyzer import MetaAnalyzer
+  File ""/meta-analytics/merico/analyzer/meta_analyzer.py"", line 25, in <module>
+    class MetaAnalyzer(MultiAnalyzer):
+  File ""/meta-analytics/merico/analyzer/meta_analyzer.py"", line 27, in MetaAnalyzer
+    _classifier = CommitMessageClassifier.load(""apache_a097395_1"")
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/src/commit-classification/commitclassifier/commit_message_classifier.py"", line 179, in load
+    classifier = CommitMessageClassifier.load_from_dict(classifier_dict, weights_file_path=_model_path(name, 'h5'))
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/src/commit-classification/commitclassifier/commit_message_classifier.py"", line 188, in load_from_dict
+    classifier = CommitMessageClassifier(input_encoder, model_builder, output_encoder, weights_file_path=weights_file_path)
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/src/commit-classification/commitclassifier/commit_message_classifier.py"", line 33, in __init__
+    self._model.load_weights(weights_file_path)
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/lib/python3.6/site-packages/keras/engine/network.py"", line 1157, in load_weights
+    with h5py.File(filepath, mode='r') as f:
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/lib/python3.6/site-packages/h5py/_hl/files.py"", line 394, in __init__
+    swmr=swmr)
+  File ""/root/.local/share/virtualenvs/meta-analytics-YHILf8e4/lib/python3.6/site-packages/h5py/_hl/files.py"", line 170, in make_fid
+    fid = h5f.open(name, flags, fapl=fapl)
+  File ""h5py/_objects.pyx"", line 54, in h5py._objects.with_phil.wrapper
+  File ""h5py/_objects.pyx"", line 55, in h5py._objects.with_phil.wrapper
+  File ""h5py/h5f.pyx"", line 85, in h5py.h5f.open
+OSError: Unable to open file (file signature not found)
+
+```",,,,3455322,doubleqiang,692,,2019-05-11T02:30:43.647+00:00,2019-05-10T14:58:19.126+00:00,2019-05-11T02:30:43.667+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,5,
+1,20843580,11624398,6,closed,Tech tags and their classes,"```
+开发
+    后端
+        开发语言
+            python
+            php
+            ruby
+            java
+            Node.js
+            Golang
+            Erlang
+            lua
+            scala
+            C#
+            coffeescript
+        框架
+            .NET
+            asp.net
+            Rails
+            ThinkPHP
+            ZendFramework
+            Spring
+            Structs
+            Hibernate
+            Flask
+            Django
+        网络
+            网络应用
+                http
+                https
+                ssh
+                Oauth
+                ftp
+            网络底层
+                tcp 
+                udp
+                socket
+                dns
+                select
+                epool
+            框架
+                tornado
+        异步IO
+            gevent
+        接口定义
+            Graphql
+            rpc
+            GrpcProto
+            ProtoBuf
+            Xml
+            Json
+            SOA
+            RESTFUL
+            JMS
+            thrift
+        数据库
+            关系型数据库
+                mysql
+                postgredb
+                sqlserver
+                oracle 
+                mariadb
+            非关系型数据库
+                orientdb
+                mongodb
+                hbase
+                couchbase
+                cassandra
+            数据库定义
+                ORM
+                sql file
+        缓存
+            Memcached
+            redis
+        消息队列
+            RabbitMQ
+            ZeroMQ
+            ActiveMQ
+            Kafka
+        搜索引擎
+            elasticsearch
+            sphinx
+            solr
+            lucene
+        Web servers
+            nginx
+            apache
+            MS IIS
+            TOMCAT
+            CGI
+            Httpd
+        操作系统
+            UNIX
+            Linux
+            Windows
+        分布式计算
+            hadoop
+            map-reduce
+    前端
+        网页前端
+            javascript
+                ajax
+                XSS
+                CSRF
+                jquery
+                ES6
+                node.js
+                npm
+                yam
+                React.js
+                Redux
+                Angular
+                Vue.js
+            html
+                seo
+                html5
+            css
+                css3
+                bootstrap
+                bulma
+        手机应用
+            android
+            
+            ios
+                Object-c
+        PC客户端
+        
+    运维
+        docker file
+        
+    嵌入式开发
+```",,,,0,,267380,,2019-11-15T06:49:31.564+00:00,2019-05-13T14:29:20.224+00:00,2019-11-15T06:49:31.589+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,6,
+1,20884758,11624398,7,closed,触发发送周报,https://gitlab.com/meri.co/vdev.co/merge_requests/457,,,,3455322,doubleqiang,265983,,2019-11-15T06:49:57.777+00:00,2019-05-14T13:46:06.308+00:00,2019-11-15T06:49:57.807+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,7,
+1,20885280,11624398,8,closed,"利用ngingx 反向代理grpc 服务, 启动多个grpc 实例",,,,,3455322,doubleqiang,265979,,2019-11-15T06:49:55.026+00:00,2019-05-14T13:50:03.766+00:00,2019-11-15T06:49:55.056+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,8,
+1,20925640,11624398,9,closed,star-rank数据 获取从数据库获取,,,,,3455322,doubleqiang,264610,,2019-11-15T06:49:49.562+00:00,2019-05-15T12:39:11.098+00:00,2019-11-15T06:49:49.590+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,9,
+1,21054967,11624398,10,closed,关于create_repo.py 复制测试文件到repos目录下出现的问题,"在服务器和CI runner运行测试时，出现在测试 test_1_1_3_3_3_update_lines.py、test_1_1_4_2_no_new_line_between_functions.py 两个文件时，出现一下情况
+
+```
+    if with_exceptions and status != 0:  
+       raise GitCommandError(command, status, stderr_value, stdout_value)  
+       git.exc.GitCommandError: Cmd('git') failed due to: exit code(1)  
+         cmdline: git commit -m N  
+         stdout: 'On branch master  
+       nothing to commit, working tree clean  
+```
+
+yizhe通过在create_repo.py 添加sleep(1)可以解决该问题，怀疑是复制文件的过程和commit add 步骤发生了异步执行，在没有复制完代码前就运行了git add，但是通过调用 `strace -o out.txt -T -tt -e trace=all -p`发现复制文件并没有消耗太多时间，log见附件
+[out.txt](/uploads/42d1ba18726e74797144aea652a7012b/out.txt)",,,,0,,115857,,2019-08-07T18:12:18.826+00:00,2019-05-19T07:15:16.750+00:00,2019-08-07T18:12:18.856+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,10,
+1,21056626,11624398,11,closed,commit 中author.email 是None,"repo: https://github.com/eosio/eos.git
+
+commit: dbbd1ddcf7291ffa3714c86414a7439898246ed3
+
+
+meta analystics branch: develop",,,,3455322,doubleqiang,5621,,2019-05-23T06:17:20.453+00:00,2019-05-19T08:35:39.623+00:00,2019-05-23T06:17:20.475+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,11,
+1,21208504,11624398,12,closed,grpc getCommit 增加add line 和del line,,,,,3455322,doubleqiang,18367,,2019-06-05T00:25:52.902+00:00,2019-05-23T06:18:01.863+00:00,2019-06-05T00:25:52.920+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,12,
+1,21208538,11624398,13,closed,grpc 中 优化GetEmailModuleValues的速度,,,,,3455322,doubleqiang,7772,,2019-05-28T15:52:05.775+00:00,2019-05-23T06:19:33.497+00:00,2019-05-28T15:52:05.843+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,13,
+1,21226518,11624398,14,closed,"Can not get meta dev value,  min() arg is an empty sequence","repo : https://github.com/adishavit/argh.git
+
+接口: GetProjectStatus",,,,3455322,doubleqiang,7867,,2019-05-29T02:22:58.477+00:00,2019-05-23T15:15:44.721+00:00,2019-05-29T02:22:58.517+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,14,
+1,21298841,11624398,15,closed,ci memroy error,https://gitlab.com/meri.co/meta-analytics/-/jobs/219315516,,,,3269714,xiaoerlaigeidd,94662,,2019-07-30T20:06:07.544+00:00,2019-05-26T02:24:04.521+00:00,2019-07-30T20:06:07.582+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,15,
+1,21317058,11624398,16,closed,Change /data to a local dir,"While installing according to https://gitlab.com/meri.co/meta-analytics/wikis/Code-Analytics-Local-Installation-Guide:
+```
+2019-05-27 12:07:45.953396: I tensorflow/compiler/xla/service/service.cc:158]   StreamExecutor device (0): <undefined>, <undefined>
+Loaded model apache_a097395_1
+in test analyze, ex: [Errno 13] Permission denied: '/data'
+```
+It is better to use a local dir like `$HOME/data` and automatically create that dir.
+(I can bypass this issue by creating `/data` with `sudo` and then `chmod`.)",,,,3455322,doubleqiang,1083766,,2021-06-17T19:08:45.325+00:00,2019-05-27T04:22:09.273+00:00,2021-06-17T19:08:45.340+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,16,
+1,21338868,11624398,17,closed,Getting doc_coverage error:  division by zero,"repo: https://github.com/haolinmeri/0526gopub.git(go项目)
+
+meta-analystics branch: feature-five-metrics",,,,3455322,doubleqiang,19465,,2019-06-10T04:46:08.193+00:00,2019-05-27T16:20:31.078+00:00,2019-06-10T04:46:08.213+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,17,
+1,21390168,11624398,18,closed,worker better exit method,,,,,3455322,doubleqiang,90342,,2019-07-30T20:07:21.761+00:00,2019-05-29T02:24:39.023+00:00,2019-07-30T20:07:21.840+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,18,
+1,21390176,11624398,19,closed,Record the running time of the task,,,,,3455322,doubleqiang,10709,,2019-06-05T12:54:55.811+00:00,2019-05-29T02:25:15.288+00:00,2019-06-05T12:54:55.848+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,19,
+1,21439510,11624398,20,closed,ValueError: A graph without link has an undefined modularity,"repo: https://gitee.com/haolin16/union02.git
+
+meta分支: deploy-enterprise
+```
+14:04:14 ValueError: A graph without link has an undefined modularity
+Traceback (most recent call last):
+  File ""/usr/local/lib/python3.6/dist-packages/rq/worker.py"", line 812, in perform_job
+    rv = job.perform()
+  File ""/usr/local/lib/python3.6/dist-packages/rq/job.py"", line 588, in perform
+    self._result = self._execute()
+  File ""/usr/local/lib/python3.6/dist-packages/rq/job.py"", line 594, in _execute
+    return self.func(*self.args, **self.kwargs)
+  File ""/meta-analytics/merico/grpc/repository.py"", line 590, in analyzing_job
+  File ""/meta-analytics/merico/grpc/repository.py"", line 584, in analyzing_job
+  File ""/meta-analytics/merico/grpc/repository.py"", line 548, in analyzing_repo
+  File ""/meta-analytics/merico/grpc/repository.py"", line 540, in analyzing_repo
+  File ""/meta-analytics/merico/grpc/repository.py"", line 326, in start_compute_data
+  File ""/meta-analytics/merico/analyzer/meta_analyzer.py"", line 148, in project_modularity
+  File ""/code-analytics/persper/analytics/analyzer2.py"", line 148, in compute_modularity
+    return self.graph.compute_modularity()
+  File ""/code-analytics/persper/analytics/call_commit_graph.py"", line 263, in compute_modularity
+    modularity = community.modularity(partition, graph)
+  File ""/usr/local/lib/python3.6/dist-packages/community/community_louvain.py"", line 141, in modularity
+    raise ValueError(""A graph without link has an undefined modularity"")
+ValueError: A graph without link has an undefined modularity
+Traceback (most recent call last):
+  File ""/usr/local/lib/python3.6/dist-packages/rq/worker.py"", line 812, in perform_job
+    rv = job.perform()
+  File ""/usr/local/lib/python3.6/dist-packages/rq/job.py"", line 588, in perform
+    self._result = self._execute()
+  File ""/usr/local/lib/python3.6/dist-packages/rq/job.py"", line 594, in _execute
+    return self.func(*self.args, **self.kwargs)
+  File ""/meta-analytics/merico/grpc/repository.py"", line 590, in analyzing_job
+  File ""/meta-analytics/merico/grpc/repository.py"", line 584, in analyzing_job
+  File ""/meta-analytics/merico/grpc/repository.py"", line 548, in analyzing_repo
+  File ""/meta-analytics/merico/grpc/repository.py"", line 540, in analyzing_repo
+  File ""/meta-analytics/merico/grpc/repository.py"", line 326, in start_compute_data
+  File ""/meta-analytics/merico/analyzer/meta_analyzer.py"", line 148, in project_modularity
+  File ""/code-analytics/persper/analytics/analyzer2.py"", line 148, in compute_modularity
+    return self.graph.compute_modularity()
+  File ""/code-analytics/persper/analytics/call_commit_graph.py"", line 263, in compute_modularity
+    modularity = community.modularity(partition, graph)
+  File ""/usr/local/lib/python3.6/dist-packages/community/community_louvain.py"", line 141, in modularity
+    raise ValueError(""A graph without link has an undefined modularity"")
+ValueError: A graph without link has an undefined modularity
+
+```",,,,3959846,huangwenren,2827,,2019-06-01T13:20:50.934+00:00,2019-05-30T14:13:21.259+00:00,2019-06-01T13:20:50.964+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,20,
+1,21501200,11624398,21,closed,Test Uber repos,"monday: [https://merico.monday.com/boards/174925610/pulses/243918190](https://merico.monday.com/boards/174925610/pulses/243918190)
+
+* [x]  [okbuck](https://github.com/uber/okbuck)
+* [x]  [ringpop-go](https://github.com/uber/ringpop-go)
+* [x]  [tchannel-go](https://github.com/uber/tchannel-go)",,,,0,,84605,,2019-07-30T20:06:58.389+00:00,2019-06-02T02:01:07.281+00:00,2019-07-30T20:06:58.423+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,21,
+1,21583750,11624398,22,closed,robustness metric,"current threshold is set to 0.01, the new threshold = 1 / num(developers) 
+
+detail: https://merico.monday.com/boards/174925610/pulses/244527797",,,,3455322,doubleqiang,102,,2019-06-05T02:13:04.026+00:00,2019-06-05T00:30:34.887+00:00,2019-06-05T02:13:04.071+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,22,
+1,21584909,11624398,23,closed,email Ignore case,,,,,3455322,doubleqiang,61,,2019-06-05T03:34:10.427+00:00,2019-06-05T02:32:48.598+00:00,2019-06-05T03:34:10.543+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,23,
+1,21589011,11624398,24,closed,add version into getproject status,,,,,3455322,doubleqiang,333,,2019-06-05T13:02:56.509+00:00,2019-06-05T07:29:07.031+00:00,2019-06-05T13:02:57.184+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,24,
+1,21592802,11624398,25,closed,git ssh clone Host key verification failed,,,,,3455322,doubleqiang,6901,,2019-06-10T04:45:47.555+00:00,2019-06-05T09:43:55.137+00:00,2019-06-10T04:45:47.580+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,25,
+1,21670901,11624398,26,closed,confirm commit 4b0e1fd0d46242973b37f3edbc72c59cd473d260,"现在网页和excel能完全对的上了，不过4b0e1fd0d46242973b37f3edbc72c59cd473d260没拉到也是一个问题，后续还需要在确认下 @孙强
+
+repo: https://github.com/uber/tchannel-go",,,,3455322,doubleqiang,231485,,2019-11-15T06:50:24.617+00:00,2019-06-07T12:44:49.077+00:00,2019-11-15T06:50:24.644+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,26,
+1,21726803,11624398,27,closed,"ValueError, min() is an empty sequence","很多项目都会报这个错,但是一般将pickle文件删除,重新分析就不报错了
+
+![ca_min_bug](/uploads/955fec1766a0ef4e2d5a53072899bdb8/ca_min_bug.png)",,,,0,,3983,,2019-06-12T23:11:14.649+00:00,2019-06-10T04:48:05.959+00:00,2019-06-12T23:11:14.677+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,27,
+1,21788574,11624398,28,closed,[GoLang Graph Server] ConnectionResetError,"repo: https://github.com/ethereum/go-ethereum.git(看错误的类型,应该是任何go和js的repo都有可能报)
+
+偶尔会报出以下错误
+
+```
+ConnectionResetError: [Errno 104] Connection reset by peer
+  File ""urllib3/response.py"", line 397, in _error_catcher
+    yield
+  File ""urllib3/response.py"", line 707, in read_chunked
+    chunk = self._handle_chunk(amt)
+  File ""urllib3/response.py"", line 653, in _handle_chunk
+    value = self._fp._safe_read(amt)
+  File ""http/client.py"", line 612, in _safe_read
+    chunk = self.fp.read(min(amt, MAXAMOUNT))
+  File ""socket.py"", line 586, in readinto
+    return self._sock.recv_into(b)
+ProtocolError: (""Connection broken: ConnectionResetError(104, 'Connection reset by peer')"", ConnectionResetError(104, 'Connection reset by peer'))
+  File ""requests/models.py"", line 750, in generate
+    for chunk in self.raw.stream(chunk_size, decode_content=True):
+  File ""urllib3/response.py"", line 527, in stream
+    for line in self.read_chunked(amt, decode_content=decode_content):
+  File ""urllib3/response.py"", line 732, in read_chunked
+    self._original_response.close()
+  File ""contextlib.py"", line 99, in __exit__
+    self.gen.throw(type, value, traceback)
+  File ""urllib3/response.py"", line 415, in _error_catcher
+    raise ProtocolError('Connection broken: %r' % e, e)
+ChunkedEncodingError: (""Connection broken: ConnectionResetError(104, 'Connection reset by peer')"", ConnectionResetError(104, 'Connection reset by peer'))
+  File ""rq/worker.py"", line 812, in perform_job
+    rv = job.perform()
+  File ""rq/job.py"", line 588, in perform
+    self._result = self._execute()
+  File ""rq/job.py"", line 594, in _execute
+    return self.func(*self.args, **self.kwargs)
+  File ""merico/grpc/repository.py"", line 631, in analyzing_job
+    raise e
+  File ""merico/grpc/repository.py"", line 628, in analyzing_job
+    auth_type, username, password, private_key)
+  File ""merico/grpc/repository.py"", line 605, in analyzing_repo
+    raise e
+  File ""merico/grpc/repository.py"", line 597, in analyzing_repo
+    repo.start_compute_data()
+  File ""merico/grpc/repository.py"", line 315, in start_compute_data
+    module_contrib_data = self.analyzer.module_contrib(dev_dict)
+  File ""merico/analyzer/meta_analyzer.py"", line 77, in module_contrib
+    analyzer.graph, self._linguist[lang], email))
+  File ""/code-analytics/persper/analytics/analyzer2.py"", line 113, in graph
+    return self._graphServer.get_graph()
+  File ""merico/graphserver/go/go_graph_server.py"", line 94, in get_graph
+    r = self._session.get(graph_url)
+  File ""requests/sessions.py"", line 546, in get
+    return self.request('GET', url, **kwargs)
+  File ""requests/sessions.py"", line 533, in request
+    resp = self.send(prep, **send_kwargs)
+  File ""requests/sessions.py"", line 686, in send
+    r.content
+  File ""requests/models.py"", line 828, in content
+    self._content = b''.join(self.iter_content(CONTENT_CHUNK_SIZE)) or b''
+  File ""requests/models.py"", line 753, in generate
+    raise ChunkedEncodingError(e)
+```
+
+detail : http://142.93.222.77:9000/sentry/analysis-worker/issues/22/?query=is%3Aresolved
+
+ps: 如需登录,请使用以下用户名/密码, qiang.sun@meri.co/sq874948234",,,,3403757,yizhe.merico,225872,,2019-11-15T06:50:33.056+00:00,2019-06-11T10:18:04.449+00:00,2019-11-15T06:50:33.090+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,28,
+1,21789932,11624398,29,closed,[BUG] An error was occurred during documentation generation.,"在执行类似请求, GET https://api.github.com/repositories/87335980/pulls?state=closed&base=master&page=50
+
+An error was occurred during documentation generation. Please check the log
+
+
+detail : http://142.93.222.77:9000/sentry/analysis-worker/issues/8/?query=is%3Aunresolved
+
+ps: 如需登录,请使用以下用户名/密码, [qiang.sun@meri.co](mailto:qiang.sun@meri.co)/sq874948234",,,,3455322,doubleqiang,225829,,2019-11-15T06:50:37.790+00:00,2019-06-11T11:01:04.373+00:00,2019-11-15T06:50:37.815+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,29,
+1,21796407,11624398,30,closed,js graph server 支持断点续算功能,,,,,3455322,doubleqiang,82385,,2019-08-07T18:11:44.461+00:00,2019-06-11T13:05:55.826+00:00,2019-08-07T18:11:44.491+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,30,
+1,21800987,11624398,31,closed,project_commit_share 的值全为0,"repo: https://github.com/ontio/ontology.git
+
+branch: develop
+
+复现过程:
+
+```python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""""""
+复现前准备:
+0. 从本issue下载pickle文件
+https://persper-my.sharepoint.com/:u:/g/personal/qiang_sun_meri_co/EWPMo3ZYeyZJsewwJT8b77EBwQdAWAzVgBvyHnqyeue0zg?e=57GW49
+
+1. 启动go graph server
+git clone git@gitlab.com:meri.co/golang/graph-server.git
+cd graph-server && go run app/graphserver/main.go -addr :9089
+
+2. 设置hosts
+echo ""127.0.0.1    gs-go"" > /etc/hosts
+
+3. clone ontio/ontology 项目到对应目录
+git clone https://github.com/ontio/ontology.git /data/repos/ontio/ontology
+""""""
+
+import pickle
+
+pickle_path = '/home/xxq/Downloads/3113361428.pickle'
+with open(pickle_path,mode='rb') as f:
+    az = pickle.load(f)
+
+az.project_commit_share()
+```
+
+有报一个runtime warning
+```
+/home/xxq/codes/src/gitlab.com/persper/code-analytics/persper/util/normalize_score.py:11: RuntimeWarning: invalid value encountered in double_scalars
+  normalized_scores[idx] = scores[idx] / score_sum * coef
+```",,,,2994198,hezheng,76023,,2019-08-03T10:01:26.955+00:00,2019-06-11T14:58:22.022+00:00,2019-08-03T10:01:26.990+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,31,
+1,21851460,11624398,32,closed,Some common file names are filtered out by npm registry,"The new feature of filtering out third-party dependencies has a very high recall but also has some problems with precision. Some common file names that developers use are also filtered out because there exists a npm package with the same name. For example, 'src/index.js', 'main.js' are filtered out because of https://www.npmjs.com/package/index and https://www.npmjs.com/package/main.
+
+I've added several examples in the unit tests (`test/js/test_file_filter.py`). They're currently commented out so that the tests can pass. Please look into this issue and make sure the tests can pass with my examples uncommented.",,,,3959846,huangwenren,223892,,2019-11-15T06:51:19.593+00:00,2019-06-12T19:19:03.868+00:00,2019-11-15T06:51:19.619+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,32,
+1,22009366,11624398,33,closed,Improve the explainability of commit dev value,"The original discussion happened in https://gitlab.com/meri.co/vdev.co/issues/384.
+
+According to the discussion above, we need to provide the following info to vdev:
+
+Legends:
+
+1. [e] - existing 已经存在的metric
+2. [n] - new 新增的metric
+
+Developer related：
+
+1. [e] 开发价值（dev_value)
+2. [n] 开发当量（dev_equivalent）
+3. [?] 排名（ranking）
+4. [e] 总提交数（num_commits）
+5. [n] 提交数占比（share_commits）
+6. [n] 开发价值和提交数比（ratio_value_commits）
+7. [e] 新增的代码行数（num_additions）
+8. [e] 删除的代码行数（num_deletions）
+9. [n] 总代码行数占比（share_loc）
+10. [n] 开发价值和代码行数比（ratio_value_loc)
+
+Commit related：
+
+1. [e] 开发价值（dev_value）
+2. [n] 开发当量（dev_equivalent）
+3. [?] 排名（ranking）
+4. [e] 新增的代码行数（num_additions）
+5. [e] 删除的代码行数（num_deletions）
+6. [n] 总代码行数占比（share_loc）
+7. [n] 开发价值和代码行数比（ratio_value_loc）
+8. [e] 修改的函数量（num_functions）
+
+Function related：
+
+1. [e] 函数名（signature）
+2. [e] 所在文件（file）
+3. [e] 函数总开发价值（function_dev_value）
+4. [e] 提交所占开发价值（commit_dev_value）
+5. [e] 函数总开发当量（function_dev_equivalent）
+6. [e] 提交所占开发量（commit_dev_equivalent）
+7. [e] 新增的代码行数（num_additions）
+8. [e] 删除的代码行数（num_deletions）
+9. [e] 入度（in_degree）
+10. [e] 出度（out_degree）",,,,0,,61393,,2019-07-30T20:08:36.934+00:00,2019-06-18T04:54:51.903+00:00,2019-07-30T20:08:36.963+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,33,
+1,22115913,11624398,34,closed,Preprocessing round,"@rankinzheng Please review the info that we show at the end of the preprocessing round:
+
+1. total number of commits (提交数量)
+2. total number of developers (开发者数量)
+3. total LOC (总代码行数)
+4. language distribution (语言分布)
+5. detected third-party code (检测到的第三方库)
+6. directories that are recommended to exclude (推荐忽略的目录)
+7. supported languages (支持的语言)
+
+The formal analysis can take the following parameters:
+
+1. A blacklist for paths to exclude
+2. A blacklist of commits to exclude",,,,0,,43672,,2019-07-21T14:26:48.861+00:00,2019-06-21T06:34:41.804+00:00,2019-07-21T14:26:48.905+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,34,
+1,22381552,11624398,35,closed,BUG:  计算js doc coverage错误,"repo: https://github.com/wagtail/wagtail.git
+
+错误栈:
+```
+I0630 06:06:23.853005 140291087861568 doc_coverage.py:70] {'doccoveragejs': 0.06826448348447077, 'doxygen': 0.9317355165155293}                                          
+--- Logging error ---                                                                                                                                                   
+Traceback (most recent call last):                                                                                                                                       
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 994, in emit                                                                                                       
+    msg = self.format(record)                                                                                                                                            
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 840, in format                                                                                                     
+    return fmt.format(record)                                                                                                                                            
+  File ""/usr/local/lib/python3.6/dist-packages/absl/logging/__init__.py"", line 928, in format                                                                            
+    return prefix + super(PythonFormatter, self).format(record)                                                                                                          
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 577, in format                                                                                                     
+    record.message = record.getMessage()                                                                                                                                 
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 338, in getMessage                                                                                                 
+    msg = msg % self.args                                                                                                                                                
+TypeError: not all arguments converted during string formatting                                                                                                          
+Call stack:                                                                                                                                                              
+  File ""test_analyze.py"", line 21, in <module>                                                                                                                           
+    repo.start_compute_data()                                                                                                                                            
+  File ""/meta-analytics/merico/grpc/repository.py"", line 344, in start_compute_data                                                                                      
+    doc_coverage_data = self.compute_doc_coverage(self._repo_path)                                                                                                       
+  File ""/meta-analytics/merico/grpc/repository.py"", line 432, in compute_doc_coverage                                                                                    
+    return doc_cov_az.doc_coverage()                                                                                                                                     
+  File ""/meta-analytics/merico/analyzer/doc_coverage.py"", line 74, in doc_coverage                                                                                       
+    coverage += parser() * weight                                                                                                                                        
+  File ""/meta-analytics/merico/analyzer/doc_coverage.py"", line 145, in coverage_js                                                                                       
+    _logger.error('coverage_js errors: ', result.stderr)                                                                                                                 
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 1337, in error                                                                                                     
+    self._log(ERROR, msg, args, **kwargs)                                                                                                                                
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 1444, in _log                                                                                                      
+    self.handle(record)                                                                                                                                                  
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 1454, in handle                                                                                                    
+    self.callHandlers(record)                                                                                                                                            
+
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 1454, in handle                                                                                           [39/1940]
+    self.callHandlers(record)                                                                                                                                            
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 1516, in callHandlers                                                                                              
+    hdlr.handle(record)                                                                                                                                                  
+  File ""/usr/local/lib/python3.6/dist-packages/absl/logging/__init__.py"", line 891, in handle                                                                           
+    return self._current_handler.handle(record)                                                                                                                          
+  File ""/usr/lib/python3.6/logging/__init__.py"", line 865, in handle                                                                                                     
+    self.emit(record)                                                                                                                                                    
+  File ""/usr/local/lib/python3.6/dist-packages/absl/logging/__init__.py"", line 825, in emit                                                                              
+    self._log_to_stderr(record)                                                                                                                                          
+  File ""/usr/local/lib/python3.6/dist-packages/absl/logging/__init__.py"", line 797, in _log_to_stderr                                                                    
+    super(PythonHandler, self).emit(record)                                                                                                                             
+Message: 'coverage_js errors: '                                                                                                                                          
+Arguments: (b'caught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/api/admin.js"": Error: Line 1: Unexpected tokencaught exception while analyzin
+g file ""/data/repos/wagtail/wagtail/client/src/api/admin.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/clie
+nt/src/api/client.js"": Error: Line 57: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/api/client.test.js"": Error: Line 1: 
+Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Button/Button.js"": Error: Line 1: Unexpected tokencaught excepti
+on while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Button/Button.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""
+/data/repos/wagtail/wagtail/client/src/components/Draftail/DraftUtils.js"": Error: Line 24: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wag
+tail/client/src/components/Draftail/DraftUtils.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/com
+ponents/Draftail/EditorFallback/EditorFallback.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/componen
+ts/Draftail/EditorFallback/EditorFallback.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/componen
+ts/Draftail/Tooltip/Tooltip.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/Tooltip
+/Tooltip.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/EmbedBlock.js""
+: Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/EmbedBlock.test.js"": Error: Lin
+e 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/ImageBlock.js"": Error: Line 1: Unexpected t
+okencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/ImageBlock.test.js"": Error: Line 1: Unexpected tokencaught e
+xception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/MediaBlock.js"": Error: Line 1: Unexpected tokencaught exception while an
+alyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/blocks/MediaBlock.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file
+ ""/data/repos/wagtail/wagtail/client/src/components/Draftail/decorators/Document.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/w
+agtail/wagtail/client/src/components/Draftail/decorators/Document.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wag
+tail/client/src/components/Draftail/decorators/Link.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/com
+ponents/Draftail/decorators/Link.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Drafta
+il/decorators/TooltipEntity.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/decorat
+ors/TooltipEntity.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/index.js"": E
+rror: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/index.test.js"": Error: Line 1: Unexpected
+ tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/sources/ModalWorkflowSource.js"": Error: Line 1: Unexpected tokenc
+aught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Draftail/sources/ModalWorkflowSource.test.js"": Error: Line 1: Unexpected tokencau
+ght exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/Explorer.js"": Error: Line 1: Unexpected tokencaught exception while analyz
+ing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/Explorer.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos
+/wagtail/wagtail/client/src/components/Explorer/ExplorerHeader.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/cl$
+ing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/Explorer.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/da[0/1940]
+/wagtail/wagtail/client/src/components/Explorer/ExplorerHeader.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/cli
+ent/src/components/Explorer/ExplorerHeader.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/compone
+nts/Explorer/ExplorerItem.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/ExplorerI
+tem.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/ExplorerPanel.js"": Error:
+Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/ExplorerPanel.test.js"": Error: Line 1: Unexpect
+ed tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/ExplorerToggle.js"": Error: Line 1: Unexpected tokencaught excep
+tion while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/ExplorerToggle.test.js"": Error: Line 1: Unexpected tokencaught exception while anal
+yzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/PageCount.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/w
+agtail/wagtail/client/src/components/Explorer/PageCount.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/clien
+t/src/components/Explorer/actions.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/a
+ctions.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/index.js"": Error: Line
+1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/index.test.js"": Error: Line 1: Unexpected tokencaugh
+t exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/reducers/explorer.js"": Error: Line 11: Unexpected tokencaught exception whil
+e analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/reducers/explorer.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing 
+file ""/data/repos/wagtail/wagtail/client/src/components/Explorer/reducers/nodes.js"": Error: Line 58: Unexpected tokencaught exception while analyzing file ""/data/repos/w
+agtail/wagtail/client/src/components/Explorer/reducers/nodes.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/
+client/src/components/Icon/Icon.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Icon/Icon.te
+st.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/LoadingSpinner/LoadingSpinner.js"": Error:
+ Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/LoadingSpinner/LoadingSpinner.test.js"": Error: Line 1: 
+Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Portal/Portal.js"": Error: Line 1: Unexpected tokencaught excepti
+on while analyzing file ""/data/repos/wagtail/wagtail/client/src/components/Portal/Portal.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""
+/data/repos/wagtail/wagtail/client/src/components/PublicationStatus/PublicationStatus.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/re
+pos/wagtail/wagtail/client/src/components/PublicationStatus/PublicationStatus.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos
+/wagtail/wagtail/client/src/components/Transition/Transition.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/clien
+t/src/components/Transition/Transition.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/config/wagt
+ailConfig.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/config/wagtailConfig.test.js"": Error: Line 1:
+ Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/includes/initSubmenus.js"": Error: Line 50: Unexpected tokencaught exceptio
+n while analyzing file ""/data/repos/wagtail/wagtail/client/src/index.js"": Error: Line 6: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagta
+il/client/src/index.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/utils/actions.js"": Error: Line
+ 5: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/utils/focus.js"": Error: Line 16: Unexpected tokencaught exception while
+ analyzing file ""/data/repos/wagtail/wagtail/client/src/utils/focus.test.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/w
+agtail/client/src/utils/performance.js"": Error: Line 31: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/src/utils/polyfills.js
+"": Error: Line 6: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/client/tests/adapter.js"": Error: Line 1: Unexpected tokencaught exce
+ption while analyzing file ""/data/repos/wagtail/wagtail/client/tests/stubs.js"": Error: Line 6: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail
+/wagtail/wagtail/admin/static_src/wagtailadmin/app/draftail.entry.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/
+wagtail/admin/static_src/wagtailadmin/app/wagtailadmin.entry.js"": Error: Line 1: Unexpected tokencaught exception while analyzing file ""/data/repos/wagtail/wagtail/wagta
+il/admin/templates/wagtailadmin/edit_handlers/inline_panel.js"": Error: Line 1: Unexpected token %caught exception while analyzing file ""/data/repos/wagtail/wagtail/wagta
+il/contrib/search_promotions/templates/wagtailsearchpromotions/includes/searchpromotions_formset.js"": Error: Line 8: Unexpected token %',) 
+```",,,,0,,36188,,2019-07-25T12:51:17.909+00:00,2019-06-30T09:42:38.585+00:00,2019-07-25T12:51:17.945+00:00,,,0,0,2022-06-19T11:55:37.946+00:00,2022-06-19T11:55:37.946+00:00,"{""ConnectionId"":1,""ProjectId"":11624398}",_raw_gitlab_api_issues,35,

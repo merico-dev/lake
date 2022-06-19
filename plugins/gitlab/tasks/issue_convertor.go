@@ -40,13 +40,13 @@ var ConvertIssuesMeta = core.SubTaskMeta{
 
 func ConvertIssues(taskCtx core.SubTaskContext) error {
 	db := taskCtx.GetDal()
-	data := taskCtx.GetData().(*GitlabTaskData)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_ISSUE_TABLE)
 	projectId := data.Options.ProjectId
 
 	clauses := []dal.Clause{
 		dal.Select("issues.*"),
 		dal.From("_tool_gitlab_issues issues"),
-		dal.Where("project_id = ?", projectId),
+		dal.Where("project_id = ? and connection_id = ?", projectId, data.Options.ConnectionId),
 	}
 	cursor, err := db.Cursor(clauses...)
 	if err != nil {
@@ -58,19 +58,13 @@ func ConvertIssues(taskCtx core.SubTaskContext) error {
 	boardIdGen := didgen.NewDomainIdGenerator(&gitlabModels.GitlabProject{})
 
 	converter, err := helper.NewDataConverter(helper.DataConverterArgs{
-		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
-			Ctx: taskCtx,
-			Params: GitlabApiParams{
-				ProjectId: data.Options.ProjectId,
-			},
-			Table: RAW_ISSUE_TABLE,
-		},
-		InputRowType: reflect.TypeOf(gitlabModels.GitlabIssue{}),
-		Input:        cursor,
+		RawDataSubTaskArgs: *rawDataSubTaskArgs,
+		InputRowType:       reflect.TypeOf(gitlabModels.GitlabIssue{}),
+		Input:              cursor,
 		Convert: func(inputRow interface{}) ([]interface{}, error) {
 			issue := inputRow.(*gitlabModels.GitlabIssue)
 			domainIssue := &ticket.Issue{
-				DomainEntity:            domainlayer.DomainEntity{Id: issueIdGen.Generate(issue.GitlabId)},
+				DomainEntity:            domainlayer.DomainEntity{Id: issueIdGen.Generate(data.Options.ConnectionId, issue.GitlabId)},
 				IssueKey:                strconv.Itoa(issue.Number),
 				Title:                   issue.Title,
 				Description:             issue.Body,
@@ -94,7 +88,7 @@ func ConvertIssues(taskCtx core.SubTaskContext) error {
 				domainIssue.Status = ticket.DONE
 			}
 			boardIssue := &ticket.BoardIssue{
-				BoardId: boardIdGen.Generate(projectId),
+				BoardId: boardIdGen.Generate(data.Options.ConnectionId, projectId),
 				IssueId: domainIssue.Id,
 			}
 			return []interface{}{

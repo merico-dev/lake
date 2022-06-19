@@ -37,14 +37,16 @@ var ConvertIssueLabelsMeta = core.SubTaskMeta{
 
 func ConvertIssueLabels(taskCtx core.SubTaskContext) error {
 	db := taskCtx.GetDal()
-	data := taskCtx.GetData().(*GitlabTaskData)
+	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_ISSUE_TABLE)
 	projectId := data.Options.ProjectId
 	clauses := []dal.Clause{
 		dal.Select("*"),
 		dal.From(&gitlabModels.GitlabIssueLabel{}),
-		dal.Join(`left join _tool_gitlab_issues on 
-			_tool_gitlab_issues.gitlab_id = _tool_gitlab_issue_labels.issue_id`),
-		dal.Where("_tool_gitlab_issues.project_id = ?", projectId),
+		dal.Join("left join _tool_gitlab_issues on " +
+			"_tool_gitlab_issues.gitlab_id = _tool_gitlab_issue_labels.issue_id"),
+		dal.Where("_tool_gitlab_issues.project_id = ? "+
+			"and _tool_gitlab_issues.connection_id = ?",
+			projectId, data.Options.ConnectionId),
 		dal.Orderby("issue_id ASC"),
 	}
 
@@ -57,19 +59,13 @@ func ConvertIssueLabels(taskCtx core.SubTaskContext) error {
 	issueIdGen := didgen.NewDomainIdGenerator(&gitlabModels.GitlabIssue{})
 
 	converter, err := helper.NewDataConverter(helper.DataConverterArgs{
-		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
-			Ctx: taskCtx,
-			Params: GitlabApiParams{
-				ProjectId: projectId,
-			},
-			Table: RAW_ISSUE_TABLE,
-		},
-		InputRowType: reflect.TypeOf(gitlabModels.GitlabIssueLabel{}),
-		Input:        cursor,
+		RawDataSubTaskArgs: *rawDataSubTaskArgs,
+		InputRowType:       reflect.TypeOf(gitlabModels.GitlabIssueLabel{}),
+		Input:              cursor,
 		Convert: func(inputRow interface{}) ([]interface{}, error) {
 			issueLabel := inputRow.(*gitlabModels.GitlabIssueLabel)
 			domainIssueLabel := &ticket.IssueLabel{
-				IssueId:   issueIdGen.Generate(issueLabel.IssueId),
+				IssueId:   issueIdGen.Generate(data.Options.ConnectionId, issueLabel.IssueId),
 				LabelName: issueLabel.LabelName,
 			}
 			return []interface{}{
