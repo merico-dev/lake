@@ -17,6 +17,7 @@ version: "3"
 services:
   mysql:
     image: mysql:8.0.26
+    platform: linux/x86_64
     volumes:
       - mysql-storage:/var/lib/mysql
     restart: always

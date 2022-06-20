@@ -19,11 +19,12 @@ package migrationscripts
 
 import (
 	"context"
-	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/apache/incubator-devlake/plugins/helper"
 
+	"github.com/apache/incubator-devlake/config"
 	commonArchived "github.com/apache/incubator-devlake/models/migrationscripts/archived"
+	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/github/models/migrationscripts/archived"
+	"github.com/apache/incubator-devlake/plugins/helper"
 	"gorm.io/gorm"
 )
 
@@ -96,17 +97,17 @@ func (u *InitSchemas) Up(ctx context.Context, db *gorm.DB) error {
 	connection.Proxy = u.config.GetString(`GITHUB_PROXY`)
 	connection.Token = u.config.GetString(`GITHUB_AUTH`)
 	connection.Name = `GitHub`
-	if err != nil {
-		return err
-	}
+	v := config.GetConfig()
+	encKey := v.GetString("ENCODE_KEY")
+
 	err = helper.UpdateEncryptFields(connection, func(plaintext string) (string, error) {
-		return core.Encrypt(u.config.GetString(core.EncodeKeyEnvStr), plaintext)
+		return core.Encrypt(encKey, plaintext)
 	})
 	if err != nil {
 		return err
 	}
 	// update from .env and save to db
-	if connection.Endpoint != `` && connection.Token != `` {
+	if connection.Endpoint != `` && connection.Token != `` && encKey != `` {
 		db.Create(connection)
 	}
 
