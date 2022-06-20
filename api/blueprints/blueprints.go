@@ -164,17 +164,13 @@ func Patch(c *gin.Context) {
 		shared.ApiOutputError(c, err, http.StatusBadRequest)
 		return
 	}
-	blueprint, err := services.GetBlueprint(id)
+	var body map[string]interface{}
+	err = c.ShouldBind(&body)
 	if err != nil {
 		shared.ApiOutputError(c, err, http.StatusBadRequest)
 		return
 	}
-	err = c.ShouldBind(blueprint)
-	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusBadRequest)
-		return
-	}
-	err = services.UpdateBlueprint(blueprint)
+	blueprint, err := services.PatchBlueprint(id, body)
 	if err != nil {
 		shared.ApiOutputError(c, err, http.StatusBadRequest)
 		return

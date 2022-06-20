@@ -17,16 +17,35 @@ limitations under the License.
 
 package migrationscripts
 
-import "github.com/apache/incubator-devlake/migration"
+import (
+	"context"
 
-// RegisterAll register all the migration scripts of framework
-func All() []migration.Script {
-	return []migration.Script{
-		new(initSchemas),
-		new(updateSchemas20220505), new(updateSchemas20220507), new(updateSchemas20220510),
-		new(updateSchemas20220513), new(updateSchemas20220524), new(updateSchemas20220526),
-		new(updateSchemas20220527), new(updateSchemas20220528), new(updateSchemas20220601),
-		new(updateSchemas20220602), new(updateSchemas20220612), new(updateSchemas20220613),
-		new(updateSchemas20220614), new(updateSchemas2022061402), new(updateSchemas20220616),
+	"gorm.io/gorm"
+)
+
+type Blueprint20220616 struct {
+	Mode     string `json:"mode" gorm:"varchar(20)" validate:"required,oneof=NORMAL ADVANCED"`
+	IsManual bool   `json:"isManual"`
+}
+
+func (Blueprint20220616) TableName() string {
+	return "_devlake_blueprints"
+}
+
+type updateSchemas20220616 struct{}
+
+func (*updateSchemas20220616) Up(ctx context.Context, db *gorm.DB) error {
+	err := db.Migrator().AutoMigrate(&Blueprint20220616{})
+	if err != nil {
+		return err
 	}
+	return nil
+}
+
+func (*updateSchemas20220616) Version() uint64 {
+	return 20220616110537
+}
+
+func (*updateSchemas20220616) Name() string {
+	return "add mode field to blueprint"
 }

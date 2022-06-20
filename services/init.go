@@ -21,6 +21,7 @@ import (
 	"context"
 
 	"github.com/apache/incubator-devlake/models/migrationscripts"
+	"github.com/apache/incubator-devlake/plugins/core"
 
 	"time"
 
@@ -36,10 +37,12 @@ import (
 var cfg *viper.Viper
 var db *gorm.DB
 var cronManager *cron.Cron
+var log core.Logger
 
 func init() {
 	var err error
 	cfg = config.GetConfig()
+	log = logger.Global
 	db, err = runner.NewGormDb(cfg, logger.Global.Nested("db"))
 	location := cron.WithLocation(time.UTC)
 	cronManager = cron.New(location)

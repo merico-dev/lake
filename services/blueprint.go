@@ -25,6 +25,7 @@ import (
 	"github.com/apache/incubator-devlake/logger"
 	"github.com/apache/incubator-devlake/models"
 	"github.com/go-playground/validator/v10"
+	"github.com/mitchellh/mapstructure"
 	"github.com/robfig/cron/v3"
 	"gorm.io/gorm"
 )
@@ -89,86 +90,71 @@ func GetBlueprint(blueprintId uint64) (*models.Blueprint, error) {
 	return blueprint, nil
 }
 
-/*
-func ModifyBlueprint(newBlueprint *models.EditBlueprint) (*models.Blueprint, error) {
-	_, err := cron.ParseStandard(newBlueprint.CronConfig)
-	if err != nil {
-		return nil, fmt.Errorf("invalid cronConfig: %w", err)
-	}
-
-	blueprint := models.Blueprint{}
-	err = db.Model(&models.Blueprint{}).
-		Where("id = ?", newBlueprint.BlueprintId).Limit(1).Find(&blueprint).Error
-	if err != nil {
-		return nil, err
-	}
-	// update cronConfig
-	if newBlueprint.CronConfig != "" {
-		blueprint.CronConfig = newBlueprint.CronConfig
-	}
-	// update tasks
-	if newBlueprint.Tasks != nil {
-		blueprint.Tasks, err = json.Marshal(newBlueprint.Tasks)
-		if err != nil {
-			return nil, err
-		}
-	}
-	blueprint.Enable = newBlueprint.Enable
-
-	err = db.Model(&models.Blueprint{}).
-		Clauses(clause.OnConflict{UpdateAll: true}).Create(&blueprint).Error
-	if err != nil {
-		return nil, errors.InternalError
-	}
-	err = ReloadBlueprints(cronManager)
-	if err != nil {
-		return nil, errors.InternalError
-	}
-	return &blueprint, nil
-}
-*/
-
 func validateBlueprint(blueprint *models.Blueprint) error {
+	// TODO: implement NORMAL mode
+	if blueprint.Mode == models.BLUEPRINT_MODE_NORMAL {
+		return fmt.Errorf("NORMAL mode is yet to be implemented")
+	}
 	// validation
 	err := vld.Struct(blueprint)
 	if err != nil {
 		return err
 	}
-	_, err = cron.ParseStandard(blueprint.CronConfig)
-	if err != nil {
-		return fmt.Errorf("invalid cronConfig: %w", err)
+	if blueprint.CronConfig != "" {
+		_, err = cron.ParseStandard(blueprint.CronConfig)
+		if err != nil {
+			return fmt.Errorf("invalid cronConfig: %w", err)
+		}
+	} else if blueprint.IsManual == false {
+		return fmt.Errorf("cronConfig is required for Automated blueprint")
 	}
-	tasks := make([][]models.NewTask, 0)
-	err = json.Unmarshal(blueprint.Tasks, &tasks)
-	if err != nil {
-		return fmt.Errorf("invalid tasks: %w", err)
-	}
-	// tasks should not be empty
-	if len(tasks) == 0 || len(tasks[0]) == 0 {
-		return fmt.Errorf("empty tasks")
+	if blueprint.Mode == models.BLUEPRINT_MODE_ADVANCED {
+		tasks := make([][]models.NewTask, 0)
+		err = json.Unmarshal(blueprint.Tasks, &tasks)
+		if err != nil {
+			return fmt.Errorf("invalid tasks: %w", err)
+		}
+		// tasks should not be empty
+		if len(tasks) == 0 || len(tasks[0]) == 0 {
+			return fmt.Errorf("empty tasks")
+		}
 	}
 	// TODO: validate each of every task object
 	return nil
 }
 
-func UpdateBlueprint(blueprint *models.Blueprint) error {
-	// validation
-	err := validateBlueprint(blueprint)
+func PatchBlueprint(id uint64, body map[string]interface{}) (*models.Blueprint, error) {
+	// load record from db
+	blueprint, err := GetBlueprint(id)
 	if err != nil {
-		return err
+		return nil, err
+	}
+	originMode := blueprint.Mode
+	err = mapstructure.Decode(body, blueprint)
+	if err != nil {
+		return nil, err
+	}
+	// make sure mode is not being update
+	if originMode != blueprint.Mode {
+		return nil, fmt.Errorf("mode is not updatable")
+	}
+	// validation
+	err = validateBlueprint(blueprint)
+	if err != nil {
+		return nil, err
 	}
 	// save
 	err = db.Save(blueprint).Error
 	if err != nil {
-		return errors.InternalError
+		return nil, errors.InternalError
 	}
 	// reload schedule
 	err = ReloadBlueprints(cronManager)
 	if err != nil {
-		return errors.InternalError
+		return nil, errors.InternalError
 	}
 	// done
-	return nil
+	return blueprint, nil
 }
 
 func DeleteBlueprint(id uint64) error {
@@ -185,7 +171,9 @@ func DeleteBlueprint(id uint64) error {
 
 func ReloadBlueprints(c *cron.Cron) error {
 	blueprints := make([]*models.Blueprint, 0)
-	err := db.Model(&models.Blueprint{}).Where("enable = ?", true).Find(&blueprints).Error
+	err := db.Model(&models.Blueprint{}).
+		Where("enable = ? AND is_manual = ?", true, false).
+		Find(&blueprints).Error
 	if err != nil {
 		panic(err)
 	}
@@ -227,5 +215,6 @@ func ReloadBlueprints(c *cron.Cron) error {
 	if len(blueprints) > 0 {
 		c.Start()
 	}
+	log.Info("total %d blueprints were scheduled", len(blueprints))
 	return nil
 }
