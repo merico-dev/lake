@@ -20,6 +20,7 @@ package tasks
 import (
 	"encoding/json"
 	"fmt"
+	. "github.com/apache/incubator-devlake/plugins/core/dal"
 	"net/http"
 	"net/url"
 
@@ -34,27 +35,33 @@ const RAW_COMMENTS_TABLE = "github_api_comments"
 // this struct should be moved to `github_api_common.go`
 
 func CollectApiComments(taskCtx core.SubTaskContext) error {
-	db := taskCtx.GetDb()
+	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 
 	since := data.Since
 	incremental := false
-	// user didn't specify a time range to sync, try load from database
-	// actually, for github pull, since doesn't make any sense, github pull api doesn't support it
 	if since == nil {
 		var latestUpdatedIssueComt models.GithubIssueComment
-		err := db.Model(&latestUpdatedIssueComt).
-			Joins("left join _tool_github_issues on _tool_github_issues.github_id = _tool_github_issue_comments.issue_id").
-			Where("_tool_github_issues.repo_id = ?", data.Repo.GithubId).
-			Order("github_updated_at DESC").Limit(1).Find(&latestUpdatedIssueComt).Error
+		err := db.All(
+			&latestUpdatedIssueComt,
+			Join("left join _tool_github_issues on _tool_github_issues.github_id = _tool_github_issue_comments.issue_id"),
+			Where(
+				"_tool_github_issues.repo_id = ? AND _tool_github_issues.connection_id = ?", data.Repo.GithubId, data.Repo.ConnectionId,
+			),
+			Orderby("github_updated_at DESC"),
+			Limit(1),
+		)
 		if err != nil {
 			return fmt.Errorf("failed to get latest github issue record: %w", err)
 		}
 		var latestUpdatedPrComt models.GithubPullRequestComment
-		err = db.Model(&latestUpdatedPrComt).
-			Joins("left join _tool_github_pull_requests on _tool_github_pull_requests.github_id = _tool_github_pull_request_comments.pull_request_id").
-			Where("_tool_github_pull_requests.repo_id = ?", data.Repo.GithubId).
-			Order("github_updated_at DESC").Limit(1).Find(&latestUpdatedPrComt).Error
+		err = db.All(
+			&latestUpdatedPrComt,
+			Join("left join _tool_github_pull_requests on _tool_github_pull_requests.github_id = _tool_github_pull_request_comments.pull_request_id"),
+			Where("_tool_github_pull_requests.repo_id = ? AND _tool_github_pull_requests.connection_id = ?", data.Repo.GithubId, data.Repo.ConnectionId),
+			Orderby("github_updated_at DESC"),
+			Limit(1),
+		)
 		if err != nil {
 			return fmt.Errorf("failed to get latest github issue record: %w", err)
 		}

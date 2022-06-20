@@ -23,8 +23,9 @@ import (
 )
 
 type GithubIssueComment struct {
-	GithubId        int `gorm:"primaryKey"`
-	IssueId         int `gorm:"index;comment:References the Issue"`
+	ConnectionId    uint64 `gorm:"primaryKey"`
+	GithubId        int    `gorm:"primaryKey"`
+	IssueId         int    `gorm:"index;comment:References the Issue"`
 	Body            string
 	AuthorUsername  string `gorm:"type:varchar(255)"`
 	AuthorUserId    int

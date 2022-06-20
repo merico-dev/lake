@@ -98,16 +98,37 @@ func NewDataFlowTester(t *testing.T, pluginName string, pluginMeta core.PluginMe
 	}
 }
 
-// ImportCsvIntoRawTable imports records from specified csv file into target table, note that existing data would be deleted first.
-func (t *DataFlowTester) ImportCsvIntoRawTable(csvRelPath string, tableName string) {
+// ImportCsvIntoRawTable imports records from specified csv file into target raw table, note that existing data would be deleted first.
+func (t *DataFlowTester) ImportCsvIntoRawTable(csvRelPath string, rawTableName string) {
 	csvIter := pluginhelper.NewCsvFileIterator(csvRelPath)
 	defer csvIter.Close()
-	t.FlushRawTable(tableName)
+	t.FlushRawTable(rawTableName)
 	// load rows and insert into target table
 	for csvIter.HasNext() {
 		toInsertValues := csvIter.Fetch()
 		toInsertValues[`data`] = json.RawMessage(toInsertValues[`data`].(string))
-		result := t.Db.Table(tableName).Create(toInsertValues)
+		result := t.Db.Table(rawTableName).Create(toInsertValues)
+		if result.Error != nil {
+			panic(result.Error)
+		}
+		assert.Equal(t.T, int64(1), result.RowsAffected)
+	}
+}
+
+// ImportCsvIntoTabler imports records from specified csv file into target tabler, note that existing data would be deleted first.
+func (t *DataFlowTester) ImportCsvIntoTabler(csvRelPath string, dst schema.Tabler) {
+	csvIter := pluginhelper.NewCsvFileIterator(csvRelPath)
+	defer csvIter.Close()
+	t.FlushTabler(dst)
+	// load rows and insert into target table
+	for csvIter.HasNext() {
+		toInsertValues := csvIter.Fetch()
+		for i := range toInsertValues {
+			if toInsertValues[i].(string) == `` {
+				toInsertValues[i] = nil
+			}
+		}
+		result := t.Db.Model(dst).Create(toInsertValues)
 		if result.Error != nil {
 			panic(result.Error)
 		}

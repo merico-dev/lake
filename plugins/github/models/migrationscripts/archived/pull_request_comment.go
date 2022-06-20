@@ -24,8 +24,9 @@ import (
 )
 
 type GithubPullRequestComment struct {
-	GithubId        int `gorm:"primaryKey"`
-	PullRequestId   int `gorm:"index"`
+	ConnectionId    uint64 `gorm:"primaryKey"`
+	GithubId        int    `gorm:"primaryKey"`
+	PullRequestId   int    `gorm:"index"`
 	Body            string
 	AuthorUsername  string `gorm:"type:varchar(255)"`
 	AuthorUserId    int

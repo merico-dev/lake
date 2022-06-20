@@ -19,6 +19,7 @@ package tasks
 
 import (
 	"encoding/json"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
 
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/github/models"
@@ -36,7 +37,7 @@ var ExtractApiCommentsMeta = core.SubTaskMeta{
 
 type IssueComment struct {
 	GithubId int `json:"id"`
-	Body     string
+	Body     json.RawMessage
 	User     struct {
 		Login string
 		Id    int
@@ -53,8 +54,9 @@ func ExtractApiComments(taskCtx core.SubTaskContext) error {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_COMMENTS_TABLE,
 		},
@@ -75,21 +77,22 @@ func ExtractApiComments(taskCtx core.SubTaskContext) error {
 				return nil, err
 			}
 			issue := &models.GithubIssue{}
-			err = taskCtx.GetDb().Where("number = ? and repo_id = ?", issueINumber, data.Repo.GithubId).Limit(1).Find(issue).Error
+			err = taskCtx.GetDal().All(issue, dal.Where("connection_id = ? and number = ? and repo_id = ?", data.Options.ConnectionId, issueINumber, data.Repo.GithubId))
 			if err != nil {
 				return nil, err
 			}
 			//if we can not find issues with issue number above, move the comments to github_pull_request_comments
 			if issue.GithubId == 0 {
 				pr := &models.GithubPullRequest{}
-				err = taskCtx.GetDb().Where("number = ? and repo_id = ?", issueINumber, data.Repo.GithubId).Limit(1).Find(pr).Error
+				err = taskCtx.GetDal().First(pr, dal.Where("connection_id = ? and number = ? and repo_id = ?", data.Options.ConnectionId, issueINumber, data.Repo.GithubId))
 				if err != nil {
 					return nil, err
 				}
 				githubPrComment := &models.GithubPullRequestComment{
+					ConnectionId:    data.Options.ConnectionId,
 					GithubId:        apiComment.GithubId,
 					PullRequestId:   pr.GithubId,
-					Body:            apiComment.Body,
+					Body:            string(apiComment.Body),
 					AuthorUsername:  apiComment.User.Login,
 					AuthorUserId:    apiComment.User.Id,
 					GithubCreatedAt: apiComment.GithubCreatedAt.ToTime(),
@@ -98,9 +101,10 @@ func ExtractApiComments(taskCtx core.SubTaskContext) error {
 				results = append(results, githubPrComment)
 			} else {
 				githubIssueComment := &models.GithubIssueComment{
+					ConnectionId:    data.Options.ConnectionId,
 					GithubId:        apiComment.GithubId,
 					IssueId:         issue.GithubId,
-					Body:            apiComment.Body,
+					Body:            string(apiComment.Body),
 					AuthorUsername:  apiComment.User.Login,
 					AuthorUserId:    apiComment.User.Id,
 					GithubCreatedAt: apiComment.GithubCreatedAt.ToTime(),

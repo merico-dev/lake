@@ -22,6 +22,7 @@ import (
 	"github.com/apache/incubator-devlake/models/domainlayer/code"
 	"github.com/apache/incubator-devlake/models/domainlayer/didgen"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
 	githubModels "github.com/apache/incubator-devlake/plugins/github/models"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"reflect"
@@ -35,14 +36,16 @@ var ConvertPullRequestCommentsMeta = core.SubTaskMeta{
 }
 
 func ConvertPullRequestComments(taskCtx core.SubTaskContext) error {
-	db := taskCtx.GetDb()
+	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 	repoId := data.Repo.GithubId
 
-	cursor, err := db.Model(&githubModels.GithubPullRequestComment{}).
-		Joins("left join _tool_github_pull_requests "+
-			"on _tool_github_pull_requests.github_id = _tool_github_pull_request_comments.pull_request_id").
-		Where("repo_id = ?", repoId).Rows()
+	cursor, err := db.Cursor(
+		dal.From(&githubModels.GithubPullRequestComment{}),
+		dal.Join("left join _tool_github_pull_requests "+
+			"on _tool_github_pull_requests.github_id = _tool_github_pull_request_comments.pull_request_id"),
+		dal.Where("repo_id = ? and _tool_github_pull_requests.connection_id = ?", repoId, data.Options.ConnectionId),
+	)
 	if err != nil {
 		return err
 	}
@@ -57,8 +60,9 @@ func ConvertPullRequestComments(taskCtx core.SubTaskContext) error {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_COMMENTS_TABLE,
 		},
@@ -66,9 +70,9 @@ func ConvertPullRequestComments(taskCtx core.SubTaskContext) error {
 			githubPullRequestComment := inputRow.(*githubModels.GithubPullRequestComment)
 			domainPrComment := &code.PullRequestComment{
 				DomainEntity: domainlayer.DomainEntity{
-					Id: prIdGen.Generate(githubPullRequestComment.GithubId),
+					Id: prIdGen.Generate(data.Options.ConnectionId, githubPullRequestComment.GithubId),
 				},
-				PullRequestId: prIdGen.Generate(githubPullRequestComment.PullRequestId),
+				PullRequestId: prIdGen.Generate(data.Options.ConnectionId, githubPullRequestComment.PullRequestId),
 				Body:          githubPullRequestComment.Body,
 				UserId:        userIdGen.Generate(githubPullRequestComment.AuthorUserId),
 				CreatedDate:   githubPullRequestComment.GithubCreatedAt,

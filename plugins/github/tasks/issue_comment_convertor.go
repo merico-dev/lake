@@ -22,6 +22,7 @@ import (
 	"github.com/apache/incubator-devlake/models/domainlayer/didgen"
 	"github.com/apache/incubator-devlake/models/domainlayer/ticket"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
 	githubModels "github.com/apache/incubator-devlake/plugins/github/models"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"reflect"
@@ -35,14 +36,16 @@ var ConvertIssueCommentsMeta = core.SubTaskMeta{
 }
 
 func ConvertIssueComments(taskCtx core.SubTaskContext) error {
-	db := taskCtx.GetDb()
+	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 	repoId := data.Repo.GithubId
 
-	cursor, err := db.Model(&githubModels.GithubIssueComment{}).
-		Joins("left join _tool_github_issues "+
-			"on _tool_github_issues.github_id = _tool_github_issue_comments.issue_id").
-		Where("repo_id = ?", repoId).Rows()
+	cursor, err := db.Cursor(
+		dal.From(&githubModels.GithubIssueComment{}),
+		dal.Join("left join _tool_github_issues "+
+			"on _tool_github_issues.github_id = _tool_github_issue_comments.issue_id"),
+		dal.Where("repo_id = ? and _tool_github_issues.connection_id = ?", repoId, data.Options.ConnectionId),
+	)
 	if err != nil {
 		return err
 	}
@@ -57,8 +60,9 @@ func ConvertIssueComments(taskCtx core.SubTaskContext) error {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_COMMENTS_TABLE,
 		},
@@ -66,9 +70,9 @@ func ConvertIssueComments(taskCtx core.SubTaskContext) error {
 			githubIssueComment := inputRow.(*githubModels.GithubIssueComment)
 			domainIssueComment := &ticket.IssueComment{
 				DomainEntity: domainlayer.DomainEntity{
-					Id: issueIdGen.Generate(githubIssueComment.GithubId),
+					Id: issueIdGen.Generate(data.Options.ConnectionId, githubIssueComment.GithubId),
 				},
-				IssueId:     issueIdGen.Generate(githubIssueComment.IssueId),
+				IssueId:     issueIdGen.Generate(data.Options.ConnectionId, githubIssueComment.IssueId),
 				Body:        githubIssueComment.Body,
 				UserId:      userIdGen.Generate(githubIssueComment.AuthorUserId),
 				CreatedDate: githubIssueComment.GithubCreatedAt,
