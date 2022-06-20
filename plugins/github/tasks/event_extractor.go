@@ -51,8 +51,9 @@ func ExtractApiEvents(taskCtx core.SubTaskContext) error {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_EVENTS_TABLE,
 		},
@@ -66,7 +67,7 @@ func ExtractApiEvents(taskCtx core.SubTaskContext) error {
 			if body.GithubId == 0 {
 				return nil, nil
 			}
-			githubIssueEvent, err := convertGithubEvent(body)
+			githubIssueEvent, err := convertGithubEvent(body, data.Options.ConnectionId)
 			if err != nil {
 				return nil, err
 			}
@@ -83,8 +84,9 @@ func ExtractApiEvents(taskCtx core.SubTaskContext) error {
 	return extractor.Execute()
 }
 
-func convertGithubEvent(event *IssueEvent) (*models.GithubIssueEvent, error) {
+func convertGithubEvent(event *IssueEvent, connId uint64) (*models.GithubIssueEvent, error) {
 	githubEvent := &models.GithubIssueEvent{
+		ConnectionId:    connId,
 		GithubId:        event.GithubId,
 		IssueId:         event.Issue.Id,
 		Type:            event.Event,

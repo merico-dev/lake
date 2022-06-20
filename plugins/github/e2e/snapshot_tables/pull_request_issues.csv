@@ -1,0 +1,2 @@
+pull_request_id,issue_id,pull_request_number,issue_number,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+gitlab:GithubPullRequest:1:246250598,gitlab:GithubIssue:1:401277739,23,22,"{""ConnectionId"":1,""Owner"":""panjf2000"",""Repo"":""ants""}",_raw_github_api_pull_requests,255,

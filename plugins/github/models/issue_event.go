@@ -23,6 +23,7 @@ import (
 )
 
 type GithubIssueEvent struct {
+	ConnectionId    uint64    `gorm:"primaryKey"`
 	GithubId        int       `gorm:"primaryKey"`
 	IssueId         int       `gorm:"index;comment:References the Issue"`
 	Type            string    `gorm:"type:varchar(255);comment:Events that can occur to an issue, ex. assigned, closed, labeled, etc."`

@@ -19,6 +19,7 @@ package tasks
 
 import (
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
 	githubModels "github.com/apache/incubator-devlake/plugins/github/models"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"reflect"
@@ -35,7 +36,7 @@ var EnrichPullRequestIssuesMeta = core.SubTaskMeta{
 }
 
 func EnrichPullRequestIssues(taskCtx core.SubTaskContext) (err error) {
-	db := taskCtx.GetDb()
+	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 	repoId := data.Repo.GithubId
 
@@ -48,9 +49,7 @@ func EnrichPullRequestIssues(taskCtx core.SubTaskContext) (err error) {
 		prBodyCloseRegex = regexp.MustCompile(prBodyClosePattern)
 	}
 	charPattern := regexp.MustCompile(`[a-zA-Z\s,]+`)
-	cursor, err := db.Model(&githubModels.GithubPullRequest{}).
-		Where("repo_id = ?", repoId).
-		Rows()
+	cursor, err := db.Cursor(dal.From(&githubModels.GithubPullRequest{}), dal.Where("repo_id = ?", repoId))
 	if err != nil {
 		return err
 	}
@@ -63,8 +62,9 @@ func EnrichPullRequestIssues(taskCtx core.SubTaskContext) (err error) {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_PULL_REQUEST_TABLE,
 		},
@@ -95,8 +95,11 @@ func EnrichPullRequestIssues(taskCtx core.SubTaskContext) (err error) {
 				if numFormatErr != nil {
 					continue
 				}
-				err = db.Where("number = ? and repo_id = ?", issueNumber, repoId).
-					Limit(1).Find(issue).Error
+				err = db.All(
+					issue,
+					dal.Where("number = ? and repo_id = ? and connection_id = ?", issueNumber, repoId, data.Options.ConnectionId),
+					dal.Limit(1),
+				)
 				if err != nil {
 					return nil, err
 				}
@@ -104,6 +107,7 @@ func EnrichPullRequestIssues(taskCtx core.SubTaskContext) (err error) {
 					continue
 				}
 				githubPullRequstIssue := &githubModels.GithubPullRequestIssue{
+					ConnectionId:      data.Options.ConnectionId,
 					PullRequestId:     githubPullRequst.GithubId,
 					IssueId:           issue.GithubId,
 					PullRequestNumber: githubPullRequst.Number,

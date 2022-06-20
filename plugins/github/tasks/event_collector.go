@@ -20,6 +20,7 @@ package tasks
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
 	"net/http"
 	"net/url"
 
@@ -41,7 +42,7 @@ var CollectApiEventsMeta = core.SubTaskMeta{
 }
 
 func CollectApiEvents(taskCtx core.SubTaskContext) error {
-	db := taskCtx.GetDb()
+	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 
 	since := data.Since
@@ -50,10 +51,13 @@ func CollectApiEvents(taskCtx core.SubTaskContext) error {
 	// actually, for github pull, since doesn't make any sense, github pull api doesn't support it
 	if since == nil {
 		var latestUpdatedIssueEvent models.GithubIssueEvent
-		err := db.Model(&latestUpdatedIssueEvent).
-			Joins("left join _tool_github_issues on _tool_github_issues.github_id = _tool_github_issue_events.issue_id").
-			Where("_tool_github_issues.repo_id = ?", data.Repo.GithubId).
-			Order("github_created_at DESC").Limit(1).Find(&latestUpdatedIssueEvent).Error
+		err := db.All(
+			&latestUpdatedIssueEvent,
+			dal.Join("left join _tool_github_issues on _tool_github_issues.github_id = _tool_github_issue_events.issue_id"),
+			dal.Where("_tool_github_issues.repo_id = ? and _tool_github_issues.repo_id = ?", data.Repo.GithubId, data.Repo.ConnectionId),
+			dal.Orderby("github_created_at DESC"),
+			dal.Limit(1),
+		)
 		if err != nil {
 			return fmt.Errorf("failed to get latest github issue record: %w", err)
 		}
@@ -69,8 +73,9 @@ func CollectApiEvents(taskCtx core.SubTaskContext) error {
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
 			Params: GithubApiParams{
-				Owner: data.Options.Owner,
-				Repo:  data.Options.Repo,
+				ConnectionId: data.Options.ConnectionId,
+				Owner:        data.Options.Owner,
+				Repo:         data.Options.Repo,
 			},
 			Table: RAW_EVENTS_TABLE,
 		},
