@@ -90,7 +90,7 @@ export default function GithubSettings (props) {
       <p className=''>Map your issue labels with each category
         to view corresponding metrics in the
         dashboard.</p>
-      <div style={{ maxWidth: '60%' }}>
+      <div style={{ }}>
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}
@@ -222,7 +222,7 @@ export default function GithubSettings (props) {
       <h5>Code Review{' '} <Tag className='bp3-form-helper-text'>RegExp</Tag></h5>
       <p className=''>Map your pull requests labels with each category to view corresponding metrics in the dashboard.</p>
 
-      <div style={{ maxWidth: '60%' }}>
+      <div style={{ }}>
         <div className='formContainer'>
           <FormGroup
             disabled={isSaving || isSavingConnection}

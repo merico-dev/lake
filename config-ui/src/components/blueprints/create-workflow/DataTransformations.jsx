@@ -211,7 +211,7 @@ const DataTransformations = (props) => {
                       {dataEntities[configuredConnection.id]?.find(
                         (e) => e.value === DataEntityTypes.TICKET
                       ) && (
-                        <>
+                        <div className='transformation-settings'>
                           {renderProviderSettings(
                             configuredConnection,
                             configuredConnection.provider,
@@ -220,7 +220,7 @@ const DataTransformations = (props) => {
                             ),
                             DataEntityTypes.TICKET
                           )}
-                        </>
+                        </div>
                       )}
                     </>
                   )}

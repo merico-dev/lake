@@ -214,3 +214,17 @@
     border-bottom-right-radius: 0;
   }
 }
+
+.transformation-settings {
+  .bp3-form-group {
+    &.bp3-inline {
+      label.bp3-label {
+        min-width: 130px;
+      }
+    }
+    
+    .bp3-form-content {
+      flex: 1;
+    }
+  }
+}
