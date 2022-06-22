@@ -36,6 +36,7 @@ func ConvertWorklog(taskCtx core.SubTaskContext) error {
 	db := taskCtx.GetDal()
 	logger.Info("convert board:%d", data.Options.WorkspaceId)
 	worklogIdGen := didgen.NewDomainIdGenerator(&models.TapdWorklog{})
+	userIdGen := didgen.NewDomainIdGenerator(&models.TapdUser{})
 	clauses := []dal.Clause{
 		dal.From(&models.TapdWorklog{}),
 		dal.Where("connection_id = ? AND workspace_id = ?", data.Options.ConnectionId, data.Options.WorkspaceId),
@@ -56,7 +57,7 @@ func ConvertWorklog(taskCtx core.SubTaskContext) error {
 				DomainEntity: domainlayer.DomainEntity{
 					Id: worklogIdGen.Generate(data.Options.ConnectionId, toolL.Id),
 				},
-				AuthorId:         UserIdGen.Generate(data.Options.ConnectionId, toolL.WorkspaceId, toolL.Owner),
+				AuthorId:         userIdGen.Generate(data.Options.ConnectionId, toolL.WorkspaceId, toolL.Owner),
 				Comment:          toolL.Memo,
 				TimeSpentMinutes: int(toolL.Timespent),
 				LoggedDate:       (*time.Time)(toolL.Created),
