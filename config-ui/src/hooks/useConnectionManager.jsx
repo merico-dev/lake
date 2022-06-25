@@ -87,7 +87,9 @@ function useConnectionManager(
           case Providers.JIRA:
             connectionPayload = {
               endpoint: endpointUrl,
-              token: token,
+              // token: token,
+              username: username,
+              password: password,
               proxy: proxy,
             }
             break
@@ -150,7 +152,7 @@ function useConnectionManager(
       }
       runTest()
     },
-    [provider.id, endpointUrl, password, proxy, token, username]
+    [provider?.id, endpointUrl, password, proxy, token, username]
   )
 
   const saveConnection = (configurationSettings = {}) => {
@@ -161,7 +163,9 @@ function useConnectionManager(
         connectionPayload = {
           name: name,
           endpoint: endpointUrl,
-          basicAuthEncoded: token,
+          // basicAuthEncoded: token,
+          username: username,
+          password: password,
           proxy: proxy,
           ...connectionPayload,
         }
@@ -170,7 +174,7 @@ function useConnectionManager(
         connectionPayload = {
           name: name,
           endpoint: endpointUrl,
-          auth: token,
+          token: token,
           proxy: proxy,
           ...connectionPayload,
         }
@@ -189,7 +193,7 @@ function useConnectionManager(
         connectionPayload = {
           name: name,
           endpoint: endpointUrl,
-          auth: token,
+          token: token,
           proxy: proxy,
           ...connectionPayload,
         }
@@ -345,7 +349,7 @@ function useConnectionManager(
         console.log('>> FAILED TO FETCH CONNECTION', e)
       }
     },
-    [provider.id, connectionId]
+    [provider?.id, connectionId]
   )
 
   const fetchAllConnections = useCallback(
@@ -361,7 +365,9 @@ function useConnectionManager(
         if (allSources) {
           const aC = await Promise.all([
             // @todo: re-enable JIRA & fix encKey warning msg (rebuild local db)
-            // request.get(`${DEVLAKE_ENDPOINT}/plugins/${Providers.JIRA}/connections`),
+            request.get(
+              `${DEVLAKE_ENDPOINT}/plugins/${Providers.JIRA}/connections`
+            ),
             request.get(
               `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITHUB}/connections`
             ),
@@ -431,7 +437,7 @@ function useConnectionManager(
         handleOfflineMode(e.response.status, e.response)
       }
     },
-    [provider.id, sourceLimits, handleOfflineMode]
+    [provider?.id, sourceLimits, handleOfflineMode]
   )
 
   const deleteConnection = useCallback(
@@ -458,7 +464,7 @@ function useConnectionManager(
         console.log('>> FAILED TO DELETE CONNECTION', e)
       }
     },
-    [provider.id]
+    [provider?.id]
   )
 
   const getConnectionName = useCallback((connectionId, connections) => {
@@ -476,7 +482,7 @@ function useConnectionManager(
           endpoint: c.Endpoint || c.endpoint,
           username: c.username,
           password: c.password,
-          auth: c.basicAuthEncoded || c.auth,
+          token: c.basicAuthEncoded || c.auth,
           proxy: c.Proxy || c.Proxy,
         }
         const onSuccess = (res) => {
@@ -556,7 +562,9 @@ function useConnectionManager(
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          // setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          setUsername(activeConnection.username)
+          setPassword(activeConnection.password)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
       }
@@ -564,7 +572,7 @@ function useConnectionManager(
       // ToastNotification.show({ message: `Fetched settings for ${activeConnection.name}.`, intent: 'success', icon: 'small-tick' })
       console.log('>> FETCHED CONNECTION FOR MODIFY', activeConnection)
     }
-  }, [activeConnection, provider.id])
+  }, [activeConnection, provider?.id])
 
   useEffect(() => {
     if (saveComplete && saveComplete.ID) {
@@ -583,7 +591,7 @@ function useConnectionManager(
       '>> CONNECTION MANAGER - RECEIVED ACTIVE PROVIDER...',
       provider
     )
-    if (provider && provider.id) {
+    if (provider && provider?.id) {
       // console.log(activeProvider)
     }
   }, [provider])

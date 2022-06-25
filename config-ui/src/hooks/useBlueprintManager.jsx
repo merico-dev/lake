@@ -142,7 +142,8 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       const blueprintPayload = {
         name,
         cronConfig: cronConfig === 'custom' ? customCronConfig : cronConfig,
-        tasks,
+        // @todo: refactor tasks ===> plan at higher levels
+        plan: tasks,
         settings,
         enable: enable
       }

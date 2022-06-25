@@ -35,6 +35,7 @@ import {
 } from '@/data/Providers'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
+import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
 import NoData from '@/components/NoData'
 
@@ -44,12 +45,15 @@ const DataScopes = (props) => {
     activeConnectionTab,
     blueprintConnections = [],
     dataEntitiesList = [],
+    boardsList =[],
     dataEntities = [],
     projects = [],
+    boards = [],
     configuredConnection,
     handleConnectionTabChange = () => {},
     setDataEntities = () => {},
     setProjects = () => {},
+    setBoards = () => {},
     prevStep = () => {},
     isSaving = false,
     isRunning = false,

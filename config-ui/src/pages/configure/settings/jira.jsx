@@ -43,7 +43,7 @@ const MAPPING_TYPES = {
 }
 
 export default function JiraSettings (props) {
-  const { connection, isSaving, onSettingsChange = () => {}, apiVersion = 2 } = props
+  const { connection, transformation = {}, isSaving, onSettingsChange = () => {}, apiVersion = 2 } = props
   // const { providerId, connectionId } = useParams()
   // const history = useHistory()
 
@@ -170,7 +170,7 @@ export default function JiraSettings (props) {
     // Fetch Issue Types & Fields from JIRA API Proxy
     fetchIssueTypes()
     fetchFields()
-  }, [connection.UpdatedAt, fetchIssueTypes, fetchFields])
+  }, [connection?.UpdatedAt, fetchIssueTypes, fetchFields])
 
   useEffect(() => {
     console.log('>>> JIRA SETTINGS :: FIELDS LIST DATA CHANGED!', fields)
@@ -186,9 +186,9 @@ export default function JiraSettings (props) {
   }, [issueTypes])
 
   useEffect(() => {
-    setJiraIssueEpicKeyField(fieldsList.find(f => f.value === connection.epicKeyField))
-    setJiraIssueStoryPointField(fieldsList.find(f => f.value === connection.storyPointField))
-  }, [fieldsList, connection.epicKeyField, connection.storyPointField])
+    setJiraIssueEpicKeyField(fieldsList.find(f => f.value === connection?.epicKeyField))
+    setJiraIssueStoryPointField(fieldsList.find(f => f.value === connection?.storyPointField))
+  }, [fieldsList, connection?.epicKeyField, connection?.storyPointField])
 
   return (
     <>

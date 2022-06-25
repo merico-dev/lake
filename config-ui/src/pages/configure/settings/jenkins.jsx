@@ -35,9 +35,9 @@ export default function JenkinsSettings (props) {
     history.push(`/integrations/${provider.id}`)
   }
 
-  useEffect(() => {
-    setErrors(['This integration doesn’t require any configuration.'])
-  }, [])
+  // useEffect(() => {
+  //   setErrors(['This integration doesn’t require any configuration.'])
+  // }, [])
 
   useEffect(() => {
     onSettingsChange({

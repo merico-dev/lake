@@ -23,66 +23,20 @@ import '@/styles/integration.scss'
 import '@/styles/connections.scss'
 
 export default function GithubSettings (props) {
-  const { connection, isSaving, isSavingConnection, onSettingsChange = () => {} } = props
-  const { providerId, connectionId } = useParams()
-  const [prType, setPrType] = useState('')
-  const [prComponent, setPrComponent] = useState('')
-  const [issueSeverity, setIssueSeverity] = useState('')
-  const [issueComponent, setIssueComponent] = useState('')
-  const [issuePriority, setIssuePriority] = useState('')
-  const [issueTypeBug, setIssueTypeBug] = useState('')
-  const [issueTypeRequirement, setIssueTypeRequirement] = useState('')
-  const [issueTypeIncident, setIssueTypeIncident] = useState('')
-
+  const { 
+    connection, 
+    transformation = {},
+    isSaving,
+    isSavingConnection,
+    onSettingsChange = () => {}, 
+    configuredProject 
+  } = props
+  
   const [errors, setErrors] = useState([])
 
   useEffect(() => {
-    setErrors(['This integration doesn’t require any configuration.'])
-  }, [])
-
-  useEffect(() => {
-    onSettingsChange({
-      errors,
-      providerId,
-      connectionId
-    })
-  }, [errors, onSettingsChange, connectionId, providerId])
-
-  useEffect(() => {
-    setPrType(connection.prType)
-    setPrComponent(connection.prComponent)
-    setIssueSeverity(connection.issueSeverity)
-    setIssuePriority(connection.issuePriority)
-    setIssueComponent(connection.issueComponent)
-    setIssueTypeBug(connection.issueTypeBug)
-    setIssueTypeRequirement(connection.issueTypeRequirement)
-    setIssueTypeIncident(connection.issueTypeIncident)
-  }, [connection])
-
-  useEffect(() => {
-    const settings = {
-      prType: prType,
-      prComponent: prComponent,
-      issueSeverity: issueSeverity,
-      issueComponent: issueComponent,
-      issuePriority: issuePriority,
-      issueTypeRequirement: issueTypeRequirement,
-      issueTypeBug: issueTypeBug,
-      issueTypeIncident: issueTypeIncident,
-    }
-    console.log('>> GITHUB INSTANCE SETTINGS FIELDS CHANGED!', settings)
-    onSettingsChange(settings)
-  }, [
-    prType,
-    prComponent,
-    issueSeverity,
-    issueComponent,
-    issuePriority,
-    issueTypeRequirement,
-    issueTypeBug,
-    issueTypeIncident,
-    onSettingsChange
-  ])
+    console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)
+  }, [transformation])
 
   return (
     <>
@@ -103,9 +57,11 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-severity'
               placeholder='severity/(.*)$'
-              defaultValue={issueSeverity}
-              onChange={(e) => setIssueSeverity(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssueSeverity('') : null}
+              // defaultValue={transformation?.issueSeverity}
+              value={transformation?.issueSeverity}
+              // key={issueSeverity}
+              onChange={(e) => onSettingsChange({...transformation, issueSeverity: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssueSeverity('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -124,9 +80,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-component'
               placeholder='component/(.*)$'
-              defaultValue={issueComponent}
-              onChange={(e) => setIssueComponent(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssueComponent('') : null}
+              value={transformation?.issueComponent}
+              // key={issueComponent}
+              onChange={(e) => onSettingsChange({...transformation, issueComponent: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssueComponent('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -145,9 +102,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-priority'
               placeholder='(highest|high|medium|low)$'
-              defaultValue={issuePriority}
-              onChange={(e) => setIssuePriority(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssuePriority('') : null}
+              value={transformation?.issuePriority}
+              // key={issuePriority}
+              onChange={(e) => onSettingsChange({...transformation, issuePriority: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssuePriority('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -166,9 +124,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-requirement'
               placeholder='(feat|feature|proposal|requirement)$'
-              defaultValue={issueTypeRequirement}
-              onChange={(e) => setIssueTypeRequirement(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeRequirement('') : null}
+              value={transformation?.issueTypeRequirement}
+              // key={issueTypeRequirement}
+              onChange={(e) => onSettingsChange({...transformation, issueTypeRequirement: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeRequirement('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -187,9 +146,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-bug'
               placeholder='(bug|broken)$'
-              defaultValue={issueTypeBug}
-              onChange={(e) => setIssueTypeBug(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeBug('') : null}
+              value={transformation?.issueTypeBug}
+              // key={issueTypeBug}
+              onChange={(e) => onSettingsChange({...transformation, issueTypeBug: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeBug('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -208,9 +168,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-issue-incident'
               placeholder='(incident|p0|p1|p2)$'
-              defaultValue={issueTypeIncident}
-              onChange={(e) => setIssueTypeIncident(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeIncident('') : null}
+              value={transformation?.issueTypeIncident}
+              // key={issueTypeIncident}
+              onChange={(e) => onSettingsChange({...transformation, issueTypeIncident: e.target.value}, configuredProject)}
+              //onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeIncident('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -235,9 +196,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-pr-type'
               placeholder='type/(.*)$'
-              defaultValue={prType}
-              onChange={(e) => setPrType(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setPrType('') : null}
+              value={transformation?.prType}
+              // key={prType}
+              onChange={(e) => onSettingsChange({...transformation, prType: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setPrType('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -256,9 +218,10 @@ export default function GithubSettings (props) {
             <InputGroup
               id='github-pr-type'
               placeholder='component/(.*)$'
-              defaultValue={prComponent}
-              onChange={(e) => setPrComponent(e.target.value)}
-              onKeyUp={(e) => e.target.value.length === 0 ? setPrComponent('') : null}
+              value={transformation?.prComponent}
+              // key={prComponent}
+              onChange={(e) => onSettingsChange({...transformation, prComponent: e.target.value}, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setPrComponent('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}

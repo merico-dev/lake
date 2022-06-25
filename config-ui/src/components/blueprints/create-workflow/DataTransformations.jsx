@@ -39,51 +39,42 @@ import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import NoData from '@/components/NoData'
 import StandardStackedList from '@/components/blueprints/StandardStackedList'
+import ProviderTransformationSettings from '@/components/blueprints/ProviderTransformationSettings'
+import GithubSettings from '@/pages/configure/settings/github'
 
 const DataTransformations = (props) => {
   const {
-    activeProvider,
+    provider,
     activeStep,
     activeConnectionTab,
     blueprintConnections = [],
-    dataEntities = [],
+    dataEntities = {},
     projects = [],
     boards = [],
+    transformations = {},
     configuredConnection,
     configuredProject,
+    configuredBoard,
     handleConnectionTabChange = () => {},
     prevStep = () => {},
     addBoardTransformation = () => {},
     addProjectTransformation = () => {},
-    // renderProviderSettings = () => {},
+    activeTransformation,
+    setTransformations = () => {},
+    setTransformationSettings = () => {},
     isSaving = false,
     isSavingConnection = false,
     isRunning = false,
   } = props
 
-  const renderProviderSettings = useCallback(
-    (activeConnection, providerId, activeProvider, dataEntityType) => {
-      console.log('>>> RENDERING PROVIDER SETTINGS...')
-      let settingsComponent = null
-      if (activeProvider && activeProvider.settings) {
-        settingsComponent = activeProvider.settings({
-          activeProvider,
-          activeConnection,
-          isSaving,
-          isSavingConnection,
-          // setSettings,
-          // @todo: fix setter
-        })
-      } else {
-        console.log(
-          '>> WARNING: NO PROVIDER SETTINGS RENDERED, PROVIDER = ',
-          activeProvider
-        )
-      }
-      return settingsComponent
-    },
-    [isSaving, isSavingConnection]
-  )
+  // @todo: lift this to a higher ancestor
+  const clearTransformations = useCallback(() => {
+    console.log('>>> CLEARING TRANSFORMATION RULES!')
+    setTransformations(existingTransformations => ({
+      ...existingTransformations,
+      [configuredProject]: {}
+    }))
+  }, [setTransformations, configuredProject])
 
   return (
     <div className='workflow-step workflow-step-add-transformation' data-step={activeStep?.id}>
@@ -201,28 +192,37 @@ const DataTransformations = (props) => {
                   )}
 
                   {configuredProject && (
-                    <>
+                    <div>
                       <h4>Project</h4>
                       <p>{configuredProject || '< select a project >'}</p>
-                      <h4>Data Transformation Rules</h4>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <h4 style={{ margin: 0 }}>
+                          Data Transformation Rules 
+                        </h4>
+                        <div>
+                          <Button minimal small text='Clear All' intent={Intent.NONE} href='#' onClick={clearTransformations} style={{ float: 'right' }} />
+                        </div>
+                      </div>
+
                       {!dataEntities[configuredConnection.id] ||
                         (dataEntities[configuredConnection.id]?.length ===
                           0 && <p>(No Data Entities Selected)</p>)}
                       {dataEntities[configuredConnection.id]?.find(
                         (e) => e.value === DataEntityTypes.TICKET
                       ) && (
-                        <div className='transformation-settings'>
-                          {renderProviderSettings(
-                            configuredConnection,
-                            configuredConnection.provider,
-                            integrationsData.find(
-                              (p) => p.id === configuredConnection.provider
-                            ),
-                            DataEntityTypes.TICKET
-                          )}
-                        </div>
+                        <ProviderTransformationSettings
+                          provider={integrationsData.find(i => i.id === configuredConnection?.provider)}
+                          connection={configuredConnection}
+                          configuredProject={configuredProject}
+                          configuredBoard={configuredBoard}
+                          transformation={activeTransformation}
+                          onSettingsChange={setTransformationSettings}
+                          entity={DataEntityTypes.TICKET}
+                          isSaving={isSaving}
+                          isSavingConnection={isSavingConnection}
+                        />
                       )}
-                    </>
+                    </div>
                   )}
                 </>
               )}

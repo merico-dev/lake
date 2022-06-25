@@ -26,7 +26,7 @@ import {
   ISSUE_FIELDS_ENDPOINT,
   BOARDS_ENDPOINT,
 } from '@/config/jiraApiProxy'
-import {
+{/* import {
   Button,
   Icon,
   Intent,
@@ -51,7 +51,7 @@ import {
   Colors,
   Tag,
   PopoverInteractionKind
-} from '@blueprintjs/core'
+} from '@blueprintjs/core' */}
 import { integrationsData } from '@/data/integrations'
 import {
   Providers,
@@ -60,10 +60,10 @@ import {
   ConnectionStatus,
   ConnectionStatusLabels,
 } from '@/data/Providers'
-import { MultiSelect, Select } from '@blueprintjs/select'
+// import { MultiSelect, Select } from '@blueprintjs/select'
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
-import AppCrumbs from '@/components/Breadcrumbs'
+// import AppCrumbs from '@/components/Breadcrumbs'
 import Content from '@/components/Content'
 
 import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
@@ -83,24 +83,24 @@ import useJIRA from '@/hooks/useJIRA'
 
 import WorkflowStepsBar from '@/components/blueprints/WorkflowStepsBar'
 import WorkflowActions from '@/components/blueprints/WorkflowActions'
-import FormValidationErrors from '@/components/messages/FormValidationErrors'
-import InputValidationError from '@/components/validation/InputValidationError'
-import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
-import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
-import BoardsSelector from '@/components/blueprints/BoardsSelector'
+// import FormValidationErrors from '@/components/messages/FormValidationErrors'
+// import InputValidationError from '@/components/validation/InputValidationError'
+// import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
+// import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
+// import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
-import StandardStackedList from '@/components/blueprints/StandardStackedList'
+// import StandardStackedList from '@/components/blueprints/StandardStackedList'
 import CodeInspector from '@/components/pipelines/CodeInspector'
-import NoData from '@/components/NoData'
+// import NoData from '@/components/NoData'
 
 import DataConnections from '@/components/blueprints/create-workflow/DataConnections'
 import DataScopes from '@/components/blueprints/create-workflow/DataScopes'
 import DataTransformations from '@/components/blueprints/create-workflow/DataTransformations'
 import DataSync from '@/components/blueprints/create-workflow/DataSync'
 
-import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
-import ClearButton from '@/components/ClearButton'
-import CronHelp from '@/images/cron-help.png'
+// import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
+// import ClearButton from '@/components/ClearButton'
+// import CronHelp from '@/images/cron-help.png'
 
 const CreateBlueprint = (props) => {
   const history = useHistory()
@@ -153,7 +153,8 @@ const CreateBlueprint = (props) => {
   const [showBlueprintInspector, setShowBlueprintInspector] = useState(false)
 
   const [dataScopes, setDataScopes] = useState([])
-  const [transformations, setTransformations] = useState([])
+  const [transformations, setTransformations] = useState({})
+  const [activeTransformation, setActiveTransformation] = useState()
 
   // @todo: replace with $projects
   const [projectId, setProjectId] = useState([])
@@ -368,10 +369,11 @@ const CreateBlueprint = (props) => {
   const handleConnectionTabChange = useCallback(
     (tab) => {
       console.log('>> CONNECTION TAB CHANGED', tab)
+      const selectedConnection = blueprintConnections.find((c) => c.id === Number(tab.split('-')[1]))
       setActiveConnectionTab(tab)
-      setConfiguredConnection(
-        blueprintConnections.find((c) => c.id === Number(tab.split('-')[1]))
-      )
+      setActiveProvider(integrationsData.find(p => p.id === selectedConnection.provider))
+      setProvider(integrationsData.find(p => p.id === selectedConnection.provider))
+      setConfiguredConnection(selectedConnection)    
     },
     [blueprintConnections]
   )
@@ -409,6 +411,7 @@ const CreateBlueprint = (props) => {
       entities = [],
       boards = [],
       projects = [],
+      transformations = [],
       defaultScope = { transformation: {}, options: {}, entities: [] }
     ) => {
       console.log(
@@ -424,19 +427,21 @@ const CreateBlueprint = (props) => {
         case Providers.JIRA:
           newScope = boards[connection.id]?.map((b) => ({
             ...newScope,
-            boardId: b.id,
-            // @todo: verify transformation payload for jira
-            transformation: {},
             options: {
+              boardId: b.id,
               // @todo: verify initial value of since date for jira provider
               since: new Date(),
             },
+            // @todo: verify transformation payload for jira
+            transformation: {},
           }))
           break
         case Providers.GITLAB:
           newScope = projects[connection.id]?.map((p) => ({
             ...newScope,
-            projectId: p,
+            options: {
+              projectId: p,
+            },
             // @todo: verify transformation payload for gitlab (none? - no additional settings)
             transformation: {},
           }))
@@ -450,18 +455,11 @@ const CreateBlueprint = (props) => {
         case Providers.GITHUB:
           newScope = projects[connection.id]?.map((p) => ({
             ...newScope,
-            owner: p.split('/')[0],
-            repo: p.split('/')[1],
-            transformation: {
-              prType: 'type/(.*)$',
-              prComponent: 'component/(.*)$',
-              issueSeverity: 'severity/(.*)$',
-              issueComponent: 'component/(.*)$',
-              issuePriority: '^(highest|high|medium|low)$',
-              issueTypeRequirement: '^(feat|feature|proposal|requirement)$',
-              issueTypeBug: '^(bug|failure|error)$',
-              issueTypeIncident: '',
+            options: {
+              owner: p.split('/')[0],
+              repo: p.split('/')[1],
             },
+            transformation: { ...transformations[p] },
           }))
           break
       }
@@ -488,6 +486,21 @@ const CreateBlueprint = (props) => {
   const addBoardTransformation = (board) => {
     setConfiguredBoard(board)
   }
+  
+  const addConnection = () => {
+    setManagedConnection(NullBlueprintConnection)
+    setConnectionDialogIsOpen(true)
+  }
+  
+  const setTransformationSettings = useCallback((settings, configuredProject) => {
+    // @todo: fix configuredProject is null here!
+    console.log(`>> SETTING TRANSFORMATION SETTINGS [PROJECT = ${configuredProject}]...`, settings)
+    setTransformations(existingTransformations => ({
+      ...existingTransformations,
+      [configuredProject]: { ...settings }
+    }))
+  }, [])
+  
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
@@ -549,35 +562,6 @@ const CreateBlueprint = (props) => {
       blueprintSettings
     )
   }, [blueprintSettings])
-
-  const addConnection = () => {
-    setManagedConnection(NullBlueprintConnection)
-    setConnectionDialogIsOpen(true)
-  }
-
-  {/* const renderProviderSettings = useCallback(
-    (activeConnection, providerId, activeProvider, dataEntityType) => {
-      console.log('>>> RENDERING PROVIDER SETTINGS...')
-      let settingsComponent = null
-      if (activeProvider && activeProvider.settings) {
-        settingsComponent = activeProvider.settings({
-          activeProvider,
-          activeConnection,
-          isSaving,
-          isSavingConnection,
-          // setSettings,
-          // @todo: fix setter
-        })
-      } else {
-        console.log(
-          '>> WARNING: NO PROVIDER SETTINGS RENDERED, PROVIDER = ',
-          activeProvider
-        )
-      }
-      return settingsComponent
-    },
-    [isSaving, isSavingConnection]
-  ) */}
 
   useEffect(() => {
     validateBlueprint()
@@ -658,20 +642,60 @@ const CreateBlueprint = (props) => {
           cIdx,
           dataEntities,
           boards,
-          projects
+          projects,
+          transformations
         ),
       })),
     }))
     // validatePipeline()
-  }, [blueprintConnections, dataEntities, boards, projects, validatePipeline])
+  }, [blueprintConnections, dataEntities, boards, projects, transformations, validatePipeline])
 
   useEffect(() => {
-    setConfiguredProject(projects.length > 0 ? projects[0] : null)
-  }, [projects])
-  
+    console.log('>> PROJECTS LIST', projects)
+    const getDefaultTransformations = (providerId) => {
+      let transforms = {}
+        switch(providerId) {
+          case Providers.GITHUB:
+            transforms = {
+              prType: '',
+              prComponent: '',
+              issueSeverity: '',
+              issueComponent: '',
+              issuePriority: '',
+              issueTypeRequirement: '',
+              issueTypeBug: '',
+              issueTypeIncident: '',
+            }
+          break
+          case Providers.JIRA:
+          break
+          case Providers.JENKINS:
+          break
+          case Providers.GITLAB:
+          break
+        }
+      return transforms
+    }
+    // @todo: check if this setter is required at this level
+    // @todo: fix lost transformations when connection tabs switch
+    // setConfiguredProject(projects.length > 0 ? projects[0] : null)
+    const initializeTransformations = (pV, cV) => ({ ...pV, [cV]: getDefaultTransformations(configuredConnection?.provider)})
+    const projectTransformation = projects[configuredConnection?.id]
+    if (projectTransformation) {
+      setTransformations(cT => ({
+        ...projectTransformation.reduce(initializeTransformations, {})
+      }))
+    }
+  }, [projects, configuredConnection])
+
   useEffect(() => {
-    
-  }, [managedConnection])
+    console.log('>>> SELECTED PROJECT TO CONFIGURE...', configuredProject)
+    setActiveTransformation(aT => configuredProject ? transformations[configuredProject] : aT)
+  }, [configuredProject, transformations])
+
+  useEffect(() => {
+    console.log('>>> ACTIVE/MODIFYING TRANSFORMATION RULES...', activeTransformation)
+  }, [activeTransformation])
 
   return (
     <>
@@ -701,16 +725,20 @@ const CreateBlueprint = (props) => {
 
               {activeStep?.id === 2 && (
                 <DataScopes
+                  provider={provider}
                   activeStep={activeStep}
                   activeConnectionTab={activeConnectionTab}
                   blueprintConnections={blueprintConnections}
                   dataEntitiesList={dataEntitiesList}
+                  boardsList={boardsList}
+                  boards={boards}
                   dataEntities={dataEntities}
                   projects={projects}
                   configuredConnection={configuredConnection}
                   handleConnectionTabChange={handleConnectionTabChange}
                   setDataEntities={setDataEntities}
                   setProjects={setProjects}
+                  setBoards={setBoards}
                   prevStep={prevStep}
                   isSaving={isSaving}
                   isRunning={isRunning}
@@ -719,7 +747,7 @@ const CreateBlueprint = (props) => {
 
               {activeStep?.id === 3 && (
                 <DataTransformations
-                  activeProvider={activeProvider}
+                  provider={provider}
                   activeStep={activeStep}
                   activeConnectionTab={activeConnectionTab}
                   blueprintConnections={blueprintConnections}
@@ -728,11 +756,15 @@ const CreateBlueprint = (props) => {
                   boards={boards}
                   configuredConnection={configuredConnection}
                   configuredProject={configuredProject}
+                  configurdBoard={configuredBoard}
                   handleConnectionTabChange={handleConnectionTabChange}
                   prevStep={prevStep}
                   addBoardTransformation={addBoardTransformation}
                   addProjectTransformation={addProjectTransformation}
-                  // renderProviderSettings={renderProviderSettings}
+                  transformations={transformations}
+                  activeTransformation={activeTransformation}
+                  setTransformations={setTransformations}
+                  setTransformationSettings={setTransformationSettings}
                   isSaving={isSaving}
                   isSavingConnection={isSavingConnection}
                   isRunning={isRunning}
@@ -804,7 +836,7 @@ const CreateBlueprint = (props) => {
         activePipeline={{
           ID: 0,
           name,
-          tasks: blueprintTasks,
+          plan: blueprintTasks,
           settings: blueprintSettings,
           cronConfig,
           enable,

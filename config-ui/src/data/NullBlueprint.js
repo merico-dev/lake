@@ -31,7 +31,11 @@ const NullBlueprint = {
   updatedAt: null,
   name: null,
   // Advanced mode uses tasks
+  // @todo sort out which key is to be used
   tasks: [
+    []
+  ],
+  plan: [
     []
   ],
   // Normal mode uses settings

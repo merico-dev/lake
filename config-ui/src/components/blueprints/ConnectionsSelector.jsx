@@ -121,7 +121,7 @@ const ConnectionsSelector = (props) => {
             selectedItems={selectedItems}
             activeItem={activeItem}
             itemPredicate={(query, item) =>
-              item?.title.toLowerCase().indexOf(query.toLowerCase()) >= 0
+              item?.title?.toLowerCase().indexOf(query.toLowerCase()) >= 0
             }
             itemRenderer={itemRenderer}
             tagRenderer={tagRenderer}
