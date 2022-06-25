@@ -580,7 +580,21 @@ const CreateBlueprint = (props) => {
     setConfiguredConnection(
       blueprintConnections.length > 0 ? blueprintConnections[0] : null
     )
-    const initializeEntities = (pV, cV) => ({ ...pV, [cV.id]: [] })
+    const getDefaultEntities = (providerId) => {
+      let entities = []
+      switch (providerId) {
+        case Providers.JIRA:
+        case Providers.GITHUB:
+        case Providers.GITLAB:
+          entities = DEFAULT_DATA_ENTITIES.filter((d) => d.name !== 'ci-cd')
+          break
+        case Providers.JENKINS:
+          entities = DEFAULT_DATA_ENTITIES.filter((d) => d.name === 'ci-cd')
+          break
+      }
+      return entities
+    }
+    const initializeEntities = (pV, cV) => ({ ...pV, [cV.id]: !pV[cV.id] ? getDefaultEntities(cV?.provider) : [] })
     const initializeProjects = (pV, cV) => ({ ...pV, [cV.id]: [] })
     const initializeBoards = (pV, cV) => ({ ...pV, [cV.id]: [] })
     setDataEntities((dE) => ({
@@ -668,6 +682,12 @@ const CreateBlueprint = (props) => {
             }
           break
           case Providers.JIRA:
+            transforms = {
+              epicKeyField: '',
+              typeMappings: '',
+              storyPointField: '',
+              remotelinkCommitShaPattern: ''
+            }
           break
           case Providers.JENKINS:
           break
@@ -836,7 +856,7 @@ const CreateBlueprint = (props) => {
         activePipeline={{
           ID: 0,
           name,
-          plan: blueprintTasks,
+          tasks: blueprintTasks,
           settings: blueprintSettings,
           cronConfig,
           enable,

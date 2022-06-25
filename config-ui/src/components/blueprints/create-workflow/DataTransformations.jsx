@@ -200,7 +200,16 @@ const DataTransformations = (props) => {
                           Data Transformation Rules 
                         </h4>
                         <div>
-                          <Button minimal small text='Clear All' intent={Intent.NONE} href='#' onClick={clearTransformations} style={{ float: 'right' }} />
+                          <Button
+                            minimal
+                            small
+                            text='Clear All'
+                            intent={Intent.NONE}
+                            href='#'
+                            onClick={clearTransformations}
+                            style={{ float: 'right' }} 
+                            disabled={Object.keys(activeTransformation || {}).length === 0}
+                          />
                         </div>
                       </div>
 
