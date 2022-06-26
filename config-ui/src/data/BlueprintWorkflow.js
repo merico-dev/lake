@@ -23,19 +23,36 @@ const WorkflowSteps = [
     active: 1,
     name: 'add-connections',
     title: 'Add Data Connections',
+    complete: false,
+    icon: null,
+    errors: []
   },
-  { id: 2, active: 0, name: 'set-data-scope', title: 'Set Data Scope' },
+  {
+    id: 2,
+    active: 0,
+    name: 'set-data-scope',
+    title: 'Set Data Scope',
+    complete: false,
+    icon: null,
+    errors: []
+  },
   {
     id: 3,
     active: 0,
     name: 'add-transformation',
     title: 'Add Transformation (Optional)',
+    complete: false,
+    icon: null,
+    errors: []
   },
   {
     id: 4,
     active: 0,
     name: 'set-sync-frequeny',
     title: 'Set Sync Frequency',
+    complete: false,
+    icon: null,
+    errors: []
   },
 ]
 

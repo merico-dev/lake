@@ -34,8 +34,8 @@ const WorkflowActions = (props) => {
     activeStep,
     setShowBlueprintInspector = () => {},
     validationErrors = [],
-    prevStep = () => {},
-    nextStep = () => {},
+    onPrev = () => {},
+    onNext = () => {},
   } = props
 
   return (
@@ -43,7 +43,7 @@ const WorkflowActions = (props) => {
       <Button
         intent={Intent.PRIMARY}
         text='Previous Step'
-        onClick={prevStep}
+        onClick={onPrev}
         disabled={activeStep?.id === 1}
       />
 
@@ -77,7 +77,7 @@ const WorkflowActions = (props) => {
           <Button
             intent={Intent.PRIMARY}
             text='Next Step'
-            onClick={nextStep}
+            onClick={onNext}
             rightIcon={
               validationErrors.length > 0 ? (
                 <Popover

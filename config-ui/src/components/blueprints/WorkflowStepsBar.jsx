@@ -28,36 +28,45 @@ import {
 import { WorkflowSteps } from '@/data/BlueprintWorkflow'
 
 const WorkflowStepsBar = (props) => {
-  const { activeStep } = props
+  const { activeStep, steps = [] } = props
+
+  const getWorkflowStep = (stepId) => {
+    return WorkflowSteps.find(s => s.id === stepId)
+  }
 
   return (
     <div className='workflow-bar'>
-      <ul className='workflow-steps'>
-        <li className={`workflow-step ${activeStep?.id === 1 ? 'active' : ''}`}>
+      {steps.length > 0 && (<ul className='workflow-steps'>
+        {(steps.map((step, sIdx) => (
+          <li
+            key={`workflow-step-key-${sIdx}`}
+            className={`workflow-step ${activeStep?.id === step?.id ? 'active' : ''} ${step.complete ? 'is-completed' : ''}`}
+          >
+            <a href='#' className='step-id'>
+              {step?.complete ? <Icon icon='tick' size={14} /> : step?.id}
+            </a>
+            {step.title}
+          </li>
+        )))}
+        {/* <li className={`workflow-step ${activeStep?.id === 2 ? 'active' : ''} ${activeStep?.completed ? 'is-completed' : ''}`}>
           <a href='#' className='step-id'>
-            1
+          {activeStep?.id === 2 && activeStep?.completed ? <Icon icon='tick' size={14} /> : 2}
           </a>
-          Add Data Connections
+          {getWorkflowStep(2)?.title || 'Set Data Scope'}
         </li>
-        <li className={`workflow-step ${activeStep?.id === 2 ? 'active' : ''}`}>
+        <li className={`workflow-step ${activeStep?.id === 3 ? 'active' : ''} ${activeStep?.completed ? 'is-completed' : ''}`}>
           <a href='#' className='step-id'>
-            2
+            {activeStep?.id === 3 && activeStep?.completed ? <Icon icon='tick' size={14} /> : 3}
           </a>
-          Set Data Scope
+          {getWorkflowStep(3)?.title || 'Add Transformation (Optional)'}
         </li>
-        <li className={`workflow-step ${activeStep?.id === 3 ? 'active' : ''}`}>
+        <li className={`workflow-step ${activeStep?.id === 4 ? 'active' : ''} ${activeStep?.completed ? 'is-completed' : ''}`}>
           <a href='#' className='step-id'>
-            3
+            {activeStep?.id === 4 && activeStep?.completed ? <Icon icon='tick' size={14} /> : 4}
           </a>
-          Add Transformation (Optional)
-        </li>
-        <li className={`workflow-step ${activeStep?.id === 4 ? 'active' : ''}`}>
-          <a href='#' className='step-id'>
-            4
-          </a>
-          Set Sync Frequency
-        </li>
-      </ul>
+          {getWorkflowStep(4)?.title || 'Set Sync Frequency'}
+        </li> */}
+      </ul>)}
     </div>
   )
 }

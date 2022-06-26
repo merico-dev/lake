@@ -16,7 +16,6 @@
  *
  */
 import React, { Fragment, useEffect, useState, useCallback } from 'react'
-// import { useSelector, useDispatch } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
 import { useHistory, useLocation, Link } from 'react-router-dom'
 import dayjs from '@/utils/time'
@@ -26,32 +25,6 @@ import {
   ISSUE_FIELDS_ENDPOINT,
   BOARDS_ENDPOINT,
 } from '@/config/jiraApiProxy'
-{/* import {
-  Button,
-  Icon,
-  Intent,
-  Switch,
-  FormGroup,
-  ButtonGroup,
-  RadioGroup,
-  Radio,
-  InputGroup,
-  TagInput,
-  Divider,
-  Elevation,
-  TextArea,
-  Tabs,
-  Tab,
-  Card,
-  Popover,
-  Tooltip,
-  Label,
-  MenuItem,
-  Position,
-  Colors,
-  Tag,
-  PopoverInteractionKind
-} from '@blueprintjs/core' */}
 import { integrationsData } from '@/data/integrations'
 import {
   Providers,
@@ -60,7 +33,6 @@ import {
   ConnectionStatus,
   ConnectionStatusLabels,
 } from '@/data/Providers'
-// import { MultiSelect, Select } from '@blueprintjs/select'
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
 // import AppCrumbs from '@/components/Breadcrumbs'
@@ -83,13 +55,7 @@ import useJIRA from '@/hooks/useJIRA'
 
 import WorkflowStepsBar from '@/components/blueprints/WorkflowStepsBar'
 import WorkflowActions from '@/components/blueprints/WorkflowActions'
-// import FormValidationErrors from '@/components/messages/FormValidationErrors'
-// import InputValidationError from '@/components/validation/InputValidationError'
-// import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
-// import DataEntitiesSelector from '@/components/blueprints/DataEntitiesSelector'
-// import BoardsSelector from '@/components/blueprints/BoardsSelector'
 import ConnectionDialog from '@/components/blueprints/ConnectionDialog'
-// import StandardStackedList from '@/components/blueprints/StandardStackedList'
 import CodeInspector from '@/components/pipelines/CodeInspector'
 // import NoData from '@/components/NoData'
 
@@ -99,14 +65,13 @@ import DataTransformations from '@/components/blueprints/create-workflow/DataTra
 import DataSync from '@/components/blueprints/create-workflow/DataSync'
 
 // import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
-// import ClearButton from '@/components/ClearButton'
-// import CronHelp from '@/images/cron-help.png'
 
 const CreateBlueprint = (props) => {
   const history = useHistory()
   // const dispatch = useDispatch()
 
-  const [activeStep, setActiveStep] = useState(WorkflowSteps.find((s) => s.id === 1))
+  const [blueprintSteps, setBlueprintSteps] = useState(WorkflowSteps)
+  const [activeStep, setActiveStep] = useState(blueprintSteps.find((s) => s.id === 1))
   const [advancedMode, setAdvancedMode] = useState(false)
   const [activeProvider, setActiveProvider] = useState(integrationsData[0])
 
@@ -358,13 +323,13 @@ const CreateBlueprint = (props) => {
 
   const nextStep = useCallback(() => {
     setActiveStep((aS) =>
-      WorkflowSteps.find((s) => s.id === Math.min(aS.id + 1, WorkflowSteps.length))
+      blueprintSteps.find((s) => s.id === Math.min(aS.id + 1, blueprintSteps.length))
     )
-  }, [WorkflowSteps])
+  }, [blueprintSteps])
 
   const prevStep = useCallback(() => {
-    setActiveStep((aS) => WorkflowSteps.find((s) => s.id === Math.max(aS.id - 1, 1)))
-  }, [WorkflowSteps])
+    setActiveStep((aS) => blueprintSteps.find((s) => s.id === Math.max(aS.id - 1, 1)))
+  }, [blueprintSteps])
 
   const handleConnectionTabChange = useCallback(
     (tab) => {
@@ -509,6 +474,7 @@ const CreateBlueprint = (props) => {
       const getAllSources = true
       fetchAllConnections(enableNotifications, getAllSources)
     }
+    setBlueprintSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
   }, [activeStep])
 
   useEffect(() => {
@@ -717,6 +683,10 @@ const CreateBlueprint = (props) => {
     console.log('>>> ACTIVE/MODIFYING TRANSFORMATION RULES...', activeTransformation)
   }, [activeTransformation])
 
+  useEffect(() => {
+    console.log('>>> BLUEPRINT WORKFLOW STEPS...', blueprintSteps)
+  }, [blueprintSteps])
+
   return (
     <>
       <div className='container'>
@@ -724,7 +694,7 @@ const CreateBlueprint = (props) => {
         <Sidebar />
         <Content>
           <main className='main'>
-            <WorkflowStepsBar activeStep={activeStep} />
+            <WorkflowStepsBar activeStep={activeStep} steps={blueprintSteps} />
 
             <div
               className={`workflow-content workflow-step-id-${activeStep?.id}`}
@@ -810,8 +780,8 @@ const CreateBlueprint = (props) => {
               activeStep={activeStep}
               setShowBlueprintInspector={setShowBlueprintInspector}
               validationErrors={validationErrors}
-              nextStep={nextStep}
-              prevStep={prevStep}
+              onNext={nextStep}
+              onPrev={prevStep}
             />
           </main>
         </Content>

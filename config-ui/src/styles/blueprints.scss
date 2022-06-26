@@ -63,6 +63,13 @@
         }
       }
 
+      &.is-completed {
+        > a {
+          background-color: #74f7a0;
+          color: #ffffff;
+        }
+      }
+
       &:hover {
         > a {
           background-color: #dee2ec;
