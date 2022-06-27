@@ -57,6 +57,7 @@ const DataSync = (props) => {
     createCron = () => {},
     setCustomCronConfig = () => {},
     getCronPresetByConfig = () => {},
+    advancedMode = false
   } = props
 
   return (

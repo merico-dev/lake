@@ -27,6 +27,11 @@ import {
 } from '@/config/jiraApiProxy'
 import { integrationsData } from '@/data/integrations'
 import {
+  Divider,
+  Elevation,
+  Card,
+} from '@blueprintjs/core'
+import {
   Providers,
   ProviderTypes,
   ProviderIcons,
@@ -39,11 +44,16 @@ import Sidebar from '@/components/Sidebar'
 import Content from '@/components/Content'
 
 import { DataEntities, DataEntityTypes } from '@/data/DataEntities'
-import { NullBlueprint } from '@/data/NullBlueprint'
+import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 import { NullConnection } from '@/data/NullConnection'
 
-import { WorkflowSteps, DEFAULT_DATA_ENTITIES, DEFAULT_BOARDS } from '@/data/BlueprintWorkflow'
+import { 
+  WorkflowSteps,
+  WorkflowAdvancedSteps,
+  DEFAULT_DATA_ENTITIES,
+  DEFAULT_BOARDS 
+} from '@/data/BlueprintWorkflow'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
 import usePipelineManager from '@/hooks/usePipelineManager'
@@ -63,6 +73,7 @@ import DataConnections from '@/components/blueprints/create-workflow/DataConnect
 import DataScopes from '@/components/blueprints/create-workflow/DataScopes'
 import DataTransformations from '@/components/blueprints/create-workflow/DataTransformations'
 import DataSync from '@/components/blueprints/create-workflow/DataSync'
+import AdvancedJSON from '../../components/blueprints/create-workflow/AdvancedJSON'
 
 // import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 
@@ -70,9 +81,11 @@ const CreateBlueprint = (props) => {
   const history = useHistory()
   // const dispatch = useDispatch()
 
-  const [blueprintSteps, setBlueprintSteps] = useState(WorkflowSteps)
-  const [activeStep, setActiveStep] = useState(blueprintSteps.find((s) => s.id === 1))
+  const [blueprintAdvancedSteps, setBlueprintAdvancedSteps] = useState(WorkflowAdvancedSteps)
+  const [blueprintNormalSteps, setBlueprintNormalSteps] = useState(WorkflowSteps)
+  const [blueprintSteps, setBlueprintSteps] = useState(blueprintNormalSteps)  
   const [advancedMode, setAdvancedMode] = useState(false)
+  const [activeStep, setActiveStep] = useState(blueprintSteps.find((s) => s.id === 1))
   const [activeProvider, setActiveProvider] = useState(integrationsData[0])
 
   const [enabledProviders, setEnabledProviders] = useState([])
@@ -83,7 +96,7 @@ const CreateBlueprint = (props) => {
     JSON.stringify([runTasks], null, '  ')
   )
   const [isValidConfiguration, setIsValidConfiguration] = useState(false)
-  const [validationError, setValidationError] = useState()
+  const [validationAdvancedError, setValidationAdvancedError] = useState()
 
   const [connectionDialogIsOpen, setConnectionDialogIsOpen] = useState(false)
   const [managedConnection, setManagedConnection] = useState(
@@ -173,7 +186,7 @@ const CreateBlueprint = (props) => {
     setSettings: setBlueprintSettings,
     setDetectedProviderTasks,
     setEnable: setEnableBlueprint,
-    setMode,
+    setMode: setBlueprintMode,
     // eslint-disable-next-line no-unused-vars
     isFetching: isFetchingBlueprints,
     isSaving,
@@ -302,7 +315,7 @@ const CreateBlueprint = (props) => {
     clearConnection: clearActiveConnection
   } = useConnectionManager({
     activeProvider,
-    connectionId: managedConnection?.id
+    connectionId: managedConnection?.connectionId
   }, manageConnection?.id !== null ? true : false)
 
   const {
@@ -465,7 +478,23 @@ const CreateBlueprint = (props) => {
       [configuredProject]: { ...settings }
     }))
   }, [])
+
+  const handleAdvancedMode = (enableAdvanced = true) => {
+    setAdvancedMode(enableAdvanced)
+  }
   
+  const isValidCode = useCallback(() => {
+    let isValid = false
+    try {
+      const parsedCode = parseJSON(rawConfiguration)
+      isValid = parsedCode
+    } catch (e) {
+      console.log('>> FORMAT CODE: Invalid Code Format!', e)
+      setValidationAdvancedError(e.message)
+    }
+    setIsValidConfiguration(isValid)
+    return isValid
+  }, [rawConfiguration])
 
   useEffect(() => {
     console.log('>> ACTIVE STEP CHANGED: ', activeStep)
@@ -474,7 +503,8 @@ const CreateBlueprint = (props) => {
       const getAllSources = true
       fetchAllConnections(enableNotifications, getAllSources)
     }
-    setBlueprintSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
+    setBlueprintNormalSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
+    setBlueprintAdvancedSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
   }, [activeStep])
 
   useEffect(() => {
@@ -687,6 +717,17 @@ const CreateBlueprint = (props) => {
     console.log('>>> BLUEPRINT WORKFLOW STEPS...', blueprintSteps)
   }, [blueprintSteps])
 
+  useEffect(() => {
+    setBlueprintSteps(advancedMode ? blueprintAdvancedSteps : blueprintNormalSteps)
+    setBlueprintMode(advancedMode ? BlueprintMode.ADVANCED : BlueprintMode.NORMAL)
+  }, [advancedMode, blueprintNormalSteps, blueprintAdvancedSteps])
+
+  useEffect(() => {
+    if (isValidCode()) {
+      setRunTasksAdvanced(JSON.parse(rawConfiguration))
+    }
+  }, [rawConfiguration, isValidCode])
+
   return (
     <>
       <div className='container'>
@@ -699,17 +740,71 @@ const CreateBlueprint = (props) => {
             <div
               className={`workflow-content workflow-step-id-${activeStep?.id}`}
             >
+            {advancedMode 
+            ? 
+              (<>
+                {activeStep?.id === 1 && (
+                  <AdvancedJSON
+                    activeStep={activeStep}
+                    advancedMode={advancedMode}
+                    runTasksAdvanced={runTasksAdvanced}
+                    blueprintConnections={blueprintConnections}
+                    connectionsList={connectionsList}
+                    name={name}
+                    setBlueprintName={setBlueprintName}
+                    // setBlueprintConnections={setBlueprintConnections}
+                    fieldHasError={fieldHasError}
+                    getFieldError={getFieldError}
+                    // addConnection={addConnection}
+                    // manageConnection={manageConnection}
+                    onAdvancedMode={handleAdvancedMode}
+                    // @todo add multistage checker method
+                    isMultiStagePipeline={() => {}}
+                    rawConfiguration={rawConfiguration}
+                    setRawConfiguration={setRawConfiguration}
+                    isSaving={isSaving}
+                    isValidConfiguration={isValidConfiguration}
+                    validationAdvancedError={validationAdvancedError}
+                    validationErrors={validationErrors}
+                  />
+                )}
+
+                { 
+                  // @todo: advanced mode step 2 (validate)
+                }
+
+                {activeStep?.id === 3 && (
+                  <DataSync
+                    activeStep={activeStep}
+                    advancedMode={advancedMode}
+                    cronConfig={cronConfig}
+                    customCronConfig={customCronConfig}
+                    createCron={createCron}
+                    setCronConfig={setCronConfig}
+                    getCronPreset={getCronPreset}
+                    fieldHasError={fieldHasError}
+                    getFieldError={getFieldError}
+                    setCustomCronConfig={setCustomCronConfig}
+                    getCronPresetByConfig={getCronPresetByConfig}
+                  />
+                )}
+              </>
+            ) :
+            (<>
               {activeStep?.id === 1 && (
                 <DataConnections
                   activeStep={activeStep}
+                  advancedMode={advancedMode}
                   blueprintConnections={blueprintConnections}
                   connectionsList={connectionsList}
+                  name={name}
                   setBlueprintName={setBlueprintName}
                   setBlueprintConnections={setBlueprintConnections}
                   fieldHasError={fieldHasError}
                   getFieldError={getFieldError}
                   addConnection={addConnection}
                   manageConnection={manageConnection}
+                  onAdvancedMode={handleAdvancedMode}
                 />
               )}
 
@@ -717,6 +812,7 @@ const CreateBlueprint = (props) => {
                 <DataScopes
                   provider={provider}
                   activeStep={activeStep}
+                  advancedMode={advancedMode}
                   activeConnectionTab={activeConnectionTab}
                   blueprintConnections={blueprintConnections}
                   dataEntitiesList={dataEntitiesList}
@@ -739,6 +835,7 @@ const CreateBlueprint = (props) => {
                 <DataTransformations
                   provider={provider}
                   activeStep={activeStep}
+                  advancedMode={advancedMode}
                   activeConnectionTab={activeConnectionTab}
                   blueprintConnections={blueprintConnections}
                   dataEntities={dataEntities}
@@ -763,6 +860,8 @@ const CreateBlueprint = (props) => {
 
               {activeStep?.id === 4 && (
                 <DataSync
+                  activeStep={activeStep}
+                  advancedMode={advancedMode}
                   cronConfig={cronConfig}
                   customCronConfig={customCronConfig}
                   createCron={createCron}
@@ -774,10 +873,14 @@ const CreateBlueprint = (props) => {
                   getCronPresetByConfig={getCronPresetByConfig}
                 />
               )}
+
+            </>)}
             </div>
 
-            <WorkflowActions 
+            <WorkflowActions
               activeStep={activeStep}
+              blueprintSteps={blueprintSteps}
+              advancedMode={advancedMode}
               setShowBlueprintInspector={setShowBlueprintInspector}
               validationErrors={validationErrors}
               onNext={nextStep}
@@ -830,6 +933,7 @@ const CreateBlueprint = (props) => {
           settings: blueprintSettings,
           cronConfig,
           enable,
+          mode
         }}
         onClose={setShowBlueprintInspector}
         hasBackdrop={false}

@@ -31,11 +31,12 @@ import { starRocksConfig as sampleStarRocksConfigPipelineConfig } from '@/data/p
 const PipelineConfigsMenu = (props) => {
   const {
     setRawConfiguration = () => {},
+    showTitle = false,
     // advancedMode = false
   } = props
   return (
     <Menu className='pipeline-configs-menu'>
-      <label style={{
+      {showTitle && (<label style={{
         fontSize: '10px',
         fontWeight: 800,
         fontFamily: '"Montserrat", sans-serif',
@@ -44,46 +45,46 @@ const PipelineConfigsMenu = (props) => {
         display: 'block'
       }}
       >SAMPLE PIPELINE CONFIGURATIONS
-      </label>
+      </label>)}
       <Menu.Item
-        icon='group-objects' text='Load General Configuration'
+        icon='code' text='Load General Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(samplePipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects'
+        icon='code'
         text='Load RefDiff Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleRefdiffPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load GitExtractor Configuration'
+        icon='code' text='Load GitExtractor Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleGitextractorPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load GitHub Configuration'
+        icon='code' text='Load GitHub Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleGithubPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load GitLab Configuration'
+        icon='code' text='Load GitLab Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleGitlabPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load JIRA Configuration'
+        icon='code' text='Load JIRA Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleJiraPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load Jenkins Configuration'
+        icon='code' text='Load Jenkins Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleJenkinsPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load Feishu Configuration'
+        icon='code' text='Load Feishu Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleFeishuPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load DBT Configuration'
+        icon='code' text='Load DBT Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleDbtPipelineConfig, null, '  '))}
       />
       <Menu.Item
-        icon='group-objects' text='Load StarRocks Configuration'
+        icon='code' text='Load StarRocks Configuration'
         onClick={() => setRawConfiguration(JSON.stringify(sampleStarRocksConfigPipelineConfig, null, '  '))}
       />
     </Menu>

@@ -32,6 +32,7 @@ import FormValidationErrors from '@/components/messages/FormValidationErrors'
 const WorkflowActions = (props) => {
   const {
     activeStep,
+    blueprintSteps = [],
     setShowBlueprintInspector = () => {},
     validationErrors = [],
     onPrev = () => {},
@@ -47,7 +48,7 @@ const WorkflowActions = (props) => {
         disabled={activeStep?.id === 1}
       />
 
-      {activeStep?.id === 4 ? (
+      {activeStep?.id === blueprintSteps.length ? (
         <div style={{ marginLeft: 'auto' }}>
           <Button
             intent={Intent.PRIMARY}

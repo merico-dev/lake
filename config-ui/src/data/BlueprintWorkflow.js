@@ -56,6 +56,36 @@ const WorkflowSteps = [
   },
 ]
 
+const WorkflowAdvancedSteps = [
+  {
+    id: 1,
+    active: 1,
+    name: 'add-advanced-configuration',
+    title: 'Create Advanced Configuration',
+    complete: false,
+    icon: null,
+    errors: []
+  },
+  {
+    id: 2,
+    active: 0,
+    name: 'validate-advanced-configuration',
+    title: 'Validate Blueprint JSON',
+    complete: false,
+    icon: null,
+    errors: []
+  },
+  {
+    id: 3,
+    active: 0,
+    name: 'set-sync-frequeny',
+    title: 'Set Sync Frequency',
+    complete: false,
+    icon: null,
+    errors: []
+  },
+]
+
 const DEFAULT_DATA_ENTITIES = [
   {
     id: 1,
@@ -98,4 +128,4 @@ const DEFAULT_BOARDS = [
   },
 ]
 
-export { WorkflowSteps, DEFAULT_DATA_ENTITIES, DEFAULT_BOARDS }
+export { WorkflowSteps, WorkflowAdvancedSteps, DEFAULT_DATA_ENTITIES, DEFAULT_BOARDS }

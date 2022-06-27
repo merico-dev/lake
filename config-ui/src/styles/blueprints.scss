@@ -121,6 +121,23 @@
     display: block;
     width: 100%;
   }
+
+  p {
+    a {
+      color: #7497F7;
+      text-decoration: underline;
+      transition: all 0.3s ease;
+      
+      &.no-underline {
+        text-decoration: none;
+      }
+
+      &:hover {
+        text-decoration: none;
+        color: darken(#7497F7, 10%)
+      }
+    }
+  }
 }
 
 .workflow-actions {

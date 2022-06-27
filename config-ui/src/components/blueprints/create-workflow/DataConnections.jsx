@@ -27,7 +27,8 @@ import {
   Colors,
 } from '@blueprintjs/core'
 
-import InputValidationError from '@/components/validation/InputValidationError'
+import BlueprintNameCard from '../BlueprintNameCard'
+// import InputValidationError from '@/components/validation/InputValidationError'
 import ConnectionsSelector from '@/components/blueprints/ConnectionsSelector'
 
 const DataConnections = (props) => {
@@ -42,12 +43,22 @@ const DataConnections = (props) => {
     getFieldError = () => {},
     addConnection = () => {},
     manageConnection = () => {},
-    isSaving = false
+    onAdvancedMode = () => {},
+    isSaving = false,
+    advancedMode = false
   } = props
 
   return (
     <div className='workflow-step workflow-step-data-connections' data-step={activeStep?.id}>
-      <Card
+      <BlueprintNameCard 
+        advancedMode={advancedMode}
+        activeStep={activeStep}
+        name={name}
+        setBlueprintName={setBlueprintName}
+        fieldHasError={fieldHasError}
+        getFieldError={getFieldError}
+      />
+      {/* <Card
         className='workflow-card'
         elevation={Elevation.TWO}
         style={{ width: '100%' }}
@@ -74,7 +85,7 @@ const DataConnections = (props) => {
             <InputValidationError error={getFieldError('Blueprint Name')} />
           }
         />
-      </Card>
+      </Card> */}
 
       <Card
         className='workflow-card'
@@ -180,6 +191,10 @@ const DataConnections = (props) => {
           </Card>
         )}
       </Card>
+
+      <div className='mode-notice advanced-mode-notice'>
+        <p>To customize how tasks are executed in the blueprint, please use <a href='#' rel='noreferrer' onClick={() => onAdvancedMode(true)}>Advanced Mode</a></p>
+      </div>
     </div>
   )
 }
