@@ -79,17 +79,7 @@ const DataTransformations = (props) => {
   return (
     <div className='workflow-step workflow-step-add-transformation' data-step={activeStep?.id}>
       <p
-        className='alert-neutral'
-        style={{
-          fontFamily: 'Montserrat, sans-serif',
-          fontSize: '12px',
-          margin: '0 0 10px 0',
-          padding: '8px',
-          borderRadius: '6px',
-          color: '#3C5088',
-          backgroundColor: '#F0F4FE',
-          border: '1px solid #BDCEFB',
-        }}
+        className='alert neutral'
       >
         Set transformation rules for your selected data to view more complex
         metrics in the dashboards.
@@ -99,7 +89,7 @@ const DataTransformations = (props) => {
           className='more-link'
           rel='noreferrer'
           style={{
-            color: '#7497F7',
+            // color: '#7497F7',
             marginTop: '5px',
             display: 'inline-block',
           }}

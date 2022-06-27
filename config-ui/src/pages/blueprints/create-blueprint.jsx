@@ -73,7 +73,8 @@ import DataConnections from '@/components/blueprints/create-workflow/DataConnect
 import DataScopes from '@/components/blueprints/create-workflow/DataScopes'
 import DataTransformations from '@/components/blueprints/create-workflow/DataTransformations'
 import DataSync from '@/components/blueprints/create-workflow/DataSync'
-import AdvancedJSON from '../../components/blueprints/create-workflow/AdvancedJSON'
+import AdvancedJSON from '@/components/blueprints/create-workflow/AdvancedJSON'
+import AdvancedJSONValidation from '@/components/blueprints/create-workflow/AdvancedJSONValidation'
 
 // import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 
@@ -482,14 +483,24 @@ const CreateBlueprint = (props) => {
   const handleAdvancedMode = (enableAdvanced = true) => {
     setAdvancedMode(enableAdvanced)
   }
+
+  const parseJSON = (jsonString = '') => {
+    try {
+      return JSON.parse(jsonString)
+    } catch (e) {
+      console.log('>> PARSE JSON ERROR!', e)
+      throw e
+    }
+  }
   
   const isValidCode = useCallback(() => {
     let isValid = false
     try {
       const parsedCode = parseJSON(rawConfiguration)
-      isValid = parsedCode
+      isValid = true
     } catch (e) {
       console.log('>> FORMAT CODE: Invalid Code Format!', e)
+      isValid = false
       setValidationAdvancedError(e.message)
     }
     setIsValidConfiguration(isValid)
@@ -769,9 +780,25 @@ const CreateBlueprint = (props) => {
                   />
                 )}
 
-                { 
-                  // @todo: advanced mode step 2 (validate)
-                }
+                {activeStep?.id === 2 && (
+                  <AdvancedJSONValidation
+                    activeStep={activeStep}
+                    advancedMode={advancedMode}
+                    runTasksAdvanced={runTasksAdvanced}
+                    blueprintConnections={blueprintConnections}
+                    connectionsList={connectionsList}
+                    name={name}
+                    setBlueprintName={setBlueprintName}
+                    isMultiStagePipeline={() => {}}
+                    rawConfiguration={rawConfiguration}
+                    setRawConfiguration={setRawConfiguration}
+                    isSaving={isSaving}
+                    isValidConfiguration={isValidConfiguration}
+                    validationAdvancedError={validationAdvancedError}
+                    validationErrors={validationErrors}
+                    onPrev={prevStep}
+                  />
+                )}
 
                 {activeStep?.id === 3 && (
                   <DataSync

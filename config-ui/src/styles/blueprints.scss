@@ -252,3 +252,46 @@
     }
   }
 }
+
+p.alert {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  margin: 0 0 10px 0;
+  padding: 8px;
+  border-radius: 6px;
+  color: #888888;
+  background-color: #eeeeee;
+  border: 1px solid #cccccc;
+  
+  > a {
+    color: #777777
+  }
+
+  &.neutral {
+    color: #3C5088;
+    background-color: #F0F4FE;
+    border: 1px solid #BDCEFB;
+
+    > a {
+      color: #7497F7;
+    }
+  }
+
+  &.info {
+
+  }
+
+  &.warning {
+
+  }
+
+  &.error {
+    background-color: #fef0f0;
+    border: 1px solid #fbbebe;
+    color: #d43d3d;
+
+    > a {
+      color: darken(#d43d3d, 10%)
+    }
+  }
+}
