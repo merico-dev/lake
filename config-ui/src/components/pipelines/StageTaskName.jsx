@@ -69,13 +69,11 @@ const StageTaskName = (props) => {
                 color: Colors.GRAY2,
                 fontWeight: 700,
                 fontSize: '14px',
-                fontFamily: '"Montserrat", sans-serif',
                 maxWidth: '60%'
               }}
               >
                 <H3 style={{
                   margin: 0,
-                  fontFamily: '"JetBrains Mono", monospace',
                   fontSize: '18px',
                   color: Colors.BLACK,
                   textOverflow: 'ellipsis',
@@ -95,7 +93,6 @@ const StageTaskName = (props) => {
                 )}
               </div>
               <div style={{
-                fontFamily: '"Montserrat", sans-serif',
                 fontWeight: 800,
                 displays: 'flex',
                 alignItems: 'center',

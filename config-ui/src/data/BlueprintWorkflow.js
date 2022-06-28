@@ -66,17 +66,17 @@ const WorkflowAdvancedSteps = [
     icon: null,
     errors: []
   },
+  // {
+  //   id: 2,
+  //   active: 0,
+  //   name: 'validate-advanced-configuration',
+  //   title: 'Validate Blueprint JSON',
+  //   complete: false,
+  //   icon: null,
+  //   errors: []
+  // },
   {
     id: 2,
-    active: 0,
-    name: 'validate-advanced-configuration',
-    title: 'Validate Blueprint JSON',
-    complete: false,
-    icon: null,
-    errors: []
-  },
-  {
-    id: 3,
     active: 0,
     name: 'set-sync-frequeny',
     title: 'Set Sync Frequency',

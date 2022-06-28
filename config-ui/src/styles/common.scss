@@ -22,18 +22,15 @@
   display: block;
   margin-bottom: 1.6rem;
   max-width: 600px;
-  font-family: 'Montserrat', sans-serif;
 }
 
 .page-description {
   margin: 0 0 1.6rem 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
   line-height: 100%;
-  letter-spacing: 0.08em;
   font-feature-settings: 'pnum'on, 'lnum'on;
   color: #606060;
 
@@ -245,12 +242,10 @@ h3 {
   &.group-header {
     margin: 2.5em 0 3px 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
     font-style: normal;
     font-weight: 900;
     font-size: 14px;
     line-height: 100%;
-    letter-spacing: 0.19em;
     font-feature-settings: 'pnum'on, 'lnum'on;
     color: #333333;
     text-transform: uppercase;

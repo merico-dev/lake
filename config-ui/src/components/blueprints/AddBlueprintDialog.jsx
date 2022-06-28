@@ -225,7 +225,6 @@ const AddBlueprintDialog = (props) => {
                               marginBottom: '10px',
                               fontWeight: 700,
                               fontSize: '14px',
-                              fontFamily: '"Montserrat", sans-serif'
                             }}
                             >
                               <Icon icon='help' size={16} style={{ marginRight: '5px' }} /> Cron Expression Format

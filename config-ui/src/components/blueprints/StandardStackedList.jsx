@@ -29,14 +29,20 @@ import {
 const StandardStackedList = (props) => {
   const {
     items = [],
+    transformations = {},
     className = 'selected-items-list',
     connection,
     activeItem,
+    editButtonText = 'Edit Transformation',
     addButtonText = 'Add Transformation',
     onAdd = () => {},
     onChange = () => {},
     style = { padding: 0, marginTop: '10px' }
   } = props
+
+  useEffect(() => {
+    console.log('>>> LOOK HERE!!!!', transformations, activeItem)
+  }, [transformations, activeItem])
 
   return (
     <>
@@ -67,12 +73,12 @@ const StandardStackedList = (props) => {
             >
               <div>
                 <div className='item-name' style={{ fontWeight: 600 }}>
-                  <input
+                  {/* <input
                     type='radio'
                     name='configured-item'
                     checked={item === activeItem}
                     onChange={() => onChange(item)}
-                  />{' '}
+                  />{' '} */}
                   <label onClick={() => onAdd(item)} style={{ cursor: 'pointer' }}>{item}</label>
                 </div>
               </div>
@@ -96,7 +102,7 @@ const StandardStackedList = (props) => {
                         color={Colors.BLUE4}
                       />
                     }
-                    text={addButtonText}
+                    text={Object.keys(transformations[item])?.some(configObject => transformations[item][configObject]?.length > 0 )  ? editButtonText : addButtonText }
                     color={Colors.BLUE3}
                     small
                     minimal={activeItem !== item ? true : false}

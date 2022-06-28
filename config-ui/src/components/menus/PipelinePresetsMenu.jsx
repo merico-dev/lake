@@ -33,7 +33,6 @@ const PipelinePresetsMenu = (props) => {
       <label style={{
         fontSize: '10px',
         fontWeight: 800,
-        fontFamily: '"Montserrat", sans-serif',
         textTransform: 'uppercase',
         padding: '6px 8px',
         display: 'block'

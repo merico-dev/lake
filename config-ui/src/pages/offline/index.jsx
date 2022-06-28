@@ -162,7 +162,7 @@ const Offline = (props) => {
                         />
                         )}
                   </div>
-                  <H2 style={{ fontFamily: '"Montserrat", sans-serif' }}>DevLake API&nbsp;
+                  <H2>DevLake API&nbsp;
                     <CSSTransition in={cardReady} timeout={300} classNames='offline-card-os'>
                       {isOffline
                         ? (
@@ -194,7 +194,7 @@ const Offline = (props) => {
                   {isOffline
                     ? (
                       <>
-                        <p style={{ fontSize: '16px', fontFamily: '"JetBrains Mono", monospace', color: '#222222' }}>
+                        <p style={{ fontSize: '16px', color: '#222222' }}>
                           Please wait for the&nbsp;
                           <strong>Lake API</strong> to start before accessing the <strong>Configuration Interface</strong>.
                         </p>
@@ -226,7 +226,7 @@ const Offline = (props) => {
                       )
                     : (
                       <>
-                        <p style={{ fontSize: '16px', fontFamily: '"JetBrains Mono", monospace', color: '#222222' }}>
+                        <p style={{ fontSize: '16px', color: '#222222' }}>
                           Connectivity to the Lake API service was successful.
                         </p>
                         <Button
@@ -255,7 +255,7 @@ const Offline = (props) => {
                   {isOffline
                     ? (
                       <>
-                        <strong style={{ fontFamily: 'Montserrat', fontWeight: 900, letterSpacing: '2px' }}>
+                        <strong style={{ fontWeight: 900, letterSpacing: '2px' }}>
                           OFFLINE &middot;&nbsp;
                         </strong>
                         <a
@@ -274,7 +274,7 @@ const Offline = (props) => {
                       )
                     : (
                       <>
-                        <strong style={{ fontFamily: 'Montserrat', fontWeight: 900, letterSpacing: '2px' }}>
+                        <strong style={{ fontWeight: 900, letterSpacing: '2px' }}>
                           ONLINE &middot;&nbsp;
                         </strong>
                         <a

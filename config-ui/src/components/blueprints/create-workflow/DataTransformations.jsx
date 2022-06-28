@@ -62,19 +62,22 @@ const DataTransformations = (props) => {
     activeTransformation,
     setTransformations = () => {},
     setTransformationSettings = () => {},
+    onSave = () => {},
+    onCancel = () => {},
+    onClear = () => {},
     isSaving = false,
     isSavingConnection = false,
     isRunning = false,
   } = props
 
   // @todo: lift this to a higher ancestor
-  const clearTransformations = useCallback(() => {
-    console.log('>>> CLEARING TRANSFORMATION RULES!')
-    setTransformations(existingTransformations => ({
-      ...existingTransformations,
-      [configuredProject]: {}
-    }))
-  }, [setTransformations, configuredProject])
+  // const clearTransformations = useCallback(() => {
+  //   console.log('>>> CLEARING TRANSFORMATION RULES!')
+  //   setTransformations(existingTransformations => ({
+  //     ...existingTransformations,
+  //     [configuredProject]: {}
+  //   }))
+  // }, [setTransformations, configuredProject])
 
   return (
     <div className='workflow-step workflow-step-add-transformation' data-step={activeStep?.id}>
@@ -139,10 +142,11 @@ const DataTransformations = (props) => {
 
                   {[Providers.GITLAB, Providers.GITHUB].includes(
                     configuredConnection.provider
-                  ) && (
+                  ) && (!configuredProject) && (
                     <>
                       <StandardStackedList
                         items={projects}
+                        transformations={transformations}
                         className='selected-items-list selected-projects-list'
                         connection={configuredConnection}
                         activeItem={configuredProject}
@@ -160,10 +164,13 @@ const DataTransformations = (props) => {
                     </>
                   )}
 
-                  {[Providers.JIRA].includes(configuredConnection.provider) && (
+                  {[Providers.JIRA].includes(
+                    configuredConnection.provider
+                  ) && (!configuredBoard) && (
                     <>
                       <StandardStackedList
                         items={boards}
+                        transformations={transformations}
                         className='selected-items-list selected-boards-list'
                         connection={configuredConnection}
                         activeItem={configuredBoard}
@@ -196,7 +203,7 @@ const DataTransformations = (props) => {
                             text='Clear All'
                             intent={Intent.NONE}
                             href='#'
-                            onClick={clearTransformations}
+                            onClick={onClear}
                             style={{ float: 'right' }} 
                             disabled={Object.keys(activeTransformation || {}).length === 0}
                           />
@@ -221,6 +228,23 @@ const DataTransformations = (props) => {
                           isSavingConnection={isSavingConnection}
                         />
                       )}
+
+                      <div className='transformation-actions' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                          <Button 
+                            text='Cancel'
+                            small
+                            outlined
+                            onClick={onCancel} 
+                          />
+                          <Button 
+                            text='Save' 
+                            intent={Intent.PRIMARY}
+                            small
+                            outlined
+                            onClick={onSave}
+                            style={{ marginLeft: '5px' }} 
+                          />
+                      </div>
                     </div>
                   )}
                 </>

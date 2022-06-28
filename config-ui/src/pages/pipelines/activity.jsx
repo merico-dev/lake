@@ -215,7 +215,7 @@ const PipelineActivity = (props) => {
                       <a href='#' rel='noreferrer'><HelpIcon width={19} height={19} style={{ marginLeft: '10px' }} /></a>
                       <>
                         <div style={{ textShadow: 'none', fontSize: '12px', padding: '12px', maxWidth: '300px' }}>
-                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px', fontFamily: '"Montserrat", sans-serif' }}>
+                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px' }}>
                             <Icon icon='help' size={16} /> Pipeline RUN Activity
                           </div>
                           <p>Need Help? &mdash; For better accuracy, ensure that all of your Data Integrations
@@ -294,7 +294,6 @@ const PipelineActivity = (props) => {
                             <div className='pipeline-multistage-tag' style={{ padding: '5px 0 0 0' }}>
                               <Icon icon='layers' color={Colors.GRAY4} size={14} style={{ marginRight: '5px' }} />
                               <span style={{
-                                fontFamily: 'Montserrat',
                                 fontStyle: 'normal',
                                 fontWeight: 900,
                                 letterSpacing: '1px',
@@ -443,7 +442,6 @@ const PipelineActivity = (props) => {
                               marginBottom: '10px',
                               fontWeight: 700,
                               fontSize: '14px',
-                              fontFamily: '"Montserrat", sans-serif'
                             }}
                             >
                               <Icon icon='help' size={16} /> Stages and Tasks
@@ -499,7 +497,6 @@ const PipelineActivity = (props) => {
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '10px' }}>
                             <strong style={{
                               fontSize: '16px',
-                              fontFamily: 'Montserrat',
                               fontWeight: 800
                             }}
                             >{ProviderLabels.JENKINS}
@@ -518,7 +515,6 @@ const PipelineActivity = (props) => {
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '10px' }}>
                             <strong style={{
                               fontSize: '16px',
-                              fontFamily: 'Montserrat',
                               fontWeight: 800
                             }}
                             >{ProviderLabels.JIRA}
@@ -544,7 +540,6 @@ const PipelineActivity = (props) => {
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '10px' }}>
                             <strong style={{
                               fontSize: '16px',
-                              fontFamily: 'Montserrat',
                               fontWeight: 800
                             }}
                             >{ProviderLabels.GITLAB}
@@ -570,7 +565,6 @@ const PipelineActivity = (props) => {
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '10px' }}>
                             <strong style={{
                               fontSize: '16px',
-                              fontFamily: 'Montserrat',
                               fontWeight: 800
                             }}
                             >{ProviderLabels.GITHUB}
@@ -606,7 +600,7 @@ const PipelineActivity = (props) => {
                         </div>
                         <div>
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '0px' }}>
-                            <strong style={{ fontSize: '16px', fontFamily: 'Montserrat', fontWeight: 800 }}>GitExtractor</strong><br />Extract Commits &amp; Refs
+                            <strong style={{ fontSize: '16px', fontWeight: 800 }}>GitExtractor</strong><br />Extract Commits &amp; Refs
                           </label>
                           <div style={{ paddingTop: '15px' }}>
                             {activePipeline.tasks.filter(t => t.plugin === 'gitextractor').map((t, tIdx) => (
@@ -636,7 +630,7 @@ const PipelineActivity = (props) => {
                         </div>
                         <div>
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '0px' }}>
-                            <strong style={{ fontSize: '16px', fontFamily: 'Montserrat', fontWeight: 800 }}>RefDiff</strong><br />Release Tag Diffs
+                            <strong style={{ fontSize: '16px', fontWeight: 800 }}>RefDiff</strong><br />Release Tag Diffs
                           </label>
                           <div style={{ paddingTop: '15px' }}>
                             {activePipeline.tasks.filter(t => t.plugin === 'refdiff').map((t, tIdx) => (
@@ -672,7 +666,7 @@ const PipelineActivity = (props) => {
                         </div>
                         <div>
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '0px' }}>
-                            <strong style={{ fontSize: '16px', fontFamily: 'Montserrat', fontWeight: 800 }}>Analysis Engine (AE)</strong><br />
+                            <strong style={{ fontSize: '16px', fontWeight: 800 }}>Analysis Engine (AE)</strong><br />
                             Merico Enterprise Analysis
                           </label>
                           <div style={{ paddingTop: '15px' }}>
@@ -697,7 +691,7 @@ const PipelineActivity = (props) => {
                         </div>
                         <div>
                           <label style={{ lineHeight: '100%', display: 'block', fontSize: '10px', marginTop: '2px', marginBottom: '0px' }}>
-                            <strong style={{ fontSize: '16px', fontFamily: 'Montserrat', fontWeight: 800 }}>Data Build Tool (DBT)</strong><br />Transform Data with SQL
+                            <strong style={{ fontSize: '16px', fontWeight: 800 }}>Data Build Tool (DBT)</strong><br />Transform Data with SQL
                           </label>
                           <div style={{ paddingTop: '15px' }}>
                             {activePipeline.tasks.filter(t => t.plugin === 'dbt').map((t, tIdx) => (

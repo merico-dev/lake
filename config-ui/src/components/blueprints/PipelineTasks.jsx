@@ -45,12 +45,12 @@ const PipelineTasks = (props) => {
           <span className='detected-provider-icon' style={{ margin: '2px 3px 0 0px', float: 'left' }}>
             {ProviderIcons[provider] ? ProviderIcons[provider](20, 20) : <></>}
           </span>
-          <span style={{ display: 'flex', marginTop: '3px', fontFamily: 'Montserrat, sans-serif', fontWeight: 800 }}>
+          <span style={{ display: 'flex', marginTop: '3px', fontWeight: 800 }}>
             {ProviderLabels[provider?.toUpperCase()] ? ProviderLabels[provider?.toUpperCase()] : 'Data Provider'}
           </span>
         </Tag>
         <div style={{ padding: '10px', maxWidth: '340px', overflow: 'hidden', overflowX: 'auto' }}>
-          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px', fontFamily: '"Montserrat", sans-serif' }}>
+          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px' }}>
             <Icon icon='layers' size={16} /> {ProviderLabels[provider?.toUpperCase()] ? ProviderLabels[provider?.toUpperCase()] : 'Plugin'}
           </div>
           <code>

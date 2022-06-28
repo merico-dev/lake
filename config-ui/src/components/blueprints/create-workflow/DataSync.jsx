@@ -65,16 +65,14 @@ const DataSync = (props) => {
       <Card className='workflow-card' elevation={Elevation.TWO}>
         <h3 style={{ marginBottom: '8px' }}>Set Sync Frequency</h3>
         {getCronPresetByConfig(cronConfig) ? (
-          <small
+          <p
             style={{
-              fontSize: '10px',
-              color: Colors.GRAY2,
               display: 'block',
             }}
           >
             <strong>Automated</strong> &mdash;{' '}
             {getCronPresetByConfig(cronConfig).description}
-          </small>
+          </p>
         ) : (
           <small
             style={{
@@ -228,7 +226,6 @@ const DataSync = (props) => {
                       marginBottom: '10px',
                       fontWeight: 700,
                       fontSize: '14px',
-                      fontFamily: '"Montserrat", sans-serif',
                     }}
                   >
                     <Icon

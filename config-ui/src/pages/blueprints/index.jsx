@@ -313,7 +313,7 @@ const Blueprints = (props) => {
                       <a href='#' rel='noreferrer'><HelpIcon width={19} height={19} style={{ marginLeft: '10px' }} /></a>
                       <>
                         <div style={{ textShadow: 'none', fontSize: '12px', padding: '12px', maxWidth: '300px' }}>
-                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px', fontFamily: '"Montserrat", sans-serif' }}>
+                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px' }}>
                             <Icon icon='help' size={16} /> Schedule Recurring Pipelines
                           </div>
                           <p>Need Help? &mdash; Automate pipelines by creating a Blueprint.

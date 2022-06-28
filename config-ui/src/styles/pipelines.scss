@@ -78,9 +78,7 @@
     }
 
     .provider-name {
-      font-family: 'Montserrat', sans-serif;
       font-weight: 900;
-      letter-spacing: 0px;
       font-size: 14px;
       margin-bottom: 3px;
       transition: all 0.3s ease;
@@ -291,15 +289,15 @@
 
   &.bp3-intent-primary:not(.bp3-minimal, .bp3-disabled) {
     // box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.65);
-    border: 1px solid rgba(24, 32, 38, 0.2);
+    // border: 1px solid rgba(24, 32, 38, 0.2);
     transition: all 0.3s ease-out;
 
     &:hover {
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.75);
+      // box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.75);
     }
 
     &:not(.bp3-minimal) {
-      box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.45);
+      // box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.45);
     }
   }
 
@@ -444,9 +442,7 @@
 }
 
 .pagination-btn {
-  font-family: 'Montserrat', sans-serif;
   font-weight: 900;
-  letter-spacing: 2px;
   font-size: 12px;
   transition: all 0.3s ease-out;
 }

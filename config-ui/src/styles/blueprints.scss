@@ -6,7 +6,6 @@
   border: 0;
   outline: none;
   min-width: 740px;
-  font-family: 'Montserrat', sans-serif;
   display: flex;
   justify-content: center;
   -webkit-user-select: none;
@@ -45,10 +44,10 @@
       flex-direction: column;
       transition: all 0.3s ease;
       color: #70727f;
+      font-weight: 600;
 
       &.active {
-        font-weight: bold;
-        color: #656774;
+        // color: darken(#656774, 20%);
 
         > a {
           background-color: #7497f7;
@@ -159,18 +158,15 @@
 
     h3 {
       font-size: 16px;
-      font-family: 'Montserrat', sans-serif;
     }
     
     h4 {
       font-size: 14px;
-      font-family: 'Montserrat', sans-serif;
       margin-bottom: 6px;
     }
     
     h5 {
       font-size: 12px;
-      font-family: 'Montserrat', sans-serif;
       margin-bottom: 4px;
     }
 
@@ -254,7 +250,6 @@
 }
 
 p.alert {
-  font-family: 'Montserrat', sans-serif;
   font-size: 12px;
   margin: 0 0 10px 0;
   padding: 8px;

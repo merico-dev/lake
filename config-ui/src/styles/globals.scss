@@ -2,7 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "Inter", sans-serif;
   width: 100%;
   height: 100%;
 }
@@ -28,10 +28,6 @@ a {
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-h1, h2 {
-  font-family: 'JetBrains Mono', sans-serif;
 }
 
 h1 {

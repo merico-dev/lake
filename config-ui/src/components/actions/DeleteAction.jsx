@@ -59,19 +59,6 @@ const DeleteAction = (props) => {
       <>
         <div style={{ padding: '15px 20px 15px 15px' }}>
           {children}
-          {/* <h3 style={{ color: 'rgb(219, 55, 55)' }}>DELETE CONFIRMATION</h3>
-          <p className='confirmation-text'>
-            <strong style={{
-              fontFamily: 'Montserrat, sans-serif',
-              fontSize: '14px',
-              fontWeight: '800',
-              color: 'rgb(219, 55, 55)'
-            }}
-            >
-              Are you sure you want to continue?
-            </strong>
-            &nbsp;This instance will be permanently deleted and cannot be restored.
-          </p> */}
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 15 }}>
             <Button
               className={Classes.POPOVER2_DISMISS}

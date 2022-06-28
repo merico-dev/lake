@@ -29,7 +29,7 @@ const SaveAlert = ({ alertOpen, onClose }) => {
       intent={Intent.PRIMARY}
     >
       <h2 style={{ fontWeight: 'bold' }}><span style={{ fontWeight: 800 }}>API</span> Configuration Updated</h2>
-      <p style={{ fontSize: '16px', fontFamily: 'Montserrat', color: '#E8471C' }}>
+      <p style={{ fontSize: '16px', color: '#E8471C' }}>
         To apply new configuration, <strong>restart</strong> devlake by running <code>docker-compose up -d</code>.
       </p>
       <TextArea

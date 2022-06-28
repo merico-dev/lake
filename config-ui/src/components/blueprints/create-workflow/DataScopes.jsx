@@ -169,7 +169,14 @@ const DataScopes = (props) => {
                   <h4>Data Entities</h4>
                   <p>
                     Select the data entities you wish to collect for the
-                    projects. <a href='#'>Learn about data entities</a>
+                    projects.{' '}
+                    <a
+                      href='https://devlake.apache.org/docs/DataModels/DevLakeDomainLayerSchema'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                        Learn about data entities
+                    </a>
                   </p>
                   <DataEntitiesSelector
                     items={dataEntitiesList}

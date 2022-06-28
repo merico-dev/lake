@@ -72,7 +72,6 @@ const Sidebar = () => {
           marginTop: '30px',
           letterSpacing: '3px',
           marginBottom: 0,
-          fontFamily: '"Montserrat", sans-serif',
           fontWeight: 900,
           color: '#444444',
           textAlign: 'center'
@@ -83,7 +82,7 @@ const Sidebar = () => {
       <SidebarMenu menu={menu} />
       <span className='copyright-tag'>
         <span className='version-tag'>{versionTag || ''}</span><br />
-        <strong>Apache 2.0 License</strong><br />&copy; 2021 Merico
+        <strong>Apache 2.0 License</strong><br />
       </span>
     </Card>
   )

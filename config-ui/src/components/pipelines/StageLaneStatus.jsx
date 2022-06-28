@@ -50,7 +50,6 @@ const StageLaneStatus = (props) => {
         <div
           className='stage-status'
           style={{
-            fontFamily: 'Montserrat',
             fontWeight: 900,
             fontSize: '10px',
             letterSpacing: '1px',

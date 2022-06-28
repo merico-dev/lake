@@ -367,6 +367,24 @@ const CreateBlueprint = (props) => {
     clearActiveConnection()
   }
 
+  const handleTransformationSave = () => {
+    console.log('>> SAVING / CLOSING Transformation Settings')
+    setConfiguredProject(null)
+  }
+
+  const handleTransformationCancel = () => {
+    setConfiguredProject(null)
+    console.log('>> Cancel Modify - Transformation Settings')
+  }
+
+  const handleTransformationClear = useCallback(() => {
+    console.log('>>> CLEARING TRANSFORMATION RULES!')
+    setTransformations(existingTransformations => ({
+      ...existingTransformations,
+      [configuredProject]: {}
+    }))
+  }, [setTransformations, configuredProject])
+
   const getRestrictedDataEntities = useCallback(() => {
     let items = []
     switch (configuredConnection.provider) {
@@ -779,7 +797,7 @@ const CreateBlueprint = (props) => {
                     validationErrors={validationErrors}
                   />
                 )}
-
+                {/* 
                 {activeStep?.id === 2 && (
                   <AdvancedJSONValidation
                     activeStep={activeStep}
@@ -798,9 +816,9 @@ const CreateBlueprint = (props) => {
                     validationErrors={validationErrors}
                     onPrev={prevStep}
                   />
-                )}
+                )} */}
 
-                {activeStep?.id === 3 && (
+                {activeStep?.id === 2 && (
                   <DataSync
                     activeStep={activeStep}
                     advancedMode={advancedMode}
@@ -882,6 +900,9 @@ const CreateBlueprint = (props) => {
                   isSaving={isSaving}
                   isSavingConnection={isSavingConnection}
                   isRunning={isRunning}
+                  onSave={handleTransformationSave}
+                  onCancel={handleTransformationCancel}
+                  onClear={handleTransformationClear}
                 />
               )}
 

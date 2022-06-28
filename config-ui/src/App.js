@@ -24,8 +24,9 @@ import {
 
 import 'normalize.css'
 import '@/styles/app.scss'
-import 'typeface-montserrat'
-import 'jetbrains-mono'
+// import 'typeface-montserrat'
+// import 'jetbrains-mono'
+import '@fontsource/inter/variable.css'
 // Theme variables (@styles/theme.scss) injected via Webpack w/ @sass-loader additionalData option!
 // import '@/styles/theme.scss'
 
@@ -42,6 +43,7 @@ import CreatePipeline from '@/pages/pipelines/create'
 import PipelineActivity from '@/pages/pipelines/activity'
 import Blueprints from '@/pages/blueprints/index'
 import CreateBlueprint from '@/pages/blueprints/create-blueprint'
+import BlueprintDetail from '@/pages/blueprints/blueprint-detail'
 
 function App () {
   return (
@@ -82,6 +84,9 @@ function App () {
       </Route>
       <Route exact path='/blueprints/create'>
         <CreateBlueprint />
+      </Route>
+      <Route exact path='/blueprints/detail/:bId'>
+        <BlueprintDetail />
       </Route>
       <Route exact path='/blueprints'>
         <Blueprints />

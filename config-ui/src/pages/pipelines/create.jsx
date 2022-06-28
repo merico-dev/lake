@@ -691,7 +691,7 @@ const CreatePipeline = (props) => {
                       <a href='#' rel='noreferrer'><HelpIcon width={19} height={19} style={{ marginLeft: '10px' }} /></a>
                       <>
                         <div style={{ textShadow: 'none', fontSize: '12px', padding: '12px', maxWidth: '300px' }}>
-                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px', fontFamily: '"Montserrat", sans-serif' }}>
+                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px' }}>
                             <Icon icon='help' size={16} /> Run Pipeline
                           </div>
                           <p>Need Help? &mdash; Configure the <strong>Data Providers</strong> you want and click
@@ -970,7 +970,6 @@ const CreatePipeline = (props) => {
                                             >
                                               <Icon icon='layers' color={Colors.GRAY4} size={14} style={{ marginRight: '5px' }} />
                                               <span style={{
-                                                fontFamily: 'Montserrat',
                                                 fontStyle: 'normal',
                                                 fontWeight: 900,
                                                 letterSpacing: '1px',
@@ -1013,7 +1012,6 @@ const CreatePipeline = (props) => {
                             fontWeight: 800,
                             letterSpacing: '2px',
                             color: Colors.GRAY2,
-                            fontFamily: '"Montserrat", sans-serif'
                           }}
                           ><span><Icon icon='nest' size={12} color={Colors.GRAY4} style={{ marginRight: '2px' }} /> DATA PROVIDERS</span>
                           </div>
@@ -1131,7 +1129,6 @@ const CreatePipeline = (props) => {
                                       marginBottom: '10px',
                                       fontWeight: 700,
                                       fontSize: '14px',
-                                      fontFamily: '"Montserrat", sans-serif'
                                     }}
                                     >
                                       <Icon icon='help' size={16} /> {provider.name} Settings
@@ -1310,7 +1307,6 @@ const CreatePipeline = (props) => {
                         <span style={{
                           fontSize: '14px',
                           fontWeight: 800,
-                          fontFamily: '"Montserrat", sans-serif',
                           display: 'inline-block',
                           whiteSpace: 'nowrap'
                         }}
@@ -1333,7 +1329,6 @@ const CreatePipeline = (props) => {
                   marginBottom: '8px',
                   fontSize: '12px',
                   fontWeight: 700,
-                  fontFamily: '"Montserrat", sans-serif'
                 }}
                 ><Icon icon='issue' size={12} style={{ marginBottom: '2px' }} /> <span>Expert Use Only</span>
                 </h4>

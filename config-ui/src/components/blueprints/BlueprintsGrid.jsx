@@ -173,7 +173,6 @@ const BlueprintsGrid = (props) => {
                         marginLeft: '25px',
                         fontSize: '9px',
                         fontWeight: '400',
-                        fontFamily: 'Montserrat, sans-serif',
                         color: '#777777'
                       }}
                       >
@@ -209,7 +208,6 @@ const BlueprintsGrid = (props) => {
                       <label style={{
                         fontSize: '9px',
                         fontWeight: '400',
-                        fontFamily: 'Montserrat, sans-serif',
                         color: '#777777'
                       }}
                       >
@@ -227,7 +225,6 @@ const BlueprintsGrid = (props) => {
                       <label style={{
                         fontSize: '9px',
                         fontWeight: '400',
-                        fontFamily: 'Montserrat, sans-serif',
                         color: '#777777'
                       }}
                       >
@@ -241,7 +238,6 @@ const BlueprintsGrid = (props) => {
                       <label style={{
                         fontSize: '9px',
                         fontWeight: '400',
-                        fontFamily: 'Montserrat, sans-serif',
                         color: '#777777'
                       }}
                       >
@@ -262,7 +258,6 @@ const BlueprintsGrid = (props) => {
                       <label style={{
                         fontSize: '9px',
                         fontWeight: '400',
-                        fontFamily: 'Montserrat, sans-serif',
                         color: '#777777'
                       }}
                       >
@@ -313,7 +308,7 @@ const BlueprintsGrid = (props) => {
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0', padding: '10px' }}>
-                    <div style={{ fontFamily: 'Montserrat', letterSpacing: '1px', fontWeight: 800 }}>
+                    <div style={{ letterSpacing: '1px', fontWeight: 800 }}>
                       <Icon icon='bold' color={Colors.BLUE4} size={14} style={{ marginRight: '5px' }} /> BLUEPRINT ID {activeBlueprint?.id}
                       {isLoading && (
                         <span style={{ paddingLeft: '20px', fontWeight: 700, color: '#777777', fontSize: '11px' }}>
@@ -410,26 +405,26 @@ const BlueprintsGrid = (props) => {
                       </div>
 
                       {!b.enable && (
-                        <p style={{ marginTop: '10px 0 0 0', fontSize: '9px', fontFamily: 'Montserrat, sans-serif' }}>
+                        <p style={{ marginTop: '10px 0 0 0', fontSize: '9px' }}>
                           <Icon icon='warning-sign' size={11} color={Colors.ORANGE5} style={{ float: 'left', marginRight: '5px' }} />
                           Blueprint is NOT Enabled / Active this schedule will not run.
                         </p>
                       )}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <label style={{ color: Colors.GRAY1, fontFamily: 'Montserrat,sans-serif' }}>Blueprint</label>
+                      <label style={{ color: Colors.GRAY1 }}>Blueprint</label>
                       <h3 style={{ marginTop: 0, fontSize: '18px', fontWeight: 800 }}>
                         {b.name}
                       </h3>
-                      <label style={{ color: Colors.GRAY1, fontFamily: 'Montserrat,sans-serif' }}>Crontab Configuration</label>
+                      <label style={{ color: Colors.GRAY1 }}>Crontab Configuration</label>
                       <h3 style={{ margin: '0 0 20px 0', fontSize: '18px' }}>{b.cronConfig}</h3>
 
-                      <label style={{ color: Colors.GRAY1, fontFamily: 'Montserrat,sans-serif' }}>Next Run</label>
+                      <label style={{ color: Colors.GRAY1 }}>Next Run</label>
                       <h3 style={{ margin: '0 0 20px 0', fontSize: '18px' }}>
                         {dayjs(getNextRunDate(b.cronConfig)).fromNow()}
                       </h3>
 
-                      <label style={{ color: Colors.GRAY3, fontFamily: 'Montserrat,sans-serif' }}>Operations</label>
+                      <label style={{ color: Colors.GRAY3 }}>Operations</label>
                       <div style={{
                         marginTop: '5px',
                         display: 'flex',
@@ -478,7 +473,6 @@ const BlueprintsGrid = (props) => {
                 letterSpacing: '2px',
                 textTransform: 'uppercase',
                 margin: 0,
-                fontFamily: '"Montserrat", sans-serif'
               }}
               >0 Blueprints
               </h3>
