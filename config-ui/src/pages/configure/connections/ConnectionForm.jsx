@@ -224,7 +224,7 @@ export default function ConnectionForm (props) {
             </Label>
             <InputGroup
               id='connection-name'
-              autoComplete={false}
+              autoComplete='false'
               inputRef={connectionNameRef}
               disabled={isTesting || isSaving || isLocked}
               // readOnly={[Providers.JENKINS].includes(activeProvider.id)}
@@ -267,7 +267,7 @@ export default function ConnectionForm (props) {
             </Label>
             <InputGroup
               id='connection-endpoint'
-              autoComplete={false}
+              autoComplete='false'
               inputRef={connectionEndpointRef}
               disabled={isTesting || isSaving || isLocked}
               placeholder={placeholders ? placeholders.endpoint : 'Enter Endpoint URL'}
@@ -373,7 +373,7 @@ export default function ConnectionForm (props) {
                             onChange={(e) => setPersonalToken(patIdx, e.target.value)}
                             className={`input personal-token-input`}
                             fill
-                            autoComplete={false}
+                            autoComplete='false'
                           />
                           </div>
                           {testResponse?.message && (<div className='token-info-status' style={{ display: 'flex', padding: '0 10px' }}>
@@ -415,7 +415,7 @@ export default function ConnectionForm (props) {
                   <InputGroup
                     id='connection-token'
                     type='password'
-                    autoComplete={false}
+                    autoComplete='false'
                     inputRef={connectionTokenRef}
                     disabled={isTesting || isSaving || isLocked}
                     placeholder={placeholders ? placeholders.token : 'Enter Auth Token eg. EJrLG8DNeXADQcGOaaaX4B47'}
@@ -496,7 +496,7 @@ export default function ConnectionForm (props) {
                 </Label>
                 <InputGroup
                   id='connection-username'
-                  autoComplete={false}
+                  autoComplete='false'
                   disabled={isTesting || isSaving || isLocked}
                   placeholder='Enter Username'
                   defaultValue={username}
@@ -531,7 +531,7 @@ export default function ConnectionForm (props) {
                 <InputGroup
                   id='connection-password'
                   type='password'
-                  autoComplete={false}
+                  autoComplete='false'
                   disabled={isTesting || isSaving || isLocked}
                   placeholder='Enter Password'
                   defaultValue={password}
