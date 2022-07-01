@@ -45,6 +45,7 @@ export default function ConnectionForm (props) {
     name,
     endpointUrl,
     token,
+    initialTokenStore = {},
     username,
     password,
     proxy = '',
@@ -81,11 +82,7 @@ export default function ConnectionForm (props) {
   // const [isValidForm, setIsValidForm] = useState(true)
   const [allowedAuthTypes, setAllowedAuthTypes] = useState(['token', 'plain'])
   const [stateErrored, setStateErrored] = useState(false)
-  const [tokenStore, setTokenStore] = useState({
-    0: '',
-    1: '',
-    2: ''
-  })
+  const [tokenStore, setTokenStore] = useState(initialTokenStore)
   const [personalAccessTokens, setPersonalAccessTokens] = useState([])
 
   const getConnectionStatusIcon = () => {
@@ -169,6 +166,11 @@ export default function ConnectionForm (props) {
     console.log('>> PERSONAL ACCESS TOKENS ENTERED...', personalAccessTokens)
     onTokenChange(personalAccessTokens.join(',').trim())
   }, [personalAccessTokens])
+
+  useEffect(() => {
+    console.log('>> INITIALIZED PERSONAL TOKEN STORE WITH...', initialTokenStore)
+    setTokenStore(initialTokenStore)
+  }, [initialTokenStore])
 
   return (
     <>

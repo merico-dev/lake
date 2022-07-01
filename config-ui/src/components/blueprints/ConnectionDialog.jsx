@@ -70,6 +70,7 @@ const ConnectionDialog = (props) => {
     endpointUrl,
     proxy,
     token,
+    initialTokenStore = {},
     username,
     password,
     isLocked = false,
@@ -289,6 +290,7 @@ const ConnectionDialog = (props) => {
                    endpointUrl={endpointUrl}
                    proxy={proxy}
                    token={token}
+                   initialTokenStore={initialTokenStore}
                    username={username}
                    password={password}
                    onSave={onSave}

@@ -300,6 +300,7 @@ const CreateBlueprint = (props) => {
     endpointUrl,
     proxy,
     token,
+    initialTokenStore,
     username,
     password,
     provider,
@@ -311,6 +312,7 @@ const CreateBlueprint = (props) => {
     setUsername,
     setPassword,
     setToken,
+    setInitialTokenStore,
     setTestStatus,
     setTestResponse,
     fetchAllConnections,
@@ -369,7 +371,9 @@ const CreateBlueprint = (props) => {
     setManagedConnection(NullBlueprintConnection)
     setTestStatus(0)
     setTestResponse(null)
+    setInitialTokenStore({})
     clearActiveConnection()
+    setActiveConnection(NullConnection)
   }
 
   const handleTransformationSave = () => {
@@ -956,6 +960,7 @@ const CreateBlueprint = (props) => {
         name={connectionName}
         proxy={proxy}
         token={token}
+        initialTokenStore={initialTokenStore}
         username={username}
         password={password}
         isOpen={connectionDialogIsOpen}

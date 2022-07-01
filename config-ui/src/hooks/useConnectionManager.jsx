@@ -45,6 +45,11 @@ function useConnectionManager(
   const [endpointUrl, setEndpointUrl] = useState()
   const [proxy, setProxy] = useState()
   const [token, setToken] = useState()
+  const [initialTokenStore, setInitialTokenStore] = useState({
+    0: '',
+    1: '',
+    2: ''
+  })
   const [username, setUsername] = useState()
   const [password, setPassword] = useState()
 
@@ -179,6 +184,8 @@ function useConnectionManager(
           name: name,
           endpoint: endpointUrl,
           token: token,
+          // @todo: remove auth, testing only
+          auth: token,
           proxy: proxy,
           ...connectionPayload,
         }
@@ -198,6 +205,8 @@ function useConnectionManager(
           name: name,
           endpoint: endpointUrl,
           token: token,
+          // @todo: remove auth, testing only
+          auth: token,
           proxy: proxy,
           ...connectionPayload,
         }
@@ -335,6 +344,7 @@ function useConnectionManager(
             proxy: connectionData.proxy || connectionData.Proxy,
             username: connectionData.username || connectionData.Username,
             password: connectionData.password || connectionData.Password,
+            token: connectionData.token || connectionData.auth
           })
           setTimeout(() => {
             setIsFetching(false)
@@ -545,11 +555,17 @@ function useConnectionManager(
     setUsername('')
     setPassword('')
     setToken('')
+    setInitialTokenStore({
+      0: '',
+      1: '',
+      2: ''
+    })
     setProxy('')
   }, [])
 
   useEffect(() => {
     if (activeConnection && activeConnection.ID !== null) {
+      const connectionToken = activeConnection.auth || activeConnection.token || activeConnection.basicAuthEncoded
       setName(activeConnection.name)
       setEndpointUrl(activeConnection.endpoint)
       switch (provider.id) {
@@ -558,11 +574,12 @@ function useConnectionManager(
           setPassword(activeConnection.password)
           break
         case Providers.GITLAB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          setToken(activeConnection.basicAuthEncoded || activeConnection.token || activeConnection.auth)
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.GITHUB:
-          setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+          setToken(connectionToken)
+          setInitialTokenStore(connectionToken?.split(',')?.reduce((tS,cT,id) => ({...tS, [id]: cT}), {}))
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
@@ -638,6 +655,7 @@ function useConnectionManager(
     username,
     password,
     token,
+    initialTokenStore,
     provider,
     setActiveConnection,
     setProvider,
@@ -645,6 +663,7 @@ function useConnectionManager(
     setEndpointUrl,
     setProxy,
     setToken,
+    setInitialTokenStore,
     setUsername,
     setPassword,
     setIsSaving,
