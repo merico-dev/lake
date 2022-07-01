@@ -52,10 +52,12 @@ export default function AddConnection () {
     isTesting,
     showError,
     testStatus,
+    testResponse,
     name,
     endpointUrl,
     proxy,
     token,
+    initialTokenStore,
     username,
     password,
     setName,
@@ -64,6 +66,7 @@ export default function AddConnection () {
     setUsername,
     setPassword,
     setToken,
+    setInitialTokenStore,
     fetchAllConnections,
     connectionLimitReached,
     // Providers
@@ -160,6 +163,7 @@ export default function AddConnection () {
                   endpointUrl={endpointUrl}
                   proxy={proxy}
                   token={token}
+                  initialTokenStore={initialTokenStore}
                   username={username}
                   password={password}
                   onSave={() => saveConnection({})}
@@ -175,6 +179,7 @@ export default function AddConnection () {
                   isSaving={isSaving}
                   isTesting={isTesting}
                   testStatus={testStatus}
+                  testResponse={testResponse}
                   errors={errors}
                   showError={showError}
                   authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider.id) ? 'plain' : 'token'}

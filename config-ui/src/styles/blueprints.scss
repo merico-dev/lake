@@ -157,7 +157,7 @@
     border-radius: 8px;
 
     h3 {
-      font-size: 16px;
+      font-size: 15px;
     }
     
     h4 {
@@ -216,9 +216,28 @@
 
 .bp3-dialog {
   &.dialog-manage-connection {
+    .bp3-dialog-header {
+      h4.bp3-heading {
+        font-size: 16px;
+      }
+
+      .bp3-icon {
+        svg {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
     .bp3-form-group {
       margin: 0 0 8px;
       flex: 1;
+
+      label {
+        font-weight: bold;
+        &.normal {
+          font-weight: normal;
+        }
+      }
       
       .bp3-form-content {
         flex: 1;

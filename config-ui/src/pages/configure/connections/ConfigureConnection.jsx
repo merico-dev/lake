@@ -60,8 +60,10 @@ export default function ConfigureConnection () {
     username,
     password,
     token,
+    initialTokenStore,
     errors,
     testStatus,
+    testResponse,
     isSaving: isSavingConnection,
     isTesting: isTestingConnection,
     isFetching: isLoadingConnection,
@@ -71,6 +73,7 @@ export default function ConfigureConnection () {
     setUsername,
     setPassword,
     setToken,
+    setInitialTokenStore,
     // saveComplete: saveConnectionComplete,
     showError: showConnectionError,
     isDeleting: isDeletingConnection,
@@ -247,6 +250,7 @@ export default function ConfigureConnection () {
                             endpointUrl={endpointUrl}
                             proxy={proxy}
                             token={token}
+                            initialTokenStore={initialTokenStore}
                             username={username}
                             password={password}
                             // JIRA and GITLAB are multi-connection plugins, for now we intentially won't include additional settings during save...
@@ -263,6 +267,7 @@ export default function ConfigureConnection () {
                             isSaving={isSavingConnection}
                             isTesting={isTestingConnection}
                             testStatus={testStatus}
+                            testResponse={testResponse}
                             errors={errors}
                             showError={showConnectionError}
                             authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider.id) ? 'plain' : 'token'}

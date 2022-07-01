@@ -45,7 +45,11 @@ export default function ConnectionForm (props) {
     name,
     endpointUrl,
     token,
-    initialTokenStore = {},
+    initialTokenStore = {
+      0: '',
+      1: '',
+      2: ''
+    },
     username,
     password,
     proxy = '',
@@ -125,17 +129,14 @@ export default function ConnectionForm (props) {
 
   const addAnotherAccessToken = () => {
     const emptyToken = ''
-    // setPersonalAccessTokens(tokens => [...new Set([...tokens, emptyToken])])
     setTokenStore(tokens => ({...tokens, [Object.keys(tokens).length]: emptyToken}))
   }
 
   const setPersonalToken = (id, newToken) => {
-    // setPersonalAccessTokens(tokens => [...new Set([...tokens, token])])
     setTokenStore(tokens => ({...tokens, [id]: newToken}))
   }
 
   const removePersonalToken = (id) => {
-    // setPersonalAccessTokens(tokens => tokens.filter(t => t !== id))
     setTokenStore(tokens => Object.values(tokens).filter((t, tId) => tId !== id).reduce((newStore, cT, tId) => ({...newStore, [tId]: cT}), {}))
   }
 
@@ -355,8 +356,8 @@ export default function ConnectionForm (props) {
                           Learn about how to create a personal access token
                       </a>
                     </p>
-                    <label>Personal Access Token(s) *</label>
-                    <div className='personal-access-tokens'>
+                    <label className='normal'>Personal Access Token(s)</label>
+                    <div className='personal-access-tokens' style={{ margin: '5px 0' }}>
                     <div className='pats-inputgroup' style={{ display: 'flex', flexDirection: 'column' }}>
                       {(Object.values(tokenStore)).map((pat, patIdx) => (
                         <div
@@ -396,8 +397,9 @@ export default function ConnectionForm (props) {
                         </div>
                       ))}
                     </div>
-                    <div className='pats-actions'>
+                    <div className='pats-actions' style={{ marginTop: '5px' }}>
                       <Button
+                        disabled={isSaving || isTesting}
                         text='Another Token'
                         icon='plus'
                         intent={Intent.PRIMARY}

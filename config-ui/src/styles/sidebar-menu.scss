@@ -4,7 +4,7 @@
   color: #ddd;
 
   > li {
-    font-size: 13px;
+    font-size: 12px;
     transition: all 0.3s ease;
     color: #ffffff;
 
@@ -16,7 +16,7 @@
       outline: none !important;
 
       &.bp3-active {
-        font-weight: bold;
+        // font-weight: bold;
         background-color: #7497F7;
         color: #ffffff;
       }
