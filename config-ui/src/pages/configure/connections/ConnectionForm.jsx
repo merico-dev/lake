@@ -53,6 +53,7 @@ export default function ConnectionForm (props) {
     showError,
     errors,
     testStatus,
+    testResponse,
     onSave = () => {},
     onCancel = () => {},
     onTest = () => {},
@@ -80,6 +81,12 @@ export default function ConnectionForm (props) {
   // const [isValidForm, setIsValidForm] = useState(true)
   const [allowedAuthTypes, setAllowedAuthTypes] = useState(['token', 'plain'])
   const [stateErrored, setStateErrored] = useState(false)
+  const [tokenStore, setTokenStore] = useState({
+    0: '',
+    1: '',
+    2: ''
+  })
+  const [personalAccessTokens, setPersonalAccessTokens] = useState([])
 
   const getConnectionStatusIcon = () => {
     let statusIcon = <Icon icon='full-circle' size='10' color={Colors.RED3} />
@@ -119,6 +126,22 @@ export default function ConnectionForm (props) {
     setStateErrored(elementId || false)
   }
 
+  const addAnotherAccessToken = () => {
+    const emptyToken = ''
+    // setPersonalAccessTokens(tokens => [...new Set([...tokens, emptyToken])])
+    setTokenStore(tokens => ({...tokens, [Object.keys(tokens).length]: emptyToken}))
+  }
+
+  const setPersonalToken = (id, newToken) => {
+    // setPersonalAccessTokens(tokens => [...new Set([...tokens, token])])
+    setTokenStore(tokens => ({...tokens, [id]: newToken}))
+  }
+
+  const removePersonalToken = (id) => {
+    // setPersonalAccessTokens(tokens => tokens.filter(t => t !== id))
+    setTokenStore(tokens => Object.values(tokens).filter((t, tId) => tId !== id).reduce((newStore, cT, tId) => ({...newStore, [tId]: cT}), {}))
+  }
+
   useEffect(() => {
     if (!allowedAuthTypes.includes(authType)) {
       console.log('INVALID AUTH TYPE!')
@@ -136,6 +159,16 @@ export default function ConnectionForm (props) {
   useEffect(() => {
     console.log('>> CONNECTION FORM VALIDATION STATUS CHANGED...', isValid)
   }, [isValid])
+
+  useEffect(() => {
+    console.log('>> PERSONAL TOKEN STORE UPDATED...', tokenStore)
+    setPersonalAccessTokens(Object.values(tokenStore).filter(t => t !== ''))
+  }, [tokenStore])
+
+  useEffect(() => {
+    console.log('>> PERSONAL ACCESS TOKENS ENTERED...', personalAccessTokens)
+    onTokenChange(personalAccessTokens.join(',').trim())
+  }, [personalAccessTokens])
 
   return (
     <>
@@ -191,12 +224,12 @@ export default function ConnectionForm (props) {
               id='connection-name'
               inputRef={connectionNameRef}
               disabled={isTesting || isSaving || isLocked}
-              readOnly={[Providers.JENKINS].includes(activeProvider.id)}
+              // readOnly={[Providers.JENKINS].includes(activeProvider.id)}
               placeholder={placeholders ? placeholders.name : 'Enter Instance Name'}
               value={name}
               onChange={(e) => onNameChange(e.target.value)}
               className={`input connection-name-input ${stateErrored === 'connection-name' ? 'invalid-field' : ''}`}
-              leftIcon={[Providers.GITHUB, Providers.GITLAB, Providers.JENKINS].includes(activeProvider.id) ? 'lock' : null}
+              // leftIcon={[Providers.GITHUB, Providers.GITLAB, Providers.JENKINS].includes(activeProvider.id) ? 'lock' : null}
               inline={true}
               rightElement={(
                 <InputValidationError
@@ -272,7 +305,9 @@ export default function ConnectionForm (props) {
               </Label>
               {[Providers.GITHUB].includes(activeProvider.id)
                 ? (
-                  <div
+                  <>
+                  {/* TEXTAREA Multi-line Token Input (Disabled) */}
+                  {/* <div
                     className='bp3-input-group connection-token-group' style={{
                       boxSizing: 'border-box',
                       width: '99%',
@@ -304,9 +339,74 @@ export default function ConnectionForm (props) {
                         validateOnFocus
                       />
                     </span>
+                  </div> */}
+                  <div className='connection-tokens-personal-group'>
+                    <p>Add one or more personal token(s) for authentication from you and your organization members. Multiple tokens can help speed up the data collection process. </p>
+                    <p>
+                      <a
+                        // eslint-disable-next-line max-len
+                        href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                        target='_blank'
+                        rel='noreferrer'>
+                          Learn about how to create a personal access token
+                      </a>
+                    </p>
+                    <label>Personal Access Token(s) *</label>
+                    <div className='personal-access-tokens'>
+                    <div className='pats-inputgroup' style={{ display: 'flex', flexDirection: 'column' }}>
+                      {(Object.values(tokenStore)).map((pat, patIdx) => (
+                        <div
+                          className='pat-input'
+                          key={`pat-input-key-${patIdx}`} 
+                          style={{ display: 'flex', flex: 1, marginBottom: '8px' }}
+                        >
+                          <div className='token-input' style={{ flex: 1, maxWidth: '55%' }}>
+                          <InputGroup
+                            id={`pat-id-${patIdx}`}
+                            type='password'
+                            placeholder='Token'
+                            value={pat}
+                            onChange={(e) => setPersonalToken(patIdx, e.target.value)}
+                            className={`input personal-token-input`}
+                            fill
+                          />
+                          </div>
+                          {testResponse?.message && (<div className='token-info-status' style={{ display: 'flex', padding: '0 10px' }}>
+                              { /* @todo: add username & duplicated status info by token after api changes integrated */}
+                              {/* <span color={Colors.GRAY4}>From: username</span> &nbsp; &nbsp; */}
+                              {(testResponse?.success && pat !== '') || (pat !== '' && testResponse?.message.includes('token') && !testResponse?.message?.includes(`token failed for #${patIdx + 1}`)) ? (
+                                <>
+                                  <span className='token-validation-status' style={{ color: Colors.GREEN4 }}>Valid</span>
+                                </>
+                              ) : (
+                                <>
+                                  <span className='token-validation-status' style={{ color: Colors.RED4 }}>{pat === '' ? '' : 'Invalid'}</span>
+                                </>
+                              )}
+                          </div>)}
+                          <div className='token-removal' style={{ marginLeft: 'auto', justifyContent: 'flex-end'}}>
+                            <Button icon='small-cross' intent={Intent.PRIMARY} minimal small onClick={() => removePersonalToken(patIdx)} />
+                          </div>
+              
+                        </div>
+                      ))}
+                    </div>
+                    <div className='pats-actions'>
+                      <Button
+                        text='Another Token'
+                        icon='plus'
+                        intent={Intent.PRIMARY}
+                        small
+                        outlined 
+                        onClick={() => addAnotherAccessToken(personalAccessTokens.length)}
+                      />
+                    </div>
+                    </div>
                   </div>
+                  </>
                   )
                 : (
+                  <>
                   <InputGroup
                     id='connection-token'
                     inputRef={connectionTokenRef}
@@ -327,6 +427,7 @@ export default function ConnectionForm (props) {
                       />
                 )}
                   />
+                  </>
                   )}
               {
                 /*activeProvider.id === Providers.JIRA &&

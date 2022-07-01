@@ -63,6 +63,8 @@ const ConnectionDialog = (props) => {
     activeProvider,
     integrations = [],
     setProvider = () => {},
+    setTestStatus = () => {},
+    setTestResponse = () => {},
     connection = NullBlueprintConnection,
     name,
     endpointUrl,
@@ -76,6 +78,7 @@ const ConnectionDialog = (props) => {
     isSaving = false,
     isValid = false,
     // editMode = false,
+    // @todo: lift data sources list to configuration level, requires expansion when more providers are added..
     dataSourcesList = [
       {
         id: 1,
@@ -117,8 +120,10 @@ const ConnectionDialog = (props) => {
     onPasswordChange=() => {},
     showConnectionError = false,
     testStatus,
+    testResponse,
     errors = [],
     validationErrors = [],
+    canOutsideClickClose = false,
     // authType,
     // showLimitWarning = false
   } = props
@@ -145,13 +150,13 @@ const ConnectionDialog = (props) => {
   }
   
   const getConnectionStatusIcon = useCallback(() => {
-    let i = <Icon icon='full-circle' size='10' color={Colors.RED3} />
+    let i = <Icon icon='full-circle' size='10' color={Colors.RED5} />
     switch (testStatus) {
       case 1:
         i = <Icon icon='full-circle' size='10' color={Colors.GREEN3} />
         break
       case 2:
-        i = <Icon icon='full-circle' size='10' color={Colors.RED3} />
+        i = <Icon icon='full-circle' size='10' color={Colors.RED5} />
         break
       case 0:
       default:
@@ -175,6 +180,8 @@ const ConnectionDialog = (props) => {
   useEffect(() => {
     console.log('>>> DATASOURCE CHANGED....', datasource)
     setProvider(integrations.find(p => p.id === datasource.value))
+    setTestStatus(0)
+    setTestResponse(null)
   }, [datasource])
 
   useEffect(() => {
@@ -194,6 +201,8 @@ const ConnectionDialog = (props) => {
         isOpen={isOpen}
         onClose={onClose}
         onClosed={() => {}}
+        // prevent outside close so user can edit without accidental closing of dialog
+        canOutsideClickClose={canOutsideClickClose}
         style={{ backgroundColor: '#ffffff' }}
       >
         <div className={Classes.DIALOG_BODY}>
@@ -295,6 +304,7 @@ const ConnectionDialog = (props) => {
                    isSaving={isSaving}
                    isTesting={isTesting}
                    testStatus={testStatus}
+                   testResponse={testResponse}
                    errors={errors}
                    showError={showConnectionError}
                    authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider?.id) ? 'plain' : 'token'}
@@ -314,22 +324,29 @@ const ConnectionDialog = (props) => {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <div className='test-response-message' style={{ marginRight: 'auto' }}>
+              {testResponse && (<>
+                {testResponse.success ? <span style={{ color: Colors.GREEN5 }}>Successfully Connected!</span> : <span style={{ color: Colors.RED5 }}>Connection Failed</span>}
+              </>)}
+            </div>
             <Button
               className='btn-test'
               icon={getConnectionStatusIcon()}
-              disabled={isSaving || isTesting}
+              disabled={isSaving || !isValid || isTesting}
               onClick={() => onTest(false)}
               loading={isTesting}
+              outlined
             >
               Test Connection
             </Button>
             <Button
               className='btn-save'
               disabled={isSaving || !isValid || isTesting}
-              icon='cloud-upload'
+              // icon='cloud-upload'
               intent={Intent.PRIMARY}
               onClick={() => onSave(connection ? connection.id : null)}
               loading={isSaving}
+              outlined
             >
               {'Save Connection'}
             </Button>

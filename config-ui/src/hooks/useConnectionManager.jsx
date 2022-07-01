@@ -57,6 +57,7 @@ function useConnectionManager(
   const [errors, setErrors] = useState([])
   const [showError, setShowError] = useState(false)
   const [testStatus, setTestStatus] = useState(0) //  0=Pending, 1=Success, 2=Failed
+  const [testResponse, setTestResponse] = useState()
   const [sourceLimits, setConnectionLimits] = useState(ProviderConnectionLimits)
 
   const [activeConnection, setActiveConnection] = useState(NullConnection)
@@ -97,6 +98,8 @@ function useConnectionManager(
             connectionPayload = {
               endpoint: endpointUrl,
               token: token,
+              // @todo: remove auth, testing only
+              auth: token,
               proxy: proxy,
             }
             break
@@ -123,6 +126,7 @@ function useConnectionManager(
           connectionPayload
         )
         const res = await request.post(testUrl, connectionPayload)
+        setTestResponse(res.data)
         console.log('res.data', res.data)
         if (res.data?.success && res.status === 200) {
           setIsTesting(false)
@@ -588,7 +592,7 @@ function useConnectionManager(
 
   useEffect(() => {
     console.log(
-      '>> CONNECTION MANAGER - RECEIVED ACTIVE PROVIDER...',
+      '>> CONNECTION MANAGER - SELECTING ACTIVE PROVIDER...',
       provider
     )
     if (provider && provider?.id) {
@@ -606,6 +610,11 @@ function useConnectionManager(
   useEffect(() => {
     console.log('>> TESTED CONNECTION RESULTS...', testedConnections)
   }, [testedConnections])
+
+  useEffect(() => {
+    console.log('>> CONNECTION MANAGER, ACTIVE PROVIDER CHANGED ====>', activeProvider)
+    setProvider(activeProvider)
+  }, [activeProvider])
 
   return {
     activeConnection,
@@ -644,6 +653,7 @@ function useConnectionManager(
     setErrors,
     setShowError,
     setTestStatus,
+    setTestResponse,
     setConnectionLimits,
     allConnections,
     allProviderConnections,
@@ -656,7 +666,8 @@ function useConnectionManager(
     saveComplete,
     deleteComplete,
     getConnectionName,
-    clearConnection
+    clearConnection,
+    testResponse
   }
 }
 

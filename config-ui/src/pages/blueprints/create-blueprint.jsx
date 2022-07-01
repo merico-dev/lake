@@ -311,9 +311,12 @@ const CreateBlueprint = (props) => {
     setUsername,
     setPassword,
     setToken,
+    setTestStatus,
+    setTestResponse,
     fetchAllConnections,
     connectionLimitReached,
-    clearConnection: clearActiveConnection
+    clearConnection: clearActiveConnection,
+    testResponse
   } = useConnectionManager({
     activeProvider,
     connectionId: managedConnection?.connectionId
@@ -364,6 +367,8 @@ const CreateBlueprint = (props) => {
   const handleConnectionDialogClose = () => {
     setConnectionDialogIsOpen(false)
     setManagedConnection(NullBlueprintConnection)
+    setTestStatus(0)
+    setTestResponse(null)
     clearActiveConnection()
   }
 
@@ -942,6 +947,8 @@ const CreateBlueprint = (props) => {
         integrations={integrationsData}
         activeProvider={activeProvider}
         setProvider={setActiveProvider}
+        setTestStatus={setTestStatus}
+        setTestResponse={setTestResponse}
         connection={managedConnection}
         errors={connectionErrors}
         validationErrors={connectionValidationErrors}
@@ -967,6 +974,7 @@ const CreateBlueprint = (props) => {
         onUsernameChange={setUsername}
         onPasswordChange={setPassword}
         testStatus={testStatus}
+        testResponse={testResponse}
       />
 
       <CodeInspector
