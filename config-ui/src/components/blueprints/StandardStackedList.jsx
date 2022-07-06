@@ -41,7 +41,7 @@ const StandardStackedList = (props) => {
   } = props
 
   useEffect(() => {
-    console.log('>>> LOOK HERE!!!!', transformations, activeItem)
+    console.log('>>> Selector List Transformations...', transformations, activeItem)
   }, [transformations, activeItem])
 
   return (
@@ -102,7 +102,7 @@ const StandardStackedList = (props) => {
                         color={Colors.BLUE4}
                       />
                     }
-                    text={Object.keys(transformations[item])?.some(configObject => transformations[item][configObject]?.length > 0 )  ? editButtonText : addButtonText }
+                    text={Object.keys(transformations[item] ? transformations[item] : {})?.some(configObject => transformations[item][configObject]?.length > 0 )  ? editButtonText : addButtonText }
                     color={Colors.BLUE3}
                     small
                     minimal={activeItem !== item ? true : false}

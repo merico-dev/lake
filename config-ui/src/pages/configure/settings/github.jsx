@@ -17,7 +17,7 @@
  */
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { FormGroup, InputGroup, Label, Tag } from '@blueprintjs/core'
+import { FormGroup, RadioGroup, InputGroup, Radio, Label, Tag } from '@blueprintjs/core'
 
 import '@/styles/integration.scss'
 import '@/styles/connections.scss'
@@ -33,10 +33,25 @@ export default function GithubSettings (props) {
   } = props
   
   const [errors, setErrors] = useState([])
+  const [enableAdditionalCalculations, setEnableAdditionalCalculations] = useState('disabled')
+
+  const handleAdditionalSettings = (setting) => {
+    setEnableAdditionalCalculations(setting)
+  }
 
   useEffect(() => {
     console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)
+    if (transformation?.gitextractorCalculation !== '') {
+      setEnableAdditionalCalculations('enabled')
+    }
   }, [transformation])
+
+  useEffect(() => {
+    console.log('>>>> ENABLE GITHUB ADDITIONAL SETTINGS..?', enableAdditionalCalculations)
+    if (enableAdditionalCalculations === 'disabled') {
+      // onSettingsChange({...transformation, gitextractorCalculation: ''}, configuredProject)
+    }
+  }, [enableAdditionalCalculations])
 
   return (
     <>
@@ -228,6 +243,42 @@ export default function GithubSettings (props) {
             />
           </FormGroup>
         </div>
+      </div>
+
+      <h5>Additional Settings</h5>
+      <div>
+        <RadioGroup
+          label={false}
+          onChange={(e) => handleAdditionalSettings(e.currentTarget.value)}
+          selectedValue={enableAdditionalCalculations}
+        >
+          <Radio label='Disabled' value='disabled' />
+          <Radio label='Enable calculation of commit and issue difference' value='enabled' />
+        </RadioGroup>
+        {enableAdditionalCalculations === 'enabled' && (
+          <>
+            <div className='formContainer'>
+              <FormGroup
+                disabled={isSaving || isSavingConnection}
+                inline={true}
+                label={false}
+                className='formGroup'
+                contentClassName='formGroupContent'
+              >
+                <InputGroup
+                  id='gitextractor-calculation-regex'
+                  placeholder=''
+                  value={transformation?.gitextractorCalculation}
+                  onChange={(e) => onSettingsChange({...transformation, gitextractorCalculation: e.target.value}, configuredProject)}
+                  disabled={isSaving || isSavingConnection}
+                  className='input'
+                  maxLength={255}
+                />
+              </FormGroup>
+            </div>          
+
+          </>
+        )}
       </div>
     </>
   )

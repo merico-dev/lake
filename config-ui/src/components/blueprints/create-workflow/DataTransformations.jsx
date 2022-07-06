@@ -191,7 +191,7 @@ const DataTransformations = (props) => {
                   {configuredProject && (
                     <div>
                       <h4>Project</h4>
-                      <p>{configuredProject || '< select a project >'}</p>
+                      <p style={{ color: '#292B3F' }}>{configuredProject || '< select a project >'}</p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h4 style={{ margin: 0 }}>
                           Data Transformation Rules 

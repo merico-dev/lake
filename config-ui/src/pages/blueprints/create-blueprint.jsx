@@ -499,11 +499,10 @@ const CreateBlueprint = (props) => {
   }
   
   const setTransformationSettings = useCallback((settings, configuredProject) => {
-    // @todo: fix configuredProject is null here!
     console.log(`>> SETTING TRANSFORMATION SETTINGS [PROJECT = ${configuredProject}]...`, settings)
     setTransformations(existingTransformations => ({
       ...existingTransformations,
-      [configuredProject]: { ...settings }
+      [configuredProject]: { ...existingTransformations[configuredProject], ...settings }
     }))
   }, [])
 
@@ -713,6 +712,7 @@ const CreateBlueprint = (props) => {
               issueTypeRequirement: '',
               issueTypeBug: '',
               issueTypeIncident: '',
+              gitextractorCalculation: ''
             }
           break
           case Providers.JIRA:
@@ -730,20 +730,20 @@ const CreateBlueprint = (props) => {
         }
       return transforms
     }
-    // @todo: check if this setter is required at this level
     // @todo: fix lost transformations when connection tabs switch
-    // setConfiguredProject(projects.length > 0 ? projects[0] : null)
     const initializeTransformations = (pV, cV) => ({ ...pV, [cV]: getDefaultTransformations(configuredConnection?.provider)})
     const projectTransformation = projects[configuredConnection?.id]
     if (projectTransformation) {
       setTransformations(cT => ({
-        ...projectTransformation.reduce(initializeTransformations, {})
+        ...projectTransformation.reduce(initializeTransformations, {}),
+        // Spread Current/Existing Transformations Settings ($cT) after Init...
+        ...cT
       }))
     }
   }, [projects, configuredConnection])
 
   useEffect(() => {
-    console.log('>>> SELECTED PROJECT TO CONFIGURE...', configuredProject)
+    console.log('>>> SELECTED PROJECT TO CONFIGURE...', configuredProject, transformations)
     setActiveTransformation(aT => configuredProject ? transformations[configuredProject] : aT)
   }, [configuredProject, transformations])
 
