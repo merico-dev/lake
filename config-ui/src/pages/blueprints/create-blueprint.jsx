@@ -712,7 +712,11 @@ const CreateBlueprint = (props) => {
               issueTypeRequirement: '',
               issueTypeBug: '',
               issueTypeIncident: '',
-              gitextractorCalculation: ''
+              refdiff: {
+                tagsOrder: '',
+                tagsPattern: '',
+                tagsLimit: 10
+              }
             }
           break
           case Providers.JIRA:

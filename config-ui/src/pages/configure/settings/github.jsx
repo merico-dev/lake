@@ -17,7 +17,7 @@
  */
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { FormGroup, RadioGroup, InputGroup, Radio, Label, Tag } from '@blueprintjs/core'
+import { FormGroup, Checkbox, InputGroup, NumericInput, Tag } from '@blueprintjs/core'
 
 import '@/styles/integration.scss'
 import '@/styles/connections.scss'
@@ -33,7 +33,7 @@ export default function GithubSettings (props) {
   } = props
   
   const [errors, setErrors] = useState([])
-  const [enableAdditionalCalculations, setEnableAdditionalCalculations] = useState('disabled')
+  const [enableAdditionalCalculations, setEnableAdditionalCalculations] = useState(false)
 
   const handleAdditionalSettings = (setting) => {
     setEnableAdditionalCalculations(setting)
@@ -41,8 +41,11 @@ export default function GithubSettings (props) {
 
   useEffect(() => {
     console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)
-    if (transformation?.gitextractorCalculation !== '') {
-      setEnableAdditionalCalculations('enabled')
+    if (transformation?.refdiff !== '' 
+      && transformation?.refdiff?.tagsOrder 
+      && transformation?.refdiff?.tagsPattern 
+      && transformation?.refdiff?.tagsLimit) {
+      setEnableAdditionalCalculations(true)
     }
   }, [transformation])
 
@@ -247,29 +250,57 @@ export default function GithubSettings (props) {
 
       <h5>Additional Settings</h5>
       <div>
-        <RadioGroup
-          label={false}
-          onChange={(e) => handleAdditionalSettings(e.currentTarget.value)}
-          selectedValue={enableAdditionalCalculations}
-        >
-          <Radio label='Disabled' value='disabled' />
-          <Radio label='Enable calculation of commit and issue difference' value='enabled' />
-        </RadioGroup>
-        {enableAdditionalCalculations === 'enabled' && (
+        <Checkbox checked={enableAdditionalCalculations} label="Enable calculation of commit and issue difference" onChange={(e) => handleAdditionalSettings(!enableAdditionalCalculations)} />
+        {enableAdditionalCalculations && (
           <>
-            <div className='formContainer'>
+            <div className='additional-settings-refdiff'>
+              <FormGroup
+                  disabled={isSaving || isSavingConnection}
+                  inline={true}
+                  label='Tags Limit'
+                  className='formGroup'
+                  contentClassName='formGroupContent'
+                >
+                  <NumericInput
+                    id='refdiff-tags-limit'
+                    fill={true}
+                    placeholder='10'
+                    allowNumericCharactersOnly={true}
+                    // onBlur={}
+                    // onKeyDown={}
+                    onValueChange={(tagsLimitNumeric) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsLimit: tagsLimitNumeric}}, configuredProject)}
+                    value={transformation?.refdiff?.tagsLimit || 10}
+                />
+              </FormGroup>
               <FormGroup
                 disabled={isSaving || isSavingConnection}
                 inline={true}
-                label={false}
+                label='Tags Pattern'
                 className='formGroup'
                 contentClassName='formGroupContent'
               >
                 <InputGroup
-                  id='gitextractor-calculation-regex'
-                  placeholder=''
-                  value={transformation?.gitextractorCalculation}
-                  onChange={(e) => onSettingsChange({...transformation, gitextractorCalculation: e.target.value}, configuredProject)}
+                  id='refdiff-tags-pattern'
+                  placeholder='(regex)$'
+                  value={transformation?.refdiff?.tagsPattern}
+                  onChange={(e) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsPattern: e.target.value}}, configuredProject)}
+                  disabled={isSaving || isSavingConnection}
+                  className='input'
+                  maxLength={255}
+                />
+              </FormGroup>
+              <FormGroup
+                disabled={isSaving || isSavingConnection}
+                inline={true}
+                label='Tags Order'
+                className='formGroup'
+                contentClassName='formGroupContent'
+              >
+                <InputGroup
+                  id='refdiff-tags-order'
+                  placeholder='reverse semver'
+                  value={transformation?.refdiff?.tagsOrder}
+                  onChange={(e) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsOrder: e.target.value}}, configuredProject)}
                   disabled={isSaving || isSavingConnection}
                   className='input'
                   maxLength={255}
