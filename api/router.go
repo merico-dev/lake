@@ -54,6 +54,11 @@ func RegisterRouter(r *gin.Engine) {
 	r.POST("/push/:tableName", push.Post)
 	r.GET("/domainlayer/repos", domainlayer.ReposIndex)
 
+	for name, pluginEntry := range core.AllPlugins() {
+		if routerSetter, ok := pluginEntry.(core.PluginRouterSetter); ok {
+			routerSetter.SetRouter(r.Group("/plugins/" + name))
+		}
+	}
 	// mount all api resources for all plugins
 	pluginsApiResources, err := services.GetPluginsApiResources()
 	if err != nil {

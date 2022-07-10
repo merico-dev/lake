@@ -15,16 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package crossdomain
+package main
 
-import "github.com/apache/incubator-devlake/models/common"
+import "github.com/apache/incubator-devlake/plugins/org/impl"
 
-type UserAccount struct {
-	UserId    string `gorm:"primaryKey;type:varchar(255)"`
-	AccountId string `gorm:"primaryKey;type:varchar(255)"`
-	common.NoPKModel
-}
-
-func (UserAccount) TableName() string {
-	return "user_accounts"
-}
+var PluginEntry impl.Org //nolint
