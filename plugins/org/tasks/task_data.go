@@ -15,16 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package crossdomain
+package tasks
 
-import "github.com/apache/incubator-devlake/models/common"
-
-type UserAccount struct {
-	UserId    string `gorm:"primaryKey;type:varchar(255)"`
-	AccountId string `gorm:"primaryKey;type:varchar(255)"`
-	common.NoPKModel
+type Options struct {
+	ConnectionId uint64 `json:"connectionId"`
 }
 
-func (UserAccount) TableName() string {
-	return "user_accounts"
+type TaskData struct {
+	Options *Options
+}
+type Params struct {
+	ConnectionId uint64
 }

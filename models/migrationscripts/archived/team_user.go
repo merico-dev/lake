@@ -20,6 +20,7 @@ package archived
 type TeamUser struct {
 	TeamId string `gorm:"primaryKey;type:varchar(255)"`
 	UserId string `gorm:"primaryKey;type:varchar(255)"`
+	NoPKModel
 }
 
 func (TeamUser) TableName() string {

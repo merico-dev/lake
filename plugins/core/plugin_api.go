@@ -17,7 +17,10 @@ limitations under the License.
 
 package core
 
-import "net/url"
+import (
+	"github.com/gin-gonic/gin"
+	"net/url"
+)
 
 // Contains api request information
 type ApiResourceInput struct {
@@ -47,4 +50,8 @@ type ApiResourceHandler func(input *ApiResourceInput) (*ApiResourceOutput, error
 // }
 type PluginApi interface {
 	ApiResources() map[string]map[string]ApiResourceHandler
+}
+
+type PluginRouterSetter interface {
+	SetRouter(r *gin.RouterGroup)
 }

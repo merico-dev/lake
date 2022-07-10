@@ -15,16 +15,34 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package crossdomain
+package api
 
-import "github.com/apache/incubator-devlake/models/common"
+import (
+	"encoding/csv"
 
-type UserAccount struct {
-	UserId    string `gorm:"primaryKey;type:varchar(255)"`
-	AccountId string `gorm:"primaryKey;type:varchar(255)"`
-	common.NoPKModel
+	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/dal"
+	"github.com/gin-gonic/gin"
+	"github.com/gocarina/gocsv"
+)
+
+type Handlers struct {
+	store store
 }
 
-func (UserAccount) TableName() string {
-	return "user_accounts"
+func NewHandlers(db dal.Dal, basicRes core.BasicRes) *Handlers {
+	return &Handlers{store: NewDbStore(db, basicRes)}
+}
+
+func (h *Handlers) unmarshal(c *gin.Context, items interface{}) error {
+	file, err := c.FormFile("file")
+	if err != nil {
+		return err
+	}
+	f, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return gocsv.UnmarshalCSV(csv.NewReader(f), items)
 }
