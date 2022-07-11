@@ -25,8 +25,8 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
-func (h *Handlers) GetAccountUser(c *gin.Context) {
-	aus, err := h.store.findAllAccountUsers()
+func (h *Handlers) GetUserAccount(c *gin.Context) {
+	aus, err := h.store.findAllUserAccounts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -39,14 +39,14 @@ func (h *Handlers) GetAccountUser(c *gin.Context) {
 	c.Data(http.StatusOK, "text/csv", blob)
 }
 
-func (h *Handlers) CreateAccountUser(c *gin.Context) {
-	var aa []accountUser
+func (h *Handlers) CreateUserAccount(c *gin.Context) {
+	var aa []userAccount
 	err := h.unmarshal(c, &aa)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	var au *accountUser
+	var au *userAccount
 	var items []interface{}
 	userAccounts := au.toDomainLayer(aa)
 	for _, userAccount := range userAccounts {
