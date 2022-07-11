@@ -20,22 +20,17 @@ package api
 import (
 	"net/http"
 
-	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
 
 func (h *Handlers) GetAccount(c *gin.Context) {
-	var aa []crossdomain.Account
-	err := h.store.findAll(&aa)
+	accounts, err := h.store.findAllAccounts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	var ua []crossdomain.UserAccount
-	var a *account
-	users := a.fromDomainLayer(aa, ua)
-	blob, err := gocsv.MarshalBytes(users)
+	blob, err := gocsv.MarshalBytes(accounts)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

@@ -20,13 +20,16 @@ package api
 import (
 	"reflect"
 
+	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/dal"
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
 
 type store interface {
-	findAll(interface{}) error
+	findAllUsers() ([]user, error)
+	findAllTeams() ([]team, error)
+	findAllAccounts() ([]account, error)
 	save(items []interface{}) error
 }
 
@@ -36,17 +39,46 @@ type dbStore struct {
 }
 
 func NewDbStore(db dal.Dal, basicRes core.BasicRes) *dbStore {
-	driver := helper.NewBatchSaveDivider(
-		basicRes,
-		1000,
-		"",
-		"",
-	)
+	driver := helper.NewBatchSaveDivider(basicRes, 1000, "", "")
 	return &dbStore{db: db, driver: driver}
 }
 
-func (d *dbStore) findAll(i interface{}) error {
-	return d.db.All(i)
+func (d *dbStore) findAllUsers() ([]user, error) {
+	var u *user
+	var uu []crossdomain.User
+	err := d.db.All(&uu)
+	if err != nil {
+		return nil, err
+	}
+	var tus []crossdomain.TeamUser
+	err = d.db.All(&tus)
+	if err != nil {
+		return nil, err
+	}
+	return u.fromDomainLayer(uu, tus), nil
+}
+func (d *dbStore) findAllTeams() ([]team, error) {
+	var tt []crossdomain.Team
+	err := d.db.All(&tt)
+	if err != nil {
+		return nil, err
+	}
+	var t *team
+	return t.fromDomainLayer(tt), nil
+}
+func (d *dbStore) findAllAccounts() ([]account, error) {
+	var aa []crossdomain.Account
+	err := d.db.All(&aa)
+	if err != nil {
+		return nil, err
+	}
+	var ua []crossdomain.UserAccount
+	err = d.db.All(&ua)
+	if err != nil {
+		return nil, err
+	}
+	var a *account
+	return a.fromDomainLayer(aa, ua), nil
 }
 
 func (d *dbStore) save(items []interface{}) error {

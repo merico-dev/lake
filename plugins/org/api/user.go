@@ -20,7 +20,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
@@ -32,17 +31,15 @@ func (h *Handlers) GetUser(c *gin.Context) {
 	_ = c.BindQuery(&query)
 	var users []user
 	var u *user
+	var err error
 	if query.FakeData {
 		users = u.fakeData()
 	} else {
-		var uu []crossdomain.User
-		err := h.store.findAll(&uu)
+		users, err = h.store.findAllUsers()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 			return
 		}
-		var tus []crossdomain.TeamUser
-		users = u.fromDomainLayer(uu, tus)
 	}
 	blob, err := gocsv.MarshalBytes(users)
 	if err != nil {

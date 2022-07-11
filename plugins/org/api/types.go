@@ -91,6 +91,9 @@ func (*user) toDomainLayer(uu []user) (users []*crossdomain.User, teamUsers []*c
 			Name:         u.Name,
 		})
 		for _, teamId := range strings.Split(u.TeamIds, ",") {
+			if u.Id == "" || teamId == "" {
+				continue
+			}
 			teamUsers = append(teamUsers, &crossdomain.TeamUser{
 				TeamId: teamId,
 				UserId: u.Id,
@@ -159,6 +162,9 @@ func (*account) toDomainLayer(aa []account) (accounts []*crossdomain.Account, us
 			CreatedDate:  createdDate,
 			Status:       a.Status,
 		})
+		if a.UserId == "" || a.Id == "" {
+			continue
+		}
 		userAccounts = append(userAccounts, &crossdomain.UserAccount{
 			UserId:    a.UserId,
 			AccountId: a.Id,
