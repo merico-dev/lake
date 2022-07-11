@@ -77,7 +77,7 @@ func (plugin *Org) SetRouter(r *gin.RouterGroup) {
 	r.GET("users.csv", plugin.handlers.GetUser)
 	r.PUT("users.csv", plugin.handlers.CreateUser)
 	r.GET("accounts.csv", plugin.handlers.GetAccount)
-	//r.PUT("accounts.csv", plugin.handlers.CreateAccount)
+	r.PUT("accounts.csv", plugin.handlers.CreateAccount)
 	r.GET("teams.csv", plugin.handlers.GetTeam)
 	r.PUT("teams.csv", plugin.handlers.CreateTeam)
 	r.GET("user_accounts.csv", plugin.handlers.GetUserAccount)

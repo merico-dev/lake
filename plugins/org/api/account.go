@@ -18,6 +18,7 @@ limitations under the License.
 package api
 
 import (
+	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -47,12 +48,14 @@ func (h *Handlers) CreateAccount(c *gin.Context) {
 	}
 	var a *account
 	var items []interface{}
-	accounts, userAccounts := a.toDomainLayer(aa)
-	for _, acc := range accounts {
-		items = append(items, acc)
-	}
+	userAccounts := a.toDomainLayer(aa)
 	for _, userAccount := range userAccounts {
 		items = append(items, userAccount)
+	}
+	err = h.store.deleteAll(&crossdomain.UserAccount{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 	err = h.store.save(items)
 	if err != nil {
