@@ -18,11 +18,9 @@ limitations under the License.
 package api
 
 import (
-	"strings"
-	"time"
-
 	"github.com/apache/incubator-devlake/models/domainlayer"
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
+	"strings"
 )
 
 const TimeFormat = "2006-01-02"
@@ -145,23 +143,9 @@ func (*account) fromDomainLayer(accounts []crossdomain.Account, userAccounts []c
 	return result
 }
 
-func (*account) toDomainLayer(aa []account) (accounts []*crossdomain.Account, userAccounts []*crossdomain.UserAccount) {
+func (*account) toDomainLayer(aa []account) []*crossdomain.UserAccount {
+	var userAccounts []*crossdomain.UserAccount
 	for _, a := range aa {
-		var createdDate *time.Time
-		t, err := time.Parse(TimeFormat, a.CreatedDate)
-		if err == nil {
-			createdDate = &t
-		}
-		accounts = append(accounts, &crossdomain.Account{
-			DomainEntity: domainlayer.DomainEntity{Id: a.Id},
-			Email:        a.Email,
-			FullName:     a.FullName,
-			UserName:     a.UserName,
-			AvatarUrl:    a.AvatarUrl,
-			Organization: a.Organization,
-			CreatedDate:  createdDate,
-			Status:       a.Status,
-		})
 		if a.UserId == "" || a.Id == "" {
 			continue
 		}
@@ -170,7 +154,7 @@ func (*account) toDomainLayer(aa []account) (accounts []*crossdomain.Account, us
 			AccountId: a.Id,
 		})
 	}
-	return
+	return userAccounts
 }
 
 type userAccount struct {
