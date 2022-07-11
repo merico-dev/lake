@@ -43,13 +43,24 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 		AccountId string
 		common.NoPKModel
 	}
+	var users []crossdomain.User
+	err := db.All(&users)
+	if err != nil {
+		return err
+	}
+	err = db.Delete(&crossdomain.UserAccount{}, dal.Where("1=1"))
+	if err != nil {
+		return err
+	}
+	emails := make(map[string]string)
+	names := make(map[string]string)
+	for _, user := range users {
+		emails[user.Email] = user.Id
+		names[user.Name] = user.Id
+	}
 	clauses := []dal.Clause{
-		dal.Select("users.id As user_id, accounts.id As account_id"),
-		dal.From(&crossdomain.User{}),
-		dal.Join(`INNER JOIN accounts
-				ON users.email = accounts.email
-                  OR users.name = accounts.full_name
-                  OR users.name = accounts.user_name `),
+		dal.Select("*"),
+		dal.From(&crossdomain.Account{}),
 	}
 	cursor, err := db.Cursor(clauses...)
 	if err != nil {
@@ -58,7 +69,7 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 	defer cursor.Close()
 
 	converter, err := helper.NewDataConverter(helper.DataConverterArgs{
-		InputRowType: reflect.TypeOf(input{}),
+		InputRowType: reflect.TypeOf(crossdomain.Account{}),
 		Input:        cursor,
 		RawDataSubTaskArgs: helper.RawDataSubTaskArgs{
 			Ctx: taskCtx,
@@ -69,13 +80,32 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 		},
 
 		Convert: func(inputRow interface{}) ([]interface{}, error) {
-			userAccount := inputRow.(*input)
-			return []interface{}{
-				&crossdomain.UserAccount{
-					UserId:    userAccount.UserId,
-					AccountId: userAccount.AccountId,
-				},
-			}, nil
+			account := inputRow.(*crossdomain.Account)
+			if userId, ok := emails[account.Email]; ok {
+				return []interface{}{
+					&crossdomain.UserAccount{
+						UserId:    userId,
+						AccountId: account.Id,
+					},
+				}, nil
+			}
+			if userId, ok := names[account.FullName]; ok {
+				return []interface{}{
+					&crossdomain.UserAccount{
+						UserId:    userId,
+						AccountId: account.Id,
+					},
+				}, nil
+			}
+			if userId, ok := names[account.UserName]; ok {
+				return []interface{}{
+					&crossdomain.UserAccount{
+						UserId:    userId,
+						AccountId: account.Id,
+					},
+				}, nil
+			}
+			return nil, nil
 		},
 	})
 	if err != nil {

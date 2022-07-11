@@ -74,10 +74,10 @@ func (plugin Org) RootPkgPath() string {
 }
 
 func (plugin *Org) SetRouter(r *gin.RouterGroup) {
-	r.GET("user.csv", plugin.handlers.GetUser)
-	r.PUT("user.csv", plugin.handlers.CreateTeam)
-	r.GET("account.csv", plugin.handlers.GetAccount)
-	r.PUT("account.csv", plugin.handlers.CreateAccount)
-	r.GET("team.csv", plugin.handlers.GetTeam)
-	r.PUT("team.csv", plugin.handlers.CreateTeam)
+	r.GET("users.csv", plugin.handlers.GetUser)
+	r.PUT("users.csv", plugin.handlers.CreateUser)
+	r.GET("accounts.csv", plugin.handlers.GetAccount)
+	r.PUT("accounts.csv", plugin.handlers.CreateAccount)
+	r.GET("teams.csv", plugin.handlers.GetTeam)
+	r.PUT("teams.csv", plugin.handlers.CreateTeam)
 }
