@@ -18,31 +18,20 @@ limitations under the License.
 package api
 
 import (
+	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"net/http"
 
-	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
 
-func (h *Handlers) GetUser(c *gin.Context) {
-	var query struct {
-		FakeData bool `form:"fake_data"`
+func (h *Handlers) GetAccountUser(c *gin.Context) {
+	aus, err := h.store.findAllAccountUsers()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
-	_ = c.BindQuery(&query)
-	var users []user
-	var u *user
-	var err error
-	if query.FakeData {
-		users = u.fakeData()
-	} else {
-		users, err = h.store.findAllUsers()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
-			return
-		}
-	}
-	blob, err := gocsv.MarshalBytes(users)
+	blob, err := gocsv.MarshalBytes(aus)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
@@ -50,28 +39,20 @@ func (h *Handlers) GetUser(c *gin.Context) {
 	c.Data(http.StatusOK, "text/csv", blob)
 }
 
-func (h *Handlers) CreateUser(c *gin.Context) {
-	var uu []user
-	err := h.unmarshal(c, &uu)
+func (h *Handlers) CreateAccountUser(c *gin.Context) {
+	var aa []accountUser
+	err := h.unmarshal(c, &aa)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-	var u *user
+	var au *accountUser
 	var items []interface{}
-	users, teamUsers := u.toDomainLayer(uu)
-	for _, user := range users {
-		items = append(items, user)
+	userAccounts := au.toDomainLayer(aa)
+	for _, userAccount := range userAccounts {
+		items = append(items, userAccount)
 	}
-	for _, teamUser := range teamUsers {
-		items = append(items, teamUser)
-	}
-	err = h.store.deleteAll(&crossdomain.User{})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
-		return
-	}
-	err = h.store.deleteAll(&crossdomain.TeamUser{})
+	err = h.store.deleteAll(&crossdomain.UserAccount{})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

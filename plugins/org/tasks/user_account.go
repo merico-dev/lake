@@ -30,7 +30,7 @@ import (
 var ConnectUserAccountsExactMeta = core.SubTaskMeta{
 	Name:             "connectUserAccountsExact",
 	EntryPoint:       ConnectUserAccountsExact,
-	EnabledByDefault: true,
+	EnabledByDefault: false,
 	Description:      "associate users and accounts",
 	DomainTypes:      []string{core.DOMAIN_TYPE_CROSS},
 }
@@ -55,8 +55,12 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 	emails := make(map[string]string)
 	names := make(map[string]string)
 	for _, user := range users {
-		emails[user.Email] = user.Id
-		names[user.Name] = user.Id
+		if user.Email != "" {
+			emails[user.Email] = user.Id
+		}
+		if user.Name != "" {
+			names[user.Name] = user.Id
+		}
 	}
 	clauses := []dal.Clause{
 		dal.Select("*"),
@@ -81,7 +85,7 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 
 		Convert: func(inputRow interface{}) ([]interface{}, error) {
 			account := inputRow.(*crossdomain.Account)
-			if userId, ok := emails[account.Email]; ok {
+			if userId, ok := emails[account.Email]; account.Email != "" && ok {
 				return []interface{}{
 					&crossdomain.UserAccount{
 						UserId:    userId,
@@ -89,7 +93,7 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 					},
 				}, nil
 			}
-			if userId, ok := names[account.FullName]; ok {
+			if userId, ok := names[account.FullName]; account.FullName != "" && ok {
 				return []interface{}{
 					&crossdomain.UserAccount{
 						UserId:    userId,
@@ -97,7 +101,7 @@ func ConnectUserAccountsExact(taskCtx core.SubTaskContext) error {
 					},
 				}, nil
 			}
-			if userId, ok := names[account.UserName]; ok {
+			if userId, ok := names[account.UserName]; account.UserName != "" && ok {
 				return []interface{}{
 					&crossdomain.UserAccount{
 						UserId:    userId,

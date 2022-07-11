@@ -20,6 +20,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
@@ -60,6 +61,11 @@ func (h *Handlers) CreateTeam(c *gin.Context) {
 	var items []interface{}
 	for _, tm := range t.toDomainLayer(tt) {
 		items = append(items, tm)
+	}
+	err = h.store.deleteAll(&crossdomain.Team{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
 	}
 	err = h.store.save(items)
 	if err != nil {
