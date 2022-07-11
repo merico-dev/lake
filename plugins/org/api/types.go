@@ -173,6 +173,33 @@ func (*account) toDomainLayer(aa []account) (accounts []*crossdomain.Account, us
 	return
 }
 
+type accountUser struct {
+	AccountId string
+	UserId    string
+}
+
+func (au *accountUser) toDomainLayer(accountUsers []accountUser) []crossdomain.UserAccount {
+	result := make([]crossdomain.UserAccount, len(accountUsers))
+	for _, ac := range accountUsers {
+		result = append(result, crossdomain.UserAccount{
+			UserId:    ac.UserId,
+			AccountId: ac.AccountId,
+		})
+	}
+	return result
+}
+
+func (au *accountUser) fromDomainLayer(accountUsers []crossdomain.UserAccount) []accountUser {
+	result := make([]accountUser, len(accountUsers))
+	for _, ac := range accountUsers {
+		result = append(result, accountUser{
+			UserId:    ac.UserId,
+			AccountId: ac.AccountId,
+		})
+	}
+	return result
+}
+
 type team struct {
 	Id           string
 	Name         string
