@@ -80,6 +80,6 @@ func (plugin *Org) SetRouter(r *gin.RouterGroup) {
 	//r.PUT("accounts.csv", plugin.handlers.CreateAccount)
 	r.GET("teams.csv", plugin.handlers.GetTeam)
 	r.PUT("teams.csv", plugin.handlers.CreateTeam)
-	r.GET("account_users.csv", plugin.handlers.GetAccountUser)
-	r.PUT("account_users.csv", plugin.handlers.CreateAccountUser)
+	r.GET("user_accounts.csv", plugin.handlers.GetUserAccount)
+	r.PUT("user_accounts.csv", plugin.handlers.CreateUserAccount)
 }

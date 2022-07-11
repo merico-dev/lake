@@ -30,7 +30,7 @@ type store interface {
 	findAllUsers() ([]user, error)
 	findAllTeams() ([]team, error)
 	findAllAccounts() ([]account, error)
-	findAllAccountUsers() ([]accountUser, error)
+	findAllUserAccounts() ([]userAccount, error)
 	deleteAll(i interface{}) error
 	save(items []interface{}) error
 }
@@ -83,14 +83,14 @@ func (d *dbStore) findAllAccounts() ([]account, error) {
 	return a.fromDomainLayer(aa, ua), nil
 }
 
-func (d *dbStore) findAllAccountUsers() ([]accountUser, error) {
+func (d *dbStore) findAllUserAccounts() ([]userAccount, error) {
 	var uas []crossdomain.UserAccount
 	err := d.db.All(&uas)
 	if err != nil {
 		return nil, err
 	}
 
-	var au *accountUser
+	var au *userAccount
 	return au.fromDomainLayer(uas), nil
 }
 func (d *dbStore) deleteAll(i interface{}) error {
