@@ -179,7 +179,7 @@ type userAccount struct {
 }
 
 func (au *userAccount) toDomainLayer(accountUsers []userAccount) []crossdomain.UserAccount {
-	result := make([]crossdomain.UserAccount, len(accountUsers))
+	result := make([]crossdomain.UserAccount, 0, len(accountUsers))
 	for _, ac := range accountUsers {
 		result = append(result, crossdomain.UserAccount{
 			UserId:    ac.UserId,
@@ -190,7 +190,7 @@ func (au *userAccount) toDomainLayer(accountUsers []userAccount) []crossdomain.U
 }
 
 func (au *userAccount) fromDomainLayer(accountUsers []crossdomain.UserAccount) []userAccount {
-	result := make([]userAccount, len(accountUsers))
+	result := make([]userAccount, 0, len(accountUsers))
 	for _, ac := range accountUsers {
 		result = append(result, userAccount{
 			UserId:    ac.UserId,
