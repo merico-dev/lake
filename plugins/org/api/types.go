@@ -162,10 +162,10 @@ type userAccount struct {
 	UserId    string
 }
 
-func (au *userAccount) toDomainLayer(accountUsers []userAccount) []crossdomain.UserAccount {
-	result := make([]crossdomain.UserAccount, 0, len(accountUsers))
+func (au *userAccount) toDomainLayer(accountUsers []userAccount) []*crossdomain.UserAccount {
+	result := make([]*crossdomain.UserAccount, 0, len(accountUsers))
 	for _, ac := range accountUsers {
-		result = append(result, crossdomain.UserAccount{
+		result = append(result, &crossdomain.UserAccount{
 			UserId:    ac.UserId,
 			AccountId: ac.AccountId,
 		})
