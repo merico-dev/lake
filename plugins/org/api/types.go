@@ -149,7 +149,7 @@ func (*account) toDomainLayer(aa []account) (accounts []*crossdomain.Account, us
 	for _, a := range aa {
 		var createdDate *time.Time
 		t, err := time.Parse(TimeFormat, a.CreatedDate)
-		if err != nil {
+		if err == nil {
 			createdDate = &t
 		}
 		accounts = append(accounts, &crossdomain.Account{
