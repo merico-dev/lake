@@ -18,9 +18,10 @@ limitations under the License.
 package api
 
 import (
-	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"net/http"
 
+	"github.com/apache/incubator-devlake/api/shared"
+	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
@@ -28,12 +29,12 @@ import (
 func (h *Handlers) GetUserAccount(c *gin.Context) {
 	aus, err := h.store.findAllUserAccounts()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	blob, err := gocsv.MarshalBytes(aus)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	c.Data(http.StatusOK, "text/csv", blob)
@@ -43,7 +44,7 @@ func (h *Handlers) CreateUserAccount(c *gin.Context) {
 	var aa []userAccount
 	err := h.unmarshal(c, &aa)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusBadRequest)
 		return
 	}
 	var au *userAccount
@@ -54,13 +55,13 @@ func (h *Handlers) CreateUserAccount(c *gin.Context) {
 	}
 	err = h.store.deleteAll(&crossdomain.UserAccount{})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	err = h.store.save(items)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, nil)
+	shared.ApiOutputSuccess(c, nil, http.StatusOK)
 }
