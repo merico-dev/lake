@@ -47,7 +47,7 @@ func CalculatePrCherryPick(taskCtx core.SubTaskContext) error {
 	db := taskCtx.GetDal()
 	var prTitleRegex *regexp.Regexp
 	var err error
-	prTitlePattern := taskCtx.GetConfig("github_pull_request_TITLE_PATTERN")
+	prTitlePattern := taskCtx.GetConfig("GITHUB_PR_TITLE_PATTERN")
 	if len(prTitlePattern) > 0 {
 		prTitleRegex, err = regexp.Compile(prTitlePattern)
 		if err != nil {

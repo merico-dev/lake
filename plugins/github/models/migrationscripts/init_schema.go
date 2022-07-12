@@ -119,8 +119,8 @@ func (u *initSchemas) Up(ctx context.Context, db *gorm.DB) error {
 		&archived.GithubAccountOrg{},
 		&archived.GithubAccount{},
 		&archived.GithubPrComment{},
-		&archived.GithubPrReview{},
 	)
+
 }
 
 func (*initSchemas) Version() uint64 {

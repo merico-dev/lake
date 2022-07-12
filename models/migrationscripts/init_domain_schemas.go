@@ -106,6 +106,7 @@ func (*initDomainSchemas) Up(ctx context.Context, db *gorm.DB) error {
 	)
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD:models/migrationscripts/init_domain_schemas.go
 func (*initDomainSchemas) Version() uint64 {
 	return 20220707232344
@@ -113,6 +114,10 @@ func (*initDomainSchemas) Version() uint64 {
 func (*initSchemas) Version() uint64 {
 	return 20220711232344
 >>>>>>> fc9539cf (feat(github): collect comments/reviews):models/migrationscripts/init_schema.go
+=======
+func (*initDomainSchemas) Version() uint64 {
+	return 20220707232344
+>>>>>>> b8097ca4 (feat(github): collect comments/reviews)
 }
 
 func (*initDomainSchemas) Owner() string {
