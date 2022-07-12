@@ -45,7 +45,7 @@ func (plugin *Org) Init(config *viper.Viper, logger core.Logger, db *gorm.DB) er
 }
 
 func (plugin Org) Description() string {
-	return "To collect and enrich data from JIRA"
+	return "collect data related to team and organization"
 }
 
 func (plugin Org) SubTaskMetas() []core.SubTaskMeta {
@@ -80,6 +80,4 @@ func (plugin *Org) SetRouter(r *gin.RouterGroup) {
 	r.PUT("accounts.csv", plugin.handlers.CreateAccount)
 	r.GET("teams.csv", plugin.handlers.GetTeam)
 	r.PUT("teams.csv", plugin.handlers.CreateTeam)
-	r.GET("user_accounts.csv", plugin.handlers.GetUserAccount)
-	r.PUT("user_accounts.csv", plugin.handlers.CreateUserAccount)
 }

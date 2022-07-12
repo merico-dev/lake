@@ -29,7 +29,7 @@ var fakeUsers = []user{{
 	Id:      "1",
 	Name:    "Tyrone K. Cummings",
 	Email:   "TyroneKCummings@teleworm.us",
-	TeamIds: "1,2",
+	TeamIds: "1;2",
 }, {
 	Id:      "2",
 	Name:    "Dorothy R. Updegraff",
@@ -75,7 +75,7 @@ func (*user) fromDomainLayer(users []crossdomain.User, teamUsers []crossdomain.T
 			Id:      u.Id,
 			Name:    u.Name,
 			Email:   u.Email,
-			TeamIds: strings.Join(teamUserMap[u.Id], ","),
+			TeamIds: strings.Join(teamUserMap[u.Id], ";"),
 		})
 	}
 	return result
@@ -88,7 +88,7 @@ func (*user) toDomainLayer(uu []user) (users []*crossdomain.User, teamUsers []*c
 			Email:        u.Email,
 			Name:         u.Name,
 		})
-		for _, teamId := range strings.Split(u.TeamIds, ",") {
+		for _, teamId := range strings.Split(u.TeamIds, ";") {
 			if u.Id == "" || teamId == "" {
 				continue
 			}

@@ -20,6 +20,7 @@ package api
 import (
 	"net/http"
 
+	"github.com/apache/incubator-devlake/api/shared"
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
@@ -38,13 +39,13 @@ func (h *Handlers) GetUser(c *gin.Context) {
 	} else {
 		users, err = h.store.findAllUsers()
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			shared.ApiOutputError(c, err, http.StatusInternalServerError)
 			return
 		}
 	}
 	blob, err := gocsv.MarshalBytes(users)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	c.Data(http.StatusOK, "text/csv", blob)
@@ -54,7 +55,7 @@ func (h *Handlers) CreateUser(c *gin.Context) {
 	var uu []user
 	err := h.unmarshal(c, &uu)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusBadRequest)
 		return
 	}
 	var u *user
@@ -68,18 +69,18 @@ func (h *Handlers) CreateUser(c *gin.Context) {
 	}
 	err = h.store.deleteAll(&crossdomain.User{})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	err = h.store.deleteAll(&crossdomain.TeamUser{})
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
 	err = h.store.save(items)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		shared.ApiOutputError(c, err, http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, nil)
+	shared.ApiOutputSuccess(c, nil, http.StatusOK)
 }
