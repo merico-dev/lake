@@ -26,6 +26,16 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
+// GetUser godoc
+// @Summary      Get users.csv file
+// @Description  get users.csv file
+// @Tags 		 plugins/org
+// @Produce      text/csv
+// @Param        fake_data    query     bool  false  "return fake data or not"
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/users.csv [get]
 func (h *Handlers) GetUser(c *gin.Context) {
 	var query struct {
 		FakeData bool `form:"fake_data"`
@@ -51,6 +61,16 @@ func (h *Handlers) GetUser(c *gin.Context) {
 	c.Data(http.StatusOK, "text/csv", blob)
 }
 
+// CreateUser godoc
+// @Summary      Upload users.csv file
+// @Description  upload users.csv file
+// @Tags 		 plugins/org
+// @Accept       text/csv
+// @Produce      json
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/users.csv [put]
 func (h *Handlers) CreateUser(c *gin.Context) {
 	var uu []user
 	err := h.unmarshal(c, &uu)
