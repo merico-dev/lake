@@ -50,7 +50,7 @@ func TestPrReviewDataFlow(t *testing.T) {
 
 	// verify extraction
 	dataflowTester.FlushTabler(&models.GithubReviewer{})
-	dataflowTester.FlushTabler(&models.GithubAccount{})
+	dataflowTester.FlushTabler(&models.GithubRepoAccount{})
 	dataflowTester.FlushTabler(&models.GithubPrReview{})
 	dataflowTester.Subtask(tasks.ExtractApiPullRequestReviewsMeta, taskData)
 	dataflowTester.VerifyTable(

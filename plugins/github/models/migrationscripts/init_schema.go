@@ -118,6 +118,8 @@ func (u *initSchemas) Up(ctx context.Context, db *gorm.DB) error {
 		&archived.GithubRepoAccount{},
 		&archived.GithubAccountOrg{},
 		&archived.GithubAccount{},
+		&archived.GithubPrComment{},
+		&archived.GithubPrReview{},
 	)
 }
 
