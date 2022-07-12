@@ -26,6 +26,16 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
+// GetTeam godoc
+// @Summary      Get teams.csv file
+// @Description  get teams.csv file
+// @Tags 		 plugins/org
+// @Produce      text/csv
+// @Param        fake_data    query     bool  false  "return fake data or not"
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/teams.csv [get]
 func (h *Handlers) GetTeam(c *gin.Context) {
 	var query struct {
 		FakeData bool `form:"fake_data"`
@@ -51,6 +61,16 @@ func (h *Handlers) GetTeam(c *gin.Context) {
 	c.Data(http.StatusOK, "text/csv", blob)
 }
 
+// CreateTeam godoc
+// @Summary      Upload teams.csv file
+// @Description  upload teams.csv file
+// @Tags 		 plugins/org
+// @Accept       text/csv
+// @Produce      json
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/teams.csv [put]
 func (h *Handlers) CreateTeam(c *gin.Context) {
 	var tt []team
 	err := h.unmarshal(c, &tt)

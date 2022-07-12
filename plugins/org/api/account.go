@@ -26,6 +26,15 @@ import (
 	"github.com/gocarina/gocsv"
 )
 
+// GetAccount godoc
+// @Summary      Get account.csv file
+// @Description  get account.csv file
+// @Tags 		 plugins/org
+// @Produce      text/csv
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/accounts.csv [get]
 func (h *Handlers) GetAccount(c *gin.Context) {
 	accounts, err := h.store.findAllAccounts()
 	if err != nil {
@@ -40,6 +49,16 @@ func (h *Handlers) GetAccount(c *gin.Context) {
 	c.Data(http.StatusOK, "text/csv", blob)
 }
 
+// CreateAccount godoc
+// @Summary      Upload account.csv file
+// @Description  upload account.csv file
+// @Tags 		 plugins/org
+// @Accept       text/csv
+// @Produce      json
+// @Success      200
+// @Failure 400  {object} shared.ApiBody "Bad Request"
+// @Failure 500  {object} shared.ApiBody "Internal Error"
+// @Router       /plugins/org/accounts.csv [put]
 func (h *Handlers) CreateAccount(c *gin.Context) {
 	var aa []account
 	err := h.unmarshal(c, &aa)
