@@ -373,9 +373,10 @@ function useConnectionManager(
         setErrors([])
         ToastNotification.clear()
         console.log('>> FETCHING ALL CONNECTION SOURCES')
-        const c = await request.get(
-          `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections`
-        )
+        // const c = await request.get(
+        //   `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections`
+        // )
+        let c = null
         if (allSources) {
           const aC = await Promise.all([
             // @todo: re-enable JIRA & fix encKey warning msg (rebuild local db)
@@ -383,35 +384,43 @@ function useConnectionManager(
               `${DEVLAKE_ENDPOINT}/plugins/${Providers.JIRA}/connections`
             ),
             request.get(
-              `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITHUB}/connections`
-            ),
-            request.get(
               `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITLAB}/connections`
             ),
             request.get(
               `${DEVLAKE_ENDPOINT}/plugins/${Providers.JENKINS}/connections`
             ),
+            request.get(
+              `${DEVLAKE_ENDPOINT}/plugins/${Providers.GITHUB}/connections`
+            ),
           ])
-          setAllProviderConnections(
-            aC
-              .map((providerResponse) => [
-                {
-                  ...providerResponse.data.reduce((cV, pV) => ({...pV, connectionId: pV.id}), {}),
-                  provider: providerResponse.config?.url?.split('/')[3],
-                  status: ConnectionStatus.ONLINE
-                },
-              ])
-              .flat()
-          )
+          const builtConnections = aC
+          .map((providerResponse) => [].concat(providerResponse.data || []).map(c => ({
+            ...c, connectionId: c.id, 
+            provider: providerResponse.config?.url?.split('/')[3],
+            // @todo: inject realtime connection status...
+            status: ConnectionStatus.ONLINE
+          })))
+          // .map((providerResponse) => [
+          //   {
+          //     ...[].concat(providerResponse.data || []).reduce((cV, pV) => ({...pV, connectionId: pV.id}), {}),
+          //     provider: providerResponse.config?.url?.split('/')[3],
+          //     status: ConnectionStatus.ONLINE
+          //   },
+          // ])
+          setAllProviderConnections(builtConnections.flat())
           console.log(
             '>> ALL SOURCE CONNECTIONS: FETCHING ALL CONNECTION FROM ALL DATA SOURCES'
           )
           console.log('>> ALL SOURCE CONNECTIONS: ', aC)
+        } else {
+          c = await request.get(
+            `${DEVLAKE_ENDPOINT}/plugins/${provider.id}/connections`
+          )
         }
 
-        console.log('>> RAW ALL CONNECTIONS DATA FROM API...', c.data)
+        console.log('>> RAW ALL CONNECTIONS DATA FROM API...', c?.data)
         const providerConnections = []
-          .concat(Array.isArray(c.data) ? c.data : [])
+          .concat(Array.isArray(c?.data) ? c?.data : [])
           .map((conn, idx) => {
             return {
               ...conn,
@@ -430,7 +439,7 @@ function useConnectionManager(
           })
         }
         setAllConnections(providerConnections)
-        setConnectionCount(c.data?.length)
+        setConnectionCount(c?.data?.length)
         setConnectionLimitReached(
           sourceLimits[provider.id] &&
             c.data?.length >= sourceLimits[provider.id]
@@ -448,7 +457,7 @@ function useConnectionManager(
         setConnectionCount(0)
         setConnectionLimitReached(false)
         setErrors([e.message])
-        handleOfflineMode(e.response.status, e.response)
+        handleOfflineMode(e.response?.status, e.response)
       }
     },
     [provider?.id, sourceLimits, handleOfflineMode]

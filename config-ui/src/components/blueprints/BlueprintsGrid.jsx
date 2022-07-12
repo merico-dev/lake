@@ -434,7 +434,7 @@ const BlueprintsGrid = (props) => {
                         fontSize: '10px'
                       }}
                       >
-                        <Button
+                        {/* <Button
                           intent={Intent.PRIMARY}
                           icon='cog'
                           text='Settings'
@@ -456,7 +456,7 @@ const BlueprintsGrid = (props) => {
                           label={b.enable ? 'Disable' : 'Enable'}
                           onChange={() => handleBlueprintActivation(b)}
                           style={{ marginBottom: '0', fontSize: '11px' }}
-                        />
+                        /> */}
                       </div>
                     </div>
 
@@ -483,7 +483,7 @@ const BlueprintsGrid = (props) => {
           )}
         </div>
       </Card>
-      <div style={{
+      {/* <div style={{
         display: 'flex',
         margin: '20px 10px',
         alignSelf: 'flex-start',
@@ -497,7 +497,7 @@ const BlueprintsGrid = (props) => {
           <span>by {' '} <strong>Administrator</strong></span><br />
           Displaying {activeFilterStatus ? filteredBlueprints.length : blueprints.length} Blueprints from API.
         </div>
-      </div>
+      </div> */}
     </>
   )
 }

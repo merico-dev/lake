@@ -25,7 +25,8 @@ function useBlueprintValidation ({
   customCronConfig,
   enable,
   tasks = [],
-  mode = null
+  mode = null,
+  activeStep = null
 }) {
   const [errors, setErrors] = useState([])
   const [isValid, setIsValid] = useState(false)

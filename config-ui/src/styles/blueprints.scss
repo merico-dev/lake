@@ -309,3 +309,44 @@ p.alert {
     }
   }
 }
+
+h4 {
+  &.status-task_created {
+    color: #94959F;
+  }
+  &.status-task_cancelled {
+    color: #94959F;
+  }
+  &.status-task_running {
+    color: #7497F7;
+  }
+  &.status-task_failed {
+    color: #E34040;
+  }
+  &.status-task_completed {
+    color: #4DB764;
+  }
+}
+
+.stage-header {
+  &.complete {
+    background-color: #EDFBF0;
+    color: #4DB764
+  }
+  &.failed {
+    background-color: #FEEFEF;
+    color: #E34040;
+  }
+  &.active {
+    background-color: #F0F4FE;
+    color: #7497F7;
+  }
+  &.pending {
+    background-color: #F9F9FA;
+    color: #94959F;
+  }
+  &.cancelled {
+    background-color: #F9F9FA;
+    color: #94959F;
+  }
+}

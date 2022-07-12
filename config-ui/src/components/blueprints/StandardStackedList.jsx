@@ -79,7 +79,7 @@ const StandardStackedList = (props) => {
                     checked={item === activeItem}
                     onChange={() => onChange(item)}
                   />{' '} */}
-                  <label onClick={() => onAdd(item)} style={{ cursor: 'pointer' }}>{item}</label>
+                  <label onClick={() => onAdd(item)} style={{ cursor: 'pointer' }}>{item?.name || item}</label>
                 </div>
               </div>
               <div

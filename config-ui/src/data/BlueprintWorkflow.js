@@ -99,12 +99,11 @@ const DEFAULT_DATA_ENTITIES = [
     title: 'Issue Tracking',
     value: DataEntityTypes.TICKET,
   },
-  // @todo: confirm entity type value for "Code Review"
   {
     id: 3,
-    name: 'code-review',
-    title: 'Code Review',
-    value: DataEntityTypes.USER,
+    name: 'cross-domain',
+    title: 'Crossdomain',
+    value: DataEntityTypes.CROSSDOMAIN,
   },
   { id: 4, name: 'ci-cd', title: 'CI/CD', value: DataEntityTypes.DEVOPS },
 ]

@@ -37,6 +37,8 @@ const WorkflowActions = (props) => {
     validationErrors = [],
     onPrev = () => {},
     onNext = () => {},
+    onSave = () => {},
+    onSaveAndRun = () => {},
   } = props
 
   return (
@@ -53,15 +55,15 @@ const WorkflowActions = (props) => {
           <Button
             intent={Intent.PRIMARY}
             text='Save Blueprint'
-            disabled
-            // onClick={saveBlueprint}
+            // disabled
+            onClick={onSave}
           />
           <Button
             intent={Intent.DANGER}
             text='Save and Run Now'
             style={{ marginLeft: '5px' }}
-            disabled
-            // onClick={saveBlueprintAndRunPipeline}
+            // disabled
+            onClick={onSaveAndRun}
           />
         </div>
       ) : (

@@ -51,6 +51,8 @@ const DataTransformations = (props) => {
     dataEntities = {},
     projects = [],
     boards = [],
+    issueTypes = [],
+    fields  = [],
     transformations = {},
     configuredConnection,
     configuredProject,
@@ -68,6 +70,8 @@ const DataTransformations = (props) => {
     isSaving = false,
     isSavingConnection = false,
     isRunning = false,
+    jiraProxyError,
+    isFetchingJIRA = false
   } = props
 
   // @todo: lift this to a higher ancestor
@@ -188,10 +192,10 @@ const DataTransformations = (props) => {
                     </>
                   )}
 
-                  {configuredProject && (
+                  {(configuredProject || configuredBoard) && (
                     <div>
                       <h4>Project</h4>
-                      <p style={{ color: '#292B3F' }}>{configuredProject || '< select a project >'}</p>
+                      <p style={{ color: '#292B3F' }}>{configuredProject || configuredBoard?.name || '< select a project >'}</p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h4 style={{ margin: 0 }}>
                           Data Transformation Rules 
@@ -221,11 +225,16 @@ const DataTransformations = (props) => {
                           connection={configuredConnection}
                           configuredProject={configuredProject}
                           configuredBoard={configuredBoard}
+                          issueTypes={issueTypes}
+                          fields={fields}
+                          boards={boards}
                           transformation={activeTransformation}
                           onSettingsChange={setTransformationSettings}
                           entity={DataEntityTypes.TICKET}
                           isSaving={isSaving}
                           isSavingConnection={isSavingConnection}
+                          jiraProxyError={jiraProxyError}
+                          isFetchingJIRA={isFetchingJIRA}
                         />
                       )}
 

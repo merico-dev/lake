@@ -46,6 +46,7 @@ import PipelineActivity from '@/pages/pipelines/activity'
 import Blueprints from '@/pages/blueprints/index'
 import CreateBlueprint from '@/pages/blueprints/create-blueprint'
 import BlueprintDetail from '@/pages/blueprints/blueprint-detail'
+import Connections from '@/pages/connections/index'
 
 function App () {
   return (
@@ -92,6 +93,9 @@ function App () {
       </Route>
       <Route exact path='/blueprints'>
         <Blueprints />
+      </Route>
+      <Route exact path='/connections'>
+        <Connections />
       </Route>
       <Route exact path='/lake/api/configuration'>
         <Configure />

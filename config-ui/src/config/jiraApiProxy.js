@@ -20,7 +20,7 @@ const API_VERSION = 2
 const API_PROXY_ENDPOINT = '/api/plugins/jira/connections/[:connectionId:]/proxy/rest'
 const ISSUE_TYPES_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${API_VERSION}/issuetype`
 const ISSUE_FIELDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${API_VERSION}/field`
-const BOARDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${API_VERSION}/board`
+const BOARDS_ENDPOINT = `${API_PROXY_ENDPOINT}/agile/1.0/board`
 
 export {
   API_VERSION,

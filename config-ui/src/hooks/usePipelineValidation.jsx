@@ -20,6 +20,7 @@ import { Providers, } from '@/data/Providers'
 import { BlueprintMode } from '@/data/NullBlueprint'
 
 function usePipelineValidation ({
+  activeStep,
   enabledProviders = [],
   pipelineName,
   projectId,

@@ -16,6 +16,7 @@
  *
  */
 import { ProviderLabels } from '@/data/Providers'
+import { GRAFANA_URL } from '@/utils/config'
 
 const MenuConfiguration = (activeRoute) => {
   return [
@@ -64,58 +65,77 @@ const MenuConfiguration = (activeRoute) => {
     {
       id: 1,
       label: 'Blueprints',
-      icon: 'bold',
-      route: '/blueprints/create',
+      icon: 'home',
+      route: '/blueprints',
       disabled: false,
-      active: activeRoute.url === '/blueprints/create',
+      active: activeRoute.url === '/blueprints',
+      children: [
+        {
+          id: 0,
+          label: 'Create Bluepint',
+          route: '/blueprints/create',
+          active: activeRoute.url.endsWith('/blueprints/create'),
+          icon: 'git-pull',
+          classNames: [],
+        },
+      ]
+    },
+    {
+      id: 2,
+      label: 'Connections',
+      disabled: true,
+      icon: 'git-merge',
+      classNames: [],
+      route: '/connections',
+      active: activeRoute.url === '/connections',
+      children: [
+      ]
+    },
+    {
+      id: 2,
+      label: 'Dashboard',
+      icon: 'dashboard',
+      classNames: [],
+      route: GRAFANA_URL,
+      active: false,
       children: [
       ]
     },
     // {
-    //   id: 2,
-    //   label: 'Triggers',
-    //   icon: 'asterisk',
+    //   id: 3,
+    //   label: 'Pipelines',
+    //   icon: 'git-merge',
     //   classNames: [],
-    //   route: '/triggers',
-    //   active: activeRoute.url === '/triggers',
+    //   route: '/pipelines',
+    //   active: activeRoute.url.startsWith('/pipelines'),
     //   children: [
+    //     {
+    //       id: 0,
+    //       label: 'Create Pipeline Run',
+    //       route: '/pipelines/create',
+    //       active: activeRoute.url.endsWith('/pipelines/create'),
+    //       icon: 'git-pull',
+    //       classNames: [],
+    //     },
+    //     {
+    //       id: 1,
+    //       label: 'All Pipeline Runs',
+    //       route: '/pipelines',
+    //       active: activeRoute.url.endsWith('/pipelines'),
+    //       icon: 'layers',
+    //       classNames: [],
+    //       disabled: false
+    //     },
+    //     {
+    //       id: 2,
+    //       label: 'Pipeline Blueprints',
+    //       route: '/blueprints',
+    //       active: activeRoute.url.endsWith('/blueprints'),
+    //       icon: 'grid',
+    //       classNames: [],
+    //     },
     //   ]
     // },
-    {
-      id: 3,
-      label: 'Pipelines',
-      icon: 'git-merge',
-      classNames: [],
-      route: '/pipelines',
-      active: activeRoute.url.startsWith('/pipelines'),
-      children: [
-        {
-          id: 0,
-          label: 'Create Pipeline Run',
-          route: '/pipelines/create',
-          active: activeRoute.url.endsWith('/pipelines/create'),
-          icon: 'git-pull',
-          classNames: [],
-        },
-        {
-          id: 1,
-          label: 'All Pipeline Runs',
-          route: '/pipelines',
-          active: activeRoute.url.endsWith('/pipelines'),
-          icon: 'layers',
-          classNames: [],
-          disabled: false
-        },
-        {
-          id: 2,
-          label: 'Pipeline Blueprints',
-          route: '/blueprints',
-          active: activeRoute.url.endsWith('/blueprints'),
-          icon: 'grid',
-          classNames: [],
-        },
-      ]
-    },
     // {
     //   id: 3,
     //   label: 'Documentation',

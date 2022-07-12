@@ -129,19 +129,21 @@ const Blueprints = (props) => {
   }
 
   const configureBlueprint = (blueprint) => {
-    setDraftBlueprint(b => ({ ...b, ...blueprint }))
+    // setDraftBlueprint(b => ({ ...b, ...blueprint }))
+    history.push(`/blueprints/detail/${blueprint.id}`)
   }
 
   const createNewBlueprint = () => {
-    setDraftBlueprint(null)
-    setExpandDetails(false)
-    setBlueprintName('MY BLUEPRINT')
-    setCronConfig('0 0 * * *')
-    setCustomCronConfig('0 0 * * *')
-    setEnableBlueprint(true)
-    setBlueprintTasks([])
-    setSelectedPipelineTemplate(null)
-    setBlueprintDialogIsOpen(true)
+    // setDraftBlueprint(null)
+    // setExpandDetails(false)
+    // setBlueprintName('MY BLUEPRINT')
+    // setCronConfig('0 0 * * *')
+    // setCustomCronConfig('0 0 * * *')
+    // setEnableBlueprint(true)
+    // setBlueprintTasks([])
+    // setSelectedPipelineTemplate(null)
+    // setBlueprintDialogIsOpen(true)
+    history.push('/blueprints/create')
   }
 
   const isActiveBlueprint = (bId) => {
@@ -235,7 +237,7 @@ const Blueprints = (props) => {
   }, [selectedPipelineTemplate, setBlueprintTasks, tasks?.length, draftBlueprint?.id])
 
   useEffect(() => {
-    setSelectedPipelineTemplate(pipelineTemplates.find(pT => pT.tasks.flat().toString() === tasks.flat().toString()))
+    setSelectedPipelineTemplate(pipelineTemplates.find(pT => pT.tasks?.flat().toString() === tasks.flat().toString()))
   }, [pipelineTemplates])
 
   useEffect(() => {
@@ -290,55 +292,25 @@ const Blueprints = (props) => {
         <Sidebar />
         <Content>
           <main className='main'>
-            <AppCrumbs
+            {/* <AppCrumbs
               items={[
                 { href: '/', icon: false, text: 'Dashboard' },
                 { href: '/pipelines', icon: false, text: 'Pipelines' },
                 { href: '/blueprints', icon: false, text: 'Pipeline Blueprints', current: true },
               ]}
-            />
+            /> */}
             <div className='headlineContainer'>
               <div style={{ display: 'flex' }}>
                 <div>
                   <h1 style={{ margin: 0 }}>
-                    Pipeline Blueprints
-                    <Popover
-                      className='trigger-manage-blueprints-help'
-                      popoverClassName='popover-help-manage-blueprints'
-                      position={Position.RIGHT}
-                      autoFocus={false}
-                      enforceFocus={false}
-                      usePortal={false}
-                    >
-                      <a href='#' rel='noreferrer'><HelpIcon width={19} height={19} style={{ marginLeft: '10px' }} /></a>
-                      <>
-                        <div style={{ textShadow: 'none', fontSize: '12px', padding: '12px', maxWidth: '300px' }}>
-                          <div style={{ marginBottom: '10px', fontWeight: 700, fontSize: '14px' }}>
-                            <Icon icon='help' size={16} /> Schedule Recurring Pipelines
-                          </div>
-                          <p>Need Help? &mdash; Automate pipelines by creating a Blueprint.
-                            Schedule data collection with Crontab and save hours of time.
-                          </p>
-                        </div>
-                      </>
-                    </Popover>
+                    Blueprints
                   </h1>
-                  <p className='page-description mb-0'>Create scheduled plans for automating pipelines with CRON.</p>
-                  <p className=''>
-                    Choose a preset schedule or use your custom crontab configuration.
-                  </p>
-                  {!isFetchingAllPipelines && pipelines.length === 0 && (
-                    <p style={{ padding: '5px', borderRadius: '12px', backgroundColor: '#f8f8f8' }}>
-                      <Icon icon='warning-sign' size={12} color={Colors.RED5} style={{ marginBottom: '2px', marginRight: '5px' }} />
-                      Please RUN at least 1 successful pipeline to enable blueprints.
-                    </p>
-                  )}
                 </div>
                 <div style={{ marginLeft: 'auto' }}>
                   <Button
                     disabled={pipelines.length === 0}
-                    icon='add' intent={Intent.PRIMARY}
-                    text='Create Blueprint'
+                    icon='plus' intent={Intent.PRIMARY}
+                    text='New Blueprint'
                     onClick={() => createNewBlueprint()}
                   />
                 </div>

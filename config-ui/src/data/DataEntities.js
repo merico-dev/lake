@@ -17,11 +17,11 @@
  */
 
 const DataEntityTypes = {
-  CODE: 'code',
-  CROSSDOMAIN: 'crossdomain',
-  DEVOPS: 'devops',
-  TICKET: 'ticket',
-  USER: 'user',
+  CODE: 'CODE',
+  CROSSDOMAIN: 'CROSS',
+  DEVOPS: 'CICD',
+  TICKET: 'TICKET',
+  // USER: 'user',
 }
 
 const DataEntities = [
@@ -29,7 +29,7 @@ const DataEntities = [
   DataEntityTypes.CROSSDOMAIN,
   DataEntityTypes.DEVOPS,
   DataEntityTypes.TICKET,
-  DataEntityTypes.USER,
+  // DataEntityTypes.USER,
 ]
 
 export { DataEntityTypes, DataEntities }

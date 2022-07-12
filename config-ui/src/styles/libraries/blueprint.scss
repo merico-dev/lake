@@ -98,6 +98,28 @@ button, .bp3-button {
   padding: 13px;
 }
 
+.bp3-toast {
+  background-color: #ffffff;
+  &.bp3-intent-primary {
+    background-color: #ffffff;
+    color: #F0F4FE;
+  }
+  &.bp3-intent-warning {
+    background-color: #ffffff;
+    color: #94959F;
+  }
+  &.bp3-intent-danger {
+    background-color: #ffffff;
+    color: #E34040;
+  }
+  > span.bp3-icon {
+    color: inherit !important;
+    > svg {
+      color: inherit !important;
+    }
+  }
+}
+
 .bp3-popover-wrapper {
   &.select-epic-key, &.select-story-key {
     width: auto;
@@ -117,6 +139,9 @@ button, .bp3-button {
   max-width: 600px;
   overflow: auto;
   text-overflow: ellipsis;
+  &.transformation-select-popover {
+    max-width: 430px;
+  }
   .bp3-menu-item {
     .bp3-menu-item-label {
       max-width: 70%;

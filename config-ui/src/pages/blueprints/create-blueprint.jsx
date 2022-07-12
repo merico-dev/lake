@@ -122,7 +122,7 @@ const CreateBlueprint = (props) => {
   const [dataEntitiesList, setDataEntitiesList] = useState([
     ...DEFAULT_DATA_ENTITIES,
   ])
-  const [boardsList, setBoardsList] = useState([...DEFAULT_BOARDS])
+  const [boardsList, setBoardsList] = useState([])
 
   const [blueprintConnections, setBlueprintConnections] = useState([])
   const [configuredConnection, setConfiguredConnection] = useState()
@@ -222,6 +222,7 @@ const CreateBlueprint = (props) => {
   })
 
   const {
+    pipelineName,
     pipelines,
     runPipeline,
     cancelPipeline,
@@ -234,6 +235,7 @@ const CreateBlueprint = (props) => {
     // eslint-disable-next-line no-unused-vars
     errors: pipelineErrors,
     setSettings: setPipelineSettings,
+    setPipelineName,
     // eslint-disable-next-line no-unused-vars
     lastRunId,
     // eslint-disable-next-line no-unused-vars
@@ -275,8 +277,10 @@ const CreateBlueprint = (props) => {
   const {
     fetchIssueTypes,
     fetchFields,
-    issueTypes,
-    fields,
+    fetchBoards,
+    boards: jiraApiBoards,
+    issueTypes: jiraApiIssueTypes,
+    fields: jiraApiFields,
     isFetching: isFetchingJIRA,
     error: jiraProxyError,
   } = useJIRA({
@@ -284,7 +288,7 @@ const CreateBlueprint = (props) => {
     issuesEndpoint: ISSUE_TYPES_ENDPOINT,
     fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
     boardsEndpoint: BOARDS_ENDPOINT,
-  })
+  }, configuredConnection)
 
   const {
     testConnection,
@@ -322,7 +326,7 @@ const CreateBlueprint = (props) => {
   } = useConnectionManager({
     activeProvider,
     connectionId: managedConnection?.connectionId
-  }, manageConnection?.id !== null ? true : false)
+  }, managedConnection?.id !== null ? true : false)
 
   const {
     validate: validateConnection,
@@ -379,10 +383,12 @@ const CreateBlueprint = (props) => {
   const handleTransformationSave = () => {
     console.log('>> SAVING / CLOSING Transformation Settings')
     setConfiguredProject(null)
+    setConfiguredBoard(null)
   }
 
   const handleTransformationCancel = () => {
     setConfiguredProject(null)
+    setConfiguredBoard(null)
     console.log('>> Cancel Modify - Transformation Settings')
   }
 
@@ -393,6 +399,15 @@ const CreateBlueprint = (props) => {
       [configuredProject]: {}
     }))
   }, [setTransformations, configuredProject])
+
+  const handleBlueprintSave = useCallback(() => {
+    saveBlueprint()
+  }, [saveBlueprint])
+
+  const handleBlueprintSaveAndRun = useCallback(() => {
+    saveBlueprint()
+    runPipeline()
+  }, [saveBlueprint, runPipeline])
 
   const getRestrictedDataEntities = useCallback(() => {
     let items = []
@@ -540,6 +555,11 @@ const CreateBlueprint = (props) => {
       const getAllSources = true
       fetchAllConnections(enableNotifications, getAllSources)
     }
+    if (activeStep?.id === 2 || activeStep?.id === 3) {
+      fetchBoards()
+      fetchIssueTypes()
+      fetchFields()
+    }
     setBlueprintNormalSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
     setBlueprintAdvancedSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
   }, [activeStep])
@@ -567,10 +587,10 @@ const CreateBlueprint = (props) => {
       '>> PIPELINE RUN TASK SETTINGS FOR PIPELINE MANAGER ....',
       runTasks
     )
-    // setPipelineSettings({
-    //   name: pipelineName,
-    //   tasks: advancedMode ? runTasksAdvanced : [[...runTasks]]
-    // })
+    setPipelineSettings({
+      name: pipelineName,
+      tasks: advancedMode ? runTasksAdvanced : [[...runTasks]]
+    })
     // setRawConfiguration(JSON.stringify(buildPipelineStages(runTasks, true), null, '  '))
     if (advancedMode) {
       validateAdvancedPipeline()
@@ -770,6 +790,17 @@ const CreateBlueprint = (props) => {
     }
   }, [rawConfiguration, isValidCode])
 
+  useEffect(() => {
+    if (saveBlueprintComplete?.id) {
+      history.push(`/blueprints/detail/${saveBlueprintComplete?.id}`)
+    }
+  }, [saveBlueprintComplete])
+
+  useEffect(() => {
+    console.log('>>> FETCHED JIRA API BOARDS FROM PROXY...', jiraApiBoards)
+    setBoardsList(jiraApiBoards)
+  }, [jiraApiBoards])
+
   return (
     <>
       <div className='container'>
@@ -898,10 +929,13 @@ const CreateBlueprint = (props) => {
                   blueprintConnections={blueprintConnections}
                   dataEntities={dataEntities}
                   projects={projects}
+                  boardsList={boardsList}
                   boards={boards}
+                  issueTypes={jiraApiIssueTypes}
+                  fields={jiraApiFields}
                   configuredConnection={configuredConnection}
                   configuredProject={configuredProject}
-                  configurdBoard={configuredBoard}
+                  configuredBoard={configuredBoard}
                   handleConnectionTabChange={handleConnectionTabChange}
                   prevStep={prevStep}
                   addBoardTransformation={addBoardTransformation}
@@ -916,6 +950,8 @@ const CreateBlueprint = (props) => {
                   onSave={handleTransformationSave}
                   onCancel={handleTransformationCancel}
                   onClear={handleTransformationClear}
+                  jiraProxyError={jiraProxyError}
+                  isFetchingJIRA={isFetchingJIRA}
                 />
               )}
 
@@ -946,6 +982,8 @@ const CreateBlueprint = (props) => {
               validationErrors={validationErrors}
               onNext={nextStep}
               onPrev={prevStep}
+              onSave={handleBlueprintSave}
+              onSaveAndRun={handleBlueprintSaveAndRun}
             />
           </main>
         </Content>
@@ -991,11 +1029,17 @@ const CreateBlueprint = (props) => {
         titleIcon='add'
         subtitle='JSON CONFIGURATION'
         isOpen={showBlueprintInspector}
-        activePipeline={{
-          ID: 0,
+        activePipeline={!advancedMode ? {
+          // ID: 0,
           name,
-          tasks: blueprintTasks,
+          // tasks: blueprintTasks,
           settings: blueprintSettings,
+          cronConfig,
+          enable,
+          mode
+        } : {
+          name,
+          plan: blueprintTasks,
           cronConfig,
           enable,
           mode

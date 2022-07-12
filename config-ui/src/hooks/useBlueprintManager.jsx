@@ -37,7 +37,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
   const [customCronConfig, setCustomCronConfig] = useState('0 0 * * *')
   const [tasks, setTasks] = useState([])
   const [settings, setSettings] = useState({
-    version: '1.0',
+    version: '1.0.0',
     connections: []
   })
   const [mode, setMode] = useState(BlueprintMode.NORMAL)
@@ -111,14 +111,15 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
         const b = await request.get(`${DEVLAKE_ENDPOINT}/blueprints/${blueprintId}`)
         const blueprintData = b.data
         console.log('>> RAW BLUEPRINT DATA FROM API...', b)
-        setBlueprint({
+        setBlueprint(b => ({
+          ...b,
           ...blueprintData,
           id: blueprintData.id,
-          enable: blueprint.enable,
+          enable: blueprintData.enable,
           status: 0,
           nextRunAt: null, // @todo: calculate next run date
-          interval: detectCronInterval(blueprint.cronConfig)
-        })
+          interval: detectCronInterval(blueprintData.cronConfig)
+        }))
         setTimeout(() => {
           setIsFetching(false)
         }, 500)
@@ -131,7 +132,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       ToastNotification.show({ message: `${e}`, intent: 'danger', icon: 'error' })
       console.log('>> FAILED TO FETCH BLUEPRINT', e)
     }
-  }, [blueprint, detectCronInterval])
+  }, [detectCronInterval])
 
   const saveBlueprint = useCallback((blueprintId = null) => {
     console.log('>> SAVING BLUEPRINT....')
@@ -145,7 +146,8 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
         // @todo: refactor tasks ===> plan at higher levels
         plan: tasks,
         settings,
-        enable: enable
+        enable: enable,
+        mode
       }
       console.log('>> DISPATCHING BLUEPRINT SAVE REQUEST', blueprintPayload)
       const run = async () => {
@@ -165,11 +167,19 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
         }
         setBlueprint(blueprintObject)
         setSaveComplete(blueprintObject)
-        ToastNotification.show({
-          message: `${blueprintId ? 'Updated' : 'Created'} Blueprint - ${name}.`,
-          intent: 'danger',
-          icon: 'small-tick'
-        })
+        if (b.status === 200) {
+          ToastNotification.show({
+            message: `${blueprintId ? 'Updated' : 'Created'} Blueprint - ${name}.`,
+            intent: 'danger',
+            icon: 'small-tick'
+          })
+        } else {
+          ToastNotification.show({
+            message: `Blueprint Failure - ${b.message}`,
+            intent: 'danger',
+            icon: 'error'
+          })
+        }
         setTimeout(() => {
           setIsSaving(false)
         }, 500)
@@ -224,7 +234,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
   }, [])
 
   const getNextRunDate = useCallback((cronExpression) => {
-    return parseCronExpression(cronExpression).next().toString()
+    return cronExpression && parseCronExpression(cronExpression).next().toString()
   }, [parseCronExpression])
 
   const getCronPreset = useCallback((presetName) => {
@@ -311,6 +321,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
   }, [])
 
   return {
+    blueprint,
     blueprints,
     blueprintCount,
     name,

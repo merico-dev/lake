@@ -23,8 +23,9 @@ import { ToastNotification } from '@/components/Toast'
 import { Providers } from '@/data/Providers'
 // import { integrationsData } from '@/data/integrations'
 
-function usePipelineManager (pipelineName = `COLLECTION ${Date.now()}`, initialTasks = []) {
+function usePipelineManager (myPipelineName = `COLLECTION ${Date.now()}`, initialTasks = []) {
   // const [integrations, setIntegrations] = useState(integrationsData)
+  const [pipelineName, setPipelineName] = useState(myPipelineName ?? `COLLECTION ${Date.now()}`)
   const [isFetching, setIsFetching] = useState(false)
   const [isFetchingAll, setIsFetchingAll] = useState(false)
   const [isRunning, setIsRunning] = useState(false)
@@ -32,7 +33,7 @@ function usePipelineManager (pipelineName = `COLLECTION ${Date.now()}`, initialT
   const [errors, setErrors] = useState([])
   const [settings, setSettings] = useState({
     name: pipelineName,
-    tasks: [
+    plan: [
       [...initialTasks]
     ]
   })
@@ -215,8 +216,10 @@ function usePipelineManager (pipelineName = `COLLECTION ${Date.now()}`, initialT
     isFetching,
     isFetchingAll,
     isCancelling,
+    pipelineName,
     settings,
     setSettings,
+    setPipelineName,
     pipelineRun,
     activePipeline,
     pipelines,
