@@ -98,7 +98,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       setBlueprintCount(0)
       setErrors([e.message])
     }
-  }, [])
+  }, [detectCronInterval])
 
   const fetchBlueprint = useCallback((blueprintId = null) => {
     console.log('>> FETCHING BLUEPRINT....')
@@ -191,7 +191,16 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       setSaveComplete(false)
       console.log('>> FAILED TO SAVE BLUEPRINT!!', e)
     }
-  }, [name, cronConfig, customCronConfig, tasks, enable, detectCronInterval])
+  }, [
+    name,
+    mode,
+    settings,
+    cronConfig,
+    customCronConfig,
+    tasks,
+    enable,
+    detectCronInterval
+  ])
 
   const deleteBlueprint = useCallback(async (blueprint) => {
     try {
@@ -231,7 +240,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       console.log('>> INVALID CRON SCHEDULE!', e)
     }
     return schedule
-  }, [])
+  }, [parseCronExpression])
 
   const getNextRunDate = useCallback((cronExpression) => {
     return cronExpression && parseCronExpression(cronExpression).next().toString()
@@ -281,7 +290,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       // setSaveComplete(false)
       console.log('>> FAILED TO ACTIVATE BLUEPRINT!!', e)
     }
-  }, [])
+  }, [fetchAllBlueprints])
 
   const deactivateBlueprint = useCallback((blueprint) => {
     console.log('>> DEACTIVATING BLUEPRINT....')
@@ -318,7 +327,7 @@ function useBlueprintManager (blueprintName = `BLUEPRINT WEEKLY ${Date.now()}`, 
       // setSaveComplete(false)
       console.log('>> FAILED TO DEACTIVATE BLUEPRINT!!', e)
     }
-  }, [])
+  }, [fetchAllBlueprints])
 
   return {
     blueprint,

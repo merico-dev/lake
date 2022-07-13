@@ -102,7 +102,7 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint, boardsEndpoint 
       setError(e)
       ToastNotification.show({ message: e.message, intent: 'danger', icon: 'error' })
     }
-  }, [activeConnection, apiProxyPath])
+  }, [boardsEndpoint, activeConnection, apiProxyPath])
 
   const createListData = (data = [], titleProperty = 'name', valueProperty = 'name') => {
     return data.map((d, dIdx) => ({

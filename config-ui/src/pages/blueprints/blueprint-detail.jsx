@@ -513,13 +513,13 @@ const BlueprintDetail = (props) => {
       fetchBlueprint(blueprintId)
       fetchAllPipelines()
     }
-  }, [blueprintId, fetchBlueprint])
+  }, [blueprintId, fetchBlueprint, fetchAllPipelines])
 
   const runBlueprint = useCallback(() => {
     if (activeBlueprint !== null) {
       runPipeline()
     }
-  }, [activeBlueprint])
+  }, [activeBlueprint, runPipeline])
 
   const cancelRun = () => {}
 
@@ -571,7 +571,7 @@ const BlueprintDetail = (props) => {
         plan: blueprint.plan,
       })
     }
-  }, [blueprint])
+  }, [blueprint, setPipelineSettings])
 
   useEffect(() => {
     console.log('>>>> FETCHED ALL PIPELINES..', pipelines, activeBlueprint?.id)
@@ -633,7 +633,7 @@ const BlueprintDetail = (props) => {
 
   useEffect(() => {
     fetchAllPipelines()
-  }, [lastRunId])
+  }, [lastRunId, fetchAllPipelines])
 
   return (
     <>

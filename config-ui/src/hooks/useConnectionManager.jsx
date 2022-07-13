@@ -488,7 +488,7 @@ function useConnectionManager (
         console.log('>> FAILED TO DELETE CONNECTION', e)
       }
     },
-    [provider?.id]
+    [provider?.id, activeProvider]
   )
 
   const getConnectionName = useCallback((connectionId, connections) => {

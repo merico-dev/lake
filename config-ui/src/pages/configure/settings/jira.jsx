@@ -40,17 +40,30 @@ const MAPPING_TYPES = {
   Bug: 'Bug'
 }
 
+const createTypeMapObject = (customType, standardType) => {
+  return customType && standardType
+    ? {
+        [customType]: {
+          standardType
+        }
+      }
+    : null
+}
+
 export default function JiraSettings (props) {
   const {
     connection,
     configuredBoard,
+    // eslint-disable-next-line no-unused-vars
     configuredProject,
     transformation = {},
     isSaving,
     onSettingsChange = () => {},
+    // eslint-disable-next-line no-unused-vars
     apiVersion = 2,
     issueTypes = [],
     fields = [],
+    // eslint-disable-next-line no-unused-vars
     boards = [],
     jiraProxyError,
     isFetchingJIRA = false
@@ -60,9 +73,11 @@ export default function JiraSettings (props) {
   const [typeMappingIncident, setTypeMappingIncident] = useState([])
   const [typeMappingRequirement, setTypeMappingRequirement] = useState([])
   const [typeMappingAll, setTypeMappingAll] = useState({})
+  // eslint-disable-next-line no-unused-vars
   const [statusMappings, setStatusMappings] = useState()
   const [jiraIssueEpicKeyField, setJiraIssueEpicKeyField] = useState('')
   const [jiraIssueStoryPointField, setJiraIssueStoryPointField] = useState('')
+  // eslint-disable-next-line no-unused-vars
   const [remoteLinkCommitSha, setRemoteLinkCommitSha] = useState('')
 
   const [requirementTags, setRequirementTags] = useState([])
@@ -76,22 +91,14 @@ export default function JiraSettings (props) {
   const [fieldsList, setFieldsList] = useState(fields)
   // const [issueTypesList, setIssueTypesList] = useState(issueTypes)
 
-  const createTypeMapObject = (customType, standardType) => {
-    return customType && standardType
-      ? {
-          [customType]: {
-            standardType
-          }
-        }
-      : null
-  }
-
-  useEffect(() => {
-    onSettingsChange({ ...transformation, typeMappings: typeMappingAll }, configuredBoard?.id)
-  }, [
-    typeMappingAll,
-    onSettingsChange
-  ])
+  // useEffect(() => {
+  //   onSettingsChange({ ...transformation, typeMappings: typeMappingAll }, configuredBoard?.id)
+  // }, [
+  //   typeMappingAll,
+  //   onSettingsChange,
+  //   configuredBoard?.id,
+  //   transformation
+  // ])
 
   useEffect(() => {
     if (typeMappingBug && typeMappingIncident && typeMappingRequirement) {
@@ -117,33 +124,25 @@ export default function JiraSettings (props) {
     console.log('>> CONN SETTINGS OBJECT ', connection)
     if (connection && connection.ID) {
       // Parse Type Mappings (V2)
-      setStatusMappings([])
-      // setRemoteLinkCommitSha(connection.remotelinkCommitShaPattern)
-      // setJiraIssueEpicKeyField(fieldsList.find(f => f.value === connection.epicKeyField))
-      // setJiraIssueStoryPointField(fieldsList.find(f => f.value === connection.storyPointField))
+      // setStatusMappings([])
     }
   }, [connection])
 
+  // @todo: FIX Error: Maximum update depth exceeded.
   useEffect(() => {
     setTypeMappingRequirement(requirementTags)
     onSettingsChange({ ...transformation, requirementTags: requirementTags }, configuredBoard?.id)
-  }, [requirementTags])
+  }, [requirementTags, configuredBoard?.id, onSettingsChange])
 
   useEffect(() => {
     setTypeMappingBug(bugTags)
     onSettingsChange({ ...transformation, bugTags: bugTags }, configuredBoard?.id)
-  }, [bugTags])
+  }, [bugTags, configuredBoard?.id, onSettingsChange])
 
   useEffect(() => {
     setTypeMappingIncident(incidentTags)
     onSettingsChange({ ...transformation, incidentTags: incidentTags }, configuredBoard?.id)
-  }, [incidentTags])
-
-  // useEffect(() => {
-  //   // Fetch Issue Types & Fields from JIRA API Proxy
-  //   fetchIssueTypes()
-  //   fetchFields()
-  // }, [connection?.UpdatedAt, fetchIssueTypes, fetchFields])
+  }, [incidentTags, configuredBoard?.id, onSettingsChange])
 
   useEffect(() => {
     console.log('>>> JIRA SETTINGS :: FIELDS LIST DATA CHANGED!', fields)
@@ -152,7 +151,6 @@ export default function JiraSettings (props) {
 
   useEffect(() => {
     console.log('>>> JIRA SETTINGS :: ISSUE TYPES LIST DATA CHANGED!', issueTypes)
-    // setIssueTypesList(issueTypes)
     setRequirementTagsList(issueTypes)
     setBugTagsList(issueTypes)
     setIncidentTagsList(issueTypes)
@@ -165,18 +163,6 @@ export default function JiraSettings (props) {
   useEffect(() => {
     setJiraIssueStoryPointField(fieldsList.find(f => f.value === transformation?.storyPointField))
   }, [fieldsList, transformation?.storyPointField])
-
-  // useEffect(() => {
-  //   if (jiraIssueStoryPointField?.value) {
-  //     onSettingsChange({...transformation, storyPointField: jiraIssueStoryPointField?.value}, configuredBoard?.id)
-  //   }
-  // }, [jiraIssueStoryPointField])
-
-  // useEffect(() => {
-  //   if (jiraIssueEpicKeyField?.value) {
-  //     onSettingsChange({...transformation, epicKeyField: jiraIssueEpicKeyField?.value}, configuredBoard?.id)
-  //   }
-  // }, [jiraIssueEpicKeyField])
 
   useEffect(() => {
     console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)

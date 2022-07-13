@@ -106,7 +106,7 @@ const InputValidationError = (props) => {
 
   return error ? (
     <div
-      className="inline-input-error"
+      className='inline-input-error'
       style={{ outline: 'none', cursor: 'pointer', margin: '5px 5px 3px 5px' }}
     >
       <Popover
@@ -119,7 +119,7 @@ const InputValidationError = (props) => {
         // autoFocus={false}
       >
         <Icon
-          icon="warning-sign"
+          icon='warning-sign'
           size={12}
           color={
             (validateOnFocus && elementIsFocused) || (error && !validateOnFocus)

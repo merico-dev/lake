@@ -176,7 +176,7 @@ export default function ConnectionForm (props) {
   useEffect(() => {
     console.log('>> PERSONAL ACCESS TOKENS ENTERED...', personalAccessTokens)
     onTokenChange(personalAccessTokens.join(',').trim())
-  }, [personalAccessTokens])
+  }, [personalAccessTokens, onTokenChange])
 
   useEffect(() => {
     console.log(
