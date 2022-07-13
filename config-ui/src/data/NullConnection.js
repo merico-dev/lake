@@ -16,7 +16,7 @@
  *
  */
 const NullConnection = {
-  // id: null,
+  id: null,
   ID: null,
   name: null,
   endpoint: null,

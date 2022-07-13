@@ -310,16 +310,18 @@ const CreateBlueprint = (props) => {
     setInitialTokenStore,
     setTestStatus,
     setTestResponse,
+    setSaveComplete: setSaveConnectionComplete,
     fetchAllConnections,
     connectionLimitReached,
     clearConnection: clearActiveConnection,
     testResponse,
+    saveComplete: saveConnectionComplete
   } = useConnectionManager(
     {
       activeProvider,
       connectionId: managedConnection?.connectionId,
     },
-    managedConnection?.id !== null
+    managedConnection && managedConnection?.id !== null
   )
 
   const {
@@ -382,6 +384,7 @@ const CreateBlueprint = (props) => {
     setInitialTokenStore({})
     clearActiveConnection()
     setActiveConnection(NullConnection)
+    setSaveConnectionComplete(null)
   }
 
   const handleTransformationSave = () => {
@@ -903,6 +906,17 @@ const CreateBlueprint = (props) => {
     setBoardsList(jiraApiBoards)
   }, [jiraApiBoards])
 
+  useEffect(() => {
+    if (saveConnectionComplete?.id && connectionDialogIsOpen) {
+      handleConnectionDialogClose()
+      fetchAllConnections(false, true)
+    }
+  }, [connectionDialogIsOpen, saveConnectionComplete])
+
+  useEffect(() => {
+    console.log('>>> CONNECTIONS SELECTOR LIST UPDATED...', connectionsList)
+  }, [connectionsList])
+
   return (
     <>
       <div className='container'>
@@ -942,26 +956,6 @@ const CreateBlueprint = (props) => {
                       validationErrors={validationErrors}
                     />
                   )}
-                  {/*
-                {activeStep?.id === 2 && (
-                  <AdvancedJSONValidation
-                    activeStep={activeStep}
-                    advancedMode={advancedMode}
-                    runTasksAdvanced={runTasksAdvanced}
-                    blueprintConnections={blueprintConnections}
-                    connectionsList={connectionsList}
-                    name={name}
-                    setBlueprintName={setBlueprintName}
-                    isMultiStagePipeline={() => {}}
-                    rawConfiguration={rawConfiguration}
-                    setRawConfiguration={setRawConfiguration}
-                    isSaving={isSaving}
-                    isValidConfiguration={isValidConfiguration}
-                    validationAdvancedError={validationAdvancedError}
-                    validationErrors={validationErrors}
-                    onPrev={prevStep}
-                  />
-                )} */}
 
                   {activeStep?.id === 2 && (
                     <DataSync

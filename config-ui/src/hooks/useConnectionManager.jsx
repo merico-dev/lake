@@ -272,7 +272,7 @@ function useConnectionManager (
       }
     }
 
-    if (updateMode && activeConnection) {
+    if (updateMode && activeConnection?.id !== null) {
       modifyConfiguration(connectionPayload)
     } else {
       saveConfiguration(connectionPayload)
@@ -684,6 +684,7 @@ function useConnectionManager (
     setTestStatus,
     setTestResponse,
     setConnectionLimits,
+    setSaveComplete,
     allConnections,
     allProviderConnections,
     domainRepositories,
