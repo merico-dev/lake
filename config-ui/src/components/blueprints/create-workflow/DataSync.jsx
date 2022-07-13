@@ -189,8 +189,6 @@ const DataSync = (props) => {
               className={`cron-custom-input ${
                 fieldHasError('Blueprint Cron') ? 'invalid-field' : ''
               }`}
-              inline={true}
-              fill={false}
               style={{ transition: 'none' }}
             />
           </FormGroup>

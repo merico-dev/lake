@@ -17,28 +17,8 @@
  */
 import React from 'react'
 import {
-  Button,
-  Icon,
   Intent,
-  Switch,
-  FormGroup,
-  ButtonGroup,
-  RadioGroup,
-  Radio,
-  InputGroup,
-  Divider,
-  Elevation,
-  TextArea,
-  Tabs,
-  Tab,
-  Card,
-  Popover,
-  Tooltip,
-  Label,
   MenuItem,
-  Position,
-  Colors,
-  Tag,
 } from '@blueprintjs/core'
 import { MultiSelect, Select } from '@blueprintjs/select'
 const BoardsSelector = (props) => {
@@ -48,6 +28,7 @@ const BoardsSelector = (props) => {
     placeholder = 'Select boards',
     items = [],
     selectedItems = [],
+    // eslint-disable-next-line max-len
     restrictedItems = [],
     activeItem = null,
     disabled = false,

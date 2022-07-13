@@ -23,7 +23,7 @@ const MappingTag = ({ classNames, labelIntent, labelName, onChange, rightElement
     <>
       <div className='formContainer'>
         <FormGroup
-            // disabled={isTesting || isSaving}
+          // disabled={isTesting || isSaving}
           label=''
           inline={true}
           labelFor='jira-issue-type-mapping'

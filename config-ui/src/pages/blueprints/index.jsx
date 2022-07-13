@@ -268,7 +268,7 @@ const Blueprints = (props) => {
           ))
           break
         default:
-          // NO FILTERS
+        // NO FILTERS
           break
       }
     }

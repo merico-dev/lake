@@ -16,35 +16,13 @@
  *
  */
 import React from 'react'
-import {
-  Button,
-  Icon,
-  Intent,
-  Switch,
-  FormGroup,
-  ButtonGroup,
-  RadioGroup,
-  Radio,
-  InputGroup,
-  Divider,
-  Elevation,
-  TextArea,
-  Tabs,
-  Tab,
-  Card,
-  Popover,
-  Tooltip,
-  Label,
-  MenuItem,
-  Position,
-  Colors,
-  Tag,
-} from '@blueprintjs/core'
-import { MultiSelect, Select } from '@blueprintjs/select'
-import { Providers, ProviderTypes, ProviderIcons } from '@/data/Providers'
+import { Button, Intent, MenuItem } from '@blueprintjs/core'
+import { MultiSelect } from '@blueprintjs/select'
+import { ProviderIcons } from '@/data/Providers'
 
 const ConnectionsSelector = (props) => {
   const {
+    // eslint-disable-next-line no-unused-vars
     connections = [],
     placeholder = 'Select connections',
     items = [],
@@ -57,8 +35,10 @@ const ConnectionsSelector = (props) => {
     onClear = () => {},
     itemRenderer = (item, { handleClick, modifiers }) => (
       <MenuItem
-        active={modifiers.active || selectedItems.find(i => i.id === item.id)}
-        disabled={selectedItems.find(i => i.id === item.id) || modifiers.active}
+        active={modifiers.active || selectedItems.find((i) => i.id === item.id)}
+        disabled={
+          selectedItems.find((i) => i.id === item.id) || modifiers.active
+        }
         key={item.id}
         label={
           <span style={{ marginLeft: '20px' }}>
@@ -67,7 +47,7 @@ const ConnectionsSelector = (props) => {
                 display: 'inline-block',
                 marginTop: '2px',
                 width: '14px',
-                height: '14px'
+                height: '14px',
               }}
             >
               {ProviderIcons[item.provider]
@@ -82,7 +62,7 @@ const ConnectionsSelector = (props) => {
         }
         onClick={handleClick}
         text={
-          selectedItems.find(i => i.id === item.id)
+          selectedItems.find((i) => i.id === item.id)
             ? (
               <>
                 <input type='checkbox' checked readOnly /> {item.title}
@@ -149,7 +129,6 @@ const ConnectionsSelector = (props) => {
         <div className='multiselect-clear-action' style={{ marginLeft: '0' }}>
           <Button
             icon='eraser'
-            intent='minimal'
             disabled={items.length === 0 || disabled || isSaving}
             intent={Intent.NONE}
             minimal={false}

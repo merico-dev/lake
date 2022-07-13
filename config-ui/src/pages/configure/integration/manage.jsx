@@ -131,7 +131,7 @@ export default function ManageIntegration () {
         break
       case 0:
       default:
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
         s = <strong style={{ color: Colors.GRAY4 }}><span style={{ float: 'right' }}><Spinner size={11} intent={Intent.NONE} /></span> Offline</strong>
         break
     }

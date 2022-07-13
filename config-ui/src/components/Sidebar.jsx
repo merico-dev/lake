@@ -20,11 +20,11 @@ import {
   // BrowserRouter as Router,
   useRouteMatch,
 } from 'react-router-dom'
-import { Button, Card, Elevation } from '@blueprintjs/core'
+import { Card, Elevation } from '@blueprintjs/core'
 import request from '@/utils/request'
 import SidebarMenu from '@/components/Sidebar/SidebarMenu'
 import MenuConfiguration from '@/components/Sidebar/MenuConfiguration'
-import { DEVLAKE_ENDPOINT, GRAFANA_URL } from '@/utils/config'
+import { DEVLAKE_ENDPOINT } from '@/utils/config'
 import { ReactComponent as Logo } from '@/images/devlake-logo.svg'
 import { ReactComponent as LogoText } from '@/images/devlake-textmark.svg'
 

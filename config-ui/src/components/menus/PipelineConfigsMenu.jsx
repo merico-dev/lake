@@ -36,55 +36,96 @@ const PipelineConfigsMenu = (props) => {
   } = props
   return (
     <Menu className='pipeline-configs-menu'>
-      {showTitle && (<label style={{
-        fontSize: '10px',
-        fontWeight: 800,
-        textTransform: 'uppercase',
-        padding: '6px 8px',
-        display: 'block'
-      }}
-                     >SAMPLE PIPELINE CONFIGURATIONS
-      </label>)}
+      {showTitle && (
+        <label
+          style={{
+            fontSize: '10px',
+            fontWeight: 800,
+            textTransform: 'uppercase',
+            padding: '6px 8px',
+            display: 'block',
+          }}
+        >
+          SAMPLE PIPELINE CONFIGURATIONS
+        </label>
+      )}
       <Menu.Item
-        icon='code' text='Load General Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(samplePipelineConfig, null, '  '))}
+        icon='code'
+        text='Load General Configuration'
+        onClick={() =>
+          setRawConfiguration(JSON.stringify(samplePipelineConfig, null, '  '))}
       />
       <Menu.Item
         icon='code'
         text='Load RefDiff Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleRefdiffPipelineConfig, null, '  '))}
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleRefdiffPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load GitExtractor Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleGitextractorPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load GitExtractor Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleGitextractorPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load GitHub Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleGithubPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load GitHub Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleGithubPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load GitLab Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleGitlabPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load GitLab Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleGitlabPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load JIRA Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleJiraPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load JIRA Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleJiraPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load Jenkins Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleJenkinsPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load Jenkins Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleJenkinsPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load Feishu Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleFeishuPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load Feishu Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleFeishuPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load DBT Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleDbtPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load DBT Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleDbtPipelineConfig, null, '  ')
+          )}
       />
       <Menu.Item
-        icon='code' text='Load StarRocks Configuration'
-        onClick={() => setRawConfiguration(JSON.stringify(sampleStarRocksConfigPipelineConfig, null, '  '))}
+        icon='code'
+        text='Load StarRocks Configuration'
+        onClick={() =>
+          setRawConfiguration(
+            JSON.stringify(sampleStarRocksConfigPipelineConfig, null, '  ')
+          )}
       />
     </Menu>
   )

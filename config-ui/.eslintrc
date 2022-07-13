@@ -47,10 +47,13 @@
   "rules": {
     "camelcase": "off",
     "max-len": [1, 140, 2],
+    "react/jsx-indent": ["error", 2],
     "import/no-named-as-default": "off",
     "comma-dangle": "off",
     "react/prop-types": "off",
     "react/jsx-boolean-value": 0,
-    "header/header": ["error", ".file-headerrc"]
+    "header/header": ["error", ".file-headerrc"],
+    "no-unused-vars": "off",
+    "multiline-ternary": 0
   }
 }

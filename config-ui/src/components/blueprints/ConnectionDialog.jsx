@@ -129,9 +129,6 @@ const ConnectionDialog = (props) => {
     // showLimitWarning = false
   } = props
 
-  { /* const connectionNameRef = useRef()
-  const connectionEndpointRef = useRef() */ }
-
   const [datasource, setDatasource] = useState(
     connection?.id
       ? dataSourcesList.find((d) => d.value === connection.provider)
@@ -176,18 +173,16 @@ const ConnectionDialog = (props) => {
     } else {
       setMode(Modes.CREATE)
     }
-  }, [connection])
+  }, [connection, dataSourcesList])
 
   useEffect(() => {
     console.log('>>> DATASOURCE CHANGED....', datasource)
-    setProvider(integrations.find(p => p.id === datasource.value))
+    setProvider(integrations.find((p) => p.id === datasource.value))
     setTestStatus(0)
     setTestResponse(null)
-  }, [datasource])
+  }, [datasource, integrations, setProvider, setTestResponse, setTestStatus])
 
-  useEffect(() => {
-
-  }, [testStatus])
+  useEffect(() => {}, [testStatus])
 
   return (
     <>
@@ -216,7 +211,6 @@ const ConnectionDialog = (props) => {
           ) : (
             <>
               <div className='manage-connection'>
-
                 <div className='formContainer'>
                   <FormGroup
                     disabled={isTesting || isSaving || isLocked}
@@ -259,10 +253,11 @@ const ConnectionDialog = (props) => {
                       readOnly={connection?.id !== null && mode === Modes.EDIT}
                     >
                       <Button
-                        disabled={connection?.id !== null && mode === Modes.EDIT}
+                        disabled={
+                          connection?.id !== null && mode === Modes.EDIT
+                        }
                         className='btn-select-datasource'
                         intent={Intent.NONE}
-                        style={{ maxWidth: '260px' }}
                         text={
                           datasource
                             ? `${datasource.title}`
@@ -271,6 +266,7 @@ const ConnectionDialog = (props) => {
                         rightIcon='double-caret-vertical'
                         fill
                         style={{
+                          maxWidth: '260px',
                           display: 'flex',
                           justifyContent: 'space-between',
                         }}
@@ -279,7 +275,10 @@ const ConnectionDialog = (props) => {
                   </FormGroup>
                 </div>
 
-                <div className='connection-form-wrapper' style={{ display: 'flex' }}>
+                <div
+                  className='connection-form-wrapper'
+                  style={{ display: 'flex' }}
+                >
                   <ConnectionForm
                     isValid={isValid}
                     validationErrors={validationErrors}
@@ -307,27 +306,47 @@ const ConnectionDialog = (props) => {
                     testResponse={testResponse}
                     errors={errors}
                     showError={showConnectionError}
-                    authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider?.id) ? 'plain' : 'token'}
+                    authType={
+                      [Providers.JENKINS, Providers.JIRA].includes(
+                        activeProvider?.id
+                      )
+                        ? 'plain'
+                        : 'token'
+                    }
                     showLimitWarning={false}
                     sourceLimits={ProviderConnectionLimits}
                     labels={ProviderFormLabels[activeProvider?.id]}
                     placeholders={ProviderFormPlaceholders[activeProvider?.id]}
                     enableActions={false}
-                   // formGroupClassName='formGroup-inline'
+                    // formGroupClassName='formGroup-inline'
                     showHeadline={false}
                   />
                 </div>
-
               </div>
             </>
           )}
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <div className='test-response-message' style={{ marginRight: 'auto' }}>
-              {testResponse && (<>
-                {testResponse.success ? <span style={{ color: Colors.GREEN5 }}>Successfully Connected!</span> : <span style={{ color: Colors.RED5 }}>Connection Failed</span>}
-              </>)}
+            <div
+              className='test-response-message'
+              style={{ marginRight: 'auto' }}
+            >
+              {testResponse && (
+                <>
+                  {testResponse.success
+                    ? (
+                      <span style={{ color: Colors.GREEN5 }}>
+                        Successfully Connected!
+                      </span>
+                      )
+                    : (
+                      <span style={{ color: Colors.RED5 }}>
+                        Connection Failed
+                      </span>
+                      )}
+                </>
+              )}
             </div>
             <Button
               className='btn-test'

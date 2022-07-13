@@ -284,7 +284,7 @@ const CreatePipeline = (props) => {
     let options = {}
     switch (providerId) {
       case Providers.JENKINS:
-        // NO OPTIONS for Jenkins!
+      // NO OPTIONS for Jenkins!
         break
       case Providers.JIRA:
         options = {

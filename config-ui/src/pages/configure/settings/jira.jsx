@@ -29,10 +29,8 @@ import {
   Position,
   Tag,
 } from '@blueprintjs/core'
-import useJIRA from '@/hooks/useJIRA'
 import { MultiSelect, Select } from '@blueprintjs/select'
 
-import ClearButton from '@/components/ClearButton'
 import '@/styles/integration.scss'
 import '@/styles/connections.scss'
 
@@ -206,7 +204,7 @@ export default function JiraSettings (props) {
             disabled={isSaving}
             resetOnSelect={true}
             placeholder='Select...'
-            popoverProps={{ usePortal: false, minimal: true, fill: true, style: { width: '100%' } }}
+            popoverProps={{ usePortal: false, popoverClassName: 'transformation-select-popover', minimal: true, fill: true, style: { width: '100%' } }}
             className='multiselector-requirement-type'
             inline={true}
             fill={true}
@@ -243,10 +241,6 @@ export default function JiraSettings (props) {
                 minimal: true
               },
             }}
-            popoverProps={{
-              popoverClassName: 'transformation-select-popover',
-              minimal: true
-            }}
             noResults={<MenuItem disabled={true} text='No results.' />}
             onRemove={(item) => {
               setRequirementTags((rT) => rT.filter(t => t.id !== item.id))
@@ -275,7 +269,7 @@ export default function JiraSettings (props) {
             disabled={isSaving}
             resetOnSelect={true}
             placeholder='Select...'
-            popoverProps={{ usePortal: false, minimal: true }}
+            popoverProps={{ usePortal: false, popoverClassName: 'transformation-select-popover', minimal: true }}
             className='multiselector-bug-type'
             inline={true}
             fill={true}
@@ -312,10 +306,6 @@ export default function JiraSettings (props) {
                 minimal: true
               },
             }}
-            popoverProps={{
-              popoverClassName: 'transformation-select-popover',
-              minimal: true
-            }}
             noResults={<MenuItem disabled={true} text='No results.' />}
             onRemove={(item) => {
               setBugTags((rT) => rT.filter(t => t.id !== item.id))
@@ -344,7 +334,7 @@ export default function JiraSettings (props) {
             disabled={isSaving}
             resetOnSelect={true}
             placeholder='Select...'
-            popoverProps={{ usePortal: false, minimal: true }}
+            popoverProps={{ usePortal: false, popoverClassName: 'transformation-select-popover', minimal: true }}
             className='multiselector-incident-type'
             inline={true}
             fill={true}
@@ -380,10 +370,6 @@ export default function JiraSettings (props) {
                 color: Colors.RED3,
                 minimal: true
               },
-            }}
-            popoverProps={{
-              popoverClassName: 'transformation-select-popover',
-              minimal: true
             }}
             noResults={<MenuItem disabled={true} text='No results.' />}
             onRemove={(item) => {

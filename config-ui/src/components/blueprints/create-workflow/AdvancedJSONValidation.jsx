@@ -15,16 +15,8 @@
  * limitations under the License.
  *
  */
-import React, { Fragment, useEffect, useState, useCallback } from 'react'
+import React from 'react'
 import {
-  Button,
-  Icon,
-  Intent,
-  TextArea,
-  InputGroup,
-  ButtonGroup,
-  Popover,
-  Position,
   Divider,
   Elevation,
   Card,
@@ -34,24 +26,24 @@ import {
 const AdvancedJSONValidation = (props) => {
   const {
     activeStep,
-    name,
-    runTasksAdvanced = [],
+    // name,
+    // runTasksAdvanced = [],
     rawConfiguration,
-    blueprintConnections = [],
-    connectionsList = [],
-    setBlueprintName = () => {},
-    fieldHasError = () => {},
-    getFieldError = () => {},
-    onAdvancedMode = () => {},
-    isMultiStagePipeline = () => {},
-    setRawConfiguration = () => {},
+    // blueprintConnections = [],
+    // connectionsList = [],
+    // setBlueprintName = () => {},
+    // fieldHasError = () => {},
+    // getFieldError = () => {},
+    // onAdvancedMode = () => {},
+    // isMultiStagePipeline = () => {},
+    // setRawConfiguration = () => {},
     onPrev = () => {},
-    isSaving = false,
-    isRunning = false,
+    // isSaving = false,
+    // isRunning = false,
     isValidConfiguration = false,
-    advancedMode = false,
+    // advancedMode = false,
     validationAdvancedError = null,
-    validationErrors = [],
+    // validationErrors = [],
   } = props
 
   return (
@@ -67,38 +59,41 @@ const AdvancedJSONValidation = (props) => {
         <h3>Validate JSON Tasks</h3>
         <Divider className='section-divider' />
 
-        {isValidConfiguration ? (<p className='alert neutral'>
-          <strong>Your Blueprint JSON Configuration is valid</strong>. Please see below for
-          detected data providers.
-          <br />
-          <a
-            href='#'
-            className='more-link'
-            rel='noreferrer'
-            style={{
-              // color: '#7497F7',
-              marginTop: '5px',
-              display: 'inline-block',
-            }}
-          >
-            Find out more
-          </a>
-        </p>) : (
-                                   <p className='alert error'>
-            <strong>Your Blueprint JSON Configuration is invalid.</strong> {validationAdvancedError}
+        {isValidConfiguration ? (
+          <p className='alert neutral'>
+            <strong>Your Blueprint JSON Configuration is valid</strong>. Please
+            see below for detected data providers.
             <br />
             <a
-                                       href='#'
-                                       className='more-link'
-                                       rel='noreferrer'
-                                       style={{
+              href='#'
+              className='more-link'
+              rel='noreferrer'
+              style={{
+                // color: '#7497F7',
                 marginTop: '5px',
                 display: 'inline-block',
               }}
-                                       onClick={onPrev}
-                                     >
+            >
+              Find out more
+            </a>
+          </p>
+        ) : (
+          <p className='alert error'>
+            <strong>Your Blueprint JSON Configuration is invalid.</strong>{' '}
+            {validationAdvancedError}
+            <br />
+            <a
+              href='#'
+              className='more-link'
+              rel='noreferrer'
+              style={{
+                marginTop: '5px',
+                display: 'inline-block',
+              }}
+              onClick={onPrev}
+            >
               Go Back
-                                     </a>
+            </a>
           </p>
         )}
 

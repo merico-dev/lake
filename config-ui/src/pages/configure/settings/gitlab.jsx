@@ -15,14 +15,20 @@
  * limitations under the License.
  *
  */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import '@/styles/integration.scss'
 import '@/styles/connections.scss'
 
 export default function GitlabSettings (props) {
-  const { connection, transformation = {}, provider, onSettingsChange = () => {} } = props
+  const {
+    connection,
+    // eslint-disable-next-line max-len
+    transformation = {},
+    provider,
+    onSettingsChange = () => {}
+  } = props
   const history = useHistory()
 
   useEffect(() => {
@@ -35,6 +41,7 @@ export default function GitlabSettings (props) {
     onSettingsChange
   ])
 
+  // eslint-disable-next-line max-len
   const cancel = () => {
     history.push(`/integrations/${provider.id}`)
   }

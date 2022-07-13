@@ -26,11 +26,7 @@ import {
   BOARDS_ENDPOINT,
 } from '@/config/jiraApiProxy'
 import { integrationsData } from '@/data/integrations'
-import {
-  Divider,
-  Elevation,
-  Card,
-} from '@blueprintjs/core'
+import { Divider, Elevation, Card } from '@blueprintjs/core'
 import {
   Providers,
   ProviderTypes,
@@ -52,7 +48,7 @@ import {
   WorkflowSteps,
   WorkflowAdvancedSteps,
   DEFAULT_DATA_ENTITIES,
-  DEFAULT_BOARDS
+  DEFAULT_BOARDS,
 } from '@/data/BlueprintWorkflow'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
@@ -82,11 +78,16 @@ const CreateBlueprint = (props) => {
   const history = useHistory()
   // const dispatch = useDispatch()
 
-  const [blueprintAdvancedSteps, setBlueprintAdvancedSteps] = useState(WorkflowAdvancedSteps)
-  const [blueprintNormalSteps, setBlueprintNormalSteps] = useState(WorkflowSteps)
+  const [blueprintAdvancedSteps, setBlueprintAdvancedSteps] = useState(
+    WorkflowAdvancedSteps
+  )
+  const [blueprintNormalSteps, setBlueprintNormalSteps] =
+    useState(WorkflowSteps)
   const [blueprintSteps, setBlueprintSteps] = useState(blueprintNormalSteps)
   const [advancedMode, setAdvancedMode] = useState(false)
-  const [activeStep, setActiveStep] = useState(blueprintSteps.find((s) => s.id === 1))
+  const [activeStep, setActiveStep] = useState(
+    blueprintSteps.find((s) => s.id === 1)
+  )
   const [activeProvider, setActiveProvider] = useState(integrationsData[0])
 
   const [enabledProviders, setEnabledProviders] = useState([])
@@ -104,20 +105,7 @@ const CreateBlueprint = (props) => {
     NullBlueprintConnection
   )
 
-  const [connectionsList, setConnectionsList] = useState(
-    allProviderConnections?.map((c, cIdx) => ({
-      ...c,
-      id: cIdx,
-      name: c.name,
-      title: c.name,
-      value: c.id,
-      status:
-        ConnectionStatusLabels[c.status] ||
-        ConnectionStatusLabels[ConnectionStatus.OFFLINE],
-      provider: c.provider,
-      plugin: c.provider,
-    }))
-  )
+  const [connectionsList, setConnectionsList] = useState([])
 
   const [dataEntitiesList, setDataEntitiesList] = useState([
     ...DEFAULT_DATA_ENTITIES,
@@ -200,7 +188,7 @@ const CreateBlueprint = (props) => {
     saveBlueprint,
     deleteBlueprint,
     isDeleting: isDeletingBlueprint,
-    saveComplete: saveBlueprintComplete
+    saveComplete: saveBlueprintComplete,
   } = useBlueprintManager()
 
   const {
@@ -218,7 +206,7 @@ const CreateBlueprint = (props) => {
     customCronConfig,
     enable,
     tasks: blueprintTasks,
-    mode
+    mode,
   })
 
   const {
@@ -271,7 +259,7 @@ const CreateBlueprint = (props) => {
     advancedMode,
     mode,
     connection: configuredConnection,
-    entities: dataEntities
+    entities: dataEntities,
   })
 
   const {
@@ -283,12 +271,15 @@ const CreateBlueprint = (props) => {
     fields: jiraApiFields,
     isFetching: isFetchingJIRA,
     error: jiraProxyError,
-  } = useJIRA({
-    apiProxyPath: API_PROXY_ENDPOINT,
-    issuesEndpoint: ISSUE_TYPES_ENDPOINT,
-    fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
-    boardsEndpoint: BOARDS_ENDPOINT,
-  }, configuredConnection)
+  } = useJIRA(
+    {
+      apiProxyPath: API_PROXY_ENDPOINT,
+      issuesEndpoint: ISSUE_TYPES_ENDPOINT,
+      fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
+      boardsEndpoint: BOARDS_ENDPOINT,
+    },
+    configuredConnection
+  )
 
   const {
     testConnection,
@@ -322,11 +313,14 @@ const CreateBlueprint = (props) => {
     fetchAllConnections,
     connectionLimitReached,
     clearConnection: clearActiveConnection,
-    testResponse
-  } = useConnectionManager({
-    activeProvider,
-    connectionId: managedConnection?.connectionId
-  }, managedConnection?.id !== null)
+    testResponse,
+  } = useConnectionManager(
+    {
+      activeProvider,
+      connectionId: managedConnection?.connectionId,
+    },
+    managedConnection?.id !== null
+  )
 
   const {
     validate: validateConnection,
@@ -339,31 +333,41 @@ const CreateBlueprint = (props) => {
     proxy,
     token,
     username,
-    password
+    password,
   })
 
   const isValidStep = useCallback((stepId) => {}, [])
 
   const nextStep = useCallback(() => {
     setActiveStep((aS) =>
-      blueprintSteps.find((s) => s.id === Math.min(aS.id + 1, blueprintSteps.length))
+      blueprintSteps.find(
+        (s) => s.id === Math.min(aS.id + 1, blueprintSteps.length)
+      )
     )
   }, [blueprintSteps])
 
   const prevStep = useCallback(() => {
-    setActiveStep((aS) => blueprintSteps.find((s) => s.id === Math.max(aS.id - 1, 1)))
+    setActiveStep((aS) =>
+      blueprintSteps.find((s) => s.id === Math.max(aS.id - 1, 1))
+    )
   }, [blueprintSteps])
 
   const handleConnectionTabChange = useCallback(
     (tab) => {
       console.log('>> CONNECTION TAB CHANGED', tab)
-      const selectedConnection = blueprintConnections.find((c) => c.id === Number(tab.split('-')[1]))
+      const selectedConnection = blueprintConnections.find(
+        (c) => c.id === Number(tab.split('-')[1])
+      )
       setActiveConnectionTab(tab)
-      setActiveProvider(integrationsData.find(p => p.id === selectedConnection.provider))
-      setProvider(integrationsData.find(p => p.id === selectedConnection.provider))
+      setActiveProvider(
+        integrationsData.find((p) => p.id === selectedConnection.provider)
+      )
+      setProvider(
+        integrationsData.find((p) => p.id === selectedConnection.provider)
+      )
       setConfiguredConnection(selectedConnection)
     },
-    [blueprintConnections]
+    [blueprintConnections, setProvider]
   )
 
   const handleConnectionDialogOpen = () => {
@@ -393,8 +397,12 @@ const CreateBlueprint = (props) => {
   }
 
   const handleTransformationClear = useCallback(() => {
-    console.log('>>> CLEARING TRANSFORMATION RULES!', '==> BOARD =', configuredBoard)
-    setTransformations(existingTransformations => ({
+    console.log(
+      '>>> CLEARING TRANSFORMATION RULES!',
+      '==> BOARD =',
+      configuredBoard
+    )
+    setTransformations((existingTransformations) => ({
       ...existingTransformations,
       [configuredProject]: {},
       [configuredBoard?.id]: {},
@@ -419,10 +427,10 @@ const CreateBlueprint = (props) => {
         items = dataEntitiesList.filter((d) => d.name !== 'ci-cd')
         break
       case Providers.JENKINS:
-        items = dataEntitiesList.filter((d) => d.name == 'ci-cd')
+        items = dataEntitiesList.filter((d) => d.name === 'ci-cd')
         break
-        return items
     }
+    return items
   }, [dataEntitiesList, configuredConnection])
 
   const createProviderScopes = useCallback(
@@ -487,16 +495,21 @@ const CreateBlueprint = (props) => {
     []
   )
 
-  const manageConnection = useCallback((connection) => {
-    console.log('>> MANAGE CONNECTION...', connection)
-    if (connection?.id !== null) {
-      setActiveProvider(integrationsData.find(p => p.id === connection.provider))
-      setProvider(integrationsData.find(p => p.id === connection.provider))
-      // fetchConnection(true, false, connection.id)
-      setManagedConnection(connection)
-      setConnectionDialogIsOpen(true)
-    }
-  }, [])
+  const manageConnection = useCallback(
+    (connection) => {
+      console.log('>> MANAGE CONNECTION...', connection)
+      if (connection?.id !== null) {
+        setActiveProvider(
+          integrationsData.find((p) => p.id === connection.provider)
+        )
+        setProvider(integrationsData.find((p) => p.id === connection.provider))
+        // fetchConnection(true, false, connection.id)
+        setManagedConnection(connection)
+        setConnectionDialogIsOpen(true)
+      }
+    },
+    [setProvider]
+  )
 
   const addProjectTransformation = (project) => {
     setConfiguredProject(project)
@@ -511,13 +524,23 @@ const CreateBlueprint = (props) => {
     setConnectionDialogIsOpen(true)
   }
 
-  const setTransformationSettings = useCallback((settings, configuredEntity) => {
-    console.log('>> SETTING TRANSFORMATION SETTINGS PROJECT/BOARD...', configuredEntity, settings)
-    setTransformations(existingTransformations => ({
-      ...existingTransformations,
-      [configuredEntity]: { ...existingTransformations[configuredEntity], ...settings }
-    }))
-  }, [])
+  const setTransformationSettings = useCallback(
+    (settings, configuredEntity) => {
+      console.log(
+        '>> SETTING TRANSFORMATION SETTINGS PROJECT/BOARD...',
+        configuredEntity,
+        settings
+      )
+      setTransformations((existingTransformations) => ({
+        ...existingTransformations,
+        [configuredEntity]: {
+          ...existingTransformations[configuredEntity],
+          ...settings,
+        },
+      }))
+    },
+    []
+  )
 
   const handleAdvancedMode = (enableAdvanced = true) => {
     setAdvancedMode(enableAdvanced)
@@ -558,9 +581,27 @@ const CreateBlueprint = (props) => {
       fetchIssueTypes()
       fetchFields()
     }
-    setBlueprintNormalSteps(bS => [...bS.map(s => s.id < activeStep?.id ? { ...s, complete: true } : { ...s, complete: false })])
-    setBlueprintAdvancedSteps(bS => [...bS.map(s => s.id < activeStep?.id ? { ...s, complete: true } : { ...s, complete: false })])
-  }, [activeStep])
+    setBlueprintNormalSteps((bS) => [
+      ...bS.map((s) =>
+        s.id < activeStep?.id
+          ? { ...s, complete: true }
+          : { ...s, complete: false }
+      ),
+    ])
+    setBlueprintAdvancedSteps((bS) => [
+      ...bS.map((s) =>
+        s.id < activeStep?.id
+          ? { ...s, complete: true }
+          : { ...s, complete: false }
+      ),
+    ])
+  }, [
+    activeStep,
+    fetchAllConnections,
+    fetchBoards,
+    fetchFields,
+    fetchIssueTypes,
+  ])
 
   useEffect(() => {
     console.log('>>> ALL DATA PROVIDER CONNECTIONS...', allProviderConnections)
@@ -587,7 +628,7 @@ const CreateBlueprint = (props) => {
     )
     setPipelineSettings({
       name: pipelineName,
-      tasks: advancedMode ? runTasksAdvanced : [[...runTasks]]
+      tasks: advancedMode ? runTasksAdvanced : [[...runTasks]],
     })
     // setRawConfiguration(JSON.stringify(buildPipelineStages(runTasks, true), null, '  '))
     if (advancedMode) {
@@ -598,6 +639,7 @@ const CreateBlueprint = (props) => {
       setBlueprintTasks([[...runTasks]])
     }
   }, [
+    pipelineName,
     advancedMode,
     runTasks,
     runTasksAdvanced,
@@ -645,7 +687,10 @@ const CreateBlueprint = (props) => {
       }
       return entities
     }
-    const initializeEntities = (pV, cV) => ({ ...pV, [cV.id]: !pV[cV.id] ? getDefaultEntities(cV?.provider) : [] })
+    const initializeEntities = (pV, cV) => ({
+      ...pV,
+      [cV.id]: !pV[cV.id] ? getDefaultEntities(cV?.provider) : [],
+    })
     const initializeProjects = (pV, cV) => ({ ...pV, [cV.id]: [] })
     const initializeBoards = (pV, cV) => ({ ...pV, [cV.id]: [] })
     setDataEntities((dE) => ({
@@ -678,7 +723,7 @@ const CreateBlueprint = (props) => {
           break
         case Providers.JENKINS:
           setDataEntitiesList(
-            DEFAULT_DATA_ENTITIES.filter((d) => d.name == 'ci-cd')
+            DEFAULT_DATA_ENTITIES.filter((d) => d.name === 'ci-cd')
           )
           break
         default:
@@ -715,7 +760,16 @@ const CreateBlueprint = (props) => {
       })),
     }))
     // validatePipeline()
-  }, [blueprintConnections, dataEntities, boards, projects, transformations, validatePipeline])
+  }, [
+    blueprintConnections,
+    dataEntities,
+    boards,
+    projects,
+    transformations,
+    validatePipeline,
+    createProviderScopes,
+    setBlueprintSettings,
+  ])
 
   useEffect(() => {
     console.log('>> PROJECTS LIST', projects)
@@ -736,8 +790,8 @@ const CreateBlueprint = (props) => {
             refdiff: {
               tagsOrder: '',
               tagsPattern: '',
-              tagsLimit: 10
-            }
+              tagsLimit: 10,
+            },
           }
           break
         case Providers.JIRA:
@@ -748,7 +802,7 @@ const CreateBlueprint = (props) => {
             remotelinkCommitShaPattern: '',
             bugTags: [],
             incidentTags: [],
-            requirementTags: []
+            requirementTags: [],
           }
           break
         case Providers.JENKINS:
@@ -761,37 +815,57 @@ const CreateBlueprint = (props) => {
       return transforms
     }
 
-    const initializeTransformations = (pV, cV) => ({ ...pV, [cV]: getDefaultTransformations(configuredConnection?.provider) })
+    const initializeTransformations = (pV, cV) => ({
+      ...pV,
+      [cV]: getDefaultTransformations(configuredConnection?.provider),
+    })
     const projectTransformation = projects[configuredConnection?.id]
-    const boardTransformation = boards[configuredConnection?.id]?.map(b => b.id)
+    const boardTransformation = boards[configuredConnection?.id]?.map(
+      (b) => b.id
+    )
     if (projectTransformation) {
-      setTransformations(cT => ({
+      setTransformations((cT) => ({
         ...projectTransformation.reduce(initializeTransformations, {}),
         // Spread Current/Existing Transformations Settings
-        ...cT
+        ...cT,
       }))
     }
     if (boardTransformation) {
-      setTransformations(cT => ({
+      setTransformations((cT) => ({
         ...boardTransformation.reduce(initializeTransformations, {}), // @todo: FIXME
         // Spread Current/Existing Transformations Settings
-        ...cT
+        ...cT,
       }))
     }
   }, [projects, boards, configuredConnection])
 
   useEffect(() => {
-    console.log('>>> SELECTED PROJECT TO CONFIGURE...', configuredProject, transformations)
-    setActiveTransformation(aT => configuredProject ? transformations[configuredProject] : aT)
+    console.log(
+      '>>> SELECTED PROJECT TO CONFIGURE...',
+      configuredProject,
+      transformations
+    )
+    setActiveTransformation((aT) =>
+      configuredProject ? transformations[configuredProject] : aT
+    )
   }, [configuredProject, transformations])
 
   useEffect(() => {
-    console.log('>>> SELECTED BOARD TO CONFIGURE...', configuredBoard, transformations)
-    setActiveTransformation(aT => configuredBoard ? transformations[configuredBoard?.id] : aT)
+    console.log(
+      '>>> SELECTED BOARD TO CONFIGURE...',
+      configuredBoard,
+      transformations
+    )
+    setActiveTransformation((aT) =>
+      configuredBoard ? transformations[configuredBoard?.id] : aT
+    )
   }, [configuredBoard, transformations])
 
   useEffect(() => {
-    console.log('>>> ACTIVE/MODIFYING TRANSFORMATION RULES...', activeTransformation)
+    console.log(
+      '>>> ACTIVE/MODIFYING TRANSFORMATION RULES...',
+      activeTransformation
+    )
   }, [activeTransformation])
 
   useEffect(() => {
@@ -799,9 +873,18 @@ const CreateBlueprint = (props) => {
   }, [blueprintSteps])
 
   useEffect(() => {
-    setBlueprintSteps(advancedMode ? blueprintAdvancedSteps : blueprintNormalSteps)
-    setBlueprintMode(advancedMode ? BlueprintMode.ADVANCED : BlueprintMode.NORMAL)
-  }, [advancedMode, blueprintNormalSteps, blueprintAdvancedSteps])
+    setBlueprintSteps(
+      advancedMode ? blueprintAdvancedSteps : blueprintNormalSteps
+    )
+    setBlueprintMode(
+      advancedMode ? BlueprintMode.ADVANCED : BlueprintMode.NORMAL
+    )
+  }, [
+    advancedMode,
+    blueprintNormalSteps,
+    blueprintAdvancedSteps,
+    setBlueprintMode,
+  ])
 
   useEffect(() => {
     if (isValidCode()) {
@@ -813,7 +896,7 @@ const CreateBlueprint = (props) => {
     if (saveBlueprintComplete?.id) {
       history.push(`/blueprints/detail/${saveBlueprintComplete?.id}`)
     }
-  }, [saveBlueprintComplete])
+  }, [saveBlueprintComplete, history])
 
   useEffect(() => {
     console.log('>>> FETCHED JIRA API BOARDS FROM PROXY...', jiraApiBoards)
@@ -832,8 +915,8 @@ const CreateBlueprint = (props) => {
             <div
               className={`workflow-content workflow-step-id-${activeStep?.id}`}
             >
-              {advancedMode
-                ? (<>
+              {advancedMode ? (
+                <>
                   {activeStep?.id === 1 && (
                     <AdvancedJSON
                       activeStep={activeStep}
@@ -843,13 +926,13 @@ const CreateBlueprint = (props) => {
                       connectionsList={connectionsList}
                       name={name}
                       setBlueprintName={setBlueprintName}
-                    // setBlueprintConnections={setBlueprintConnections}
+                      // setBlueprintConnections={setBlueprintConnections}
                       fieldHasError={fieldHasError}
                       getFieldError={getFieldError}
-                    // addConnection={addConnection}
-                    // manageConnection={manageConnection}
+                      // addConnection={addConnection}
+                      // manageConnection={manageConnection}
                       onAdvancedMode={handleAdvancedMode}
-                    // @todo add multistage checker method
+                      // @todo add multistage checker method
                       isMultiStagePipeline={() => {}}
                       rawConfiguration={rawConfiguration}
                       setRawConfiguration={setRawConfiguration}
@@ -895,9 +978,9 @@ const CreateBlueprint = (props) => {
                       getCronPresetByConfig={getCronPresetByConfig}
                     />
                   )}
-                   </>
-                  )
-                : (<>
+                </>
+              ) : (
+                <>
                   {activeStep?.id === 1 && (
                     <DataConnections
                       activeStep={activeStep}
@@ -988,8 +1071,8 @@ const CreateBlueprint = (props) => {
                       getCronPresetByConfig={getCronPresetByConfig}
                     />
                   )}
-
-                </>)}
+                </>
+              )}
             </div>
 
             <WorkflowActions
@@ -1047,21 +1130,25 @@ const CreateBlueprint = (props) => {
         titleIcon='add'
         subtitle='JSON CONFIGURATION'
         isOpen={showBlueprintInspector}
-        activePipeline={!advancedMode ? {
-          // ID: 0,
-          name,
-          // tasks: blueprintTasks,
-          settings: blueprintSettings,
-          cronConfig,
-          enable,
-          mode
-        } : {
-          name,
-          plan: blueprintTasks,
-          cronConfig,
-          enable,
-          mode
-        }}
+        activePipeline={
+          !advancedMode
+            ? {
+                // ID: 0,
+                name,
+                // tasks: blueprintTasks,
+                settings: blueprintSettings,
+                cronConfig,
+                enable,
+                mode,
+              }
+            : {
+                name,
+                plan: blueprintTasks,
+                cronConfig,
+                enable,
+                mode,
+              }
+        }
         onClose={setShowBlueprintInspector}
         hasBackdrop={false}
       />

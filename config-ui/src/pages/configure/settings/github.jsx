@@ -16,7 +16,6 @@
  *
  */
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { FormGroup, Checkbox, InputGroup, NumericInput, Tag } from '@blueprintjs/core'
 
 import '@/styles/integration.scss'
@@ -24,6 +23,7 @@ import '@/styles/connections.scss'
 
 export default function GithubSettings (props) {
   const {
+    // eslint-disable-next-line no-unused-vars
     connection,
     transformation = {},
     isSaving,
@@ -32,6 +32,7 @@ export default function GithubSettings (props) {
     configuredProject
   } = props
 
+  // eslint-disable-next-line no-unused-vars
   const [errors, setErrors] = useState([])
   const [enableAdditionalCalculations, setEnableAdditionalCalculations] = useState(false)
 
@@ -267,8 +268,8 @@ export default function GithubSettings (props) {
                   fill={true}
                   placeholder='10'
                   allowNumericCharactersOnly={true}
-                    // onBlur={}
-                    // onKeyDown={}
+                  // onBlur={}
+                  // onKeyDown={}
                   onValueChange={(tagsLimitNumeric) => onSettingsChange({ ...transformation, refdiff: { ...transformation?.refdiff, tagsLimit: tagsLimitNumeric } }, configuredProject)}
                   value={transformation?.refdiff?.tagsLimit || 10}
                 />

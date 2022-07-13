@@ -29,6 +29,7 @@ export default function JenkinsSettings (props) {
   const history = useHistory()
   const { providerId, connectionId } = useParams()
 
+  // eslint-disable-next-line max-len
   const [errors, setErrors] = useState([])
 
   const cancel = () => {

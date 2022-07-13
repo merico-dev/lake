@@ -86,7 +86,7 @@ const TaskActivity = (props) => {
           <div className='pipeline-task-block' key={`pipeline-task-key-${tIdx}`}>
             <div
               className='pipeline-task-row'
-            // key={`pipeline-task-key-${tIdx}`}
+              // key={`pipeline-task-key-${tIdx}`}
               style={{
                 display: 'flex',
                 padding: '6px 10px',
@@ -142,7 +142,7 @@ const TaskActivity = (props) => {
                             icon={expandedTask?.id === t.id ? 'collapse-all' : 'expand-all'}
                             style={{ margin: '0 6px 0 0' }}
                           />
-                         )}
+                        )}
                         small
                         style={{
                           minHeight: '20px',

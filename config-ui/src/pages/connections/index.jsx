@@ -15,43 +15,43 @@
  * limitations under the License.
  *
  */
-import React, { Fragment, useEffect, useState, useCallback } from 'react'
-import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
-import { CSSTransition } from 'react-transition-group'
-import dayjs from '@/utils/time'
-import {
-  Button,
-  Elevation,
-  Intent,
-  Switch,
-  Card,
-  Tooltip,
-  Icon,
-  Tag,
-  Colors,
-  Divider,
-  Spinner,
-  Classes,
-  Position,
-  Popover,
-} from '@blueprintjs/core'
-import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
-import { Providers, ProviderLabels, ProviderIcons } from '@/data/Providers'
-import {
-  WorkflowSteps,
-  WorkflowAdvancedSteps,
-  DEFAULT_DATA_ENTITIES,
-  DEFAULT_BOARDS
-} from '@/data/BlueprintWorkflow'
+import React from 'react'
+// import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
+// import { CSSTransition } from 'react-transition-group'
+// import dayjs from '@/utils/time'
+// import {
+//   Button,
+//   Elevation,
+//   Intent,
+//   Switch,
+//   Card,
+//   Tooltip,
+//   Icon,
+//   Tag,
+//   Colors,
+//   Divider,
+//   Spinner,
+//   Classes,
+//   Position,
+//   Popover,
+// } from '@blueprintjs/core'
+// import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
+// import { Providers, ProviderLabels, ProviderIcons } from '@/data/Providers'
+// import {
+//   WorkflowSteps,
+//   WorkflowAdvancedSteps,
+//   DEFAULT_DATA_ENTITIES,
+//   DEFAULT_BOARDS
+// } from '@/data/BlueprintWorkflow'
 
-import Nav from '@/components/Nav'
-import Sidebar from '@/components/Sidebar'
-import Content from '@/components/Content'
+// import Nav from '@/components/Nav'
+// import Sidebar from '@/components/Sidebar'
+// import Content from '@/components/Content'
 
-import useBlueprintManager from '@/hooks/useBlueprintManager'
-import usePipelineManager from '@/hooks/usePipelineManager'
-import useConnectionManager from '@/hooks/useConnectionManager'
-import { DataEntityTypes } from '@/data/DataEntities'
+// import useBlueprintManager from '@/hooks/useBlueprintManager'
+// import usePipelineManager from '@/hooks/usePipelineManager'
+// import useConnectionManager from '@/hooks/useConnectionManager'
+// import { DataEntityTypes } from '@/data/DataEntities'
 
 const Connections = (props) => {
   return (

@@ -129,7 +129,7 @@ const ProviderSettings = (props) => {
                 >{boardId.length}
                 </span>
               </strong>
-            }
+          }
             labelInfo={<span style={{ display: 'block' }}>Enter JIRA Board ID.</span>}
             inline={false}
             labelFor='board-id'
@@ -154,7 +154,7 @@ const ProviderSettings = (props) => {
                     minimal
                     onClick={() => setBoardId([])}
                   />
-                  }
+              }
                 onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
                 className='input-board-id tagInput'
               />
@@ -279,7 +279,7 @@ const ProviderSettings = (props) => {
                 >{projectId.length}
                 </span>
               </strong>
-            }
+          }
             labelInfo={<span style={{ display: 'block' }}>Enter GitLab Project ID.</span>}
             inline={false}
             labelFor='project-id'
@@ -303,7 +303,7 @@ const ProviderSettings = (props) => {
                     minimal
                     onClick={() => setProjectId([])}
                   />
-                  }
+              }
                 onKeyDown={e => e.key === 'Enter' && e.preventDefault()}
                 className='input-project-id tagInput'
               />
@@ -388,9 +388,9 @@ const ProviderSettings = (props) => {
                   disabled={isRunning || !isEnabled(providerId)}
                   style={{ justifyContent: 'space-between', minWidth: '220px', maxWidth: '420px', whiteSpace: 'nowrap' }}
                   text={(
-                      selectedGithubRepo
-                        ? <>{selectedGithubRepo.title} <span style={{ fontSize: '10px', color: Colors.GRAY3 }}>[{selectedGithubRepo.value}]</span></>
-                        : 'Select Repository')}
+                  selectedGithubRepo
+                    ? <>{selectedGithubRepo.title} <span style={{ fontSize: '10px', color: Colors.GRAY3 }}>[{selectedGithubRepo.value}]</span></>
+                    : 'Select Repository')}
                   rightIcon='double-caret-vertical'
                   fill
                 />

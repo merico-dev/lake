@@ -191,7 +191,7 @@ function useConnectionManager (
         }
         break
       case Providers.JENKINS:
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
         connectionPayload = {
           name: name,
           endpoint: endpointUrl,
@@ -593,7 +593,7 @@ function useConnectionManager (
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
-          // setToken(activeConnection.basicAuthEncoded || activeConnection.token)
+        // setToken(activeConnection.basicAuthEncoded || activeConnection.token)
           setUsername(activeConnection.username)
           setPassword(activeConnection.password)
           setProxy(activeConnection.Proxy || activeConnection.proxy)

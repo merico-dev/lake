@@ -31,24 +31,27 @@ const WorkflowStepsBar = (props) => {
   const { activeStep, steps = [] } = props
 
   const getWorkflowStep = (stepId) => {
-    return WorkflowSteps.find(s => s.id === stepId)
+    return WorkflowSteps.find((s) => s.id === stepId)
   }
 
   return (
     <div className='workflow-bar'>
-      {steps.length > 0 && (<ul className='workflow-steps'>
-        {(steps.map((step, sIdx) => (
-          <li
-            key={`workflow-step-key-${sIdx}`}
-            className={`workflow-step ${activeStep?.id === step?.id ? 'active' : ''} ${step.complete ? 'is-completed' : ''}`}
-          >
-            <a href='#' className='step-id'>
-              {step?.complete ? <Icon icon='tick' size={14} /> : step?.id}
-            </a>
-            {step.title}
-          </li>
-        )))}
-        {/* <li className={`workflow-step ${activeStep?.id === 2 ? 'active' : ''} ${activeStep?.completed ? 'is-completed' : ''}`}>
+      {steps.length > 0 && (
+        <ul className='workflow-steps'>
+          {steps.map((step, sIdx) => (
+            <li
+              key={`workflow-step-key-${sIdx}`}
+              className={`workflow-step ${
+                activeStep?.id === step?.id ? 'active' : ''
+              } ${step.complete ? 'is-completed' : ''}`}
+            >
+              <a href='#' className='step-id'>
+                {step?.complete ? <Icon icon='tick' size={14} /> : step?.id}
+              </a>
+              {step.title}
+            </li>
+          ))}
+          {/* <li className={`workflow-step ${activeStep?.id === 2 ? 'active' : ''} ${activeStep?.completed ? 'is-completed' : ''}`}>
           <a href='#' className='step-id'>
           {activeStep?.id === 2 && activeStep?.completed ? <Icon icon='tick' size={14} /> : 2}
           </a>
@@ -66,7 +69,8 @@ const WorkflowStepsBar = (props) => {
           </a>
           {getWorkflowStep(4)?.title || 'Set Sync Frequency'}
         </li> */}
-      </ul>)}
+        </ul>
+      )}
     </div>
   )
 }

@@ -76,21 +76,24 @@ const AddBlueprintDialog = (props) => {
     isValidBlueprint = false,
     pipelines = [],
     detectedProviders = [],
-    tasksLocked = false
+    tasksLocked = false,
   } = props
 
-  useEffect(() => {
-  }, [enable, cronConfig, customCronConfig])
+  useEffect(() => {}, [enable, cronConfig, customCronConfig])
 
   return (
     <>
       <Dialog
         className='dialog-manage-blueprint'
         icon={draftBlueprint ? 'edit' : 'add'}
-        title={draftBlueprint ? `Edit ${draftBlueprint.name}` : 'Create Pipeline Blueprint'}
+        title={
+          draftBlueprint
+            ? `Edit ${draftBlueprint.name}`
+            : 'Create Pipeline Blueprint'
+        }
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        onClosed={() => !tasksLocked ? setDraftBlueprint(null) : {}}
+        onClosed={() => (!tasksLocked ? setDraftBlueprint(null) : {})}
         style={{ backgroundColor: '#ffffff' }}
       >
         <div className={Classes.DIALOG_BODY}>
@@ -111,10 +114,14 @@ const AddBlueprintDialog = (props) => {
                   className='formGroup-inline'
                   contentClassName='formGroupContent'
                 >
-                  <Label style={{ display: 'inline', marginRight: 0, fontWeight: 'bold' }}>
-
+                  <Label
+                    style={{
+                      display: 'inline',
+                      marginRight: 0,
+                      fontWeight: 'bold',
+                    }}
+                  >
                     Blueprint Name
-
                     <span className='requiredStar'>*</span>
                   </Label>
                   <InputGroup
@@ -122,26 +129,44 @@ const AddBlueprintDialog = (props) => {
                     placeholder='Enter Blueprint Name'
                     value={name}
                     onChange={(e) => setBlueprintName(e.target.value)}
-                    className={`blueprint-name-input ${fieldHasError('Blueprint Name') ? 'invalid-field' : ''}`}
+                    className={`blueprint-name-input ${
+                      fieldHasError('Blueprint Name') ? 'invalid-field' : ''
+                    }`}
                     inline={true}
                     style={{ marginBottom: '10px' }}
-                    rightElement={(
+                    rightElement={
                       <InputValidationError
                         error={getFieldError('Blueprint Name')}
                       />
-                  )}
+                    }
                   />
-                  <Label style={{ display: 'inline', lineHeight: '18px', marginRight: 0, marginBottom: 0, fontWeight: 'bold' }}>
+                  <Label
+                    style={{
+                      display: 'inline',
+                      lineHeight: '18px',
+                      marginRight: 0,
+                      marginBottom: 0,
+                      fontWeight: 'bold',
+                    }}
+                  >
                     Frequency
                     <span className='requiredStar'>*</span>
                   </Label>
                   {getCronPresetByConfig(cronConfig)
                     ? (
-                      <small style={{ fontSize: '10px', color: Colors.GRAY2, display: 'block' }}>
+                      <small
+                        style={{
+                          fontSize: '10px',
+                          color: Colors.GRAY2,
+                          display: 'block',
+                        }}
+                      >
                         {getCronPresetByConfig(cronConfig).description}
                       </small>
                       )
-                    : ''}
+                    : (
+                        ''
+                      )}
                   <RadioGroup
                     inline={true}
                     label={false}
@@ -151,28 +176,42 @@ const AddBlueprintDialog = (props) => {
                     required
                   >
                     {/* Dynamic Presets from Connection Manager */}
-                    {[getCronPreset('hourly'),
+                    {[
+                      getCronPreset('hourly'),
                       getCronPreset('daily'),
                       getCronPreset('weekly'),
-                      getCronPreset('monthly')].map((preset, prIdx) => (
-                        <Radio
-                          key={`cron-preset-tooltip-key${prIdx}`}
-                          label={(
-                            <>
-                              <Tooltip
-                                position={Position.TOP}
-                                intent={Intent.PRIMARY}
-                                content={preset.description}
-                              >{preset.label}
-                              </Tooltip>
-                            </>
-                            )}
-                          value={preset.cronConfig}
-                          style={{ fontWeight: cronConfig === preset.cronConfig ? 'bold' : 'normal', outline: 'none !important' }}
-                        />
-
+                      getCronPreset('monthly'),
+                    ].map((preset, prIdx) => (
+                      <Radio
+                        key={`cron-preset-tooltip-key${prIdx}`}
+                        label={
+                          <>
+                            <Tooltip
+                              position={Position.TOP}
+                              intent={Intent.PRIMARY}
+                              content={preset.description}
+                            >
+                              {preset.label}
+                            </Tooltip>
+                          </>
+                        }
+                        value={preset.cronConfig}
+                        style={{
+                          fontWeight:
+                            cronConfig === preset.cronConfig
+                              ? 'bold'
+                              : 'normal',
+                          outline: 'none !important',
+                        }}
+                      />
                     ))}
-                    <Radio label='Custom' value='custom' style={{ fontWeight: cronConfig === 'custom' ? 'bold' : 'normal' }} />
+                    <Radio
+                      label='Custom'
+                      value='custom'
+                      style={{
+                        fontWeight: cronConfig === 'custom' ? 'bold' : 'normal',
+                      }}
+                    />
                   </RadioGroup>
                   <div style={{ display: 'flex' }}>
                     <FormGroup
@@ -185,25 +224,50 @@ const AddBlueprintDialog = (props) => {
                       style={{ marginBottom: '5px' }}
                       fill={false}
                     >
-                      <Label style={{ display: 'inline', marginRight: 0, fontWeight: 'bold' }}>
+                      <Label
+                        style={{
+                          display: 'inline',
+                          marginRight: 0,
+                          fontWeight: 'bold',
+                        }}
+                      >
                         Custom Schedule
-                        {cronConfig === 'custom' && <span className='requiredStar'>*</span>}
+                        {cronConfig === 'custom' && (
+                          <span className='requiredStar'>*</span>
+                        )}
                       </Label>
                       <InputGroup
                         id='cron-custom'
                         readOnly={cronConfig !== 'custom'}
-                        leftElement={cronConfig !== 'custom'
-                          ? <Icon icon='lock' size={11} style={{ alignSelf: 'center', margin: '4px 10px -2px 6px' }} />
-                          : null}
-                        rightElement={(
+                        leftElement={
+                          cronConfig !== 'custom'
+                            ? (
+                              <Icon
+                                icon='lock'
+                                size={11}
+                                style={{
+                                  alignSelf: 'center',
+                                  margin: '4px 10px -2px 6px',
+                                }}
+                              />
+                              )
+                            : null
+                        }
+                        rightElement={
                           <InputValidationError
                             error={getFieldError('Blueprint Cron')}
                           />
-                        )}
+                        }
                         placeholder='Enter Crontab Syntax'
-                        value={cronConfig !== 'custom' ? cronConfig : customCronConfig}
+                        value={
+                          cronConfig !== 'custom'
+                            ? cronConfig
+                            : customCronConfig
+                        }
                         onChange={(e) => setCustomCronConfig(e.target.value)}
-                        className={`cron-custom-input ${fieldHasError('Blueprint Cron') ? 'invalid-field' : ''}`}
+                        className={`cron-custom-input ${
+                          fieldHasError('Blueprint Cron') ? 'invalid-field' : ''
+                        }`}
                         inline={true}
                         fill={false}
                         style={{ transition: 'none' }}
@@ -218,43 +282,79 @@ const AddBlueprintDialog = (props) => {
                         enforceFocus={false}
                         usePortal={false}
                       >
-                        <a href='#' rel='noreferrer'><Icon icon='help' size={14} style={{ marginLeft: '10px', transition: 'none' }} /></a>
+                        <a href='#' rel='noreferrer'>
+                          <Icon
+                            icon='help'
+                            size={14}
+                            style={{ marginLeft: '10px', transition: 'none' }}
+                          />
+                        </a>
                         <>
-                          <div style={{ textShadow: 'none', fontSize: '12px', padding: '12px', maxWidth: '300px' }}>
-                            <div style={{
-                              marginBottom: '10px',
-                              fontWeight: 700,
-                              fontSize: '14px',
+                          <div
+                            style={{
+                              textShadow: 'none',
+                              fontSize: '12px',
+                              padding: '12px',
+                              maxWidth: '300px',
                             }}
+                          >
+                            <div
+                              style={{
+                                marginBottom: '10px',
+                                fontWeight: 700,
+                                fontSize: '14px',
+                              }}
                             >
-                              <Icon icon='help' size={16} style={{ marginRight: '5px' }} /> Cron Expression Format
+                              <Icon
+                                icon='help'
+                                size={16}
+                                style={{ marginRight: '5px' }}
+                              />{' '}
+                              Cron Expression Format
                             </div>
-                            <p>Need Help? &mdash; For additional information on <strong>Crontab</strong>,
-                              please reference the{' '}
+                            <p>
+                              Need Help? &mdash; For additional information on{' '}
+                              <strong>Crontab</strong>, please reference the{' '}
                               <a
                                 href='https://man7.org/linux/man-pages/man5/crontab.5.html'
                                 rel='noreferrer'
-                                target='_blank' style={{ textDecoration: 'underline' }}
+                                target='_blank'
+                                style={{ textDecoration: 'underline' }}
                               >
                                 Crontab Linux manual
-                              </a>.
+                              </a>
+                              .
                             </p>
-                            <img src={CronHelp} style={{ border: 0, margin: 0, maxWidth: '100%' }} />
+                            <img
+                              src={CronHelp}
+                              style={{ border: 0, margin: 0, maxWidth: '100%' }}
+                            />
                           </div>
                         </>
                       </Popover>
                     </div>
                   </div>
-
                 </FormGroup>
               </div>
               <div className='formContainer'>
                 <FormGroup
                   disabled={isSaving}
-                  label={<strong>Pipeline Tasks<span className='requiredStar'>*</span></strong>}
-                  labelInfo={tasksLocked
-                    ? ''
-                    : <span style={{ display: 'block' }}>Choose Pipeline Run Template for task configuration</span>}
+                  label={
+                    <strong>
+                      Pipeline Tasks<span className='requiredStar'>*</span>
+                    </strong>
+                  }
+                  labelInfo={
+                    tasksLocked
+                      ? (
+                          ''
+                        )
+                      : (
+                        <span style={{ display: 'block' }}>
+                          Choose Pipeline Run Template for task configuration
+                        </span>
+                        )
+                  }
                   inline={false}
                   labelFor='blueprint-tasks'
                   className=''
@@ -267,12 +367,19 @@ const AddBlueprintDialog = (props) => {
                       <Select
                         disabled={isSaving || pipelines.length === 0}
                         className='selector-blueprint-tasks'
-                        popoverProps={{ usePortal: false, popoverClassName: 'blueprint-tasks-popover', fill: true }}
+                        popoverProps={{
+                          usePortal: false,
+                          popoverClassName: 'blueprint-tasks-popover',
+                          fill: true,
+                        }}
                         inline={true}
                         fill={true}
                         items={pipelines}
                         activeItem={selectedPipelineTemplate}
-                        itemPredicate={(query, item) => item?.title?.toLowerCase().indexOf(query.toLowerCase()) >= 0}
+                        itemPredicate={(query, item) =>
+                          item?.title
+                            ?.toLowerCase()
+                            .indexOf(query.toLowerCase()) >= 0}
                         itemRenderer={(item, { handleClick, modifiers }) => (
                           <MenuItem
                             active={modifiers.active}
@@ -282,14 +389,26 @@ const AddBlueprintDialog = (props) => {
                             text={
                               <span style={{ paddingRight: '20px' }}>
                                 <Icon
-                                  color={item.status === 'TASK_COMPLETED' ? Colors.GREEN4 : Colors.GRAY4}
-                                  icon={item.status === 'TASK_COMPLETED' ? 'small-tick' : 'dot'} size={11}
-                                /> {item.title}
+                                  color={
+                                    item.status === 'TASK_COMPLETED'
+                                      ? Colors.GREEN4
+                                      : Colors.GRAY4
+                                  }
+                                  icon={
+                                    item.status === 'TASK_COMPLETED'
+                                      ? 'small-tick'
+                                      : 'dot'
+                                  }
+                                  size={11}
+                                />{' '}
+                                {item.title}
                               </span>
-                             }
+                            }
                           />
                         )}
-                        noResults={<MenuItem disabled={true} text='No Pipeline Runs.' />}
+                        noResults={
+                          <MenuItem disabled={true} text='No Pipeline Runs.' />
+                        }
                         onItemSelect={(item) => {
                           setSelectedPipelineTemplate(item)
                         }}
@@ -297,24 +416,35 @@ const AddBlueprintDialog = (props) => {
                         <Button
                           className='btn-pipeline-selector'
                           disabled={isSaving}
-                          style={{ justifyContent: 'space-between', minWidth: '300px', maxWidth: '460px', whiteSpace: 'nowrap' }}
-                          text={selectedPipelineTemplate ? `${selectedPipelineTemplate?.title}` : 'Select Pipeline Run Tasks'}
+                          style={{
+                            justifyContent: 'space-between',
+                            minWidth: '300px',
+                            maxWidth: '460px',
+                            whiteSpace: 'nowrap',
+                          }}
+                          text={
+                            selectedPipelineTemplate
+                              ? `${selectedPipelineTemplate?.title}`
+                              : 'Select Pipeline Run Tasks'
+                          }
                           icon='double-caret-vertical'
                           fill={true}
-                          rightIcon={(
+                          rightIcon={
                             <span style={{ marginRight: '5px' }}>
                               <InputValidationError
                                 error={getFieldError('Blueprint Tasks')}
                               />
                             </span>
-                      )}
+                          }
                         />
                       </Select>
                       <Button
                         icon='eraser'
                         intent={Intent.WARNING}
                         disabled={isSaving}
-                        onClick={() => setSelectedPipelineTemplate(null) | setBlueprintTasks([])}
+                        onClick={() =>
+                          setSelectedPipelineTemplate(null) |
+                          setBlueprintTasks([])}
                       />
                     </ButtonGroup>
                   )}
@@ -322,14 +452,16 @@ const AddBlueprintDialog = (props) => {
               </div>
               <div>
                 <PipelineTasks tasks={detectedProviders} />
-                {!tasksLocked && tasks.length > 0 &&
-                 (
-                   <Button
-                     onClick={() => setBlueprintTasks([]) | setSelectedPipelineTemplate(null)}
-                     icon='eraser'
-                     round minimal text='Clear'
-                   />
-                 )}
+                {!tasksLocked && tasks.length > 0 && (
+                  <Button
+                    onClick={() =>
+                      setBlueprintTasks([]) | setSelectedPipelineTemplate(null)}
+                    icon='eraser'
+                    round
+                    minimal
+                    text='Clear'
+                  />
+                )}
               </div>
               <div className='formContainer'>
                 <FormGroup
@@ -340,7 +472,13 @@ const AddBlueprintDialog = (props) => {
                   contentClassName='formGroupContent'
                   style={{ marginBottom: '5px' }}
                 >
-                  <Label style={{ display: 'inline', marginRight: 0, fontWeight: 'bold' }}>
+                  <Label
+                    style={{
+                      display: 'inline',
+                      marginRight: 0,
+                      fontWeight: 'bold',
+                    }}
+                  >
                     Enable Blueprint?
                     <span className='requiredStar'>*</span>
                   </Label>
@@ -349,42 +487,67 @@ const AddBlueprintDialog = (props) => {
                     name='blueprint-enable'
                     checked={enable}
                     label={enable ? 'Active' : 'Inactive'}
-                    onChange={() => setEnableBlueprint(e => !e)}
+                    onChange={() => setEnableBlueprint((e) => !e)}
                     style={{ marginBottom: 0, marginTop: 0 }}
                   />
                 </FormGroup>
               </div>
               <div>
                 <div>
-                  <Label style={{ display: 'inline', marginRight: 0, marginBottom: 0 }}>
+                  <Label
+                    style={{
+                      display: 'inline',
+                      marginRight: 0,
+                      marginBottom: 0,
+                    }}
+                  >
                     Next Run Date
                   </Label>
                 </div>
                 <div style={{ fontSize: '14px', fontWeight: 800 }}>
                   {getFieldError('Blueprint Cron') && (
-                    <Icon icon='warning-sign' size={14} color={Colors.RED4} style={{ marginRight: '5px' }} />
+                    <Icon
+                      icon='warning-sign'
+                      size={14}
+                      color={Colors.RED4}
+                      style={{ marginRight: '5px' }}
+                    />
                   )}
-                  {dayjs(createCron(cronConfig === 'custom'
-                    ? customCronConfig
-                    : cronConfig).next().toString()).format('L LTS')} &middot;{' '}
-                  <span style={{ color: Colors.GRAY3 }}>({dayjs(createCron(cronConfig === 'custom'
-                    ? customCronConfig
-                    : cronConfig).next().toString()).fromNow()})
+                  {dayjs(
+                    createCron(
+                      cronConfig === 'custom' ? customCronConfig : cronConfig
+                    )
+                      .next()
+                      .toString()
+                  ).format('L LTS')}{' '}
+                  &middot;{' '}
+                  <span style={{ color: Colors.GRAY3 }}>
+                    (
+                    {dayjs(
+                      createCron(
+                        cronConfig === 'custom' ? customCronConfig : cronConfig
+                      )
+                        .next()
+                        .toString()
+                    ).fromNow()}
+                    )
                   </span>
                 </div>
               </div>
             </div>
           )}
-
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button disabled={isSaving} onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button disabled={isSaving} onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
             <Button
               disabled={isSaving || !isValidBlueprint}
               icon='cloud-upload'
               intent={Intent.PRIMARY}
-              onClick={() => saveBlueprint(draftBlueprint ? draftBlueprint.id : null)}
+              onClick={() =>
+                saveBlueprint(draftBlueprint ? draftBlueprint.id : null)}
             >
               {draftBlueprint ? 'Modify Blueprint' : 'Save Blueprint'}
             </Button>

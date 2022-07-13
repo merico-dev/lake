@@ -123,7 +123,7 @@ const RefDiffSettings = (props) => {
           disabled={isRunning || !isEnabled(providerId)}
           content={(
             <RefDiffTasksMenu onSelect={handleRefDiffTaskSelect} selected={tasks} />
-        )}
+          )}
           placement='top-center'
         >
           <ButtonGroup disabled={isRunning || !isEnabled(providerId)}>
@@ -156,7 +156,7 @@ const RefDiffSettings = (props) => {
               >{pairs.length}
               </span>
             </strong>
-        )}
+          )}
           labelInfo={<span style={{ display: 'block' }}>Specify tag Ref Pairs</span>}
           inline={false}
           labelFor='refdiff-pair-newref'
@@ -176,7 +176,7 @@ const RefDiffSettings = (props) => {
                     }}
                   >New Ref
                   </Tag>
-              )}
+                )}
                 inline={true}
                 disabled={isRunning || !isEnabled(providerId)}
                 placeholder='eg. refs/tags/v0.6.0'
@@ -196,7 +196,7 @@ const RefDiffSettings = (props) => {
                     }}
                   >Old Ref
                   </Tag>
-              )}
+                )}
                 inline={true}
                 disabled={isRunning || !isEnabled(providerId)}
                 placeholder='eg. refs/tags/v0.5.0'
@@ -215,7 +215,7 @@ const RefDiffSettings = (props) => {
                       onClick={() => addRefDiffPairObject(refDiffOldTag, refDiffNewTag)}
                     />
                   </Tooltip>
-              )}
+                )}
               />
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
