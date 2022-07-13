@@ -19,12 +19,15 @@ package api
 
 import (
 	"encoding/csv"
+	"errors"
+	"net/http"
 
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/dal"
-	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
+
+const maxMemory = 32 << 20 // 32 MB
 
 type Handlers struct {
 	store store
@@ -34,15 +37,24 @@ func NewHandlers(db dal.Dal, basicRes core.BasicRes) *Handlers {
 	return &Handlers{store: NewDbStore(db, basicRes)}
 }
 
-func (h *Handlers) unmarshal(c *gin.Context, items interface{}) error {
-	file, err := c.FormFile("file")
+func (h *Handlers) unmarshal(r *http.Request, items interface{}) error {
+	if r == nil {
+		return errors.New("request is nil")
+	}
+	if r.MultipartForm == nil {
+		if err := r.ParseMultipartForm(maxMemory); err != nil {
+			return err
+		}
+	}
+	f, fh, err := r.FormFile("file")
 	if err != nil {
 		return err
 	}
-	f, err := file.Open()
+	f.Close()
+	file, err := fh.Open()
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	return gocsv.UnmarshalCSV(csv.NewReader(f), items)
+	defer file.Close()
+	return gocsv.UnmarshalCSV(csv.NewReader(file), items)
 }

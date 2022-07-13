@@ -20,9 +20,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/apache/incubator-devlake/api/shared"
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
-	"github.com/gin-gonic/gin"
+	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/gocarina/gocsv"
 )
 
@@ -35,18 +34,23 @@ import (
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/accounts.csv [get]
-func (h *Handlers) GetUserAccountMapping(c *gin.Context) {
+func (h *Handlers) GetUserAccountMapping(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
 	accounts, err := h.store.findAllAccounts()
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 	blob, err := gocsv.MarshalBytes(accounts)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	c.Data(http.StatusOK, "text/csv", blob)
+	return &core.ApiResourceOutput{
+		Body:   nil,
+		Status: http.StatusOK,
+		File: &core.OutputFile{
+			ContentType: "text/csv",
+			Data:        blob,
+		},
+	}, nil
 }
 
 // CreateUserAccountMapping godoc
@@ -59,12 +63,11 @@ func (h *Handlers) GetUserAccountMapping(c *gin.Context) {
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/accounts.csv [put]
-func (h *Handlers) CreateUserAccountMapping(c *gin.Context) {
+func (h *Handlers) CreateUserAccountMapping(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
 	var aa []account
-	err := h.unmarshal(c, &aa)
+	err := h.unmarshal(input.Request, &aa)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusBadRequest)
-		return
+		return nil, err
 	}
 	var a *account
 	var items []interface{}
@@ -74,13 +77,11 @@ func (h *Handlers) CreateUserAccountMapping(c *gin.Context) {
 	}
 	err = h.store.deleteAll(&crossdomain.UserAccount{})
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 	err = h.store.save(items)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	shared.ApiOutputSuccess(c, nil, http.StatusOK)
+	return &core.ApiResourceOutput{Status: http.StatusOK}, nil
 }

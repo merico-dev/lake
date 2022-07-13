@@ -20,9 +20,8 @@ package api
 import (
 	"net/http"
 
-	"github.com/apache/incubator-devlake/api/shared"
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
-	"github.com/gin-gonic/gin"
+	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/gocarina/gocsv"
 )
 
@@ -36,29 +35,30 @@ import (
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/users.csv [get]
-func (h *Handlers) GetUser(c *gin.Context) {
-	var query struct {
-		FakeData bool `form:"fake_data"`
-	}
-	_ = c.BindQuery(&query)
+func (h *Handlers) GetUser(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
 	var users []user
 	var u *user
 	var err error
-	if query.FakeData {
+	if input.Query.Get("fake_data") == "true" {
 		users = u.fakeData()
 	} else {
 		users, err = h.store.findAllUsers()
 		if err != nil {
-			shared.ApiOutputError(c, err, http.StatusInternalServerError)
-			return
+			return nil, err
 		}
 	}
 	blob, err := gocsv.MarshalBytes(users)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	c.Data(http.StatusOK, "text/csv", blob)
+	return &core.ApiResourceOutput{
+		Body:   nil,
+		Status: http.StatusOK,
+		File: &core.OutputFile{
+			ContentType: "text/csv",
+			Data:        blob,
+		},
+	}, nil
 }
 
 // CreateUser godoc
@@ -71,12 +71,11 @@ func (h *Handlers) GetUser(c *gin.Context) {
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/users.csv [put]
-func (h *Handlers) CreateUser(c *gin.Context) {
+func (h *Handlers) CreateUser(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
 	var uu []user
-	err := h.unmarshal(c, &uu)
+	err := h.unmarshal(input.Request, &uu)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusBadRequest)
-		return
+		return nil, err
 	}
 	var u *user
 	var items []interface{}
@@ -89,18 +88,15 @@ func (h *Handlers) CreateUser(c *gin.Context) {
 	}
 	err = h.store.deleteAll(&crossdomain.User{})
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 	err = h.store.deleteAll(&crossdomain.TeamUser{})
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 	err = h.store.save(items)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	shared.ApiOutputSuccess(c, nil, http.StatusOK)
+	return &core.ApiResourceOutput{Status: http.StatusOK}, nil
 }

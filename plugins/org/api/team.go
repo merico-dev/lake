@@ -18,11 +18,10 @@ limitations under the License.
 package api
 
 import (
+	"github.com/apache/incubator-devlake/plugins/core"
 	"net/http"
 
-	"github.com/apache/incubator-devlake/api/shared"
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
-	"github.com/gin-gonic/gin"
 	"github.com/gocarina/gocsv"
 )
 
@@ -36,29 +35,31 @@ import (
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/teams.csv [get]
-func (h *Handlers) GetTeam(c *gin.Context) {
-	var query struct {
-		FakeData bool `form:"fake_data"`
-	}
-	_ = c.BindQuery(&query)
+func (h *Handlers) GetTeam(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
+	input.Query.Get("fake_data")
 	var teams []team
 	var t *team
 	var err error
-	if query.FakeData {
+	if input.Query.Get("fake_data") == "true" {
 		teams = t.fakeData()
 	} else {
 		teams, err = h.store.findAllTeams()
 		if err != nil {
-			shared.ApiOutputError(c, err, http.StatusInternalServerError)
-			return
+			return nil, err
 		}
 	}
 	blob, err := gocsv.MarshalBytes(teams)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	c.Data(http.StatusOK, "text/csv", blob)
+	return &core.ApiResourceOutput{
+		Body:   nil,
+		Status: http.StatusOK,
+		File: &core.OutputFile{
+			ContentType: "text/csv",
+			Data:        blob,
+		},
+	}, nil
 }
 
 // CreateTeam godoc
@@ -71,12 +72,11 @@ func (h *Handlers) GetTeam(c *gin.Context) {
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router       /plugins/org/teams.csv [put]
-func (h *Handlers) CreateTeam(c *gin.Context) {
+func (h *Handlers) CreateTeam(input *core.ApiResourceInput) (*core.ApiResourceOutput, error) {
 	var tt []team
-	err := h.unmarshal(c, &tt)
+	err := h.unmarshal(input.Request, &tt)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusBadRequest)
-		return
+		return nil, err
 	}
 	var t *team
 	var items []interface{}
@@ -85,13 +85,11 @@ func (h *Handlers) CreateTeam(c *gin.Context) {
 	}
 	err = h.store.deleteAll(&crossdomain.Team{})
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
 	err = h.store.save(items)
 	if err != nil {
-		shared.ApiOutputError(c, err, http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	shared.ApiOutputSuccess(c, nil, http.StatusOK)
+	return &core.ApiResourceOutput{Status: http.StatusOK}, nil
 }

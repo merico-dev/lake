@@ -23,7 +23,6 @@ import (
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/org/api"
 	"github.com/apache/incubator-devlake/plugins/org/tasks"
-	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -32,7 +31,6 @@ import (
 var _ core.PluginMeta = (*Org)(nil)
 var _ core.PluginInit = (*Org)(nil)
 var _ core.PluginTask = (*Org)(nil)
-var _ core.PluginRouterSetter = (*Org)(nil)
 
 type Org struct {
 	handlers *api.Handlers
@@ -73,11 +71,20 @@ func (plugin Org) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/org"
 }
 
-func (plugin *Org) SetRouter(r *gin.RouterGroup) {
-	r.GET("users.csv", plugin.handlers.GetUser)
-	r.PUT("users.csv", plugin.handlers.CreateUser)
-	r.GET("user_account_mapping.csv", plugin.handlers.GetUserAccountMapping)
-	r.PUT("user_account_mapping.csv", plugin.handlers.CreateUserAccountMapping)
-	r.GET("teams.csv", plugin.handlers.GetTeam)
-	r.PUT("teams.csv", plugin.handlers.CreateTeam)
+func (plugin Org) ApiResources() map[string]map[string]core.ApiResourceHandler {
+	return map[string]map[string]core.ApiResourceHandler{
+		"teams.csv": {
+			"GET": plugin.handlers.GetTeam,
+			"PUT": plugin.handlers.CreateTeam,
+		},
+		"users.csv": {
+			"GET": plugin.handlers.GetUser,
+			"PUT": plugin.handlers.CreateUser,
+		},
+
+		"user_account_mapping.csv": {
+			"GET": plugin.handlers.GetUserAccountMapping,
+			"PUT": plugin.handlers.CreateUserAccountMapping,
+		},
+	}
 }

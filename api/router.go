@@ -20,10 +20,10 @@ package api
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/apache/incubator-devlake/api/blueprints"
 	"github.com/apache/incubator-devlake/api/domainlayer"
-
 	"github.com/apache/incubator-devlake/api/ping"
 	"github.com/apache/incubator-devlake/api/pipelines"
 	"github.com/apache/incubator-devlake/api/push"
@@ -54,11 +54,6 @@ func RegisterRouter(r *gin.Engine) {
 	r.POST("/push/:tableName", push.Post)
 	r.GET("/domainlayer/repos", domainlayer.ReposIndex)
 
-	for name, pluginEntry := range core.AllPlugins() {
-		if routerSetter, ok := pluginEntry.(core.PluginRouterSetter); ok {
-			routerSetter.SetRouter(r.Group("/plugins/" + name))
-		}
-	}
 	// mount all api resources for all plugins
 	pluginsApiResources, err := services.GetPluginsApiResources()
 	if err != nil {
@@ -82,10 +77,14 @@ func RegisterRouter(r *gin.Engine) {
 						}
 						input.Query = c.Request.URL.Query()
 						if c.Request.Body != nil {
-							err := c.ShouldBindJSON(&input.Body)
-							if err != nil && err.Error() != "EOF" {
-								shared.ApiOutputError(c, err, http.StatusBadRequest)
-								return
+							if strings.HasPrefix(c.Request.Header.Get("Content-Type"), "multipart/form-data;") {
+								input.Request = c.Request
+							} else {
+								err = c.ShouldBindJSON(&input.Body)
+								if err != nil && err.Error() != "EOF" {
+									shared.ApiOutputError(c, err, http.StatusBadRequest)
+									return
+								}
 							}
 						}
 						output, err := handler(input)
@@ -95,6 +94,10 @@ func RegisterRouter(r *gin.Engine) {
 							status := output.Status
 							if status < http.StatusContinue {
 								status = http.StatusOK
+							}
+							if output.File != nil {
+								c.Data(status, output.File.ContentType, output.File.Data)
+								return
 							}
 							shared.ApiOutputSuccess(c, output.Body, status)
 						} else {
