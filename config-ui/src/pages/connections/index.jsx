@@ -16,7 +16,7 @@
  *
  */
 import React, { Fragment, useEffect, useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 import dayjs from '@/utils/time'
 import {
@@ -35,16 +35,14 @@ import {
   Position,
   Popover,
 } from '@blueprintjs/core'
-import { useHistory, useLocation, Link } from 'react-router-dom'
 import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
 import { Providers, ProviderLabels, ProviderIcons } from '@/data/Providers'
-import { 
+import {
   WorkflowSteps,
   WorkflowAdvancedSteps,
   DEFAULT_DATA_ENTITIES,
-  DEFAULT_BOARDS 
+  DEFAULT_BOARDS
 } from '@/data/BlueprintWorkflow'
-
 
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
@@ -55,15 +53,12 @@ import usePipelineManager from '@/hooks/usePipelineManager'
 import useConnectionManager from '@/hooks/useConnectionManager'
 import { DataEntityTypes } from '@/data/DataEntities'
 
-
-
 const Connections = (props) => {
+  return (
+    <>
 
-    return (
-      <>
-        
-      </>
-    )
+    </>
+  )
 }
 
 export default Connections

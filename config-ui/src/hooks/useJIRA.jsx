@@ -78,7 +78,7 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint, boardsEndpoint 
       ToastNotification.show({ message: e.message, intent: 'danger', icon: 'error' })
     }
   }, [fieldsEndpoint, activeConnection, apiProxyPath])
-  
+
   const fetchBoards = useCallback(() => {
     try {
       if (apiProxyPath.includes('null')) {
@@ -106,12 +106,12 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint, boardsEndpoint 
 
   const createListData = (data = [], titleProperty = 'name', valueProperty = 'name') => {
     return data.map((d, dIdx) => ({
-        ...d,
-        id: d.id || dIdx,
-        key: d.key ? d.key : dIdx,
-        title: d[titleProperty],
-        value: d[valueProperty],
-        type: d.schema?.type || 'string'
+      ...d,
+      id: d.id || dIdx,
+      key: d.key ? d.key : dIdx,
+      title: d[titleProperty],
+      value: d[valueProperty],
+      type: d.schema?.type || 'string'
     }))
   }
 
@@ -124,7 +124,7 @@ const useJIRA = ({ apiProxyPath, issuesEndpoint, fieldsEndpoint, boardsEndpoint 
   useEffect(() => {
     setFields(fieldsResponse ? createListData(fieldsResponse, 'name', 'key') : [])
   }, [fieldsResponse])
-  
+
   useEffect(() => {
     setBoards(boardsResponse ? createListData(boardsResponse, 'name', 'name') : [])
   }, [boardsResponse])

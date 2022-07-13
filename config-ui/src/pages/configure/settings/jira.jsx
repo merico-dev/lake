@@ -43,13 +43,13 @@ const MAPPING_TYPES = {
 }
 
 export default function JiraSettings (props) {
-  const { 
+  const {
     connection,
     configuredBoard,
     configuredProject,
-    transformation = {}, 
+    transformation = {},
     isSaving,
-    onSettingsChange = () => {}, 
+    onSettingsChange = () => {},
     apiVersion = 2,
     issueTypes = [],
     fields = [],
@@ -89,7 +89,7 @@ export default function JiraSettings (props) {
   }
 
   useEffect(() => {
-    onSettingsChange({...transformation, typeMappings: typeMappingAll}, configuredBoard?.id)
+    onSettingsChange({ ...transformation, typeMappings: typeMappingAll }, configuredBoard?.id)
   }, [
     typeMappingAll,
     onSettingsChange
@@ -128,17 +128,17 @@ export default function JiraSettings (props) {
 
   useEffect(() => {
     setTypeMappingRequirement(requirementTags)
-    onSettingsChange({...transformation, requirementTags: requirementTags}, configuredBoard?.id)
+    onSettingsChange({ ...transformation, requirementTags: requirementTags }, configuredBoard?.id)
   }, [requirementTags])
 
   useEffect(() => {
     setTypeMappingBug(bugTags)
-    onSettingsChange({...transformation, bugTags: bugTags}, configuredBoard?.id)
+    onSettingsChange({ ...transformation, bugTags: bugTags }, configuredBoard?.id)
   }, [bugTags])
 
   useEffect(() => {
     setTypeMappingIncident(incidentTags)
-    onSettingsChange({...transformation, incidentTags: incidentTags}, configuredBoard?.id)
+    onSettingsChange({ ...transformation, incidentTags: incidentTags }, configuredBoard?.id)
   }, [incidentTags])
 
   // useEffect(() => {
@@ -187,16 +187,15 @@ export default function JiraSettings (props) {
 
   useEffect(() => {
     console.log('>>>> CONFIGURING BOARD....', configuredBoard)
-
   }, [configuredBoard])
-
 
   return (
     <>
       <h5>Issue Tracking</h5>
       <p className=''>Map your issue labels with each category
         to view corresponding metrics in the
-        dashboard.</p>
+        dashboard.
+      </p>
 
       <div className='issue-type-multiselect' style={{ display: 'flex', marginBottom: '10px' }}>
         <div className='issue-type-label' style={{ minWidth: '120px', paddingRight: '10px', paddingTop: '3px' }}>
@@ -405,7 +404,7 @@ export default function JiraSettings (props) {
         </div>
       </div>
 
-      <div className='epic-key-select' style={{ display: 'flex', marginBottom: '10px' }}>     
+      <div className='epic-key-select' style={{ display: 'flex', marginBottom: '10px' }}>
         <div className='epick-key-label' style={{ minWidth: '120px', paddingRight: '10px', paddingTop: '3px' }}>
           <label>Epic Key</label>
         </div>
@@ -444,7 +443,7 @@ export default function JiraSettings (props) {
               noResults={<MenuItem disabled={true} text='No epic results.' />}
               onItemSelect={(item) => {
                 setJiraIssueEpicKeyField(item)
-                onSettingsChange({...transformation, epicKeyField: item?.value}, configuredBoard?.id)
+                onSettingsChange({ ...transformation, epicKeyField: item?.value }, configuredBoard?.id)
               }}
               popoverProps={{
                 position: Position.TOP
@@ -465,7 +464,7 @@ export default function JiraSettings (props) {
               icon='eraser'
               intent={jiraIssueEpicKeyField ? Intent.NONE : Intent.NONE} minimal={false} onClick={() => {
                 setJiraIssueEpicKeyField('')
-                onSettingsChange({...transformation, epicKeyField: ''}, configuredBoard?.id)
+                onSettingsChange({ ...transformation, epicKeyField: '' }, configuredBoard?.id)
               }}
             />
           </ButtonGroup>
@@ -480,7 +479,7 @@ export default function JiraSettings (props) {
         </div>
       </div>
 
-      <div className='story-point-select' style={{ display: 'flex', marginBottom: '10px' }}>     
+      <div className='story-point-select' style={{ display: 'flex', marginBottom: '10px' }}>
         <div className='story-point-label' style={{ minWidth: '120px', paddingRight: '10px', paddingTop: '3px' }}>
           <label>Story Point Field</label>
         </div>
@@ -519,7 +518,7 @@ export default function JiraSettings (props) {
               noResults={<MenuItem disabled={true} text='No epic results.' />}
               onItemSelect={(item) => {
                 setJiraIssueStoryPointField(item)
-                onSettingsChange({...transformation, storyPointField: item?.value}, configuredBoard?.id)
+                onSettingsChange({ ...transformation, storyPointField: item?.value }, configuredBoard?.id)
               }}
               popoverProps={{
                 position: Position.TOP
@@ -543,7 +542,7 @@ export default function JiraSettings (props) {
                 ? Intent.NONE
                 : Intent.NONE} minimal={false} onClick={() => {
                   setJiraIssueStoryPointField('')
-                  onSettingsChange({...transformation, storyPointField: ''}, configuredBoard?.id)
+                  onSettingsChange({ ...transformation, storyPointField: '' }, configuredBoard?.id)
                 }}
             />
           </ButtonGroup>
@@ -576,12 +575,12 @@ export default function JiraSettings (props) {
             fill={true}
             placeholder='/commit/([0-9a-f]{40})$'
             value={transformation?.remotelinkCommitShaPattern}
-            onChange={(e) => onSettingsChange({...transformation, remotelinkCommitShaPattern: e.target.value}, configuredBoard?.id)}
+            onChange={(e) => onSettingsChange({ ...transformation, remotelinkCommitShaPattern: e.target.value }, configuredBoard?.id)}
             disabled={isSaving}
             className='input'
           />
         </FormGroup>
-        
+
       </div>
     </>
   )

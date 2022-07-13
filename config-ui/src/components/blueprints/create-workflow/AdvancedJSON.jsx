@@ -57,7 +57,7 @@ const AdvancedJSON = (props) => {
 
   return (
     <div className='workflow-step workflow-step-advanced-json' data-step={activeStep?.id}>
-      <BlueprintNameCard 
+      <BlueprintNameCard
         activeStep={activeStep}
         advancedMode={advancedMode}
         name={name}
@@ -144,7 +144,6 @@ const AdvancedJSON = (props) => {
             </ButtonGroup>
           </div>
         </Card>
-
 
       </Card>
 

@@ -129,15 +129,15 @@ export default function ConnectionForm (props) {
 
   const addAnotherAccessToken = () => {
     const emptyToken = ''
-    setTokenStore(tokens => ({...tokens, [Object.keys(tokens).length]: emptyToken}))
+    setTokenStore(tokens => ({ ...tokens, [Object.keys(tokens).length]: emptyToken }))
   }
 
   const setPersonalToken = (id, newToken) => {
-    setTokenStore(tokens => ({...tokens, [id]: newToken}))
+    setTokenStore(tokens => ({ ...tokens, [id]: newToken }))
   }
 
   const removePersonalToken = (id) => {
-    setTokenStore(tokens => Object.values(tokens).filter((t, tId) => tId !== id).reduce((newStore, cT, tId) => ({...newStore, [tId]: cT}), {}))
+    setTokenStore(tokens => Object.values(tokens).filter((t, tId) => tId !== id).reduce((newStore, cT, tId) => ({ ...newStore, [tId]: cT }), {}))
   }
 
   useEffect(() => {
@@ -311,8 +311,8 @@ export default function ConnectionForm (props) {
               {[Providers.GITHUB].includes(activeProvider.id)
                 ? (
                   <>
-                  {/* TEXTAREA Multi-line Token Input (Disabled) */}
-                  {/* <div
+                    {/* TEXTAREA Multi-line Token Input (Disabled) */}
+                    {/* <div
                     className='bp3-input-group connection-token-group' style={{
                       boxSizing: 'border-box',
                       width: '99%',
@@ -345,101 +345,104 @@ export default function ConnectionForm (props) {
                       />
                     </span>
                   </div> */}
-                  <div className='connection-tokens-personal-group'>
-                    <p>Add one or more personal token(s) for authentication from you and your organization members. Multiple tokens can help speed up the data collection process. </p>
-                    <p>
-                      <a
+                    <div className='connection-tokens-personal-group'>
+                      <p>Add one or more personal token(s) for authentication from you and your organization members. Multiple tokens can help speed up the data collection process. </p>
+                      <p>
+                        <a
                         // eslint-disable-next-line max-len
-                        href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
-                        target='_blank'
-                        rel='noreferrer'>
-                          Learn about how to create a personal access token
-                      </a>
-                    </p>
-                    <label className='normal'>Personal Access Token(s)</label>
-                    <div className='personal-access-tokens' style={{ margin: '5px 0' }}>
-                    <div className='pats-inputgroup' style={{ display: 'flex', flexDirection: 'column' }}>
-                      {(Object.values(tokenStore)).map((pat, patIdx) => (
-                        <div
-                          className='pat-input'
-                          key={`pat-input-key-${patIdx}`} 
-                          style={{ display: 'flex', flex: 1, marginBottom: '8px' }}
+                          href='https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token'
+                          target='_blank'
+                          rel='noreferrer'
                         >
-                          <div className='token-input' style={{ flex: 1, maxWidth: '55%' }}>
-                          <InputGroup
-                            id={`pat-id-${patIdx}`}
-                            type='password'
-                            placeholder='Token'
-                            value={pat}
-                            onChange={(e) => setPersonalToken(patIdx, e.target.value)}
-                            className={`input personal-token-input`}
-                            fill
-                            autoComplete='false'
-                          />
-                          </div>
-                          {testResponse?.message && (<div className='token-info-status' style={{ display: 'flex', padding: '0 10px' }}>
-                              { /* @todo: add username & duplicated status info by token after api changes integrated */}
-                              {/* <span color={Colors.GRAY4}>From: username</span> &nbsp; &nbsp; */}
-                              {(testResponse?.success && pat !== '') || (pat !== '' && testResponse?.message.includes('token') && !testResponse?.message?.includes(`token failed for #${patIdx + 1}`)) ? (
-                                <>
-                                  <span className='token-validation-status' style={{ color: Colors.GREEN4 }}>Valid</span>
-                                </>
-                              ) : (
-                                <>
-                                  <span className='token-validation-status' style={{ color: Colors.RED4 }}>{pat === '' ? '' : 'Invalid'}</span>
-                                </>
-                              )}
-                          </div>)}
-                          <div className='token-removal' style={{ marginLeft: 'auto', justifyContent: 'flex-end'}}>
-                            <Button icon='small-cross' intent={Intent.PRIMARY} minimal small onClick={() => removePersonalToken(patIdx)} />
-                          </div>
-              
+                          Learn about how to create a personal access token
+                        </a>
+                      </p>
+                      <label className='normal'>Personal Access Token(s)</label>
+                      <div className='personal-access-tokens' style={{ margin: '5px 0' }}>
+                        <div className='pats-inputgroup' style={{ display: 'flex', flexDirection: 'column' }}>
+                          {(Object.values(tokenStore)).map((pat, patIdx) => (
+                            <div
+                              className='pat-input'
+                              key={`pat-input-key-${patIdx}`}
+                              style={{ display: 'flex', flex: 1, marginBottom: '8px' }}
+                            >
+                              <div className='token-input' style={{ flex: 1, maxWidth: '55%' }}>
+                                <InputGroup
+                                  id={`pat-id-${patIdx}`}
+                                  type='password'
+                                  placeholder='Token'
+                                  value={pat}
+                                  onChange={(e) => setPersonalToken(patIdx, e.target.value)}
+                                  className='input personal-token-input'
+                                  fill
+                                  autoComplete='false'
+                                />
+                              </div>
+                              {testResponse?.message && (<div className='token-info-status' style={{ display: 'flex', padding: '0 10px' }}>
+                                {/* @todo: add username & duplicated status info by token after api changes integrated */}
+                                {/* <span color={Colors.GRAY4}>From: username</span> &nbsp; &nbsp; */}
+                                {(testResponse?.success && pat !== '') || (pat !== '' && testResponse?.message.includes('token') && !testResponse?.message?.includes(`token failed for #${patIdx + 1}`))
+                                  ? (
+                                    <>
+                                      <span className='token-validation-status' style={{ color: Colors.GREEN4 }}>Valid</span>
+                                    </>
+                                    )
+                                  : (
+                                    <>
+                                      <span className='token-validation-status' style={{ color: Colors.RED4 }}>{pat === '' ? '' : 'Invalid'}</span>
+                                    </>
+                                    )}
+                              </div>)}
+                              <div className='token-removal' style={{ marginLeft: 'auto', justifyContent: 'flex-end' }}>
+                                <Button icon='small-cross' intent={Intent.PRIMARY} minimal small onClick={() => removePersonalToken(patIdx)} />
+                              </div>
+
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                        <div className='pats-actions' style={{ marginTop: '5px' }}>
+                          <Button
+                            disabled={isSaving || isTesting}
+                            text='Another Token'
+                            icon='plus'
+                            intent={Intent.PRIMARY}
+                            small
+                            outlined
+                            onClick={() => addAnotherAccessToken(personalAccessTokens.length)}
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div className='pats-actions' style={{ marginTop: '5px' }}>
-                      <Button
-                        disabled={isSaving || isTesting}
-                        text='Another Token'
-                        icon='plus'
-                        intent={Intent.PRIMARY}
-                        small
-                        outlined 
-                        onClick={() => addAnotherAccessToken(personalAccessTokens.length)}
-                      />
-                    </div>
-                    </div>
-                  </div>
                   </>
                   )
                 : (
                   <>
-                  <InputGroup
-                    id='connection-token'
-                    type='password'
-                    autoComplete='false'
-                    inputRef={connectionTokenRef}
-                    disabled={isTesting || isSaving || isLocked}
-                    placeholder={placeholders ? placeholders.token : 'Enter Auth Token eg. EJrLG8DNeXADQcGOaaaX4B47'}
-                    value={token}
-                    onChange={(e) => onTokenChange(e.target.value)}
-                    className={`input auth-input ${stateErrored === 'connection-token' ? 'invalid-field' : ''}`}
-                    fill
-                    required
-                    rightElement={(
-                      <InputValidationError
-                        error={getFieldError('Auth')}
-                        elementRef={connectionTokenRef}
-                        onError={activateErrorStates}
-                        onSuccess={() => setStateErrored(null)}
-                        validateOnFocus
-                      />
+                    <InputGroup
+                      id='connection-token'
+                      type='password'
+                      autoComplete='false'
+                      inputRef={connectionTokenRef}
+                      disabled={isTesting || isSaving || isLocked}
+                      placeholder={placeholders ? placeholders.token : 'Enter Auth Token eg. EJrLG8DNeXADQcGOaaaX4B47'}
+                      value={token}
+                      onChange={(e) => onTokenChange(e.target.value)}
+                      className={`input auth-input ${stateErrored === 'connection-token' ? 'invalid-field' : ''}`}
+                      fill
+                      required
+                      rightElement={(
+                        <InputValidationError
+                          error={getFieldError('Auth')}
+                          elementRef={connectionTokenRef}
+                          onError={activateErrorStates}
+                          onSuccess={() => setStateErrored(null)}
+                          validateOnFocus
+                        />
                 )}
-                  />
+                    />
                   </>
                   )}
               {
-                /*activeProvider.id === Providers.JIRA &&
+                /* activeProvider.id === Providers.JIRA &&
                   <Popover
                     className='popover-generate-token'
                     position={Position.RIGHT}
@@ -465,7 +468,7 @@ export default function ConnectionForm (props) {
                         />
                       </div>
                     </>
-                  </Popover>*/
+                  </Popover> */
               }
               {/* <a href='#' style={{ margin: '5px 0 5px 5px' }}><Icon icon='info-sign' size='16' /></a> */}
             </FormGroup>
@@ -585,7 +588,7 @@ export default function ConnectionForm (props) {
         {enableActions && (<div
           className='form-actions-block'
           style={{ display: 'flex', marginTop: '30px', justifyContent: 'space-between' }}
-        >
+                           >
           <div style={{ display: 'flex' }}>
             <Button
               id='btn-test'

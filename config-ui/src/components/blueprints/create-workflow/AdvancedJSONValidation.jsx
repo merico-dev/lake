@@ -45,7 +45,7 @@ const AdvancedJSONValidation = (props) => {
     onAdvancedMode = () => {},
     isMultiStagePipeline = () => {},
     setRawConfiguration = () => {},
-    onPrev= () => {},
+    onPrev = () => {},
     isSaving = false,
     isRunning = false,
     isValidConfiguration = false,
@@ -56,25 +56,25 @@ const AdvancedJSONValidation = (props) => {
 
   return (
     <div
-      className="workflow-step workflow-step-advanced-json"
+      className='workflow-step workflow-step-advanced-json'
       data-step={activeStep?.id}
     >
       <Card
-        className="workflow-card workflow-panel-card"
+        className='workflow-card workflow-panel-card'
         elevation={Elevation.TWO}
         style={{ width: '100%' }}
       >
         <h3>Validate JSON Tasks</h3>
-        <Divider className="section-divider" />
+        <Divider className='section-divider' />
 
-        {isValidConfiguration ? (<p className="alert neutral">
+        {isValidConfiguration ? (<p className='alert neutral'>
           <strong>Your Blueprint JSON Configuration is valid</strong>. Please see below for
           detected data providers.
           <br />
           <a
-            href="#"
-            className="more-link"
-            rel="noreferrer"
+            href='#'
+            className='more-link'
+            rel='noreferrer'
             style={{
               // color: '#7497F7',
               marginTop: '5px',
@@ -84,22 +84,22 @@ const AdvancedJSONValidation = (props) => {
             Find out more
           </a>
         </p>) : (
-          <p className="alert error">
+                                   <p className='alert error'>
             <strong>Your Blueprint JSON Configuration is invalid.</strong> {validationAdvancedError}
-          <br />
-          <a
-            href="#"
-            className="more-link"
-            rel="noreferrer"
-            style={{
-              marginTop: '5px',
-              display: 'inline-block',
-            }}
-            onClick={onPrev}
-          >
-            Go Back
-          </a>
-        </p>
+            <br />
+            <a
+                                       href='#'
+                                       className='more-link'
+                                       rel='noreferrer'
+                                       style={{
+                marginTop: '5px',
+                display: 'inline-block',
+              }}
+                                       onClick={onPrev}
+                                     >
+              Go Back
+                                     </a>
+          </p>
         )}
 
         <code style={{ fontSize: '10px', borderRadius: '8px' }}>

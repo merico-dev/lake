@@ -65,7 +65,7 @@ function usePipelineValidation ({
   const validateNumericSet = (set = []) => {
     return Array.isArray(set) ? set.every(i => !isNaN(i)) : false
   }
-  
+
   const validateRepositoryName = (set = []) => {
     const repoRegExp = /([a-z0-9_-]){2,}\/([a-z0-9_-]){2,}/gi
     return set.every(i => i.match(repoRegExp))
@@ -78,31 +78,31 @@ function usePipelineValidation ({
     // if (!pipelineName || pipelineName.length <= 2) {
     //   errs.push('Name: Enter a valid Pipeline Name')
     // }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.GITLAB) && projects[connection?.id]?.length === 0) {
       errs.push('GitLab: Enter one valid Project ID (Numeric)')
     }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.GITLAB) && projects[connection?.id]?.length === 0) {
       errs.push('GitLab: Enter one valid Project ID (Numeric)')
     }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.GITLAB) && !validateNumericSet(projects[connection?.id])) {
       errs.push('GitLab: Entered Project ID is NOT numeric!')
     }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.JIRA) && boards[connection?.id]?.length === 0) {
       errs.push('JIRA: Enter one valid Board ID (Numeric)')
     }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.JIRA) && !validateNumericSet(boards[connection?.id])) {
       errs.push('JIRA: Entered Board ID is NOT numeric!')
     }
-        
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.GITHUB) && projects[connection?.id]?.length === 0) {
       errs.push('GitHub: Enter one valid Project (Repository)')
     }
-    
+
     if (mode === BlueprintMode.NORMAL && enabledProviders.includes(Providers.GITHUB) && !validateRepositoryName(projects[connection?.id])) {
       errs.push('GitHub: Entered Repository Name Invalid Format (owner/repo)')
     }
@@ -115,7 +115,7 @@ function usePipelineValidation ({
     if (mode === null && enabledProviders.includes(Providers.GITLAB) && (!projectId || projectId.length !== 1 || projectId.toString() === '')) {
       errs.push('GitLab: Enter one valid Project ID (Numeric)')
     }
-    
+
     if (mode === null && enabledProviders.includes(Providers.GITLAB) && !validateNumericSet(projectId)) {
       errs.push('GitLab: Entered Project ID is NOT numeric!')
     }

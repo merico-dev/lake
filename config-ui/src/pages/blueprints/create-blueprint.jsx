@@ -48,11 +48,11 @@ import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 import { NullConnection } from '@/data/NullConnection'
 
-import { 
+import {
   WorkflowSteps,
   WorkflowAdvancedSteps,
   DEFAULT_DATA_ENTITIES,
-  DEFAULT_BOARDS 
+  DEFAULT_BOARDS
 } from '@/data/BlueprintWorkflow'
 
 import useBlueprintManager from '@/hooks/useBlueprintManager'
@@ -84,7 +84,7 @@ const CreateBlueprint = (props) => {
 
   const [blueprintAdvancedSteps, setBlueprintAdvancedSteps] = useState(WorkflowAdvancedSteps)
   const [blueprintNormalSteps, setBlueprintNormalSteps] = useState(WorkflowSteps)
-  const [blueprintSteps, setBlueprintSteps] = useState(blueprintNormalSteps)  
+  const [blueprintSteps, setBlueprintSteps] = useState(blueprintNormalSteps)
   const [advancedMode, setAdvancedMode] = useState(false)
   const [activeStep, setActiveStep] = useState(blueprintSteps.find((s) => s.id === 1))
   const [activeProvider, setActiveProvider] = useState(integrationsData[0])
@@ -326,20 +326,20 @@ const CreateBlueprint = (props) => {
   } = useConnectionManager({
     activeProvider,
     connectionId: managedConnection?.connectionId
-  }, managedConnection?.id !== null ? true : false)
+  }, managedConnection?.id !== null)
 
   const {
     validate: validateConnection,
     errors: connectionValidationErrors,
     isValid: isValidConnection,
   } = useConnectionValidation({
-      activeProvider,
-      name: connectionName,
-      endpointUrl,
-      proxy,
-      token,
-      username,
-      password
+    activeProvider,
+    name: connectionName,
+    endpointUrl,
+    proxy,
+    token,
+    username,
+    password
   })
 
   const isValidStep = useCallback((stepId) => {}, [])
@@ -361,7 +361,7 @@ const CreateBlueprint = (props) => {
       setActiveConnectionTab(tab)
       setActiveProvider(integrationsData.find(p => p.id === selectedConnection.provider))
       setProvider(integrationsData.find(p => p.id === selectedConnection.provider))
-      setConfiguredConnection(selectedConnection)    
+      setConfiguredConnection(selectedConnection)
     },
     [blueprintConnections]
   )
@@ -505,12 +505,12 @@ const CreateBlueprint = (props) => {
   const addBoardTransformation = (board) => {
     setConfiguredBoard(board)
   }
-  
+
   const addConnection = () => {
     setManagedConnection(NullBlueprintConnection)
     setConnectionDialogIsOpen(true)
   }
-  
+
   const setTransformationSettings = useCallback((settings, configuredEntity) => {
     console.log('>> SETTING TRANSFORMATION SETTINGS PROJECT/BOARD...', configuredEntity, settings)
     setTransformations(existingTransformations => ({
@@ -531,7 +531,7 @@ const CreateBlueprint = (props) => {
       throw e
     }
   }
-  
+
   const isValidCode = useCallback(() => {
     let isValid = false
     try {
@@ -558,8 +558,8 @@ const CreateBlueprint = (props) => {
       fetchIssueTypes()
       fetchFields()
     }
-    setBlueprintNormalSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
-    setBlueprintAdvancedSteps(bS => [...bS.map(s => s.id < activeStep?.id ? {...s, complete: true} : {...s, complete: false})])
+    setBlueprintNormalSteps(bS => [...bS.map(s => s.id < activeStep?.id ? { ...s, complete: true } : { ...s, complete: false })])
+    setBlueprintAdvancedSteps(bS => [...bS.map(s => s.id < activeStep?.id ? { ...s, complete: true } : { ...s, complete: false })])
   }, [activeStep])
 
   useEffect(() => {
@@ -722,46 +722,46 @@ const CreateBlueprint = (props) => {
     console.log('>> BOARDS LIST', boards)
     const getDefaultTransformations = (providerId) => {
       let transforms = {}
-        switch(providerId) {
-          case Providers.GITHUB:
-            transforms = {
-              prType: '',
-              prComponent: '',
-              issueSeverity: '',
-              issueComponent: '',
-              issuePriority: '',
-              issueTypeRequirement: '',
-              issueTypeBug: '',
-              issueTypeIncident: '',
-              refdiff: {
-                tagsOrder: '',
-                tagsPattern: '',
-                tagsLimit: 10
-              }
+      switch (providerId) {
+        case Providers.GITHUB:
+          transforms = {
+            prType: '',
+            prComponent: '',
+            issueSeverity: '',
+            issueComponent: '',
+            issuePriority: '',
+            issueTypeRequirement: '',
+            issueTypeBug: '',
+            issueTypeIncident: '',
+            refdiff: {
+              tagsOrder: '',
+              tagsPattern: '',
+              tagsLimit: 10
             }
+          }
           break
-          case Providers.JIRA:
-            transforms = {
-              epicKeyField: '',
-              typeMappings: '',
-              storyPointField: '',
-              remotelinkCommitShaPattern: '',
-              bugTags: [],
-              incidentTags: [],
-              requirementTags: []
-            }
+        case Providers.JIRA:
+          transforms = {
+            epicKeyField: '',
+            typeMappings: '',
+            storyPointField: '',
+            remotelinkCommitShaPattern: '',
+            bugTags: [],
+            incidentTags: [],
+            requirementTags: []
+          }
           break
-          case Providers.JENKINS:
-            // No Transform Settings...
+        case Providers.JENKINS:
+          // No Transform Settings...
           break
-          case Providers.GITLAB:
-            // No Transform Settings...
+        case Providers.GITLAB:
+          // No Transform Settings...
           break
-        }
+      }
       return transforms
     }
 
-    const initializeTransformations = (pV, cV) => ({ ...pV, [cV]: getDefaultTransformations(configuredConnection?.provider)})
+    const initializeTransformations = (pV, cV) => ({ ...pV, [cV]: getDefaultTransformations(configuredConnection?.provider) })
     const projectTransformation = projects[configuredConnection?.id]
     const boardTransformation = boards[configuredConnection?.id]?.map(b => b.id)
     if (projectTransformation) {
@@ -832,35 +832,34 @@ const CreateBlueprint = (props) => {
             <div
               className={`workflow-content workflow-step-id-${activeStep?.id}`}
             >
-            {advancedMode 
-            ? 
-              (<>
-                {activeStep?.id === 1 && (
-                  <AdvancedJSON
-                    activeStep={activeStep}
-                    advancedMode={advancedMode}
-                    runTasksAdvanced={runTasksAdvanced}
-                    blueprintConnections={blueprintConnections}
-                    connectionsList={connectionsList}
-                    name={name}
-                    setBlueprintName={setBlueprintName}
+              {advancedMode
+                ? (<>
+                  {activeStep?.id === 1 && (
+                    <AdvancedJSON
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      runTasksAdvanced={runTasksAdvanced}
+                      blueprintConnections={blueprintConnections}
+                      connectionsList={connectionsList}
+                      name={name}
+                      setBlueprintName={setBlueprintName}
                     // setBlueprintConnections={setBlueprintConnections}
-                    fieldHasError={fieldHasError}
-                    getFieldError={getFieldError}
+                      fieldHasError={fieldHasError}
+                      getFieldError={getFieldError}
                     // addConnection={addConnection}
                     // manageConnection={manageConnection}
-                    onAdvancedMode={handleAdvancedMode}
+                      onAdvancedMode={handleAdvancedMode}
                     // @todo add multistage checker method
-                    isMultiStagePipeline={() => {}}
-                    rawConfiguration={rawConfiguration}
-                    setRawConfiguration={setRawConfiguration}
-                    isSaving={isSaving}
-                    isValidConfiguration={isValidConfiguration}
-                    validationAdvancedError={validationAdvancedError}
-                    validationErrors={validationErrors}
-                  />
-                )}
-                {/* 
+                      isMultiStagePipeline={() => {}}
+                      rawConfiguration={rawConfiguration}
+                      setRawConfiguration={setRawConfiguration}
+                      isSaving={isSaving}
+                      isValidConfiguration={isValidConfiguration}
+                      validationAdvancedError={validationAdvancedError}
+                      validationErrors={validationErrors}
+                    />
+                  )}
+                  {/*
                 {activeStep?.id === 2 && (
                   <AdvancedJSONValidation
                     activeStep={activeStep}
@@ -881,116 +880,116 @@ const CreateBlueprint = (props) => {
                   />
                 )} */}
 
-                {activeStep?.id === 2 && (
-                  <DataSync
-                    activeStep={activeStep}
-                    advancedMode={advancedMode}
-                    cronConfig={cronConfig}
-                    customCronConfig={customCronConfig}
-                    createCron={createCron}
-                    setCronConfig={setCronConfig}
-                    getCronPreset={getCronPreset}
-                    fieldHasError={fieldHasError}
-                    getFieldError={getFieldError}
-                    setCustomCronConfig={setCustomCronConfig}
-                    getCronPresetByConfig={getCronPresetByConfig}
-                  />
-                )}
-              </>
-            ) :
-            (<>
-              {activeStep?.id === 1 && (
-                <DataConnections
-                  activeStep={activeStep}
-                  advancedMode={advancedMode}
-                  blueprintConnections={blueprintConnections}
-                  connectionsList={connectionsList}
-                  name={name}
-                  setBlueprintName={setBlueprintName}
-                  setBlueprintConnections={setBlueprintConnections}
-                  fieldHasError={fieldHasError}
-                  getFieldError={getFieldError}
-                  addConnection={addConnection}
-                  manageConnection={manageConnection}
-                  onAdvancedMode={handleAdvancedMode}
-                />
-              )}
+                  {activeStep?.id === 2 && (
+                    <DataSync
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      cronConfig={cronConfig}
+                      customCronConfig={customCronConfig}
+                      createCron={createCron}
+                      setCronConfig={setCronConfig}
+                      getCronPreset={getCronPreset}
+                      fieldHasError={fieldHasError}
+                      getFieldError={getFieldError}
+                      setCustomCronConfig={setCustomCronConfig}
+                      getCronPresetByConfig={getCronPresetByConfig}
+                    />
+                  )}
+                   </>
+                  )
+                : (<>
+                  {activeStep?.id === 1 && (
+                    <DataConnections
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      blueprintConnections={blueprintConnections}
+                      connectionsList={connectionsList}
+                      name={name}
+                      setBlueprintName={setBlueprintName}
+                      setBlueprintConnections={setBlueprintConnections}
+                      fieldHasError={fieldHasError}
+                      getFieldError={getFieldError}
+                      addConnection={addConnection}
+                      manageConnection={manageConnection}
+                      onAdvancedMode={handleAdvancedMode}
+                    />
+                  )}
 
-              {activeStep?.id === 2 && (
-                <DataScopes
-                  provider={provider}
-                  activeStep={activeStep}
-                  advancedMode={advancedMode}
-                  activeConnectionTab={activeConnectionTab}
-                  blueprintConnections={blueprintConnections}
-                  dataEntitiesList={dataEntitiesList}
-                  boardsList={boardsList}
-                  boards={boards}
-                  dataEntities={dataEntities}
-                  projects={projects}
-                  configuredConnection={configuredConnection}
-                  handleConnectionTabChange={handleConnectionTabChange}
-                  setDataEntities={setDataEntities}
-                  setProjects={setProjects}
-                  setBoards={setBoards}
-                  prevStep={prevStep}
-                  isSaving={isSaving}
-                  isRunning={isRunning}
-                />
-              )}
+                  {activeStep?.id === 2 && (
+                    <DataScopes
+                      provider={provider}
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      activeConnectionTab={activeConnectionTab}
+                      blueprintConnections={blueprintConnections}
+                      dataEntitiesList={dataEntitiesList}
+                      boardsList={boardsList}
+                      boards={boards}
+                      dataEntities={dataEntities}
+                      projects={projects}
+                      configuredConnection={configuredConnection}
+                      handleConnectionTabChange={handleConnectionTabChange}
+                      setDataEntities={setDataEntities}
+                      setProjects={setProjects}
+                      setBoards={setBoards}
+                      prevStep={prevStep}
+                      isSaving={isSaving}
+                      isRunning={isRunning}
+                    />
+                  )}
 
-              {activeStep?.id === 3 && (
-                <DataTransformations
-                  provider={provider}
-                  activeStep={activeStep}
-                  advancedMode={advancedMode}
-                  activeConnectionTab={activeConnectionTab}
-                  blueprintConnections={blueprintConnections}
-                  dataEntities={dataEntities}
-                  projects={projects}
-                  boardsList={boardsList}
-                  boards={boards}
-                  issueTypes={jiraApiIssueTypes}
-                  fields={jiraApiFields}
-                  configuredConnection={configuredConnection}
-                  configuredProject={configuredProject}
-                  configuredBoard={configuredBoard}
-                  handleConnectionTabChange={handleConnectionTabChange}
-                  prevStep={prevStep}
-                  addBoardTransformation={addBoardTransformation}
-                  addProjectTransformation={addProjectTransformation}
-                  transformations={transformations}
-                  activeTransformation={activeTransformation}
-                  setTransformations={setTransformations}
-                  setTransformationSettings={setTransformationSettings}
-                  isSaving={isSaving}
-                  isSavingConnection={isSavingConnection}
-                  isRunning={isRunning}
-                  onSave={handleTransformationSave}
-                  onCancel={handleTransformationCancel}
-                  onClear={handleTransformationClear}
-                  jiraProxyError={jiraProxyError}
-                  isFetchingJIRA={isFetchingJIRA}
-                />
-              )}
+                  {activeStep?.id === 3 && (
+                    <DataTransformations
+                      provider={provider}
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      activeConnectionTab={activeConnectionTab}
+                      blueprintConnections={blueprintConnections}
+                      dataEntities={dataEntities}
+                      projects={projects}
+                      boardsList={boardsList}
+                      boards={boards}
+                      issueTypes={jiraApiIssueTypes}
+                      fields={jiraApiFields}
+                      configuredConnection={configuredConnection}
+                      configuredProject={configuredProject}
+                      configuredBoard={configuredBoard}
+                      handleConnectionTabChange={handleConnectionTabChange}
+                      prevStep={prevStep}
+                      addBoardTransformation={addBoardTransformation}
+                      addProjectTransformation={addProjectTransformation}
+                      transformations={transformations}
+                      activeTransformation={activeTransformation}
+                      setTransformations={setTransformations}
+                      setTransformationSettings={setTransformationSettings}
+                      isSaving={isSaving}
+                      isSavingConnection={isSavingConnection}
+                      isRunning={isRunning}
+                      onSave={handleTransformationSave}
+                      onCancel={handleTransformationCancel}
+                      onClear={handleTransformationClear}
+                      jiraProxyError={jiraProxyError}
+                      isFetchingJIRA={isFetchingJIRA}
+                    />
+                  )}
 
-              {activeStep?.id === 4 && (
-                <DataSync
-                  activeStep={activeStep}
-                  advancedMode={advancedMode}
-                  cronConfig={cronConfig}
-                  customCronConfig={customCronConfig}
-                  createCron={createCron}
-                  setCronConfig={setCronConfig}
-                  getCronPreset={getCronPreset}
-                  fieldHasError={fieldHasError}
-                  getFieldError={getFieldError}
-                  setCustomCronConfig={setCustomCronConfig}
-                  getCronPresetByConfig={getCronPresetByConfig}
-                />
-              )}
+                  {activeStep?.id === 4 && (
+                    <DataSync
+                      activeStep={activeStep}
+                      advancedMode={advancedMode}
+                      cronConfig={cronConfig}
+                      customCronConfig={customCronConfig}
+                      createCron={createCron}
+                      setCronConfig={setCronConfig}
+                      getCronPreset={getCronPreset}
+                      fieldHasError={fieldHasError}
+                      getFieldError={getFieldError}
+                      setCustomCronConfig={setCustomCronConfig}
+                      getCronPresetByConfig={getCronPresetByConfig}
+                    />
+                  )}
 
-            </>)}
+                </>)}
             </div>
 
             <WorkflowActions
@@ -1007,7 +1006,7 @@ const CreateBlueprint = (props) => {
           </main>
         </Content>
       </div>
-      
+
       <ConnectionDialog
         integrations={integrationsData}
         activeProvider={activeProvider}

@@ -52,7 +52,7 @@ const DataTransformations = (props) => {
     projects = [],
     boards = [],
     issueTypes = [],
-    fields  = [],
+    fields = [],
     transformations = {},
     configuredConnection,
     configuredProject,
@@ -125,11 +125,13 @@ const DataTransformations = (props) => {
                 <>
                   <h3>
                     <span style={{ float: 'left', marginRight: '8px' }}>
-                      {ProviderIcons[configuredConnection.provider] ? (
-                        ProviderIcons[configuredConnection.provider](24, 24)
-                      ) : (
-                        <></>
-                      )}
+                      {ProviderIcons[configuredConnection.provider]
+                        ? (
+                            ProviderIcons[configuredConnection.provider](24, 24)
+                          )
+                        : (
+                          <></>
+                          )}
                     </span>{' '}
                     {configuredConnection.title}
                   </h3>
@@ -189,7 +191,7 @@ const DataTransformations = (props) => {
                       <p style={{ color: '#292B3F' }}>{configuredProject || configuredBoard?.name || '< select a project >'}</p>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <h4 style={{ margin: 0 }}>
-                          Data Transformation Rules 
+                          Data Transformation Rules
                         </h4>
                         <div>
                           <Button
@@ -199,7 +201,7 @@ const DataTransformations = (props) => {
                             intent={Intent.NONE}
                             href='#'
                             onClick={onClear}
-                            style={{ float: 'right' }} 
+                            style={{ float: 'right' }}
                             disabled={Object.keys(activeTransformation || {}).length === 0}
                           />
                         </div>
@@ -230,21 +232,21 @@ const DataTransformations = (props) => {
                       )}
 
                       <div className='transformation-actions' style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                          <Button 
-                            text='Cancel'
-                            small
-                            outlined
-                            onClick={onCancel} 
-                          />
-                          <Button 
-                            text='Save' 
-                            intent={Intent.PRIMARY}
-                            small
-                            outlined
-                            onClick={onSave}
-                            disabled={[Providers.GITLAB].includes(configuredConnection?.provider)}
-                            style={{ marginLeft: '5px' }} 
-                          />
+                        <Button
+                          text='Cancel'
+                          small
+                          outlined
+                          onClick={onCancel}
+                        />
+                        <Button
+                          text='Save'
+                          intent={Intent.PRIMARY}
+                          small
+                          outlined
+                          onClick={onSave}
+                          disabled={[Providers.GITLAB].includes(configuredConnection?.provider)}
+                          style={{ marginLeft: '5px' }}
+                        />
                       </div>
                     </div>
                   )}
@@ -253,18 +255,18 @@ const DataTransformations = (props) => {
 
               {[Providers.JENKINS].includes(configuredConnection.provider) && (
                 <>
-                <div className='bp3-non-ideal-state'>
-                  <div className='bp3-non-ideal-state-visual'>
-                    <Icon icon='disable' size={32} />
+                  <div className='bp3-non-ideal-state'>
+                    <div className='bp3-non-ideal-state-visual'>
+                      <Icon icon='disable' size={32} />
+                    </div>
+                    <div className='bp3-non-ideal-state-text'>
+                      <h4 className='bp3-heading' style={{ margin: 0 }}>
+                        No Data Transformations
+                      </h4>
+                      <div>No additional settings are available at this time.</div>
+                    </div>
                   </div>
-                  <div className='bp3-non-ideal-state-text'>
-                    <h4 className='bp3-heading' style={{ margin: 0 }}>
-                      No Data Transformations
-                    </h4>
-                    <div>No additional settings are available at this time.</div>
-                  </div>
-                </div>
-              </>
+                </>
               )}
             </Card>
           </div>

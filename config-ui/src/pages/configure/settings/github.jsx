@@ -23,15 +23,15 @@ import '@/styles/integration.scss'
 import '@/styles/connections.scss'
 
 export default function GithubSettings (props) {
-  const { 
-    connection, 
+  const {
+    connection,
     transformation = {},
     isSaving,
     isSavingConnection,
-    onSettingsChange = () => {}, 
-    configuredProject 
+    onSettingsChange = () => {},
+    configuredProject
   } = props
-  
+
   const [errors, setErrors] = useState([])
   const [enableAdditionalCalculations, setEnableAdditionalCalculations] = useState(false)
 
@@ -41,10 +41,10 @@ export default function GithubSettings (props) {
 
   useEffect(() => {
     console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)
-    if (transformation?.refdiff !== '' 
-      && transformation?.refdiff?.tagsOrder 
-      && transformation?.refdiff?.tagsPattern 
-      && transformation?.refdiff?.tagsLimit) {
+    if (transformation?.refdiff !== '' &&
+      transformation?.refdiff?.tagsOrder &&
+      transformation?.refdiff?.tagsPattern &&
+      transformation?.refdiff?.tagsLimit) {
       setEnableAdditionalCalculations(true)
     }
   }, [transformation])
@@ -61,7 +61,8 @@ export default function GithubSettings (props) {
       <h5>Issue Tracking{' '} <Tag className='bp3-form-helper-text'>RegExp</Tag></h5>
       <p className=''>Map your issue labels with each category
         to view corresponding metrics in the
-        dashboard.</p>
+        dashboard.
+      </p>
       <div style={{ }}>
         <div className='formContainer'>
           <FormGroup
@@ -78,7 +79,7 @@ export default function GithubSettings (props) {
               // defaultValue={transformation?.issueSeverity}
               value={transformation?.issueSeverity}
               // key={issueSeverity}
-              onChange={(e) => onSettingsChange({...transformation, issueSeverity: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, issueSeverity: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setIssueSeverity('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -100,7 +101,7 @@ export default function GithubSettings (props) {
               placeholder='component/(.*)$'
               value={transformation?.issueComponent}
               // key={issueComponent}
-              onChange={(e) => onSettingsChange({...transformation, issueComponent: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, issueComponent: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setIssueComponent('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -122,7 +123,7 @@ export default function GithubSettings (props) {
               placeholder='(highest|high|medium|low)$'
               value={transformation?.issuePriority}
               // key={issuePriority}
-              onChange={(e) => onSettingsChange({...transformation, issuePriority: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, issuePriority: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setIssuePriority('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -144,7 +145,7 @@ export default function GithubSettings (props) {
               placeholder='(feat|feature|proposal|requirement)$'
               value={transformation?.issueTypeRequirement}
               // key={issueTypeRequirement}
-              onChange={(e) => onSettingsChange({...transformation, issueTypeRequirement: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, issueTypeRequirement: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeRequirement('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -166,7 +167,7 @@ export default function GithubSettings (props) {
               placeholder='(bug|broken)$'
               value={transformation?.issueTypeBug}
               // key={issueTypeBug}
-              onChange={(e) => onSettingsChange({...transformation, issueTypeBug: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, issueTypeBug: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeBug('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -188,8 +189,8 @@ export default function GithubSettings (props) {
               placeholder='(incident|p0|p1|p2)$'
               value={transformation?.issueTypeIncident}
               // key={issueTypeIncident}
-              onChange={(e) => onSettingsChange({...transformation, issueTypeIncident: e.target.value}, configuredProject)}
-              //onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeIncident('') : null}
+              onChange={(e) => onSettingsChange({ ...transformation, issueTypeIncident: e.target.value }, configuredProject)}
+              // onKeyUp={(e) => e.target.value.length === 0 ? setIssueTypeIncident('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
               maxLength={255}
@@ -216,7 +217,7 @@ export default function GithubSettings (props) {
               placeholder='type/(.*)$'
               value={transformation?.prType}
               // key={prType}
-              onChange={(e) => onSettingsChange({...transformation, prType: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, prType: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setPrType('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -238,7 +239,7 @@ export default function GithubSettings (props) {
               placeholder='component/(.*)$'
               value={transformation?.prComponent}
               // key={prComponent}
-              onChange={(e) => onSettingsChange({...transformation, prComponent: e.target.value}, configuredProject)}
+              onChange={(e) => onSettingsChange({ ...transformation, prComponent: e.target.value }, configuredProject)}
               // onKeyUp={(e) => e.target.value.length === 0 ? setPrComponent('') : null}
               disabled={isSaving || isSavingConnection}
               className='input'
@@ -250,26 +251,26 @@ export default function GithubSettings (props) {
 
       <h5>Additional Settings</h5>
       <div>
-        <Checkbox checked={enableAdditionalCalculations} label="Enable calculation of commit and issue difference" onChange={(e) => handleAdditionalSettings(!enableAdditionalCalculations)} />
+        <Checkbox checked={enableAdditionalCalculations} label='Enable calculation of commit and issue difference' onChange={(e) => handleAdditionalSettings(!enableAdditionalCalculations)} />
         {enableAdditionalCalculations && (
           <>
             <div className='additional-settings-refdiff'>
               <FormGroup
-                  disabled={isSaving || isSavingConnection}
-                  inline={true}
-                  label='Tags Limit'
-                  className='formGroup'
-                  contentClassName='formGroupContent'
-                >
-                  <NumericInput
-                    id='refdiff-tags-limit'
-                    fill={true}
-                    placeholder='10'
-                    allowNumericCharactersOnly={true}
+                disabled={isSaving || isSavingConnection}
+                inline={true}
+                label='Tags Limit'
+                className='formGroup'
+                contentClassName='formGroupContent'
+              >
+                <NumericInput
+                  id='refdiff-tags-limit'
+                  fill={true}
+                  placeholder='10'
+                  allowNumericCharactersOnly={true}
                     // onBlur={}
                     // onKeyDown={}
-                    onValueChange={(tagsLimitNumeric) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsLimit: tagsLimitNumeric}}, configuredProject)}
-                    value={transformation?.refdiff?.tagsLimit || 10}
+                  onValueChange={(tagsLimitNumeric) => onSettingsChange({ ...transformation, refdiff: { ...transformation?.refdiff, tagsLimit: tagsLimitNumeric } }, configuredProject)}
+                  value={transformation?.refdiff?.tagsLimit || 10}
                 />
               </FormGroup>
               <FormGroup
@@ -283,7 +284,7 @@ export default function GithubSettings (props) {
                   id='refdiff-tags-pattern'
                   placeholder='(regex)$'
                   value={transformation?.refdiff?.tagsPattern}
-                  onChange={(e) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsPattern: e.target.value}}, configuredProject)}
+                  onChange={(e) => onSettingsChange({ ...transformation, refdiff: { ...transformation?.refdiff, tagsPattern: e.target.value } }, configuredProject)}
                   disabled={isSaving || isSavingConnection}
                   className='input'
                   maxLength={255}
@@ -300,13 +301,13 @@ export default function GithubSettings (props) {
                   id='refdiff-tags-order'
                   placeholder='reverse semver'
                   value={transformation?.refdiff?.tagsOrder}
-                  onChange={(e) => onSettingsChange({...transformation, refdiff: { ...transformation?.refdiff, tagsOrder: e.target.value}}, configuredProject)}
+                  onChange={(e) => onSettingsChange({ ...transformation, refdiff: { ...transformation?.refdiff, tagsOrder: e.target.value } }, configuredProject)}
                   disabled={isSaving || isSavingConnection}
                   className='input'
                   maxLength={255}
                 />
               </FormGroup>
-            </div>          
+            </div>
 
           </>
         )}

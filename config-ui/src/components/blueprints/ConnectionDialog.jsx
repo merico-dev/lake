@@ -113,12 +113,12 @@ const ConnectionDialog = (props) => {
     onClose = () => {},
     onCancel = () => {},
     onValidate = () => {},
-    onNameChange=() => {},
-    onEndpointChange=() => {},
-    onProxyChange=() => {},
-    onTokenChange=() => {},
-    onUsernameChange=() => {},
-    onPasswordChange=() => {},
+    onNameChange = () => {},
+    onEndpointChange = () => {},
+    onProxyChange = () => {},
+    onTokenChange = () => {},
+    onUsernameChange = () => {},
+    onPasswordChange = () => {},
     showConnectionError = false,
     testStatus,
     testResponse,
@@ -129,8 +129,8 @@ const ConnectionDialog = (props) => {
     // showLimitWarning = false
   } = props
 
-  {/* const connectionNameRef = useRef()
-  const connectionEndpointRef = useRef() */}
+  { /* const connectionNameRef = useRef()
+  const connectionEndpointRef = useRef() */ }
 
   const [datasource, setDatasource] = useState(
     connection?.id
@@ -149,7 +149,7 @@ const ConnectionDialog = (props) => {
   const activateErrorStates = (elementId) => {
     setStateErrored(elementId || false)
   }
-  
+
   const getConnectionStatusIcon = useCallback(() => {
     let i = <Icon icon='full-circle' size='10' color={Colors.RED5} />
     switch (testStatus) {
@@ -177,7 +177,7 @@ const ConnectionDialog = (props) => {
       setMode(Modes.CREATE)
     }
   }, [connection])
-  
+
   useEffect(() => {
     console.log('>>> DATASOURCE CHANGED....', datasource)
     setProvider(integrations.find(p => p.id === datasource.value))
@@ -186,7 +186,7 @@ const ConnectionDialog = (props) => {
   }, [datasource])
 
   useEffect(() => {
-    
+
   }, [testStatus])
 
   return (
@@ -240,8 +240,7 @@ const ConnectionDialog = (props) => {
                       activeItem={datasource}
                       itemPredicate={(query, item) =>
                         item.title.toLowerCase().indexOf(query.toLowerCase()) >=
-                        0
-                      }
+                        0}
                       itemRenderer={(item, { handleClick, modifiers }) => (
                         <MenuItem
                           active={modifiers.active}
@@ -280,46 +279,45 @@ const ConnectionDialog = (props) => {
                   </FormGroup>
                 </div>
 
-                
                 <div className='connection-form-wrapper' style={{ display: 'flex' }}>
-                 <ConnectionForm
-                   isValid={isValid}
-                   validationErrors={validationErrors}
-                   activeProvider={activeProvider}
-                   name={name}
-                   endpointUrl={endpointUrl}
-                   proxy={proxy}
-                   token={token}
-                   initialTokenStore={initialTokenStore}
-                   username={username}
-                   password={password}
-                   onSave={onSave}
-                   onTest={onTest}
-                   onCancel={onCancel}
-                   onValidate={onValidate}
-                   onNameChange={onNameChange}
-                   onEndpointChange={onEndpointChange}
-                   onProxyChange={onProxyChange}
-                   onTokenChange={onTokenChange}
-                   onUsernameChange={onUsernameChange}
-                   onPasswordChange={onPasswordChange}
-                   isSaving={isSaving}
-                   isTesting={isTesting}
-                   testStatus={testStatus}
-                   testResponse={testResponse}
-                   errors={errors}
-                   showError={showConnectionError}
-                   authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider?.id) ? 'plain' : 'token'}
-                   showLimitWarning={false}
-                   sourceLimits={ProviderConnectionLimits}
-                   labels={ProviderFormLabels[activeProvider?.id]}
-                   placeholders={ProviderFormPlaceholders[activeProvider?.id]}
-                   enableActions={false}
+                  <ConnectionForm
+                    isValid={isValid}
+                    validationErrors={validationErrors}
+                    activeProvider={activeProvider}
+                    name={name}
+                    endpointUrl={endpointUrl}
+                    proxy={proxy}
+                    token={token}
+                    initialTokenStore={initialTokenStore}
+                    username={username}
+                    password={password}
+                    onSave={onSave}
+                    onTest={onTest}
+                    onCancel={onCancel}
+                    onValidate={onValidate}
+                    onNameChange={onNameChange}
+                    onEndpointChange={onEndpointChange}
+                    onProxyChange={onProxyChange}
+                    onTokenChange={onTokenChange}
+                    onUsernameChange={onUsernameChange}
+                    onPasswordChange={onPasswordChange}
+                    isSaving={isSaving}
+                    isTesting={isTesting}
+                    testStatus={testStatus}
+                    testResponse={testResponse}
+                    errors={errors}
+                    showError={showConnectionError}
+                    authType={[Providers.JENKINS, Providers.JIRA].includes(activeProvider?.id) ? 'plain' : 'token'}
+                    showLimitWarning={false}
+                    sourceLimits={ProviderConnectionLimits}
+                    labels={ProviderFormLabels[activeProvider?.id]}
+                    placeholders={ProviderFormPlaceholders[activeProvider?.id]}
+                    enableActions={false}
                    // formGroupClassName='formGroup-inline'
-                   showHeadline={false}
-                 />
+                    showHeadline={false}
+                  />
                 </div>
-                
+
               </div>
             </>
           )}
@@ -350,7 +348,7 @@ const ConnectionDialog = (props) => {
               loading={isSaving}
               outlined
             >
-              {'Save Connection'}
+              Save Connection
             </Button>
           </div>
         </div>

@@ -43,7 +43,7 @@ const PipelineConfigsMenu = (props) => {
         padding: '6px 8px',
         display: 'block'
       }}
-      >SAMPLE PIPELINE CONFIGURATIONS
+                     >SAMPLE PIPELINE CONFIGURATIONS
       </label>)}
       <Menu.Item
         icon='code' text='Load General Configuration'

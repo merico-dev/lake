@@ -73,7 +73,7 @@ function useBlueprintValidation ({
     if (enable && tasks?.length === 0) {
       errs.push('Blueprint Tasks: Invalid/Empty Configuration')
     }
-    
+
     if (mode !== null && ![BlueprintMode.NORMAL, BlueprintMode.ADVANCED].includes(mode)) {
       errs.push('Invalid / Unsupported Blueprint Mode Detected!')
     }

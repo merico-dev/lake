@@ -50,7 +50,7 @@ const DataConnections = (props) => {
 
   return (
     <div className='workflow-step workflow-step-data-connections' data-step={activeStep?.id}>
-      <BlueprintNameCard 
+      <BlueprintNameCard
         advancedMode={advancedMode}
         activeStep={activeStep}
         name={name}

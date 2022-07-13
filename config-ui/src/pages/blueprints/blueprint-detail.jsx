@@ -16,7 +16,7 @@
  *
  */
 import React, { Fragment, useEffect, useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory, useLocation, Link } from 'react-router-dom'
 import { CSSTransition } from 'react-transition-group'
 import dayjs from '@/utils/time'
 import {
@@ -35,16 +35,14 @@ import {
   Position,
   Popover,
 } from '@blueprintjs/core'
-import { useHistory, useLocation, Link } from 'react-router-dom'
 import { NullBlueprint, BlueprintMode } from '@/data/NullBlueprint'
 import { Providers, ProviderLabels, ProviderIcons } from '@/data/Providers'
-import { 
+import {
   WorkflowSteps,
   WorkflowAdvancedSteps,
   DEFAULT_DATA_ENTITIES,
-  DEFAULT_BOARDS 
+  DEFAULT_BOARDS
 } from '@/data/BlueprintWorkflow'
-
 
 import Nav from '@/components/Nav'
 import Sidebar from '@/components/Sidebar'
@@ -96,7 +94,7 @@ const StatusBgColors = {
   ACTIVE: '#F0F4FE'
 }
 
-const TEST_BLUEPRINT = { 
+const TEST_BLUEPRINT = {
   ...NullBlueprint,
   id: 1,
   name: 'DevLake Daily Blueprint',
@@ -105,8 +103,8 @@ const TEST_BLUEPRINT = {
 }
 
 const TEST_CONNECTIONS = [
-  {id: 0, provider: Providers.GITHUB, name: 'Merico GitHub', dataScope: 'merico-dev/ake, merico-dev/lake-website', dataEntities: ['code', 'ticket', 'user']},
-  {id: 0, provider: Providers.JIRA, name: 'Merico JIRA', dataScope: 'Sprint Dev Board, DevLake Sync Board ', dataEntities: ['ticket']}
+  { id: 0, provider: Providers.GITHUB, name: 'Merico GitHub', dataScope: 'merico-dev/ake, merico-dev/lake-website', dataEntities: ['code', 'ticket', 'user'] },
+  { id: 0, provider: Providers.JIRA, name: 'Merico JIRA', dataScope: 'Sprint Dev Board, DevLake Sync Board ', dataEntities: ['ticket'] }
 ]
 
 const TEST_RUN = {
@@ -138,122 +136,122 @@ const EMPTY_RUN = {
 }
 
 const TEST_BLUEPRINT_API_RESPONSE = {
-  "name": "DEVLAKE (Hourly)",
-  "mode": "NORMAL",
-  "plan": [
-      [
-          {
-              "plugin": "github",
-              "subtasks": [
-                  "collectApiRepo",
-                  "extractApiRepo",
-                  "collectApiIssues",
-                  "extractApiIssues",
-                  "collectApiPullRequests",
-                  "extractApiPullRequests",
-                  "collectApiComments",
-                  "extractApiComments",
-                  "collectApiEvents",
-                  "extractApiEvents",
-                  "collectApiPullRequestCommits",
-                  "extractApiPullRequestCommits",
-                  "collectApiPullRequestReviews",
-                  "extractApiPullRequestReviewers",
-                  "collectApiCommits",
-                  "extractApiCommits",
-                  "collectApiCommitStats",
-                  "extractApiCommitStats",
-                  "enrichPullRequestIssues",
-                  "convertRepo",
-                  "convertIssues",
-                  "convertCommits",
-                  "convertIssueLabels",
-                  "convertPullRequestCommits",
-                  "convertPullRequests",
-                  "convertPullRequestLabels",
-                  "convertPullRequestIssues",
-                  "convertIssueComments",
-                  "convertPullRequestComments"
-              ],
-              "options": {
-                  "connectionId": 1,
-                  "owner": "e2corporation",
-                  "repo": "incubator-devlake",
-                  "transformationRules": {
-                      "issueComponent": "",
-                      "issuePriority": "",
-                      "issueSeverity": "",
-                      "issueTypeBug": "",
-                      "issueTypeIncident": "",
-                      "issueTypeRequirement": "",
-                      "prComponent": "",
-                      "prType": ""
-                  }
-              }
-          },
-          {
-              "plugin": "gitextractor",
-              "subtasks": null,
-              "options": {
-                  "repoId": "github:GithubRepo:1:506830252",
-                  "url": "https://git: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@github.com/e2corporation/incubator-devlake.git"
-              }
+  name: 'DEVLAKE (Hourly)',
+  mode: 'NORMAL',
+  plan: [
+    [
+      {
+        plugin: 'github',
+        subtasks: [
+          'collectApiRepo',
+          'extractApiRepo',
+          'collectApiIssues',
+          'extractApiIssues',
+          'collectApiPullRequests',
+          'extractApiPullRequests',
+          'collectApiComments',
+          'extractApiComments',
+          'collectApiEvents',
+          'extractApiEvents',
+          'collectApiPullRequestCommits',
+          'extractApiPullRequestCommits',
+          'collectApiPullRequestReviews',
+          'extractApiPullRequestReviewers',
+          'collectApiCommits',
+          'extractApiCommits',
+          'collectApiCommitStats',
+          'extractApiCommitStats',
+          'enrichPullRequestIssues',
+          'convertRepo',
+          'convertIssues',
+          'convertCommits',
+          'convertIssueLabels',
+          'convertPullRequestCommits',
+          'convertPullRequests',
+          'convertPullRequestLabels',
+          'convertPullRequestIssues',
+          'convertIssueComments',
+          'convertPullRequestComments'
+        ],
+        options: {
+          connectionId: 1,
+          owner: 'e2corporation',
+          repo: 'incubator-devlake',
+          transformationRules: {
+            issueComponent: '',
+            issuePriority: '',
+            issueSeverity: '',
+            issueTypeBug: '',
+            issueTypeIncident: '',
+            issueTypeRequirement: '',
+            prComponent: '',
+            prType: ''
           }
-      ],
-      [
-          {
-              "plugin": "refdiff",
-              "subtasks": null,
-              "options": {
-                  "tagsLimit": 10,
-                  "tagsOrder": "",
-                  "tagsPattern": ""
-              }
-          }
-      ]
+        }
+      },
+      {
+        plugin: 'gitextractor',
+        subtasks: null,
+        options: {
+          repoId: 'github:GithubRepo:1:506830252',
+          url: 'https://git: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@github.com/e2corporation/incubator-devlake.git'
+        }
+      }
+    ],
+    [
+      {
+        plugin: 'refdiff',
+        subtasks: null,
+        options: {
+          tagsLimit: 10,
+          tagsOrder: '',
+          tagsPattern: ''
+        }
+      }
+    ]
   ],
-  "enable": true,
-  "cronConfig": "0 0 * * *",
-  "isManual": false,
-  "settings": {
-      "version": "1.0.0",
-      "connections": [
+  enable: true,
+  cronConfig: '0 0 * * *',
+  isManual: false,
+  settings: {
+    version: '1.0.0',
+    connections: [
+      {
+        connectionId: 1,
+        plugin: 'github',
+        scope: [
           {
-              "connectionId": 1,
-              "plugin": "github",
-              "scope": [
-                  {
-                      "entities": [
-                          "CODE",
-                          "TICKET"
-                      ],
-                      "options": {
-                          "owner": "e2corporation",
-                          "repo": "incubator-devlake"
-                      },
-                      "transformation": {
-                          "prType": "",
-                          "prComponent": "",
-                          "issueSeverity": "",
-                          "issueComponent": "",
-                          "issuePriority": "",
-                          "issueTypeRequirement": "",
-                          "issueTypeBug": "",
-                          "issueTypeIncident": "",
-                          "refdiff": {
-                              "tagsOrder": "",
-                              "tagsPattern": "",
-                              "tagsLimit": 10
-                          }
-                      }
-                  }
-              ]
+            entities: [
+              'CODE',
+              'TICKET'
+            ],
+            options: {
+              owner: 'e2corporation',
+              repo: 'incubator-devlake'
+            },
+            transformation: {
+              prType: '',
+              prComponent: '',
+              issueSeverity: '',
+              issueComponent: '',
+              issuePriority: '',
+              issueTypeRequirement: '',
+              issueTypeBug: '',
+              issueTypeIncident: '',
+              refdiff: {
+                tagsOrder: '',
+                tagsPattern: '',
+                tagsLimit: 10
+              }
+            }
           }
-      ]
+        ]
+      }
+    ]
   },
-  "id": 1,
-  "createdAt": "2022-07-11T10:23:38.908-04:00",
-  "updatedAt": "2022-07-11T10:23:38.908-04:00"
+  id: 1,
+  createdAt: '2022-07-11T10:23:38.908-04:00',
+  updatedAt: '2022-07-11T10:23:38.908-04:00'
 }
 
 const BlueprintDetail = (props) => {
@@ -383,12 +381,12 @@ const BlueprintDetail = (props) => {
     }
   ])
   const [historicalRuns, setHistoricalRuns] = useState([
-    {id: 0, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
-    {id: 1, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
-    {id: 2, status: 'TASK_FAILED', statusLabel: 'Failed', statusIcon: <Icon icon='delete' size={14} color={Colors.RED5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:00 AM', duration: '0 min' },
-    {id: 3, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
-    {id: 4, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
-    {id: 5, status: 'TASK_FAILED', statusLabel: 'Failed', statusIcon: <Icon icon='delete' size={14} color={Colors.RED5} />,startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:00 AM', duration: '0 min' },
+    { id: 0, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
+    { id: 1, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
+    { id: 2, status: 'TASK_FAILED', statusLabel: 'Failed', statusIcon: <Icon icon='delete' size={14} color={Colors.RED5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:00 AM', duration: '0 min' },
+    { id: 3, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
+    { id: 4, status: 'TASK_COMPLETED', statusLabel: 'Completed', statusIcon: <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:15 AM', duration: '15 min' },
+    { id: 5, status: 'TASK_FAILED', statusLabel: 'Failed', statusIcon: <Icon icon='delete' size={14} color={Colors.RED5} />, startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:00 AM', duration: '0 min' },
   ])
 
   const {
@@ -441,7 +439,6 @@ const BlueprintDetail = (props) => {
     detectPipelineProviders
   } = usePipelineManager()
 
-
   useEffect(() => {
     setBlueprintId(bId)
     console.log('>>> REQUESTED BLUEPRINT ID ===', bId)
@@ -453,7 +450,6 @@ const BlueprintDetail = (props) => {
       fetchBlueprint(blueprintId)
       fetchAllPipelines()
     }
-
   }, [blueprintId, fetchBlueprint])
 
   const runBlueprint = useCallback(() => {
@@ -475,10 +471,10 @@ const BlueprintDetail = (props) => {
         break
       case TaskStatus.COMPLETE:
         icon = <Icon icon='tick-circle' size={14} color={Colors.GREEN5} />
-        break      
+        break
       case TaskStatus.FAILED:
         icon = <Icon icon='delete' size={14} color={Colors.RED5} />
-        break  
+        break
       case TaskStatus.CANCELLED:
       case TaskStatus.CREATED:
 
@@ -515,7 +511,6 @@ const BlueprintDetail = (props) => {
     console.log('>>>> FETCHED ALL PIPELINES..', pipelines, activeBlueprint?.id)
     //  {id: 5, status: 'TASK_FAILED', statusLabel: 'Failed', statusIcon: <Icon icon='delete' size={14} color={Colors.RED5} />,startedAt: '05/25/2022 0:00 AM', completedAt: '05/25/2022 0:00 AM', duration: '0 min' },
     setBlueprintPipelines(pipelines.filter(p => p.blueprintId === activeBlueprint?.id))
-    
   }, [pipelines, activeBlueprint])
 
   useEffect(() => {
@@ -529,7 +524,7 @@ const BlueprintDetail = (props) => {
       statusIcon: getTaskStatusIcon(p.status),
       startedAt: dayjs(p.beganAt).format('L LTS'),
       completedAt: p.status === 'TASK_RUNNING' ? ' - ' : dayjs(p.finishedAt || p.updatedAt).format('L LTS'),
-      duration: p.status === 'TASK_RUNNING' ? dayjs(p.beganAt).toNow(true) : dayjs(p.beganAt).from(p.finishedAt || p.updatedAt, true)                     
+      duration: p.status === 'TASK_RUNNING' ? dayjs(p.beganAt).toNow(true) : dayjs(p.beganAt).from(p.finishedAt || p.updatedAt, true)
     })))
   }, [blueprintPipelines])
 
@@ -558,30 +553,30 @@ const BlueprintDetail = (props) => {
 
   return (
     <>
-      <div className="container">
+      <div className='container'>
         <Nav />
         <Sidebar />
         <Content>
-          <main className="main">
-            
+          <main className='main'>
+
             <div className='blueprint-header' style={{ display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '10px' }}>
               <div className='blueprint-name' style={{}}>
                 <h2 style={{ fontWeight: 'bold' }}>{activeBlueprint?.name}</h2>
               </div>
               <div className='blueprint-info' style={{ display: 'flex', alignItems: 'center' }}>
                 <div className='blueprint-schedule'>
-                  <span className='blueprint-schedule-interval' style={{ textTransform: 'capitalize', padding: '0 10px'  }}>
+                  <span className='blueprint-schedule-interval' style={{ textTransform: 'capitalize', padding: '0 10px' }}>
                     {activeBlueprint?.interval}{' '}
                     (at {dayjs(getNextRunDate(activeBlueprint?.cronConfig)).format('hh:mm A')})
                   </span> &nbsp; {' '}
                   <span className='blueprint-schedule-nextrun'>Next Run {dayjs(getNextRunDate(activeBlueprint?.cronConfig)).fromNow()}</span>
                 </div>
                 <div className='blueprint-actions' style={{ padding: '0 10px' }}>
-                  <Button 
+                  <Button
                     intent={Intent.PRIMARY}
                     small
                     text='Run Now'
-                    onClick={runBlueprint} 
+                    onClick={runBlueprint}
                     disabled={!activeBlueprint?.enable}
                     // disabled={currentRun?.status === TaskStatus.RUNNING}
                   />
@@ -596,7 +591,7 @@ const BlueprintDetail = (props) => {
                     style={{ marginBottom: 0, marginTop: 0 }}
                   />
                 </div>
-                <div  style={{ padding: '0 10px' }}>
+                <div style={{ padding: '0 10px' }}>
                   <Button intent={Intent.PRIMARY} icon='trash' small minimal disabled />
                 </div>
               </div>
@@ -628,13 +623,13 @@ const BlueprintDetail = (props) => {
               </Card>
             </div> */}
 
-            <div className='blueprint-run' style={{ width: '100%', alignSelf: 'flex-start', minWidth: '750px'  }}>
+            <div className='blueprint-run' style={{ width: '100%', alignSelf: 'flex-start', minWidth: '750px' }}>
               <h3>Current Run</h3>
               <Card className={`current-run status-${currentRun?.status.toLowerCase()}`} elevation={Elevation.TWO} style={{ padding: '12px', marginBottom: '8px' }}>
                 {currentRun && (<div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div>
                     <label style={{ color: '#94959F' }}>Status</label>
-                    <div  style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex' }}>
                       <span style={{ marginRight: '6px' }}>
                         {currentRun?.icon}
                       </span>
@@ -658,7 +653,7 @@ const BlueprintDetail = (props) => {
                     <h4 style={{ fontSize: '15px', margin: 0, padding: 0 }}>{currentRun?.tasksCompleted} / {currentRun?.tasksPending}</h4>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <div  style={{ display: 'block' }}>
+                    <div style={{ display: 'block' }}>
                       {/* <Button intent={Intent.PRIMARY} outlined text='Cancel' onClick={cancelRun} /> */}
                       <Popover
                         key='popover-help-key-cancel-run'
@@ -707,44 +702,44 @@ const BlueprintDetail = (props) => {
               </Card>
               {currentRun && (<Card elevation={Elevation.TWO} style={{ padding: '12px', marginBottom: '8px' }}>
                 <div className='blueprint-run-activity' style={{ display: 'flex', width: '100%' }}>
-                    {currentStages.map((stage, stageIdx) => (
-                      <div className='run-stage' key={`run-stage-key-${stageIdx}`} style={{ flex: 1, margin: '0 4px' }}>
-                        <h3 className={`stage-header ${stage?.stageHeaderClassName}`} style={{ margin: '0', padding: '7px' }}>
-                          <span style={{ float: 'right' }}>{stage?.icon}</span>
-                          {stage?.title}
-                        </h3>
-                        {showCurrentRunTasks && (<div className='task-activity'>
-                          {stage.tasks.map((stageTask, stIdx) => (
-                            <div className='stage-task' key={`stage-task-key-${stIdx}`} style={{ display: 'flex', flexDirection: 'column' }}>
-                              <div className='stage-task-info' style={{ display: 'flex', padding: '8px' }}>
-                                  <div className='task-icon' style={{ minWidth: '24px' }}>{stageTask.icon}</div>
-                                  <div className='task-title' style={{ flex: 1}}>
-                                    <div style={{ marginBottom: '8px' }}><strong>{stageTask.title}</strong> {stageTask?.caption}</div>
-                                    <div className='stage-task-progress' style={{ color: stageTask?.status === TaskStatus.FAILED ? StatusColors.FAILED : 'inherit'}}>
-                                      <div>{stageTask?.message}</div>
-                                      <div>{stageTask?.recordsFinished} records finished</div>
-                                    </div>
-                                  </div>
-                                  <div className='task-duration' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: StatusColors[stageTask?.status] }}>
-                                    {stageTask.duration}{' '}
-                                    {stageTask?.status === TaskStatus.FAILED && <>({TaskStatusLabels[TaskStatus.FAILED]})</>}
-                                    {stageTask?.status === TaskStatus.ACTIVE && <>({TaskStatusLabels[TaskStatus.ACTIVE]})</>}
-                                  </div>
+                  {currentStages.map((stage, stageIdx) => (
+                    <div className='run-stage' key={`run-stage-key-${stageIdx}`} style={{ flex: 1, margin: '0 4px' }}>
+                      <h3 className={`stage-header ${stage?.stageHeaderClassName}`} style={{ margin: '0', padding: '7px' }}>
+                        <span style={{ float: 'right' }}>{stage?.icon}</span>
+                        {stage?.title}
+                      </h3>
+                      {showCurrentRunTasks && (<div className='task-activity'>
+                        {stage.tasks.map((stageTask, stIdx) => (
+                          <div className='stage-task' key={`stage-task-key-${stIdx}`} style={{ display: 'flex', flexDirection: 'column' }}>
+                            <div className='stage-task-info' style={{ display: 'flex', padding: '8px' }}>
+                              <div className='task-icon' style={{ minWidth: '24px' }}>{stageTask.icon}</div>
+                              <div className='task-title' style={{ flex: 1 }}>
+                                <div style={{ marginBottom: '8px' }}><strong>{stageTask.title}</strong> {stageTask?.caption}</div>
+                                <div className='stage-task-progress' style={{ color: stageTask?.status === TaskStatus.FAILED ? StatusColors.FAILED : 'inherit' }}>
+                                  <div>{stageTask?.message}</div>
+                                  <div>{stageTask?.recordsFinished} records finished</div>
+                                </div>
                               </div>
-                              <Divider />
+                              <div className='task-duration' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: StatusColors[stageTask?.status] }}>
+                                {stageTask.duration}{' '}
+                                {stageTask?.status === TaskStatus.FAILED && <>({TaskStatusLabels[TaskStatus.FAILED]})</>}
+                                {stageTask?.status === TaskStatus.ACTIVE && <>({TaskStatusLabels[TaskStatus.ACTIVE]})</>}
+                              </div>
                             </div>
-                          ))}
-                        </div>)}
-                      </div>
-                    ))}
-                    <Button
-                      icon={showCurrentRunTasks ? 'chevron-down' : 'chevron-right'}
-                      intent={Intent.NONE}
-                      minimal
-                      small
-                      style={{ textAlign: 'center', display: 'block', float: 'right', margin: '0 10px', marginBottom: 'auto' }} 
-                      onClick={() => setShowCurrentRunTasks(s => !s)}
-                    />
+                            <Divider />
+                          </div>
+                        ))}
+                                               </div>)}
+                    </div>
+                  ))}
+                  <Button
+                    icon={showCurrentRunTasks ? 'chevron-down' : 'chevron-right'}
+                    intent={Intent.NONE}
+                    minimal
+                    small
+                    style={{ textAlign: 'center', display: 'block', float: 'right', margin: '0 10px', marginBottom: 'auto' }}
+                    onClick={() => setShowCurrentRunTasks(s => !s)}
+                  />
                 </div>
               </Card>)}
             </div>
@@ -759,13 +754,13 @@ const BlueprintDetail = (props) => {
                       <th style={{ minWidth: '100px', whiteSpace: 'nowrap' }}>Started at</th>
                       <th style={{ minWidth: '100px', whiteSpace: 'nowrap' }}>Completed at</th>
                       <th style={{ minWidth: '100px', whiteSpace: 'nowrap' }}>Duration</th>
-                      <th style={{ width: '100%', whiteSpace: 'nowrap' }}></th>
+                      <th style={{ width: '100%', whiteSpace: 'nowrap' }} />
                     </tr>
                   </thead>
                   <tbody>
                     {historicalRuns.map((run, runIdx) => (
                       <tr key={`historical-run-key-${runIdx}`}>
-                        <td style={{ width: '15%', whiteSpace: 'nowrap', borderBottom: '1px solid #f0f0f0' }}><span style={{ display: 'inline-block', float: 'left', marginRight: '5px'}}>{run.statusIcon}</span> {run.statusLabel}</td>
+                        <td style={{ width: '15%', whiteSpace: 'nowrap', borderBottom: '1px solid #f0f0f0' }}><span style={{ display: 'inline-block', float: 'left', marginRight: '5px' }}>{run.statusIcon}</span> {run.statusLabel}</td>
                         <td style={{ width: '25%', whiteSpace: 'nowrap', borderBottom: '1px solid #f0f0f0' }}>{run.startedAt}</td>
                         <td style={{ width: '25%', whiteSpace: 'nowrap', borderBottom: '1px solid #f0f0f0' }}>{run.completedAt}</td>
                         <td style={{ width: '15%', whiteSpace: 'nowrap', borderBottom: '1px solid #f0f0f0' }}>{run.duration}</td>
@@ -776,7 +771,7 @@ const BlueprintDetail = (props) => {
                           <Tooltip intent={Intent.PRIMARY} content='View Full Log'>
                             <Button intent={Intent.PRIMARY} minimal small icon='document' style={{ marginLeft: '10px' }} />
                           </Tooltip>
-                          <Button intent={Intent.PRIMARY} minimal small icon='chevron-right' style={{ marginLeft: '10px' }}></Button>
+                          <Button intent={Intent.PRIMARY} minimal small icon='chevron-right' style={{ marginLeft: '10px' }} />
                         </td>
                       </tr>
                     ))}

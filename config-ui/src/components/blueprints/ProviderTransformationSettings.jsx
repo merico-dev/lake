@@ -62,7 +62,7 @@ const ProviderTransformationSettings = (props) => {
           entity={DataEntityTypes.TICKET}
           isSaving={isSaving}
           isSavingConnection={isSavingConnection}
-      />
+        />
       )}
 
       {provider?.id === Providers.GITLAB && (
@@ -75,7 +75,7 @@ const ProviderTransformationSettings = (props) => {
           entity={DataEntityTypes.TICKET}
           isSaving={isSaving}
           isSavingConnection={isSavingConnection}
-      />
+        />
       )}
 
       {provider?.id === Providers.JIRA && (
@@ -93,7 +93,7 @@ const ProviderTransformationSettings = (props) => {
           isSavingConnection={isSavingConnection}
           jiraProxyError={jiraProxyError}
           isFetchingJIRA={isFetchingJIRA}
-      />
+        />
       )}
 
       {provider?.id === Providers.JENKINS && (
@@ -105,7 +105,7 @@ const ProviderTransformationSettings = (props) => {
           entity={DataEntityTypes.TICKET}
           isSaving={isSaving}
           isSavingConnection={isSavingConnection}
-      />
+        />
       )}
     </div>
   )

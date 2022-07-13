@@ -45,7 +45,7 @@ const DataScopes = (props) => {
     activeConnectionTab,
     blueprintConnections = [],
     dataEntitiesList = [],
-    boardsList =[],
+    boardsList = [],
     dataEntities = [],
     projects = [],
     boards = [],
@@ -91,11 +91,13 @@ const DataScopes = (props) => {
                 <>
                   <h3>
                     <span style={{ float: 'left', marginRight: '8px' }}>
-                      {ProviderIcons[configuredConnection.provider] ? (
-                        ProviderIcons[configuredConnection.provider](24, 24)
-                      ) : (
-                        <></>
-                      )}
+                      {ProviderIcons[configuredConnection.provider]
+                        ? (
+                            ProviderIcons[configuredConnection.provider](24, 24)
+                          )
+                        : (
+                          <></>
+                          )}
                     </span>{' '}
                     {configuredConnection.title}
                   </h3>
@@ -121,8 +123,7 @@ const DataScopes = (props) => {
                           setProjects((p) => ({
                             ...p,
                             [configuredConnection.id]: [...new Set(values)],
-                          }))
-                        }
+                          }))}
                         addOnPaste={true}
                         addOnBlur={true}
                         rightElement={
@@ -134,13 +135,11 @@ const DataScopes = (props) => {
                               setProjects((p) => ({
                                 ...p,
                                 [configuredConnection.id]: [],
-                              }))
-                            }
+                              }))}
                           />
                         }
                         onKeyDown={(e) =>
-                          e.key === 'Enter' && e.preventDefault()
-                        }
+                          e.key === 'Enter' && e.preventDefault()}
                         tagProps={{
                           intent: Intent.PRIMARY,
                           minimal: true,
@@ -175,7 +174,7 @@ const DataScopes = (props) => {
                       target='_blank'
                       rel='noreferrer'
                     >
-                        Learn about data entities
+                      Learn about data entities
                     </a>
                   </p>
                   <DataEntitiesSelector
@@ -207,4 +206,3 @@ const DataScopes = (props) => {
 }
 
 export default DataScopes
-

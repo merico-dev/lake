@@ -31,21 +31,21 @@ const BlueprintNameCard = (props) => {
 
   return (
     <Card
-      className="workflow-card"
+      className='workflow-card'
       elevation={Elevation.TWO}
       style={{ width: '100%' }}
     >
       <h3>
         {advancedMode ? 'Advanced' : ''} Blueprint Name{' '}
-        <span className="required-star">*</span>
+        <span className='required-star'>*</span>
       </h3>
-      <Divider className="section-divider" />
+      <Divider className='section-divider' />
       <p>
         Give your Blueprint a unique name to help you identify it in the future.
       </p>
       <InputGroup
-        id="blueprint-name"
-        placeholder="Enter Blueprint Name"
+        id='blueprint-name'
+        placeholder='Enter Blueprint Name'
         value={name}
         onChange={(e) => setBlueprintName(e.target.value)}
         className={`blueprint-name-input ${

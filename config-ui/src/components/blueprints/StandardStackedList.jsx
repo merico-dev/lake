@@ -95,10 +95,10 @@ const StandardStackedList = (props) => {
                         color={Colors.BLUE4}
                       />
                     }
-                    text={transformations[activeItem?.id]  ? editButtonText : addButtonText }
+                    text={transformations[activeItem?.id] ? editButtonText : addButtonText}
                     color={Colors.BLUE3}
                     small
-                    minimal={activeItem !== item ? true : false}
+                    minimal={activeItem !== item}
                     style={{
                       minWidth: '18px',
                       minHeight: '18px',

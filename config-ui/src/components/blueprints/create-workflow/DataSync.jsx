@@ -64,26 +64,28 @@ const DataSync = (props) => {
     <div className='workflow-step workflow-step-set-sync-frequency' data-step={activeStep?.id}>
       <Card className='workflow-card' elevation={Elevation.TWO}>
         <h3 style={{ marginBottom: '8px' }}>Set Sync Frequency</h3>
-        {getCronPresetByConfig(cronConfig) ? (
-          <p
-            style={{
-              display: 'block',
-            }}
-          >
-            <strong>Automated</strong> &mdash;{' '}
-            {getCronPresetByConfig(cronConfig).description}
-          </p>
-        ) : (
-          <small
-            style={{
-              fontSize: '10px',
-              color: Colors.GRAY2,
-              textTransform: 'uppercase',
-            }}
-          >
-            {cronConfig}
-          </small>
-        )}
+        {getCronPresetByConfig(cronConfig)
+          ? (
+            <p
+              style={{
+                display: 'block',
+              }}
+            >
+              <strong>Automated</strong> &mdash;{' '}
+              {getCronPresetByConfig(cronConfig).description}
+            </p>
+            )
+          : (
+            <small
+              style={{
+                fontSize: '10px',
+                color: Colors.GRAY2,
+                textTransform: 'uppercase',
+              }}
+            >
+              {cronConfig}
+            </small>
+            )}
         <Divider className='section-divider' />
 
         <h4>Frequency</h4>
@@ -161,16 +163,18 @@ const DataSync = (props) => {
               fill={false}
               readOnly={cronConfig !== 'custom'}
               leftElement={
-                cronConfig !== 'custom' ? (
-                  <Icon
-                    icon='lock'
-                    size={11}
-                    style={{
-                      alignSelf: 'center',
-                      margin: '4px 10px -2px 6px',
-                    }}
-                  />
-                ) : null
+                cronConfig !== 'custom'
+                  ? (
+                    <Icon
+                      icon='lock'
+                      size={11}
+                      style={{
+                        alignSelf: 'center',
+                        margin: '4px 10px -2px 6px',
+                      }}
+                    />
+                    )
+                  : null
               }
               rightElement={
                 <>

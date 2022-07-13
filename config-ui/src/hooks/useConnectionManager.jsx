@@ -30,7 +30,7 @@ import {
 
 import useNetworkOfflineMode from '@/hooks/useNetworkOfflineMode'
 
-function useConnectionManager(
+function useConnectionManager (
   {
     activeProvider,
     connectionId,
@@ -394,12 +394,13 @@ function useConnectionManager(
             ),
           ])
           const builtConnections = aC
-          .map((providerResponse) => [].concat(providerResponse.data || []).map(c => ({
-            ...c, connectionId: c.id, 
-            provider: providerResponse.config?.url?.split('/')[3],
-            // @todo: inject realtime connection status...
-            status: ConnectionStatus.ONLINE
-          })))
+            .map((providerResponse) => [].concat(providerResponse.data || []).map(c => ({
+              ...c,
+              connectionId: c.id,
+              provider: providerResponse.config?.url?.split('/')[3],
+              // @todo: inject realtime connection status...
+              status: ConnectionStatus.ONLINE
+            })))
           // .map((providerResponse) => [
           //   {
           //     ...[].concat(providerResponse.data || []).reduce((cV, pV) => ({...pV, connectionId: pV.id}), {}),
@@ -557,7 +558,7 @@ function useConnectionManager(
       console.log('>> FAILED TO FETCH DOMAIN LAYER REPOS', e)
     }
   }, [])
-  
+
   const clearConnection = useCallback(() => {
     setName('')
     setEndpointUrl('')
@@ -588,7 +589,7 @@ function useConnectionManager(
           break
         case Providers.GITHUB:
           setToken(connectionToken)
-          setInitialTokenStore(connectionToken?.split(',')?.reduce((tS,cT,id) => ({...tS, [id]: cT}), {}))
+          setInitialTokenStore(connectionToken?.split(',')?.reduce((tS, cT, id) => ({ ...tS, [id]: cT }), {}))
           setProxy(activeConnection.Proxy || activeConnection.proxy)
           break
         case Providers.JIRA:
