@@ -16,36 +16,28 @@
  *
  */
 import React, { useEffect, useState, useRef, useCallback } from 'react'
-import dayjs from '@/utils/time'
+// import dayjs from '@/utils/time'
 import {
   Button,
-  ButtonGroup,
   Classes,
   Colors,
   Dialog,
   Elevation,
   FormGroup,
   Icon,
-  InputGroup,
   Intent,
   Label,
   MenuItem,
-  Popover,
-  Position,
-  Radio,
-  RadioGroup,
-  Switch,
-  Tooltip,
 } from '@blueprintjs/core'
 import { Select } from '@blueprintjs/select'
 import {
   Providers,
-  ProviderTypes,
+  // ProviderTypes,
   ProviderLabels,
   ProviderFormLabels,
   ProviderFormPlaceholders,
   ProviderConnectionLimits,
-  ProviderIcons,
+  // ProviderIcons,
 } from '@/data/Providers'
 import { NullBlueprintConnection } from '@/data/NullBlueprintConnection'
 import InputValidationError from '@/components/validation/InputValidationError'
@@ -56,6 +48,34 @@ const Modes = {
   CREATE: 'create',
   EDIT: 'edit',
 }
+
+// @todo: lift data sources list to configuration level, requires expansion when more providers are added..
+const DATA_SOURCES_LIST = [
+  {
+    id: 1,
+    name: Providers.JIRA,
+    title: ProviderLabels[Providers.JIRA.toUpperCase()],
+    value: Providers.JIRA,
+  },
+  {
+    id: 2,
+    name: Providers.GITHUB,
+    title: ProviderLabels[Providers.GITHUB.toUpperCase()],
+    value: Providers.GITHUB,
+  },
+  {
+    id: 3,
+    name: Providers.GITLAB,
+    title: ProviderLabels[Providers.GITLAB.toUpperCase()],
+    value: Providers.GITLAB,
+  },
+  {
+    id: 4,
+    name: Providers.JENKINS,
+    title: ProviderLabels[Providers.JENKINS.toUpperCase()],
+    value: Providers.JENKINS,
+  },
+]
 
 const ConnectionDialog = (props) => {
   const {
@@ -79,33 +99,7 @@ const ConnectionDialog = (props) => {
     isSaving = false,
     isValid = false,
     // editMode = false,
-    // @todo: lift data sources list to configuration level, requires expansion when more providers are added..
-    dataSourcesList = [
-      {
-        id: 1,
-        name: Providers.JIRA,
-        title: ProviderLabels[Providers.JIRA.toUpperCase()],
-        value: Providers.JIRA,
-      },
-      {
-        id: 2,
-        name: Providers.GITHUB,
-        title: ProviderLabels[Providers.GITHUB.toUpperCase()],
-        value: Providers.GITHUB,
-      },
-      {
-        id: 3,
-        name: Providers.GITLAB,
-        title: ProviderLabels[Providers.GITLAB.toUpperCase()],
-        value: Providers.GITLAB,
-      },
-      {
-        id: 4,
-        name: Providers.JENKINS,
-        title: ProviderLabels[Providers.JENKINS.toUpperCase()],
-        value: Providers.JENKINS,
-      },
-    ],
+    dataSourcesList = DATA_SOURCES_LIST,
     labels = ProviderLabels[connection.provider],
     placeholders = ProviderFormPlaceholders[connection.provider],
     onTest = () => {},

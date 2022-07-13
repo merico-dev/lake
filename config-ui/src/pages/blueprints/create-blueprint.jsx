@@ -241,7 +241,7 @@ const CreateBlueprint = (props) => {
     detectedProviders,
   } = usePipelineValidation({
     enabledProviders,
-    // pipelineName,
+    pipelineName,
     projectId,
     projects,
     boardId,
