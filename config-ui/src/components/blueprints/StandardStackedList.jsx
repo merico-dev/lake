@@ -73,12 +73,6 @@ const StandardStackedList = (props) => {
             >
               <div>
                 <div className='item-name' style={{ fontWeight: 600 }}>
-                  {/* <input
-                    type='radio'
-                    name='configured-item'
-                    checked={item === activeItem}
-                    onChange={() => onChange(item)}
-                  />{' '} */}
                   <label onClick={() => onAdd(item)} style={{ cursor: 'pointer' }}>{item?.name || item}</label>
                 </div>
               </div>
@@ -97,12 +91,11 @@ const StandardStackedList = (props) => {
                     className='item-action-transformation'
                     icon={
                       <Icon
-                        // icon='plus'
                         size={12}
                         color={Colors.BLUE4}
                       />
                     }
-                    text={Object.keys(transformations[item] ? transformations[item] : {})?.some(configObject => transformations[item][configObject]?.length > 0 )  ? editButtonText : addButtonText }
+                    text={transformations[activeItem?.id]  ? editButtonText : addButtonText }
                     color={Colors.BLUE3}
                     small
                     minimal={activeItem !== item ? true : false}

@@ -74,15 +74,6 @@ const DataTransformations = (props) => {
     isFetchingJIRA = false
   } = props
 
-  // @todo: lift this to a higher ancestor
-  // const clearTransformations = useCallback(() => {
-  //   console.log('>>> CLEARING TRANSFORMATION RULES!')
-  //   setTransformations(existingTransformations => ({
-  //     ...existingTransformations,
-  //     [configuredProject]: {}
-  //   }))
-  // }, [setTransformations, configuredProject])
-
   return (
     <div className='workflow-step workflow-step-add-transformation' data-step={activeStep?.id}>
       <p
@@ -251,12 +242,29 @@ const DataTransformations = (props) => {
                             small
                             outlined
                             onClick={onSave}
+                            disabled={[Providers.GITLAB].includes(configuredConnection?.provider)}
                             style={{ marginLeft: '5px' }} 
                           />
                       </div>
                     </div>
                   )}
                 </>
+              )}
+
+              {[Providers.JENKINS].includes(configuredConnection.provider) && (
+                <>
+                <div className='bp3-non-ideal-state'>
+                  <div className='bp3-non-ideal-state-visual'>
+                    <Icon icon='disable' size={32} />
+                  </div>
+                  <div className='bp3-non-ideal-state-text'>
+                    <h4 className='bp3-heading' style={{ margin: 0 }}>
+                      No Data Transformations
+                    </h4>
+                    <div>No additional settings are available at this time.</div>
+                  </div>
+                </div>
+              </>
               )}
             </Card>
           </div>

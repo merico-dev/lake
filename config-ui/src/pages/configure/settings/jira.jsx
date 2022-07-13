@@ -58,29 +58,12 @@ export default function JiraSettings (props) {
     isFetchingJIRA = false
   } = props
 
- 
-  // const { providerId, connectionId } = useParams()
-  // const history = useHistory()
-
-  // const API_PROXY_ENDPOINT = `/api/plugins/jira/connections/${connection?.ID}/proxy/rest`
-  // const ISSUE_TYPES_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/issuetype`
-  // const ISSUE_FIELDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/field`
-  // const BOARDS_ENDPOINT = `${API_PROXY_ENDPOINT}/api/${apiVersion}/board`
-
-  // const { fetchIssueTypes, fetchFields, issueTypes, fields, isFetching: isFetchingJIRA, error: jiraProxyError } = useJIRA({
-  //   apiProxyPath: API_PROXY_ENDPOINT,
-  //   issuesEndpoint: ISSUE_TYPES_ENDPOINT,
-  //   fieldsEndpoint: ISSUE_FIELDS_ENDPOINT,
-  //   boardsEndpoint: BOARDS_ENDPOINT
-  // })
-
   const [typeMappingBug, setTypeMappingBug] = useState([])
   const [typeMappingIncident, setTypeMappingIncident] = useState([])
   const [typeMappingRequirement, setTypeMappingRequirement] = useState([])
   const [typeMappingAll, setTypeMappingAll] = useState({})
   const [statusMappings, setStatusMappings] = useState()
   const [jiraIssueEpicKeyField, setJiraIssueEpicKeyField] = useState('')
-  // const [jiraIssueStoryCoefficient, setJiraIssueStoryCoefficient] = useState(1)
   const [jiraIssueStoryPointField, setJiraIssueStoryPointField] = useState('')
   const [remoteLinkCommitSha, setRemoteLinkCommitSha] = useState('')
 
@@ -106,80 +89,57 @@ export default function JiraSettings (props) {
   }
 
   useEffect(() => {
-    const settings = {
-      epicKeyField: jiraIssueEpicKeyField?.value || '',
-      typeMappings: typeMappingAll,
-      storyPointField: jiraIssueStoryPointField?.value || '',
-      remotelinkCommitShaPattern: remoteLinkCommitSha || ''
-    }
-    // onSettingsChange(settings)
-    console.log('>> JIRA INSTANCE SETTINGS FIELDS CHANGED!', settings)
-    console.log(
-      typeMappingBug,
-      typeMappingAll,
-      typeMappingIncident,
-      typeMappingRequirement,
-      statusMappings,
-      jiraIssueEpicKeyField,
-      jiraIssueStoryPointField,
-      // jiraIssueStoryCoefficient,
-      remoteLinkCommitSha,
-      onSettingsChange)
+    onSettingsChange({...transformation, typeMappings: typeMappingAll}, configuredBoard?.id)
   }, [
-    typeMappingBug,
     typeMappingAll,
-    typeMappingIncident,
-    typeMappingRequirement,
-    statusMappings,
-    jiraIssueEpicKeyField,
-    jiraIssueStoryPointField,
-    // jiraIssueStoryCoefficient,
-    remoteLinkCommitSha,
     onSettingsChange
   ])
 
-  // useEffect(() => {
-  //   if (typeMappingBug && typeMappingIncident && typeMappingRequirement) {
-  //     const RequirementMappings = typeMappingRequirement !== ''
-  //       ? typeMappingRequirement.map(r => createTypeMapObject(r.value, MAPPING_TYPES.Requirement))
-  //       : []
-  //     const IncidentMappings = typeMappingIncident !== ''
-  //       ? typeMappingIncident.map(i => createTypeMapObject(i.value, MAPPING_TYPES.Incident))
-  //       : []
-  //     const BugMappings = typeMappingBug !== ''
-  //       ? typeMappingBug.map(b => createTypeMapObject(b.value, MAPPING_TYPES.Bug))
-  //       : []
-  //     const CombinedMappings = [...RequirementMappings, ...IncidentMappings, ...BugMappings].filter(m => m !== null)
-  //     const MappingTypeObjects = CombinedMappings.reduce((pV, cV) => { return { ...cV, ...pV } }, {})
-  //     setTypeMappingAll(MappingTypeObjects)
-  //     console.log('>> INCIDENT TYPE MAPPING OBJECTS....', RequirementMappings, IncidentMappings, BugMappings)
-  //     console.log('>> ALL MAPPINGS COMBINED...', CombinedMappings)
-  //     console.log('>> FINAL MAPPING OBJECTS FOR API REQUEST...', MappingTypeObjects)
-  //   }
-  // }, [typeMappingBug, typeMappingIncident, typeMappingRequirement])
+  useEffect(() => {
+    if (typeMappingBug && typeMappingIncident && typeMappingRequirement) {
+      const RequirementMappings = typeMappingRequirement !== ''
+        ? typeMappingRequirement.map(r => createTypeMapObject(r.value, MAPPING_TYPES.Requirement))
+        : []
+      const IncidentMappings = typeMappingIncident !== ''
+        ? typeMappingIncident.map(i => createTypeMapObject(i.value, MAPPING_TYPES.Incident))
+        : []
+      const BugMappings = typeMappingBug !== ''
+        ? typeMappingBug.map(b => createTypeMapObject(b.value, MAPPING_TYPES.Bug))
+        : []
+      const CombinedMappings = [...RequirementMappings, ...IncidentMappings, ...BugMappings].filter(m => m !== null)
+      const MappingTypeObjects = CombinedMappings.reduce((pV, cV) => { return { ...cV, ...pV } }, {})
+      setTypeMappingAll(MappingTypeObjects)
+      console.log('>> INCIDENT TYPE MAPPING OBJECTS....', RequirementMappings, IncidentMappings, BugMappings)
+      console.log('>> ALL MAPPINGS COMBINED...', CombinedMappings)
+      console.log('>> FINAL MAPPING OBJECTS FOR API REQUEST...', MappingTypeObjects)
+    }
+  }, [typeMappingBug, typeMappingIncident, typeMappingRequirement])
 
   useEffect(() => {
     console.log('>> CONN SETTINGS OBJECT ', connection)
     if (connection && connection.ID) {
       // Parse Type Mappings (V2)
       setStatusMappings([])
-      setRemoteLinkCommitSha(connection.remotelinkCommitShaPattern)
+      // setRemoteLinkCommitSha(connection.remotelinkCommitShaPattern)
       // setJiraIssueEpicKeyField(fieldsList.find(f => f.value === connection.epicKeyField))
       // setJiraIssueStoryPointField(fieldsList.find(f => f.value === connection.storyPointField))
     }
   }, [connection])
 
-  // useEffect(() => {
-  //   setTypeMappingRequirement(requirementTags)
-  // }, [requirementTags])
+  useEffect(() => {
+    setTypeMappingRequirement(requirementTags)
+    onSettingsChange({...transformation, requirementTags: requirementTags}, configuredBoard?.id)
+  }, [requirementTags])
 
-  // useEffect(() => {
-  //   setTypeMappingBug(bugTags)
-  // }, [bugTags])
+  useEffect(() => {
+    setTypeMappingBug(bugTags)
+    onSettingsChange({...transformation, bugTags: bugTags}, configuredBoard?.id)
+  }, [bugTags])
 
-  // useEffect(() => {
-  //   setTypeMappingIncident(incidentTags)
-  // }, [incidentTags])
+  useEffect(() => {
+    setTypeMappingIncident(incidentTags)
+    onSettingsChange({...transformation, incidentTags: incidentTags}, configuredBoard?.id)
+  }, [incidentTags])
 
   // useEffect(() => {
   //   // Fetch Issue Types & Fields from JIRA API Proxy
@@ -200,14 +160,36 @@ export default function JiraSettings (props) {
     setIncidentTagsList(issueTypes)
   }, [issueTypes])
 
+  useEffect(() => {
+    setJiraIssueEpicKeyField(fieldsList.find(f => f.value === transformation?.epicKeyField))
+  }, [fieldsList, transformation?.epicKeyField])
+
+  useEffect(() => {
+    setJiraIssueStoryPointField(fieldsList.find(f => f.value === transformation?.storyPointField))
+  }, [fieldsList, transformation?.storyPointField])
+
   // useEffect(() => {
-  //   setJiraIssueEpicKeyField(fieldsList.find(f => f.value === connection?.epicKeyField))
-  //   setJiraIssueStoryPointField(fieldsList.find(f => f.value === connection?.storyPointField))
-  // }, [fieldsList, connection?.epicKeyField, connection?.storyPointField])
+  //   if (jiraIssueStoryPointField?.value) {
+  //     onSettingsChange({...transformation, storyPointField: jiraIssueStoryPointField?.value}, configuredBoard?.id)
+  //   }
+  // }, [jiraIssueStoryPointField])
+
+  // useEffect(() => {
+  //   if (jiraIssueEpicKeyField?.value) {
+  //     onSettingsChange({...transformation, epicKeyField: jiraIssueEpicKeyField?.value}, configuredBoard?.id)
+  //   }
+  // }, [jiraIssueEpicKeyField])
 
   useEffect(() => {
     console.log('>>>> TRANSFORMATION SETTINGS OBJECT....', transformation)
+    setRemoteLinkCommitSha(transformation?.remotelinkCommitShaPattern)
   }, [transformation])
+
+  useEffect(() => {
+    console.log('>>>> CONFIGURING BOARD....', configuredBoard)
+
+  }, [configuredBoard])
+
 
   return (
     <>
@@ -230,7 +212,7 @@ export default function JiraSettings (props) {
             inline={true}
             fill={true}
             items={requirementTagsList}
-            selectedItems={requirementTags}
+            selectedItems={transformation?.requirementTags}
             activeItem={null}
             itemPredicate={(query, item) => item?.title.toLowerCase().indexOf(query.toLowerCase()) >= 0}
             itemRenderer={(item, { handleClick, modifiers }) => (
@@ -299,7 +281,7 @@ export default function JiraSettings (props) {
             inline={true}
             fill={true}
             items={bugTagsList}
-            selectedItems={bugTags}
+            selectedItems={transformation?.bugTags}
             activeItem={null}
             itemPredicate={(query, item) => item?.title.toLowerCase().indexOf(query.toLowerCase()) >= 0}
             itemRenderer={(item, { handleClick, modifiers }) => (
@@ -368,7 +350,7 @@ export default function JiraSettings (props) {
             inline={true}
             fill={true}
             items={incidentTagsList}
-            selectedItems={incidentTags}
+            selectedItems={transformation?.incidentTags}
             activeItem={null}
             itemPredicate={(query, item) => item?.title.toLowerCase().indexOf(query.toLowerCase()) >= 0}
             itemRenderer={(item, { handleClick, modifiers }) => (
@@ -462,6 +444,7 @@ export default function JiraSettings (props) {
               noResults={<MenuItem disabled={true} text='No epic results.' />}
               onItemSelect={(item) => {
                 setJiraIssueEpicKeyField(item)
+                onSettingsChange({...transformation, epicKeyField: item?.value}, configuredBoard?.id)
               }}
               popoverProps={{
                 position: Position.TOP
@@ -480,7 +463,10 @@ export default function JiraSettings (props) {
             <Button
               disabled={!jiraIssueEpicKeyField || isSaving}
               icon='eraser'
-              intent={jiraIssueEpicKeyField ? Intent.NONE : Intent.NONE} minimal={false} onClick={() => setJiraIssueEpicKeyField('')}
+              intent={jiraIssueEpicKeyField ? Intent.NONE : Intent.NONE} minimal={false} onClick={() => {
+                setJiraIssueEpicKeyField('')
+                onSettingsChange({...transformation, epicKeyField: ''}, configuredBoard?.id)
+              }}
             />
           </ButtonGroup>
           <div style={{ marginLeft: '10px' }}>
@@ -533,6 +519,7 @@ export default function JiraSettings (props) {
               noResults={<MenuItem disabled={true} text='No epic results.' />}
               onItemSelect={(item) => {
                 setJiraIssueStoryPointField(item)
+                onSettingsChange({...transformation, storyPointField: item?.value}, configuredBoard?.id)
               }}
               popoverProps={{
                 position: Position.TOP
@@ -554,7 +541,10 @@ export default function JiraSettings (props) {
               icon='eraser'
               intent={jiraIssueStoryPointField
                 ? Intent.NONE
-                : Intent.NONE} minimal={false} onClick={() => setJiraIssueStoryPointField('')}
+                : Intent.NONE} minimal={false} onClick={() => {
+                  setJiraIssueStoryPointField('')
+                  onSettingsChange({...transformation, storyPointField: ''}, configuredBoard?.id)
+                }}
             />
           </ButtonGroup>
           <div style={{ marginLeft: '10px' }}>
@@ -585,8 +575,8 @@ export default function JiraSettings (props) {
             id='jira-remotelink-sha'
             fill={true}
             placeholder='/commit/([0-9a-f]{40})$'
-            defaultValue={remoteLinkCommitSha}
-            onChange={(e) => setRemoteLinkCommitSha(e.target.value)}
+            value={transformation?.remotelinkCommitShaPattern}
+            onChange={(e) => onSettingsChange({...transformation, remotelinkCommitShaPattern: e.target.value}, configuredBoard?.id)}
             disabled={isSaving}
             className='input'
           />

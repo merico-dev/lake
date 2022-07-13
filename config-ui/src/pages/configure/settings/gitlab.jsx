@@ -52,10 +52,7 @@ export default function GitlabSettings (props) {
       <div className='headlineContainer'>
         <h5>No Additional Settings</h5>
         <p className='description'>
-          This integration doesn’t require any configuration.
-          You can continue to&nbsp;
-          <a href='#' style={{ textDecoration: 'underline' }} onClick={cancel}>add other data connections</a>&nbsp;
-          or trigger collection at the <a href='#' style={{ textDecoration: 'underline' }} onClick={cancel}>previous page</a>.
+          This project doesn’t require any configuration.
         </p>
       </div>
     </>

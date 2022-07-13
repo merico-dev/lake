@@ -48,7 +48,7 @@ const ProviderTransformationSettings = (props) => {
 
   useEffect(() => {
     console.log('>>> activeTransformation?', transformation)
-  }, [transformation, boards, issueTypes, fields])
+  }, [transformation, boards, issueTypes, fields, configuredBoard])
 
   return (
     <div className='transformation-settings' data-provider={provider?.id}>
