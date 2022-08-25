@@ -1,4 +1,10 @@
 connection_id,gitlab_id,merge_request_id,merge_request_iid,body,author_username,author_user_id,gitlab_created_at,resolvable,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,135100359,1149942101,29,approved this merge request,liyongfeng,3393147,2019-01-25T16:46:23.996+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,71,
+1,135223089,135772105,30,approved this merge request,liyongfeng,3393147,2019-01-26T11:41:34.158+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,126,
+1,135848627,15869219,37,approved this merge request,basicthinker,2436773,2019-01-29T00:40:37.158+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,169,
+1,135848646,15869219,37,unapproved this merge request,basicthinker,2436773,2019-01-29T00:40:45.520+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,170,
+1,135848654,15869219,37,approved this merge request,basicthinker,2436773,2019-01-29T00:40:47.455+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,171,
+1,137424744,145032495,46,approved this merge request,hackwaly,3014346,2019-02-01T11:43:54.686+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,151,
 1,186439132,32348491,1,"@tayloramurphy Once this is merged, let's make this a release version?",emilie,2295562,2019-06-28T10:56:46.646+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,7,
 1,208061122,35064956,3,@mg12 This looks good to me. Want me to merge?,emilie,2295562,2019-08-26T12:14:39.003+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,12,
 1,208092969,35064956,3,@emilie Let's do it!,martinguindon,3871284,2019-08-26T13:17:51.707+00:00,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,13,

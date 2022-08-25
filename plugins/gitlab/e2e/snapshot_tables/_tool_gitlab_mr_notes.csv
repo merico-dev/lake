@@ -1,4 +1,10 @@
 connection_id,gitlab_id,merge_request_id,merge_request_iid,noteable_type,author_username,body,gitlab_created_at,confidential,resolvable,is_system,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,135100359,1149942101,29,MergeRequest,liyongfeng,approved this merge request,2019-01-25T16:46:23.996+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,71,
+1,135223089,135772105,30,MergeRequest,liyongfeng,approved this merge request,2019-01-26T11:41:34.158+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,126,
+1,135848627,15869219,37,MergeRequest,basicthinker,approved this merge request,2019-01-29T00:40:37.158+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,169,
+1,135848646,15869219,37,MergeRequest,basicthinker,unapproved this merge request,2019-01-29T00:40:45.520+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,170,
+1,135848654,15869219,37,MergeRequest,basicthinker,approved this merge request,2019-01-29T00:40:47.455+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,171,
+1,137424744,145032495,46,MergeRequest,hackwaly,approved this merge request,2019-02-01T11:43:54.686+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,151,
 1,186327072,32348491,1,MergeRequest,emilie,assigned to @emilie,2019-06-28T05:40:22.415+00:00,0,0,1,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_request_notes,1,
 1,186327158,32348491,1,MergeRequest,emilie,"added 1 commit
 

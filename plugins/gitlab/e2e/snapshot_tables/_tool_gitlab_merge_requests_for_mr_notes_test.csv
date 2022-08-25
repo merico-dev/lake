@@ -1,4 +1,5 @@
 connection_id,gitlab_id,iid,project_id,source_project_id,target_project_id,state,title,web_url,user_notes_count,work_in_progress,source_branch,target_branch,merge_commit_sha,merged_at,gitlab_created_at,closed_at,merged_by_username,description,author_username,author_user_id,component,first_comment_time,review_rounds,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark
+1,15869219,37,12345678,12345678,12345678,opened,Draft: Corrections for dbt 1,https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/21,0,1,updates_for_dbt_1_1,master,,,2022-06-03T09:24:53.707+00:00,,,Closes https://gitlab.com/gitlab-data/analytics/-/issues/12941,paul_armstrong,5618371,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,21,
 1,32348491,1,12345678,12345678,12345678,merged,"Resolve ""Add documentation to snowflake spend package""",https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/1,1,0,1-add-documentation-to-snowflake-spend-package,master,da1d6dea48f5972ffc683da6cff30934e7d6c52c,2019-06-28T14:32:06.192+00:00,2019-06-28T05:21:43.743+00:00,,tayloramurphy,Closes #1,emilie,2295562,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,1,
 1,34300715,2,12345678,12345678,12345678,merged,"Resolve ""Handle multiple prices and date ranges""",https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/2,9,0,2-handle-multiple-prices-and-date-ranges,master,2fe82576fdbd0a43a2d5e02c17c6dc6ce3e188ee,2019-08-04T22:24:41.219+00:00,2019-08-01T21:36:45.020+00:00,,emilie,"Closes #2 
 
@@ -22,3 +23,9 @@ All models ran fine and the data looks great in my scratch schema!",tayloramurph
 
 * Upgrades to 0.17.0 format
 * Formatting changes to be in line with GitLab SQL Style Guide",tayloramurphy,1942272,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,12,
+1,135772105,30,12345678,32935405,12345678,opened,Updates for dbt 1.0,https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/19,1,0,updates_for_dbt_1.0,master,,,2022-01-18T19:59:30.723+00:00,,,"This MR sets up the repo for dbt 1.0
+A few configs were renamed.
+
+Could a new release be made for dbt 1.0?",johnj4,10663622,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,19,
+1,145032495,46,12345678,34491818,12345678,closed,Draft: Update dbt_project.yml,https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/20,0,1,PedramNavid-master-patch-20645,master,,,2022-03-15T03:07:06.077+00:00,2022-03-15T03:07:22.665+00:00,,,PedramNavid,9722492,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,20,
+1,1149942101,29,12345678,29298577,12345678,opened,Add support for Snowpipe usage monitoring,https://gitlab.com/gitlab-data/snowflake_spend/-/merge_requests/18,0,0,master,master,,,2021-09-01T21:15:30.334+00:00,,,Add models and docs for Snowflake pipes (Snowpipe) usage monitoring based on the views in Snowflake Usage schema,gary-beautypie,9635687,,,0,"{""ConnectionId"":1,""ProjectId"":12345678}",_raw_gitlab_api_merge_requests,18,

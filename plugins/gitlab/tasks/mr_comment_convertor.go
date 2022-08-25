@@ -78,8 +78,13 @@ func ConvertMergeRequestComment(taskCtx core.SubTaskContext) error {
 				UserId:        accountIdGen.Generate(data.Options.ConnectionId, gitlabComments.AuthorUserId),
 				CreatedDate:   gitlabComments.GitlabCreatedAt,
 			}
-
 			domainComment.Type = getStdCommentType(gitlabComments.Type)
+			if domainComment.Body == "unapproved this merge request" {
+				domainComment.Status = "CHANGES_REQUESTED"
+			}
+			if domainComment.Body == "approved this merge request" {
+				domainComment.Status = "APPROVED"
+			}
 			return []interface{}{
 				domainComment,
 			}, nil

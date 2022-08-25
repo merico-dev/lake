@@ -67,7 +67,7 @@ func ExtractApiMergeRequestsNotes(taskCtx core.SubTaskContext) error {
 				return nil, err
 			}
 			results := make([]interface{}, 0, 2)
-			if !toolMrNote.IsSystem || (toolMrNote.IsSystem && toolMrNote.Body == "approved this merge request") {
+			if !toolMrNote.IsSystem || toolMrNote.Body == "approved this merge request" || toolMrNote.Body == "unapproved this merge request" {
 				toolMrComment := &models.GitlabMrComment{
 					GitlabId:        toolMrNote.GitlabId,
 					MergeRequestId:  toolMrNote.MergeRequestId,
