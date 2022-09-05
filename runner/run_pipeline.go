@@ -36,14 +36,14 @@ func RunPipeline(
 ) error {
 	startTime := time.Now()
 	// load pipeline from db
-	pipeline := &models.Pipeline{}
-	err := db.Find(pipeline, pipelineId).Error
+	pipelineDO := &models.PipelineDO{}
+	err := db.Find(pipelineDO, pipelineId).Error
 	if err != nil {
 		return err
 	}
 	// load tasks for pipeline
 	var tasks []*models.Task
-	err = db.Where("pipeline_id = ?", pipeline.ID).Order("pipeline_row, pipeline_col").Find(&tasks).Error
+	err = db.Where("pipeline_id = ?", pipelineDO.ID).Order("pipeline_row, pipeline_col").Find(&tasks).Error
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func RunPipeline(
 	}
 
 	beganAt := time.Now()
-	err = db.Model(pipeline).Updates(map[string]interface{}{
+	err = db.Model(pipelineDO).Updates(map[string]interface{}{
 		"status":   models.TASK_RUNNING,
 		"message":  "",
 		"began_at": beganAt,
@@ -70,7 +70,7 @@ func RunPipeline(
 	finishedTasks := 0
 	for i, row := range taskIds {
 		// update stage
-		err = db.Model(pipeline).Updates(map[string]interface{}{
+		err = db.Model(pipelineDO).Updates(map[string]interface{}{
 			"status": models.TASK_RUNNING,
 			"stage":  i + 1,
 		}).Error
@@ -87,7 +87,7 @@ func RunPipeline(
 		// Deprecated
 		// update finishedTasks
 		finishedTasks += len(row)
-		err = db.Model(pipeline).Updates(map[string]interface{}{
+		err = db.Model(pipelineDO).Updates(map[string]interface{}{
 			"finished_tasks": finishedTasks,
 		}).Error
 		if err != nil {

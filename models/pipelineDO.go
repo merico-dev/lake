@@ -15,31 +15,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package migrationscripts
+package models
 
-import "github.com/apache/incubator-devlake/migration"
+import (
+	"time"
 
-// All return all the migration scripts of framework
-func All() []migration.Script {
-	return []migration.Script{
-		new(addFrameTables),
-		new(renameStepToStage),
-		new(addSubtasksField),
-		new(updateBlueprintMode),
-		new(renameTasksToPlan),
-		new(addDomainTables),
-		new(addTypeField),
-		new(commitfileComponent),
-		new(removeNotes),
-		new(addProjectMapping),
-		new(renameColumnsOfPullRequestIssue),
-		new(addNoPKModelToCommitParent),
-		new(addSubtasksTable),
-		new(addCICD),
-		new(renameColumnsOfPrCommentIssueComment),
-		new(modifyTablesForDora),
-		new(addTypeFieldInBoard),
-		new(modifyBLueprint),
-		new(modifyPipeline),
-	}
+	"github.com/apache/incubator-devlake/models/common"
+)
+
+type PipelineDO struct {
+	common.Model
+	Name          string     `json:"name" gorm:"index"`
+	BlueprintId   uint64     `json:"blueprintId"`
+	Plan          string     `json:"plan" encrypt:"yes"`
+	TotalTasks    int        `json:"totalTasks"`
+	FinishedTasks int        `json:"finishedTasks"`
+	BeganAt       *time.Time `json:"beganAt"`
+	FinishedAt    *time.Time `json:"finishedAt" gorm:"index"`
+	Status        string     `json:"status"`
+	Message       string     `json:"message"`
+	SpentSeconds  int        `json:"spentSeconds"`
+	Stage         int        `json:"stage"`
+}
+
+func (PipelineDO) TableName() string {
+	return "_devlake_pipelines"
 }

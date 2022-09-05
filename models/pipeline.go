@@ -48,7 +48,3 @@ type NewPipeline struct {
 	Plan        core.PipelinePlan `json:"plan" swaggertype:"array,string" example:"please check api /pipelines/<PLUGIN_NAME>/pipeline-plan"`
 	BlueprintId uint64
 }
-
-func (Pipeline) TableName() string {
-	return "_devlake_pipelines"
-}

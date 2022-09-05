@@ -42,10 +42,6 @@ type Blueprint struct {
 	common.Model `swaggerignore:"true"`
 }
 
-func (Blueprint) TableName() string {
-	return "_devlake_blueprints"
-}
-
 type BlueprintSettings struct {
 	Version     string          `json:"version" validate:"required,semver,oneof=1.0.0"`
 	Connections json.RawMessage `json:"connections" validate:"required"`
