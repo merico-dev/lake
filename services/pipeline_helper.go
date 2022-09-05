@@ -58,7 +58,7 @@ func pipelineServiceInitDO() {
 		watchTemporalPipelines()
 	} else {
 		// standalone mode: reset pipeline status
-		db.Model(&models.PipelineDO{}).Where("status <> ?", models.TASK_COMPLETED).Update("status", models.TASK_FAILED)
+		db.Model(&models.Pipeline{}).Where("status <> ?", models.TASK_COMPLETED).Update("status", models.TASK_FAILED)
 		db.Model(&models.Task{}).Where("status <> ?", models.TASK_COMPLETED).Update("status", models.TASK_FAILED)
 	}
 
@@ -80,9 +80,9 @@ func pipelineServiceInitDO() {
 }
 
 // CreatePipeline and return the model
-func CreatePipelineDO(newPipeline *models.NewPipeline) (*models.PipelineDO, error) {
+func CreatePipelineDO(newPipeline *models.NewPipeline) (*models.Pipeline, error) {
 	// create pipeline object from posted data
-	pipelineDO := &models.PipelineDO{
+	pipelineDO := &models.Pipeline{
 		Name:          newPipeline.Name,
 		FinishedTasks: 0,
 		Status:        models.TASK_CREATED,
@@ -153,8 +153,8 @@ func CreatePipelineDO(newPipeline *models.NewPipeline) (*models.PipelineDO, erro
 }
 
 // GetPipelines by query
-func GetPipelineDOs(query *PipelineQuery) ([]*models.PipelineDO, int64, error) {
-	pipelineDOs := make([]*models.PipelineDO, 0)
+func GetPipelineDOs(query *PipelineQuery) ([]*models.Pipeline, int64, error) {
+	pipelineDOs := make([]*models.Pipeline, 0)
 	db := db.Model(pipelineDOs).Order("id DESC")
 	if query.BlueprintId != 0 {
 		db = db.Where("blueprint_id = ?", query.BlueprintId)
@@ -182,8 +182,8 @@ func GetPipelineDOs(query *PipelineQuery) ([]*models.PipelineDO, int64, error) {
 }
 
 // GetPipeline by id
-func GetPipelineDO(pipelineId uint64) (*models.PipelineDO, error) {
-	pipelineDO := &models.PipelineDO{}
+func GetPipelineDO(pipelineId uint64) (*models.Pipeline, error) {
+	pipelineDO := &models.Pipeline{}
 	err := db.First(pipelineDO, pipelineId).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -207,7 +207,7 @@ func RunPipelineInQueueDO(pipelineMaxParallel int64) {
 			panic(err)
 		}
 		globalPipelineLog.Info("get lock and wait pipeline")
-		pipelineDO := &models.PipelineDO{}
+		pipelineDO := &models.Pipeline{}
 		for {
 			db.Where("status = ?", models.TASK_CREATED).
 				Not(startedPipelineIds).
@@ -236,7 +236,7 @@ func watchTemporalPipelinesDO() {
 		// run forever
 		for range ticker.C {
 			// load all running pipeline from database
-			runningPipelineDOs := make([]models.PipelineDO, 0)
+			runningPipelineDOs := make([]models.Pipeline, 0)
 			err := db.Find(&runningPipelineDOs, "status = ?", models.TASK_RUNNING).Error
 			if err != nil {
 				panic(err)
@@ -320,8 +320,8 @@ func watchTemporalPipelinesDO() {
 }
 
 // parsePipeline
-func parsePipeline(pipelineDO *models.PipelineDO) (*models.Pipeline, error) {
-	pipeline := models.Pipeline{
+func parsePipeline(pipelineDO *models.Pipeline) (*models.ApiPipeline, error) {
+	pipeline := models.ApiPipeline{
 		Model: common.Model{
 			ID: pipelineDO.ID,
 		},
@@ -341,8 +341,8 @@ func parsePipeline(pipelineDO *models.PipelineDO) (*models.Pipeline, error) {
 }
 
 // parsePipelineDO
-func parsePipelineDO(pipeline *models.Pipeline) (*models.PipelineDO, error) {
-	pipelineDO := models.PipelineDO{
+func parsePipelineDO(pipeline *models.ApiPipeline) (*models.Pipeline, error) {
+	pipelineDO := models.Pipeline{
 		Model: common.Model{
 			ID: pipeline.ID,
 		},
@@ -362,7 +362,7 @@ func parsePipelineDO(pipeline *models.Pipeline) (*models.PipelineDO, error) {
 }
 
 // encryptPipelineDO
-func encryptPipelineDO(pipelineDO *models.PipelineDO) (*models.PipelineDO, error) {
+func encryptPipelineDO(pipelineDO *models.Pipeline) (*models.Pipeline, error) {
 	encKey := config.GetConfig().GetString(core.EncodeKeyEnvStr)
 	planEncrypt, err := core.Encrypt(encKey, pipelineDO.Plan)
 	if err != nil {
@@ -373,7 +373,7 @@ func encryptPipelineDO(pipelineDO *models.PipelineDO) (*models.PipelineDO, error
 }
 
 // encryptPipelineDO
-func decryptPipelineDO(pipelineDO *models.PipelineDO) (*models.PipelineDO, error) {
+func decryptPipelineDO(pipelineDO *models.Pipeline) (*models.Pipeline, error) {
 	encKey := config.GetConfig().GetString(core.EncodeKeyEnvStr)
 	plan, err := core.Decrypt(encKey, pipelineDO.Plan)
 	if err != nil {

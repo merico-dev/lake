@@ -59,7 +59,7 @@ func TestNewTask(t *testing.T) {
 
 	assert.Equal(t, w.Code, http.StatusCreated)
 	resp := w.Body.String()
-	var pipeline models.Pipeline
+	var pipeline models.ApiPipeline
 	err := json.Unmarshal([]byte(resp), &pipeline)
 	if err != nil {
 		t.Fatal(err)

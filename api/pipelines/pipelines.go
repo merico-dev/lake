@@ -47,7 +47,7 @@ POST /pipelines
 // @Tags framework/pipelines
 // @Accept application/json
 // @Param pipeline body models.NewPipeline true "json"
-// @Success 200  {object} models.Pipeline
+// @Success 200  {object} models.ApiPipeline
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internal Error"
 // @Router /pipelines [post]
@@ -125,7 +125,7 @@ GET /pipelines/:pipelineId
 // @Description }
 // @Tags framework/pipelines
 // @Param pipelineId path int true "query"
-// @Success 200  {object} models.Pipeline
+// @Success 200  {object} models.ApiPipeline
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /pipelines/{pipelineId} [get]
@@ -181,7 +181,7 @@ GET /pipelines/:pipelineId/logging.tar.gz
 // @Param pipelineId path int true "query"
 // @Success 200  "The archive file"
 // @Failure 400  {string} errcode.Error "Bad Request"
-// @Failure 404  {string} errcode.Error "Pipeline or Log files not found"
+// @Failure 404  {string} errcode.Error "ApiPipeline or Log files not found"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /pipelines/{pipelineId}/logging.tar.gz [get]
 func DownloadLogs(c *gin.Context) {

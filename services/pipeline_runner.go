@@ -33,7 +33,7 @@ import (
 
 type pipelineRunner struct {
 	logger   core.Logger
-	pipeline *models.Pipeline
+	pipeline *models.ApiPipeline
 }
 
 func (p *pipelineRunner) runPipelineStandalone() error {
@@ -79,7 +79,7 @@ func (p *pipelineRunner) runPipelineViaTemporal() error {
 	return err
 }
 
-func getPipelineLogger(pipeline *models.Pipeline) core.Logger {
+func getPipelineLogger(pipeline *models.ApiPipeline) core.Logger {
 	pipelineLogger := globalPipelineLog.Nested(
 		fmt.Sprintf("pipeline #%d", pipeline.ID),
 	)

@@ -26,7 +26,7 @@ import (
 	"gorm.io/datatypes"
 )
 
-type Pipeline struct {
+type ApiPipeline struct {
 	common.Model
 	Name          string         `json:"name" gorm:"index"`
 	BlueprintId   uint64         `json:"blueprintId"`
@@ -47,4 +47,23 @@ type NewPipeline struct {
 	Name        string            `json:"name"`
 	Plan        core.PipelinePlan `json:"plan" swaggertype:"array,string" example:"please check api /pipelines/<PLUGIN_NAME>/pipeline-plan"`
 	BlueprintId uint64
+}
+
+type Pipeline struct {
+	common.Model
+	Name          string     `json:"name" gorm:"index"`
+	BlueprintId   uint64     `json:"blueprintId"`
+	Plan          string     `json:"plan" encrypt:"yes"`
+	TotalTasks    int        `json:"totalTasks"`
+	FinishedTasks int        `json:"finishedTasks"`
+	BeganAt       *time.Time `json:"beganAt"`
+	FinishedAt    *time.Time `json:"finishedAt" gorm:"index"`
+	Status        string     `json:"status"`
+	Message       string     `json:"message"`
+	SpentSeconds  int        `json:"spentSeconds"`
+	Stage         int        `json:"stage"`
+}
+
+func (Pipeline) TableName() string {
+	return "_devlake_pipelines"
 }

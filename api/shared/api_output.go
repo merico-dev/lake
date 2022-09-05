@@ -32,8 +32,8 @@ type ApiBody struct {
 }
 
 type ResponsePipelines struct {
-	Count     int64              `json:"count"`
-	Pipelines []*models.Pipeline `json:"pipelines"`
+	Count     int64                 `json:"count"`
+	Pipelines []*models.ApiPipeline `json:"pipelines"`
 }
 
 // ApiOutputError writes a JSON error message to the HTTP response body

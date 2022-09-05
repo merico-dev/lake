@@ -36,7 +36,7 @@ func RunPipeline(
 ) error {
 	startTime := time.Now()
 	// load pipeline from db
-	pipelineDO := &models.PipelineDO{}
+	pipelineDO := &models.Pipeline{}
 	err := db.Find(pipelineDO, pipelineId).Error
 	if err != nil {
 		return err

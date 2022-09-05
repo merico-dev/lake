@@ -22,12 +22,11 @@ import (
 	"github.com/apache/incubator-devlake/models"
 	"github.com/apache/incubator-devlake/models/common"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/robfig/cron/v3"
 	"gorm.io/gorm"
 )
 
-// CreateBlueprint accepts a Blueprint instance and insert it to database
-func CreateBlueprintDO(blueprintDO *models.BlueprintDO) error {
+// CreateApiBlueprint accepts a ApiBlueprint instance and insert it to database
+func CreateBlueprint(blueprintDO *models.Blueprint) error {
 	err := db.Create(&blueprintDO).Error
 	if err != nil {
 		return err
@@ -35,9 +34,9 @@ func CreateBlueprintDO(blueprintDO *models.BlueprintDO) error {
 	return nil
 }
 
-// GetBlueprints returns a paginated list of Blueprints based on `query`
-func GetBlueprintDOs(query *BlueprintQuery) ([]*models.BlueprintDO, int64, error) {
-	blueprintDOs := make([]*models.BlueprintDO, 0)
+// GetApiBlueprints returns a paginated list of Blueprints based on `query`
+func GetBlueprintDOs(query *BlueprintQuery) ([]*models.Blueprint, int64, error) {
+	blueprintDOs := make([]*models.Blueprint, 0)
 	db := db.Model(blueprintDOs).Order("id DESC")
 	if query.Enable != nil {
 		db = db.Where("enable = ?", *query.Enable)
@@ -60,9 +59,9 @@ func GetBlueprintDOs(query *BlueprintQuery) ([]*models.BlueprintDO, int64, error
 	return blueprintDOs, count, nil
 }
 
-// GetBlueprint returns the detail of a given Blueprint ID
-func GetBlueprintDO(blueprintDOId uint64) (*models.BlueprintDO, error) {
-	blueprintDO := &models.BlueprintDO{}
+// GetApiBlueprint returns the detail of a given ApiBlueprint ID
+func GetBlueprint(blueprintDOId uint64) (*models.Blueprint, error) {
+	blueprintDO := &models.Blueprint{}
 	err := db.First(blueprintDO, blueprintDOId).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -73,62 +72,18 @@ func GetBlueprintDO(blueprintDOId uint64) (*models.BlueprintDO, error) {
 	return blueprintDO, nil
 }
 
-// DeleteBlueprint FIXME ...
-func DeleteBlueprintDO(id uint64) error {
-	err := db.Delete(&models.BlueprintDO{}, "id = ?", id).Error
+// DeleteApiBlueprint FIXME ...
+func DeleteBlueprint(id uint64) error {
+	err := db.Delete(&models.Blueprint{}, "id = ?", id).Error
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// ReloadBlueprints FIXME ...
-func ReloadBlueprintsDO(c *cron.Cron) error {
-	blueprintDOs := make([]*models.BlueprintDO, 0)
-	err := db.Model(&models.BlueprintDO{}).
-		Where("enable = ? AND is_manual = ?", true, false).
-		Find(&blueprintDOs).Error
-	if err != nil {
-		panic(err)
-	}
-	for _, e := range c.Entries() {
-		c.Remove(e.ID)
-	}
-	c.Stop()
-	for _, pp := range blueprintDOs {
-		pp, err = decryptBlueprintDO(pp)
-		if err != nil {
-			return err
-		}
-		blueprint, err := parseBlueprint(pp)
-		plan, err := blueprint.UnmarshalPlan()
-		if err != nil {
-			blueprintLog.Error(err, "created cron job failed")
-			return err
-		}
-		_, err = c.AddFunc(blueprint.CronConfig, func() {
-			pipeline, err := createPipelineByBlueprint(blueprint.ID, blueprint.Name, plan)
-			if err != nil {
-				blueprintLog.Error(err, "run cron job failed")
-			} else {
-				blueprintLog.Info("Run new cron job successfully, pipeline id: %d", pipeline.ID)
-			}
-		})
-		if err != nil {
-			blueprintLog.Error(err, "created cron job failed")
-			return err
-		}
-	}
-	if len(blueprintDOs) > 0 {
-		c.Start()
-	}
-	log.Info("total %d blueprints were scheduled", len(blueprintDOs))
-	return nil
-}
-
 // parseBlueprint
-func parseBlueprint(blueprintDO *models.BlueprintDO) (*models.Blueprint, error) {
-	blueprint := models.Blueprint{
+func parseBlueprint(blueprintDO *models.Blueprint) (*models.ApiBlueprint, error) {
+	blueprint := models.ApiBlueprint{
 		Name:       blueprintDO.Name,
 		Mode:       blueprintDO.Mode,
 		Plan:       []byte(blueprintDO.Plan),
@@ -143,9 +98,9 @@ func parseBlueprint(blueprintDO *models.BlueprintDO) (*models.Blueprint, error) 
 	return &blueprint, nil
 }
 
-// parseBlueprintDO
-func parseBlueprintDO(blueprint *models.Blueprint) (*models.BlueprintDO, error) {
-	blueprintDO := models.BlueprintDO{
+// parseApiBlueprint
+func parseApiBlueprint(blueprint *models.ApiBlueprint) (*models.Blueprint, error) {
+	blueprintDO := models.Blueprint{
 		Name:       blueprint.Name,
 		Mode:       blueprint.Mode,
 		Plan:       string(blueprint.Plan),
@@ -160,8 +115,8 @@ func parseBlueprintDO(blueprint *models.Blueprint) (*models.BlueprintDO, error) 
 	return &blueprintDO, nil
 }
 
-// encryptBlueprintDO
-func encryptBlueprintDO(blueprintDO *models.BlueprintDO) (*models.BlueprintDO, error) {
+// encryptBlueprint
+func encryptBlueprint(blueprintDO *models.Blueprint) (*models.Blueprint, error) {
 	encKey := config.GetConfig().GetString(core.EncodeKeyEnvStr)
 	planEncrypt, err := core.Encrypt(encKey, blueprintDO.Plan)
 	if err != nil {
@@ -176,8 +131,8 @@ func encryptBlueprintDO(blueprintDO *models.BlueprintDO) (*models.BlueprintDO, e
 	return blueprintDO, nil
 }
 
-// decryptBlueprintDO
-func decryptBlueprintDO(blueprintDO *models.BlueprintDO) (*models.BlueprintDO, error) {
+// decryptBlueprint
+func decryptBlueprint(blueprintDO *models.Blueprint) (*models.Blueprint, error) {
 	encKey := config.GetConfig().GetString(core.EncodeKeyEnvStr)
 	plan, err := core.Decrypt(encKey, blueprintDO.Plan)
 	if err != nil {

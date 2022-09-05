@@ -40,7 +40,7 @@ func GetTaskLoggerPath(config *core.LoggerConfig, t *models.Task) string {
 	return filepath.Join(basePath, fmt.Sprintf("task-%d-%d-%d-%s.log", t.ID, t.PipelineRow, t.PipelineCol, t.Plugin))
 }
 
-func GetPipelineLoggerPath(config *core.LoggerConfig, p *models.Pipeline) string {
+func GetPipelineLoggerPath(config *core.LoggerConfig, p *models.ApiPipeline) string {
 	if config.Path == "" {
 		return ""
 	}

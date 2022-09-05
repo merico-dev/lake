@@ -44,21 +44,21 @@ var (
 	vld          = validator.New()
 )
 
-// CreateBlueprint accepts a Blueprint instance and insert it to database
-func CreateBlueprint(blueprint *models.Blueprint) error {
-	err := validateBlueprint(blueprint)
+// CreateApiBlueprint accepts a ApiBlueprint instance and insert it to database
+func CreateApiBlueprint(apiBlueprint *models.ApiBlueprint) error {
+	err := validateApiBlueprint(apiBlueprint)
 	if err != nil {
 		return err
 	}
-	blueprintDO, err := parseBlueprintDO(blueprint)
+	blueprint, err := parseApiBlueprint(apiBlueprint)
 	if err != nil {
 		return err
 	}
-	blueprintDO, err = encryptBlueprintDO(blueprintDO)
+	blueprint, err = encryptBlueprint(blueprint)
 	if err != nil {
 		return err
 	}
-	err = CreateBlueprintDO(blueprintDO)
+	err = CreateBlueprint(blueprint)
 	if err != nil {
 		return err
 	}
@@ -69,63 +69,63 @@ func CreateBlueprint(blueprint *models.Blueprint) error {
 	return nil
 }
 
-// GetBlueprints returns a paginated list of Blueprints based on `query`
-func GetBlueprints(query *BlueprintQuery) ([]*models.Blueprint, int64, error) {
+// GetApiBlueprints returns a paginated list of Blueprints based on `query`
+func GetApiBlueprints(query *BlueprintQuery) ([]*models.ApiBlueprint, int64, error) {
 	blueprintDOs, count, err := GetBlueprintDOs(query)
 	if err != nil {
 		return nil, 0, err
 	}
-	blueprints := make([]*models.Blueprint, 0)
-	for _, blueprintDO := range blueprintDOs {
-		blueprintDO, err = decryptBlueprintDO(blueprintDO)
+	apiBlueprints := make([]*models.ApiBlueprint, 0)
+	for _, blueprint := range blueprintDOs {
+		blueprint, err = decryptBlueprint(blueprint)
 		if err != nil {
 			return nil, 0, err
 		}
-		blueprint, err := parseBlueprint(blueprintDO)
+		apiBlueprint, err := parseBlueprint(blueprint)
 		if err != nil {
 			return nil, 0, err
 		}
-		blueprints = append(blueprints, blueprint)
+		apiBlueprints = append(apiBlueprints, apiBlueprint)
 	}
-	return blueprints, count, nil
+	return apiBlueprints, count, nil
 }
 
-// GetBlueprint returns the detail of a given Blueprint ID
-func GetBlueprint(blueprintId uint64) (*models.Blueprint, error) {
-	blueprintDO, err := GetBlueprintDO(blueprintId)
+// GetApiBlueprint returns the detail of a given ApiBlueprint ID
+func GetApiBlueprint(blueprintId uint64) (*models.ApiBlueprint, error) {
+	blueprint, err := GetBlueprint(blueprintId)
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.NotFound.New("blueprint not found", errors.AsUserMessage())
 		}
 		return nil, errors.Internal.Wrap(err, "error getting the task from database", errors.AsUserMessage())
 	}
-	blueprintDO, err = decryptBlueprintDO(blueprintDO)
+	blueprint, err = decryptBlueprint(blueprint)
 	if err != nil {
 		return nil, err
 	}
-	blueprint, err := parseBlueprint(blueprintDO)
-	return blueprint, nil
+	apiBlueprint, err := parseBlueprint(blueprint)
+	return apiBlueprint, nil
 }
 
-func validateBlueprint(blueprint *models.Blueprint) error {
+func validateApiBlueprint(apiBlueprint *models.ApiBlueprint) error {
 	// validation
-	err := vld.Struct(blueprint)
+	err := vld.Struct(apiBlueprint)
 	if err != nil {
 		return err
 	}
-	if strings.ToLower(blueprint.CronConfig) == "manual" {
-		blueprint.IsManual = true
+	if strings.ToLower(apiBlueprint.CronConfig) == "manual" {
+		apiBlueprint.IsManual = true
 	}
 
-	if !blueprint.IsManual {
-		_, err = cron.ParseStandard(blueprint.CronConfig)
+	if !apiBlueprint.IsManual {
+		_, err = cron.ParseStandard(apiBlueprint.CronConfig)
 		if err != nil {
 			return errors.Default.Wrap(err, "invalid cronConfig")
 		}
 	}
-	if blueprint.Mode == models.BLUEPRINT_MODE_ADVANCED {
+	if apiBlueprint.Mode == models.BLUEPRINT_MODE_ADVANCED {
 		plan := make(core.PipelinePlan, 0)
-		err = json.Unmarshal(blueprint.Plan, &plan)
+		err = json.Unmarshal(apiBlueprint.Plan, &plan)
 
 		if err != nil {
 			return errors.Default.Wrap(err, "invalid plan")
@@ -134,8 +134,8 @@ func validateBlueprint(blueprint *models.Blueprint) error {
 		if len(plan) == 0 || len(plan[0]) == 0 {
 			return errors.Default.New("empty plan")
 		}
-	} else if blueprint.Mode == models.BLUEPRINT_MODE_NORMAL {
-		blueprint.Plan, err = GeneratePlanJson(blueprint.Settings)
+	} else if apiBlueprint.Mode == models.BLUEPRINT_MODE_NORMAL {
+		apiBlueprint.Plan, err = GeneratePlanJson(apiBlueprint.Settings)
 		if err != nil {
 			return errors.Default.Wrap(err, "invalid plan")
 		}
@@ -144,31 +144,31 @@ func validateBlueprint(blueprint *models.Blueprint) error {
 	return nil
 }
 
-// PatchBlueprint FIXME ...
-func PatchBlueprint(id uint64, body map[string]interface{}) (*models.Blueprint, error) {
+// PatchApiBlueprint FIXME ...
+func PatchApiBlueprint(id uint64, body map[string]interface{}) (*models.ApiBlueprint, error) {
 	// load record from db
-	blueprint, err := GetBlueprint(id)
+	apiBlueprint, err := GetApiBlueprint(id)
 	if err != nil {
 		return nil, err
 	}
-	originMode := blueprint.Mode
-	err = helper.DecodeMapStruct(body, blueprint)
+	originMode := apiBlueprint.Mode
+	err = helper.DecodeMapStruct(body, apiBlueprint)
 
 	if err != nil {
 		return nil, err
 	}
 	// make sure mode is not being update
-	if originMode != blueprint.Mode {
+	if originMode != apiBlueprint.Mode {
 		return nil, errors.Default.New("mode is not updatable")
 	}
 	// validation
-	err = validateBlueprint(blueprint)
+	err = validateApiBlueprint(apiBlueprint)
 	if err != nil {
 		return nil, err
 	}
 
 	// save
-	err = save(blueprint)
+	err = save(apiBlueprint)
 	if err != nil {
 		return nil, errors.Internal.Wrap(err, "error saving blueprint")
 	}
@@ -179,12 +179,12 @@ func PatchBlueprint(id uint64, body map[string]interface{}) (*models.Blueprint, 
 		return nil, errors.Internal.Wrap(err, "error reloading blueprints")
 	}
 	// done
-	return blueprint, nil
+	return apiBlueprint, nil
 }
 
-// DeleteBlueprint FIXME ...
-func DeleteBlueprint(id uint64) error {
-	err := DeleteBlueprintDO(id)
+// DeleteApiBlueprint FIXME ...
+func DeleteApiBlueprint(id uint64) error {
+	err := DeleteBlueprint(id)
 	if err != nil {
 		return errors.Internal.Wrap(err, fmt.Sprintf("error deleting blueprint %d", id))
 	}
@@ -197,14 +197,49 @@ func DeleteBlueprint(id uint64) error {
 
 // ReloadBlueprints FIXME ...
 func ReloadBlueprints(c *cron.Cron) error {
-	err := ReloadBlueprintsDO(c)
+	blueprintDOs := make([]*models.Blueprint, 0)
+	err := db.Model(&models.Blueprint{}).
+		Where("enable = ? AND is_manual = ?", true, false).
+		Find(&blueprintDOs).Error
 	if err != nil {
-		return err
+		panic(err)
 	}
+	for _, e := range c.Entries() {
+		c.Remove(e.ID)
+	}
+	c.Stop()
+	for _, pp := range blueprintDOs {
+		pp, err = decryptBlueprint(pp)
+		if err != nil {
+			return err
+		}
+		apiBlueprint, err := parseBlueprint(pp)
+		plan, err := apiBlueprint.UnmarshalPlan()
+		if err != nil {
+			blueprintLog.Error(err, "created cron job failed")
+			return err
+		}
+		_, err = c.AddFunc(apiBlueprint.CronConfig, func() {
+			pipeline, err := createPipelineByBlueprint(apiBlueprint.ID, apiBlueprint.Name, plan)
+			if err != nil {
+				blueprintLog.Error(err, "run cron job failed")
+			} else {
+				blueprintLog.Info("Run new cron job successfully, pipeline id: %d", pipeline.ID)
+			}
+		})
+		if err != nil {
+			blueprintLog.Error(err, "created cron job failed")
+			return err
+		}
+	}
+	if len(blueprintDOs) > 0 {
+		c.Start()
+	}
+	log.Info("total %d blueprints were scheduled", len(blueprintDOs))
 	return nil
 }
 
-func createPipelineByBlueprint(blueprintId uint64, name string, plan core.PipelinePlan) (*models.Pipeline, error) {
+func createPipelineByBlueprint(blueprintId uint64, name string, plan core.PipelinePlan) (*models.ApiPipeline, error) {
 	newPipeline := models.NewPipeline{}
 	newPipeline.Plan = plan
 	newPipeline.Name = name
@@ -313,28 +348,28 @@ func MergePipelinePlans(plans ...core.PipelinePlan) core.PipelinePlan {
 }
 
 // TriggerBlueprint triggers blueprint immediately
-func TriggerBlueprint(id uint64) (*models.Pipeline, error) {
+func TriggerBlueprint(id uint64) (*models.ApiPipeline, error) {
 	// load record from db
-	blueprint, err := GetBlueprint(id)
+	apiBlueprint, err := GetApiBlueprint(id)
 	if err != nil {
 		return nil, err
 	}
-	plan, err := blueprint.UnmarshalPlan()
+	plan, err := apiBlueprint.UnmarshalPlan()
 	if err != nil {
 		return nil, err
 	}
-	pipeline, err := createPipelineByBlueprint(blueprint.ID, blueprint.Name, plan)
+	pipeline, err := createPipelineByBlueprint(apiBlueprint.ID, apiBlueprint.Name, plan)
 	// done
 	return pipeline, err
 }
-func save(blueprint *models.Blueprint) error {
-	blueprintDO, err := parseBlueprintDO(blueprint)
+func save(apiBlueprint *models.ApiBlueprint) error {
+	blueprint, err := parseApiBlueprint(apiBlueprint)
 	if err != nil {
 		return nil
 	}
-	blueprintDO, err = encryptBlueprintDO(blueprintDO)
+	blueprint, err = encryptBlueprint(blueprint)
 	if err != nil {
 		return err
 	}
-	return db.Save(blueprintDO).Error
+	return db.Save(blueprint).Error
 }

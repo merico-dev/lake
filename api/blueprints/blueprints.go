@@ -32,13 +32,13 @@ import (
 // @Description post blueprints
 // @Tags framework/blueprints
 // @Accept application/json
-// @Param blueprint body models.Blueprint true "json"
-// @Success 200  {object} models.Blueprint
+// @Param blueprint body models.ApiBlueprint true "json"
+// @Success 200  {object} models.ApiBlueprint
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /blueprints [post]
 func Post(c *gin.Context) {
-	blueprint := &models.Blueprint{}
+	blueprint := &models.ApiBlueprint{}
 
 	err := c.ShouldBind(blueprint)
 	if err != nil {
@@ -46,7 +46,7 @@ func Post(c *gin.Context) {
 		return
 	}
 
-	err = services.CreateBlueprint(blueprint)
+	err = services.CreateApiBlueprint(blueprint)
 	if err != nil {
 		shared.ApiOutputError(c, errors.Default.Wrap(err, "error creating blueprint", errors.AsUserMessage()))
 		return
@@ -70,7 +70,7 @@ func Index(c *gin.Context) {
 		shared.ApiOutputError(c, errors.BadInput.Wrap(err, "bad request body format", errors.AsUserMessage()))
 		return
 	}
-	blueprints, count, err := services.GetBlueprints(&query)
+	blueprints, count, err := services.GetApiBlueprints(&query)
 	if err != nil {
 		shared.ApiOutputAbort(c, errors.Default.Wrap(err, "error getting blueprints", errors.AsUserMessage()))
 		return
@@ -83,7 +83,7 @@ func Index(c *gin.Context) {
 // @Tags framework/blueprints
 // @Accept application/json
 // @Param blueprintId path int true "blueprint id"
-// @Success 200  {object} models.Blueprint
+// @Success 200  {object} models.ApiBlueprint
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /blueprints/{blueprintId} [get]
@@ -94,7 +94,7 @@ func Get(c *gin.Context) {
 		shared.ApiOutputError(c, errors.BadInput.Wrap(err, "bad blueprintId format supplied", errors.AsUserMessage()))
 		return
 	}
-	blueprint, err := services.GetBlueprint(id)
+	blueprint, err := services.GetApiBlueprint(id)
 	if err != nil {
 		shared.ApiOutputError(c, errors.Default.Wrap(err, "error getting blueprint", errors.AsUserMessage()))
 		return
@@ -117,7 +117,7 @@ func Delete(c *gin.Context) {
 		shared.ApiOutputError(c, errors.BadInput.Wrap(err, "bad blueprintID format supplied", errors.AsUserMessage()))
 		return
 	}
-	err = services.DeleteBlueprint(id)
+	err = services.DeleteApiBlueprint(id)
 	if err != nil {
 		shared.ApiOutputError(c, errors.Default.Wrap(err, "error deleting blueprint", errors.AsUserMessage()))
 	}
@@ -153,7 +153,7 @@ func Put(c *gin.Context) {
 // @Tags framework/blueprints
 // @Accept application/json
 // @Param blueprintId path string true "blueprintId"
-// @Success 200  {object} models.Blueprint
+// @Success 200  {object} models.ApiBlueprint
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /blueprints/{blueprintId} [Patch]
@@ -170,7 +170,7 @@ func Patch(c *gin.Context) {
 		shared.ApiOutputError(c, errors.BadInput.Wrap(err, "bad request body format", errors.AsUserMessage()))
 		return
 	}
-	blueprint, err := services.PatchBlueprint(id, body)
+	blueprint, err := services.PatchApiBlueprint(id, body)
 	if err != nil {
 		shared.ApiOutputError(c, errors.Default.Wrap(err, "error patching the blueprint", errors.AsUserMessage()))
 		return
@@ -183,7 +183,7 @@ func Patch(c *gin.Context) {
 // @Tags framework/blueprints
 // @Accept application/json
 // @Param blueprintId path string true "blueprintId"
-// @Success 200  {object} models.Pipeline
+// @Success 200  {object} models.ApiPipeline
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
 // @Router /blueprints/{blueprintId}/trigger [Post]

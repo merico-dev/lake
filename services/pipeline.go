@@ -47,7 +47,7 @@ func pipelineServiceInit() {
 }
 
 // CreatePipeline and return the model
-func CreatePipeline(newPipeline *models.NewPipeline) (*models.Pipeline, error) {
+func CreatePipeline(newPipeline *models.NewPipeline) (*models.ApiPipeline, error) {
 	pipelineDO, err := CreatePipelineDO(newPipeline)
 	if err != nil {
 		return nil, err
@@ -64,12 +64,12 @@ func CreatePipeline(newPipeline *models.NewPipeline) (*models.Pipeline, error) {
 }
 
 // GetPipelines by query
-func GetPipelines(query *PipelineQuery) ([]*models.Pipeline, int64, error) {
+func GetPipelines(query *PipelineQuery) ([]*models.ApiPipeline, int64, error) {
 	pipelineDOs, i, err := GetPipelineDOs(query)
 	if err != nil {
 		return nil, 0, err
 	}
-	pipelines := make([]*models.Pipeline, 0)
+	pipelines := make([]*models.ApiPipeline, 0)
 	for _, pipelineDO := range pipelineDOs {
 		pipelineDO, err = decryptPipelineDO(pipelineDO)
 		if err != nil {
@@ -86,7 +86,7 @@ func GetPipelines(query *PipelineQuery) ([]*models.Pipeline, int64, error) {
 }
 
 // GetPipeline by id
-func GetPipeline(pipelineId uint64) (*models.Pipeline, error) {
+func GetPipeline(pipelineId uint64) (*models.ApiPipeline, error) {
 	pipelineDO, err := GetPipelineDO(pipelineId)
 	if err != nil {
 		return nil, err
@@ -103,7 +103,7 @@ func GetPipeline(pipelineId uint64) (*models.Pipeline, error) {
 }
 
 // GetPipelineLogsArchivePath creates an archive for the logs of this pipeline and returns its file path
-func GetPipelineLogsArchivePath(pipeline *models.Pipeline) (string, error) {
+func GetPipelineLogsArchivePath(pipeline *models.ApiPipeline) (string, error) {
 	logPath, err := getPipelineLogsPath(pipeline)
 	if err != nil {
 		return "", err
@@ -172,7 +172,7 @@ func CancelPipeline(pipelineId uint64) error {
 }
 
 // getPipelineLogsPath gets the logs directory of this pipeline
-func getPipelineLogsPath(pipeline *models.Pipeline) (string, error) {
+func getPipelineLogsPath(pipeline *models.ApiPipeline) (string, error) {
 	pipelineLog := getPipelineLogger(pipeline)
 	path := filepath.Dir(pipelineLog.GetConfig().Path)
 	_, err := os.Stat(path)

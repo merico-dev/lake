@@ -30,7 +30,7 @@ const (
 )
 
 // @Description CronConfig
-type Blueprint struct {
+type ApiBlueprint struct {
 	Name   string          `json:"name" validate:"required"`
 	Mode   string          `json:"mode" gorm:"varchar(20)" validate:"required,oneof=NORMAL ADVANCED"`
 	Plan   json.RawMessage `json:"plan"`
@@ -50,11 +50,28 @@ type BlueprintSettings struct {
 }
 
 // UnmarshalPlan unmarshals Plan in JSON to strong-typed core.PipelinePlan
-func (bp *Blueprint) UnmarshalPlan() (core.PipelinePlan, error) {
+func (bp *ApiBlueprint) UnmarshalPlan() (core.PipelinePlan, error) {
 	var plan core.PipelinePlan
 	err := json.Unmarshal(bp.Plan, &plan)
 	if err != nil {
 		return nil, err
 	}
 	return plan, nil
+}
+
+// @Description CronConfig
+type Blueprint struct {
+	Name   string `json:"name" validate:"required"`
+	Mode   string `json:"mode" gorm:"varchar(20)" validate:"required,oneof=NORMAL ADVANCED"`
+	Plan   string `json:"plan" encrypt:"yes"`
+	Enable bool   `json:"enable"`
+	//please check this https://crontab.guru/ for detail
+	CronConfig   string `json:"cronConfig" format:"* * * * *" example:"0 0 * * 1"`
+	IsManual     bool   `json:"isManual"`
+	Settings     string `json:"settings" encrypt:"yes" swaggertype:"array,string" example:"please check api: /blueprints/<PLUGIN_NAME>/blueprint-setting"`
+	common.Model `swaggerignore:"true"`
+}
+
+func (Blueprint) TableName() string {
+	return "_devlake_blueprints"
 }
