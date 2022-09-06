@@ -78,10 +78,10 @@ func CollectIterations(taskCtx core.SubTaskContext) error {
 		},
 		ResponseParser: func(res *http.Response) ([]json.RawMessage, error) {
 			var data struct {
-				Iterations []json.RawMessage `json:"data"`
+				Projects []json.RawMessage `json:"projects"`
 			}
 			err := helper.UnmarshalResponse(res, &data)
-			return data.Iterations, err
+			return data.Projects, err
 		},
 	})
 	if err != nil {

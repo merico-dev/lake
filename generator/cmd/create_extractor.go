@@ -117,7 +117,7 @@ Type in what the name of extractor is, then generator will create a new extracto
 		util.WriteTemplates(filepath.Join(`plugins`, pluginName, `tasks`), templates)
 		if modifyExistCode {
 			util.ReplaceVarInFile(
-				filepath.Join(`plugins`, pluginName, `plugin_main.go`),
+				filepath.Join(`plugins`, pluginName, fmt.Sprintf(`%s.go`, pluginName)),
 				regexp.MustCompile(`(return +\[]core\.SubTaskMeta ?\{ ?\n?)((\s*[\w.]+,\n)*)(\s*})`),
 				fmt.Sprintf("$1$2\t\ttasks.Extract%sMeta,\n$4", extractorDataNameUpperCamel),
 			)
