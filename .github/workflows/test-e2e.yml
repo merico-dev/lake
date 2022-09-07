@@ -41,7 +41,7 @@ jobs:
           MYSQL_USER: merico
           MYSQL_PASSWORD: merico
           MYSQL_ROOT_PASSWORD: root
-    container: mericodev/lake-builder:v0.0.7
+    container: mericodev/lake-builder:latest
     steps:
       - uses: actions/checkout@v3
       - name: Cache test-e2e
