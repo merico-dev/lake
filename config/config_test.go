@@ -25,14 +25,6 @@ import (
 	"testing"
 )
 
-func TestReadConfig(t *testing.T) {
-	DbUrl := "mysql://merico:merico@mysql:3306/lake?charset=utf8mb4&parseTime=True"
-	v := GetConfig()
-	currentDbUrl := v.GetString("DB_URL")
-	logrus.Infof("current db url: %s\n", currentDbUrl)
-	assert.Equal(t, currentDbUrl == DbUrl, true)
-}
-
 func TestWriteConfig(t *testing.T) {
 	filename := ".env"
 	cwd, _ := os.Getwd()
