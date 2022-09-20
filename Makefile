@@ -94,7 +94,6 @@ mock:
 	mockery --dir=./plugins/core --unroll-variadic=false --name='.*'
 	mockery --dir=./plugins/core/dal --unroll-variadic=false --name='.*'
 	mockery --dir=./plugins/helper --unroll-variadic=false --name='.*'
-	mockery --dir=./plugins/github/api --unroll-variadic=false --name='.*'
 
 test: unit-test e2e-test
 

@@ -113,6 +113,7 @@ func processScope(subtaskMetas []core.SubTaskMeta, connectionId uint64, scopeEle
 		}
 		token := strings.Split(connection.Token, ",")[0]
 		if apiRepo == nil {
+			apiRepo = new(tasks.GitlabApiProject)
 			err = getApiRepo(connection, token, op, apiRepo)
 			if err != nil {
 				return nil, err
