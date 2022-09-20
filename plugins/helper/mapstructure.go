@@ -89,3 +89,15 @@ func Decode(source interface{}, target interface{}, vld *validator.Validate) err
 	}
 	return nil
 }
+
+// Convert inefficient, but there's no other practical way
+func Convert(src any, dest any) error {
+	b, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+	if err = json.Unmarshal(b, dest); err != nil {
+		return err
+	}
+	return nil
+}
