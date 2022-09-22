@@ -137,14 +137,14 @@ func processScope(subtaskMetas []core.SubTaskMeta, connectionId uint64, scopeEle
 	if productionPattern, ok := transformationRules["productionPattern"]; ok && productionPattern != nil {
 		j := i + 1
 		// add a new task to next stage
+		if j == len(plan) {
+			plan = append(plan, nil)
+		}
 		if plan[j] != nil {
 			j++
 		}
 		if j == len(plan) {
 			plan = append(plan, nil)
-		}
-		if err != nil {
-			return nil, err
 		}
 		if apiRepo == nil {
 			if connection == nil {
