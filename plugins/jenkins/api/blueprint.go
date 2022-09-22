@@ -59,13 +59,16 @@ func MakePipelinePlan(subtaskMetas []core.SubTaskMeta, connectionId uint64, scop
 				Options:  taskOptions,
 			},
 		}
-		if doraRules, ok := transformationRules["dora"]; ok && doraRules != nil {
+		if productionPattern, ok := transformationRules["productionPattern"]; ok && productionPattern != nil {
 			j := i + 1
+			if j == len(plan) {
+				plan = append(plan, nil)
+			}
 			// add a new task to next stage
 			if plan[j] != nil {
 				j++
 			}
-			if j == len(plan) {
+			if j+1 == len(plan) {
 				plan = append(plan, nil)
 			}
 			if err != nil {
@@ -74,6 +77,8 @@ func MakePipelinePlan(subtaskMetas []core.SubTaskMeta, connectionId uint64, scop
 			doraOption := make(map[string]interface{})
 			doraOption["tasks"] = []string{"EnrichTaskEnv"}
 			doraOption["dataSource"] = []string{"jenkins"}
+			doraRules := make(map[string]interface{})
+			doraRules["productionPattern"] = productionPattern
 			doraOption["transformationRules"] = doraRules
 			plan[j] = core.PipelineStage{
 				{
@@ -82,7 +87,7 @@ func MakePipelinePlan(subtaskMetas []core.SubTaskMeta, connectionId uint64, scop
 				},
 			}
 			// remove it from github transformationRules
-			delete(transformationRules, "dora")
+			delete(transformationRules, "productionPattern")
 		}
 		plan[i] = stage
 	}

@@ -62,10 +62,7 @@ func TestProcessScope(t *testing.T) {
                 "tagsLimit": 10,
                 "tagsOrder": "reverse semver"
               },
-              "dora": {
-                "environment": "pattern",
-                "environmentRegex": "xxxx"
-              }
+              "productionPattern": "xxxx"
             }`),
 	}
 	apiRepo := &tasks.GitlabApiProject{
@@ -81,6 +78,6 @@ func TestProcessScope(t *testing.T) {
 	}
 	planJson, err1 := json.Marshal(plan)
 	assert.Nil(t, err1)
-	expectPlan := `[[{"plugin":"gitlab","subtasks":[],"options":{"connectionId":1,"projectId":123,"transformationRules":{"prType":"hey,man,wasup"}}},{"plugin":"gitextractor","subtasks":null,"options":{"proxy":"","repoId":"gitlab:GitlabProject:1:123","url":"//git:123@HttpUrlToRepo"}}],[{"plugin":"refdiff","subtasks":null,"options":{"tagsLimit":10,"tagsOrder":"reverse semver","tagsPattern":"pattern"}}],[{"plugin":"dora","subtasks":null,"options":{"repoId":"gitlab:GitlabProject:1:123","tasks":["EnrichTaskEnv"],"transformationRules":{"environment":"pattern","environmentRegex":"xxxx"}}}]]`
+	expectPlan := `[[{"plugin":"gitlab","subtasks":[],"options":{"connectionId":1,"projectId":123,"transformationRules":{"prType":"hey,man,wasup"}}},{"plugin":"gitextractor","subtasks":null,"options":{"proxy":"","repoId":"gitlab:GitlabProject:1:123","url":"//git:123@HttpUrlToRepo"}}],[{"plugin":"refdiff","subtasks":null,"options":{"tagsLimit":10,"tagsOrder":"reverse semver","tagsPattern":"pattern"}}],[{"plugin":"dora","subtasks":null,"options":{"repoId":"gitlab:GitlabProject:1:123","tasks":["EnrichTaskEnv"],"transformationRules":{"productionPattern":"xxxx"}}}]]`
 	assert.Equal(t, expectPlan, string(planJson))
 }

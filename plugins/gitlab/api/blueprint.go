@@ -134,17 +134,17 @@ func processScope(subtaskMetas []core.SubTaskMeta, connectionId uint64, scopeEle
 		})
 	}
 	// dora
-	if doraRules, ok := transformationRules["dora"]; ok && doraRules != nil {
+	if productionPattern, ok := transformationRules["productionPattern"]; ok && productionPattern != nil {
 		j := i + 1
 		// add a new task to next stage
-		if plan[j] != nil {
-			j++
-		}
 		if j == len(plan) {
 			plan = append(plan, nil)
 		}
-		if err != nil {
-			return nil, err
+		if plan[j] != nil {
+			j++
+		}
+		if j+1 == len(plan) {
+			plan = append(plan, nil)
 		}
 		if apiRepo == nil {
 			if connection == nil {
@@ -164,6 +164,8 @@ func processScope(subtaskMetas []core.SubTaskMeta, connectionId uint64, scopeEle
 		doraOption := make(map[string]interface{})
 		doraOption["repoId"] = didgen.NewDomainIdGenerator(&models.GitlabProject{}).Generate(connectionId, apiRepo.GitlabId)
 		doraOption["tasks"] = []string{"EnrichTaskEnv"}
+		doraRules := make(map[string]interface{})
+		doraRules["productionPattern"] = productionPattern
 		doraOption["transformationRules"] = doraRules
 		plan[j] = core.PipelineStage{
 			{
@@ -172,7 +174,7 @@ func processScope(subtaskMetas []core.SubTaskMeta, connectionId uint64, scopeEle
 			},
 		}
 		// remove it from github transformationRules
-		delete(transformationRules, "dora")
+		delete(transformationRules, "productionPattern")
 	}
 	plan[i] = stage
 	return plan, nil

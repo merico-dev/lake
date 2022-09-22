@@ -63,10 +63,7 @@ func TestProcessScope(t *testing.T) {
                 "tagsLimit": 10,
                 "tagsOrder": "reverse semver"
               },
-              "dora": {
-                "environment": "pattern",
-                "environmentRegex": "xxxx"
-              }
+              "productionPattern": "xxxx"
             }`),
 	}
 	apiRepo := &tasks.GithubApiRepo{
@@ -82,6 +79,6 @@ func TestProcessScope(t *testing.T) {
 	}
 	planJson, err1 := json.Marshal(plan)
 	assert.Nil(t, err1)
-	expectPlan := `[[{"plugin":"github","subtasks":[],"options":{"connectionId":1,"owner":"test","repo":"testRepo","transformationRules":{"prType":"hey,man,wasup"}}},{"plugin":"gitextractor","subtasks":null,"options":{"proxy":"","repoId":"github:GithubRepo:1:123","url":"//git:123@HttpUrlToRepo"}}],[{"plugin":"refdiff","subtasks":null,"options":{"tagsLimit":10,"tagsOrder":"reverse semver","tagsPattern":"pattern"}}],[{"plugin":"dora","subtasks":null,"options":{"repoId":"github:GithubRepo:1:123","tasks":["EnrichTaskEnv"],"transformationRules":{"environment":"pattern","environmentRegex":"xxxx"}}}]]`
+	expectPlan := `[[{"plugin":"github","subtasks":[],"options":{"connectionId":1,"owner":"test","repo":"testRepo","transformationRules":{"prType":"hey,man,wasup"}}},{"plugin":"gitextractor","subtasks":null,"options":{"proxy":"","repoId":"github:GithubRepo:1:123","url":"//git:123@HttpUrlToRepo"}}],[{"plugin":"refdiff","subtasks":null,"options":{"tagsLimit":10,"tagsOrder":"reverse semver","tagsPattern":"pattern"}}],[{"plugin":"dora","subtasks":null,"options":{"repoId":"github:GithubRepo:1:123","tasks":["EnrichTaskEnv"],"transformationRules":{"productionPattern":"xxxx"}}}]]`
 	assert.Equal(t, expectPlan, string(planJson))
 }
