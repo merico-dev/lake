@@ -35,8 +35,8 @@ type BatchSaveDivider struct {
 	db        dal.Dal
 	batches   map[reflect.Type]*BatchSave
 	batchSize int
-	table     string
-	params    string
+	rawTable  string
+	rawParams string
 }
 
 // NewBatchSaveDivider create a new BatchInsertDivider instance
@@ -48,8 +48,21 @@ func NewBatchSaveDivider(basicRes core.BasicRes, batchSize int, table string, pa
 		db:        basicRes.GetDal(),
 		batches:   make(map[reflect.Type]*BatchSave),
 		batchSize: batchSize,
-		table:     table,
-		params:    params,
+		rawTable:  table,
+		rawParams: params,
+	}
+}
+
+func NewBatchSaveDivider2(basicRes core.BasicRes, batchSize int) *BatchSaveDivider {
+	log := basicRes.GetLogger().Nested("batch divider")
+	return &BatchSaveDivider{
+		basicRes:  basicRes,
+		log:       log,
+		db:        basicRes.GetDal(),
+		batches:   make(map[reflect.Type]*BatchSave),
+		batchSize: batchSize,
+		rawTable:  "",
+		rawParams: "",
 	}
 }
 
@@ -74,14 +87,16 @@ func (d *BatchSaveDivider) ForType(rowType reflect.Type) (*BatchSave, errors.Err
 		if !hasField || field.Type != reflect.TypeOf(common.RawDataOrigin{}) {
 			return nil, errors.Default.New(fmt.Sprintf("type %s must have RawDataOrigin embeded", rowElemType.Name()))
 		}
-		// all good, delete outdated records before we insertion
-		d.log.Debug("deleting outdate records for %s", rowElemType.Name())
-		err = d.db.Delete(
-			row,
-			dal.Where("_raw_data_table = ? AND _raw_data_params = ?", d.table, d.params),
-		)
-		if err != nil {
-			return nil, err
+		if d.rawTable != "" {
+			// all good, delete outdated records before we insertion
+			d.log.Debug("deleting outdate records for %s", rowElemType.Name())
+			err = d.db.Delete(
+				row,
+				dal.Where("_raw_data_table = ? AND _raw_data_params = ?", d.rawTable, d.rawParams),
+			)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	return batch, nil

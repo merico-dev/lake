@@ -72,6 +72,9 @@ func (t *Type) New(message string, opts ...Option) Error {
 
 // Wrap constructs a new Error instance with this message and wraps the passed in error. A nil 'err' will return a nil Error.
 func (t *Type) Wrap(err error, message string, opts ...Option) Error {
+	if err == nil {
+		return nil
+	}
 	return newSingleCrdbError(t, err, message, opts...)
 }
 
