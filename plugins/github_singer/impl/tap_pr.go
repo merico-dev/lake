@@ -15,22 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package singer
+package impl
 
 import (
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/plugins/core/singer"
-	"github.com/apache/incubator-devlake/plugins/github/models"
+	models2 "github.com/apache/incubator-devlake/plugins/github_singer/models"
 )
 
 type GithubPullRequestTap struct {
-	tap *singer.Tap[models.GithubPullRequestSchema]
+	tap *singer.Tap[models2.GithubPullRequestSchema]
 }
 
-func NewGithubPullRequestTap(cfg *models.GithubConfig) *GithubPullRequestTap {
+func NewGithubPullRequestTap(cfg *models2.GithubConfig) *GithubPullRequestTap {
 	env := config.GetConfig()
 	return &GithubPullRequestTap{
-		tap: singer.NewTap[models.GithubPullRequestSchema](&singer.Config{
+		tap: singer.NewTap[models2.GithubPullRequestSchema](&singer.Config{
 			Mappings: cfg,
 			Cmd:      env.GetString("TAP_GITHUB"),
 			TapType:  "github_pull_request",
@@ -41,7 +41,7 @@ func NewGithubPullRequestTap(cfg *models.GithubConfig) *GithubPullRequestTap {
 func (t *GithubPullRequestTap) Setup() {
 	t.tap.WriteConfig()
 	t.tap.DiscoverProperties()
-	t.tap.SetProperties(func(stream *singer.Stream[models.GithubPullRequestSchema]) bool {
+	t.tap.SetProperties(func(stream *singer.Stream[models2.GithubPullRequestSchema]) bool {
 		if stream.Stream == "pull_requests" {
 			stream.Schema.Selected = true
 		}
@@ -49,21 +49,21 @@ func (t *GithubPullRequestTap) Setup() {
 	})
 }
 
-func (t *GithubPullRequestTap) Run(initialState *models.GithubPullRequestState) ([]*singer.TapRecord[models.GithubPullRequestRecord], *singer.TapState[models.GithubPullRequestState]) {
+func (t *GithubPullRequestTap) Run(initialState *models2.GithubPullRequestState) ([]*singer.TapRecord[models2.GithubPullRequestRecord], *singer.TapState[models2.GithubPullRequestState]) {
 	if initialState != nil {
 		t.tap.WriteState(initialState)
 	}
-	var records []*singer.TapRecord[models.GithubPullRequestRecord]
-	var state = &singer.TapState[models.GithubPullRequestState]{}
+	var records []*singer.TapRecord[models2.GithubPullRequestRecord]
+	var state = &singer.TapState[models2.GithubPullRequestState]{}
 	stream := t.tap.Run()
 	for d := range stream {
 		if d.Err != nil {
 			panic(d.Err)
 		}
-		if record, ok := singer.AsTapRecord[models.GithubPullRequestRecord](d.Data); ok {
+		if record, ok := singer.AsTapRecord[models2.GithubPullRequestRecord](d.Data); ok {
 			records = append(records, record)
 			continue
-		} else if state, ok = singer.AsTapState[models.GithubPullRequestState](d.Data); ok {
+		} else if state, ok = singer.AsTapState[models2.GithubPullRequestState](d.Data); ok {
 			continue
 		}
 	}

@@ -181,9 +181,22 @@ type ProcessResponse[T any] struct {
 
 func RunProcess(cmd *exec.Cmd) (*ProcessResponse[[]byte], error) {
 	cmd.Env = append(cmd.Env, os.Environ()...)
-	output, err := cmd.Output()
+	stderr, err := cmd.StderrPipe()
 	if err != nil {
 		return nil, err
+	}
+	remoteErrorMsg := &strings.Builder{}
+	go func() {
+		scanner := bufio.NewScanner(stderr)
+		scanner.Split(bufio.ScanLines)
+		for scanner.Scan() {
+			remoteErrorMsg.Write(scanner.Bytes())
+			remoteErrorMsg.WriteString("\n")
+		}
+	}()
+	output, err := cmd.Output()
+	if err != nil {
+		return nil, errors.Default.Wrap(err, fmt.Sprintf("remote error message:\n%s", remoteErrorMsg.String()))
 	}
 	return &ProcessResponse[[]byte]{
 		Data: output,

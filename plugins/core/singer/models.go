@@ -18,7 +18,7 @@ limitations under the License.
 package singer
 
 import (
-	"github.com/apache/incubator-devlake/plugins/helper"
+	"encoding/json"
 	"time"
 )
 
@@ -49,10 +49,21 @@ type TapState[V any] struct {
 	Value *V     `json:"value"`
 }
 
+func NewTapState[V any](v *V) *TapState[V] {
+	return &TapState[V]{
+		Type:  "STATE",
+		Value: v,
+	}
+}
+
+func (TapState[V]) TableName() string {
+	return "_singer_github_state"
+}
+
 func AsTapState[V any](src map[string]interface{}) (*TapState[V], bool) {
 	if src["type"] == "STATE" {
 		state := TapState[V]{}
-		if err := helper.Convert(src, &state); err != nil {
+		if err := convert(src, &state); err != nil {
 			panic(err)
 		}
 		return &state, true
@@ -70,10 +81,22 @@ type TapRecord[R any] struct {
 func AsTapRecord[R any](src map[string]interface{}) (*TapRecord[R], bool) {
 	if src["type"] == "RECORD" {
 		record := TapRecord[R]{}
-		if err := helper.Convert(src, &record); err != nil {
+		if err := convert(src, &record); err != nil {
 			panic(err)
 		}
 		return &record, true
 	}
 	return nil, false
+}
+
+// Convert inefficient, but there's no other practical way
+func convert(src any, dest any) error {
+	b, err := json.Marshal(src)
+	if err != nil {
+		return err
+	}
+	if err = json.Unmarshal(b, dest); err != nil {
+		return err
+	}
+	return nil
 }
