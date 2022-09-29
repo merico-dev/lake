@@ -24,6 +24,7 @@ import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/singer"
+	"github.com/mitchellh/hashstructure"
 	"gorm.io/gorm"
 	"reflect"
 	"time"
@@ -44,8 +45,9 @@ type SingerExtractorArgs[Record, State, Schema any] struct {
 
 // SingerApiExtractor add doc
 type SingerApiExtractor[Record, State, Schema any] struct {
-	args *SingerExtractorArgs[Record, State, Schema]
-	tap  *singer.Tap[Schema]
+	args          *SingerExtractorArgs[Record, State, Schema]
+	tap           *singer.Tap[Schema]
+	streamVersion uint64
 }
 
 // NewSingerApiExtractor add doc
@@ -71,7 +73,11 @@ func NewSingerApiExtractor[Record, State, Schema any](args *SingerExtractorArgs[
 func (e *SingerApiExtractor[Record, State, Schema]) setupSingerTap() {
 	e.tap.WriteConfig()
 	e.tap.DiscoverProperties()
-	e.tap.SetProperties(e.args.TapSchemaSetter)
+	e.tap.SetProperties(func(s *singer.Stream[Schema]) bool {
+		b := e.args.TapSchemaSetter(s)
+		e.streamVersion = hash(s)
+		return b
+	})
 }
 
 // TODO fix this...
@@ -99,7 +105,7 @@ func (e *SingerApiExtractor[Record, State, Schema]) pushState(state *singer.TapS
 
 func (e *SingerApiExtractor[Record, State, Schema]) getStateId() string {
 	//TODO should this account for the schema state?
-	return fmt.Sprintf("{singer:%d:%s}", e.args.ConnectionId, e.args.TapType)
+	return fmt.Sprintf("{singer:%d:%s:%d}", e.args.ConnectionId, e.args.TapType, e.streamVersion)
 }
 
 // Execute add doc
@@ -169,4 +175,12 @@ func (e *SingerApiExtractor[Record, State, Schema]) pushToDB(divider *BatchSaveD
 		e.args.Ctx.IncProgress(1)
 	}
 	return nil
+}
+
+func hash(x any) uint64 {
+	version, err := hashstructure.Hash(x, nil)
+	if err != nil {
+		panic(err)
+	}
+	return version
 }
