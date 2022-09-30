@@ -50,7 +50,6 @@ func ExtractAssignee(taskCtx core.SubTaskContext) errors.Error {
 				ret := true
 				if stream.Stream == "assignees" {
 					stream.Schema["selected"] = true
-					stream.Schema["selected2"] = true
 				} else {
 					ret = false
 				}

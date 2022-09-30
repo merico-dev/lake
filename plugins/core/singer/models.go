@@ -28,12 +28,18 @@ type TapResponse map[string]interface{}
 // TapStateValue alias for a generic value for TapState
 type TapStateValue map[string]interface{}
 
+// TapSchema the structure of this is determined by the catalog/properties JSON of this tap
+type TapSchema map[string]interface{}
+
+// TapMetadata the structure of this is determined by the catalog/properties JSON of this tap
+type TapMetadata map[string]interface{}
+
 type Stream struct {
-	Stream        string                   `json:"stream"`
-	TapStreamId   string                   `json:"tap_stream_id"`
-	Schema        map[string]interface{}   `json:"schema"`
-	Metadata      []map[string]interface{} `json:"metadata"`
-	KeyProperties []string                 `json:"key_properties"`
+	Stream        string        `json:"stream"`
+	TapStreamId   string        `json:"tap_stream_id"`
+	Schema        TapSchema     `json:"schema"`
+	Metadata      []TapMetadata `json:"metadata"`
+	KeyProperties []string      `json:"key_properties"`
 }
 
 type Config struct {
