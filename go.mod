@@ -3,6 +3,7 @@ module github.com/apache/incubator-devlake
 go 1.19
 
 require (
+	github.com/Jeffail/gabs/v2 v2.6.1
 	github.com/cockroachdb/errors v1.9.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7

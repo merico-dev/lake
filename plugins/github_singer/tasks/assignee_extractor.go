@@ -27,14 +27,14 @@ import (
 
 var _ core.SubTaskEntryPoint = ExtractPr
 
-func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
+func ExtractAssignee(taskCtx core.SubTaskContext) errors.Error {
 	data := taskCtx.GetData().(*GithubSingerTaskData)
 	extractor := helper.NewSingerApiExtractor(
-		&helper.SingerExtractorArgs[generated.PullRequests]{
+		&helper.SingerExtractorArgs[generated.Assignees]{
 			Ctx:          taskCtx,
 			SingerConfig: data.Config,
 			ConnectionId: data.Options.ConnectionId,
-			Extract: func(resData *generated.PullRequests) ([]interface{}, errors.Error) {
+			Extract: func(resData *generated.Assignees) ([]interface{}, errors.Error) {
 				//extractedModels := make([]interface{}, 0)
 				//println(resData.Data)
 				//println(resData.Input)
@@ -43,13 +43,14 @@ func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
 				//return extractedModels, nil
 				return nil, nil
 			},
-			TapType:              "github_pull_request",
+			TapType:              "github_assignee",
 			TapClass:             "TAP_GITHUB",
 			StreamPropertiesFile: "github.json",
 			TapSchemaSetter: func(stream *singer.Stream) bool {
 				ret := true
-				if stream.Stream == "pull_requests" {
+				if stream.Stream == "assignees" {
 					stream.Schema["selected"] = true
+					stream.Schema["selected2"] = true
 				} else {
 					ret = false
 				}
@@ -60,9 +61,9 @@ func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
 	return extractor.Execute()
 }
 
-var ExtractPrMeta = core.SubTaskMeta{
+var ExtractAssigneeMeta = core.SubTaskMeta{
 	Name:             "ExtractPr",
-	EntryPoint:       ExtractPr,
+	EntryPoint:       ExtractAssignee,
 	EnabledByDefault: true,
 	Description:      "Extract raw data into tool layer table github_singer_pr",
 }

@@ -19,57 +19,20 @@ package models
 
 import "time"
 
-// GithubPullRequestState models corresponds to docs here https://github.com/singer-io/tap-github
+// GithubBookmarkState models corresponds to docs here https://github.com/singer-io/tap-github
+type GithubBookmarkState struct {
+	Bookmarks map[string]*GithubRepoState `json:"bookmarks"`
+}
+
+type GithubRepoState struct {
+	PullRequests *GithubPullRequestState `json:"pull_requests,omitempty"`
+	Issues       *GithubIssuesState      `json:"issues,omitempty"`
+}
+
 type GithubPullRequestState struct {
-	Bookmarks map[string]struct {
-		PullRequests struct {
-			Since time.Time `json:"since"`
-		} `json:"pull_requests"`
-	} `json:"bookmarks"`
+	Since time.Time `json:"since"`
 }
 
-// GithubPullRequestRecord models corresponds to docs here https://github.com/singer-io/tap-github
-type GithubPullRequestRecord struct {
-	Url    string `json:"url"`
-	Id     string `json:"id"`
-	Number int    `json:"number"`
-	State  string `json:"state"`
-	Title  string `json:"title"`
-	User   struct {
-		Login string `json:"login"`
-		Id    int    `json:"id"`
-	} `json:"user"`
-	Body      string    `json:"body"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	ClosedAt  time.Time `json:"closed_at"`
-	MergedAt  time.Time `json:"merged_at"`
-	Labels    []struct {
-		Id          int64  `json:"id"`
-		NodeId      string `json:"node_id"`
-		Url         string `json:"url"`
-		Name        string `json:"name"`
-		Color       string `json:"color"`
-		Default     bool   `json:"default"`
-		Description string `json:"description"`
-	} `json:"labels"`
-	Base struct {
-		Label string `json:"label"`
-		Ref   string `json:"ref"`
-		Sha   string `json:"sha"`
-		Repo  struct {
-			Id   int    `json:"id"`
-			Name string `json:"name"`
-			Url  string `json:"url"`
-		} `json:"repo"`
-	} `json:"base"`
-	SdcRepository string `json:"_sdc_repository"`
-}
-
-// GithubPullRequestSchema models corresponds to docs here https://github.com/singer-io/tap-github
-type GithubPullRequestSchema struct {
-	Selected             bool        `json:"selected"`
-	Type                 interface{} `json:"type"`
-	AdditionalProperties bool        `json:"additionalProperties"`
-	Properties           interface{} `json:"properties"`
+type GithubIssuesState struct {
+	Since time.Time `json:"since"`
 }
