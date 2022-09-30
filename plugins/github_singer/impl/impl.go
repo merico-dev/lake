@@ -54,7 +54,9 @@ func (plugin GithubSinger) Init(config *viper.Viper, logger core.Logger, db *gor
 func (plugin GithubSinger) SubTaskMetas() []core.SubTaskMeta {
 	// TODO add your sub task here
 	return []core.SubTaskMeta{
-		tasks.ExtractPrMeta,
+		//tasks.ExtractPrMeta,
+		//tasks.ExtractIssuesMeta,
+		tasks.ExtractAssigneeMeta,
 	}
 }
 
@@ -82,7 +84,7 @@ func (plugin GithubSinger) PrepareTaskData(taskCtx core.TaskContext, options map
 	config := &models.GithubConfig{
 		AccessToken:    connection.Token,
 		Repository:     options["repo"].(string),
-		StartDate:      time.Time{},
+		StartDate:      options["start_date"].(time.Time),
 		RequestTimeout: 300,
 		BaseUrl:        connection.Endpoint,
 	}

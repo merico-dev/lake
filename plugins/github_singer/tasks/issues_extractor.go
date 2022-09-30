@@ -25,16 +25,16 @@ import (
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
 
-var _ core.SubTaskEntryPoint = ExtractPr
+var _ core.SubTaskEntryPoint = ExtractIssues
 
-func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
+func ExtractIssues(taskCtx core.SubTaskContext) errors.Error {
 	data := taskCtx.GetData().(*GithubSingerTaskData)
 	extractor := helper.NewSingerApiExtractor(
-		&helper.SingerExtractorArgs[generated.PullRequests]{
+		&helper.SingerExtractorArgs[generated.Issues]{
 			Ctx:          taskCtx,
 			SingerConfig: data.Config,
 			ConnectionId: data.Options.ConnectionId,
-			Extract: func(resData *generated.PullRequests) ([]interface{}, errors.Error) {
+			Extract: func(resData *generated.Issues) ([]interface{}, errors.Error) {
 				//extractedModels := make([]interface{}, 0)
 				//println(resData.Data)
 				//println(resData.Input)
@@ -43,12 +43,12 @@ func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
 				//return extractedModels, nil
 				return nil, nil
 			},
-			TapType:              "github_pull_request",
+			TapType:              "github_issues",
 			TapClass:             "TAP_GITHUB",
 			StreamPropertiesFile: "github.json",
 			TapSchemaSetter: func(stream *singer.Stream) bool {
 				ret := true
-				if stream.Stream == "pull_requests" {
+				if stream.Stream == "issues" {
 					stream.Schema["selected"] = true
 				} else {
 					ret = false
@@ -60,9 +60,9 @@ func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
 	return extractor.Execute()
 }
 
-var ExtractPrMeta = core.SubTaskMeta{
-	Name:             "ExtractPr",
-	EntryPoint:       ExtractPr,
+var ExtractIssuesMeta = core.SubTaskMeta{
+	Name:             "ExtractIssues",
+	EntryPoint:       ExtractIssues,
 	EnabledByDefault: true,
 	Description:      "Extract raw data into tool layer table github_singer_pr",
 }

@@ -22,26 +22,32 @@ import (
 	"time"
 )
 
+// TapResponse alias for a generic response from a streamed tap
 type TapResponse map[string]interface{}
 
-type Stream[Sch any] struct {
-	Stream      string `json:"stream"`
-	TapStreamId string `json:"tap_stream_id"`
-	Schema      *Sch   `json:"schema"`
-	Metadata    []struct {
-		Breadcrumb []string `json:"breadcrumb"`
-		Metadata   struct {
-			TableKeyProperties []string `json:"table-key-properties,omitempty"`
-			Inclusion          string   `json:"inclusion,omitempty"`
-		} `json:"metadata"`
-	} `json:"metadata"`
-	KeyProperties []string `json:"key_properties"`
+// TapStateValue alias for a generic value for TapState
+type TapStateValue map[string]interface{}
+
+type Stream struct {
+	Stream        string                   `json:"stream"`
+	TapStreamId   string                   `json:"tap_stream_id"`
+	Schema        map[string]interface{}   `json:"schema"`
+	Metadata      []map[string]interface{} `json:"metadata"`
+	KeyProperties []string                 `json:"key_properties"`
 }
 
 type Config struct {
-	Mappings interface{}
-	Cmd      string
-	TapType  string
+	Mappings             interface{}
+	Cmd                  string
+	TapType              string
+	StreamPropertiesFile string
+}
+
+type TapRecord[R any] struct {
+	Type          string    `json:"type"`
+	Stream        string    `json:"stream"`
+	TimeExtracted time.Time `json:"time_extracted"`
+	Record        *R        `json:"record"`
 }
 
 type TapState[V any] struct {
@@ -71,14 +77,7 @@ func AsTapState[V any](src map[string]interface{}) (*TapState[V], bool) {
 	return nil, false
 }
 
-type TapRecord[R any] struct {
-	Type          string    `json:"type"`
-	Stream        string    `json:"stream"`
-	TimeExtracted time.Time `json:"time_extracted"`
-	Record        *R        `json:"record"`
-}
-
-func AsTapRecord[R any](src map[string]interface{}) (*TapRecord[R], bool) {
+func AsTapRecord[R any](src TapResponse) (*TapRecord[R], bool) {
 	if src["type"] == "RECORD" {
 		record := TapRecord[R]{}
 		if err := convert(src, &record); err != nil {

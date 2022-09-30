@@ -1,0 +1,33 @@
+{
+  "type": [
+    "object"
+  ],
+  "properties": {
+    "login": {
+      "type": [
+        "string"
+      ]
+    },
+    "id": {
+      "type": [
+        "string"
+      ]
+    },
+    "url": {
+      "type": [
+        "string"
+      ]
+    },
+    "type": {
+      "type": [
+        "string"
+      ]
+    },
+    "_sdc_repository": {
+      "type": [
+        "string"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

@@ -24,45 +24,44 @@ import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/singer"
-	"github.com/mitchellh/hashstructure"
 	"gorm.io/gorm"
 	"reflect"
-	"time"
 )
 
 // SingerExtractorArgs add doc
-type SingerExtractorArgs[Record, State, Schema any] struct {
-	Ctx             core.SubTaskContext
-	SingerConfig    interface{}
-	ConnectionId    uint64
-	Extract         func(*Record) ([]interface{}, errors.Error)
-	BatchSize       int
-	TapType         string
-	TapClass        string
-	TapSchemaSetter func(stream *singer.Stream[Schema]) bool
-	TapStateSetter  func(time time.Time) *State
+type SingerExtractorArgs[Record any] struct {
+	Ctx                  core.SubTaskContext
+	SingerConfig         interface{}
+	ConnectionId         uint64
+	Extract              func(*Record) ([]interface{}, errors.Error)
+	BatchSize            int
+	TapType              string
+	TapClass             string
+	TapSchemaSetter      func(stream *singer.Stream) bool
+	StreamPropertiesFile string
 }
 
 // SingerApiExtractor add doc
-type SingerApiExtractor[Record, State, Schema any] struct {
-	args          *SingerExtractorArgs[Record, State, Schema]
-	tap           *singer.Tap[Schema]
+type SingerApiExtractor[Record, State any] struct {
+	args          *SingerExtractorArgs[Record]
+	tap           *singer.Tap
 	streamVersion uint64
 }
 
 // NewSingerApiExtractor add doc
-func NewSingerApiExtractor[Record, State, Schema any](args *SingerExtractorArgs[Record, State, Schema]) *SingerApiExtractor[Record, State, Schema] {
+func NewSingerApiExtractor[Record any](args *SingerExtractorArgs[Record]) *SingerApiExtractor[Record, singer.TapStateValue] {
 	env := config.GetConfig()
 	cmd := env.GetString(args.TapClass)
 	if cmd == "" {
 		panic("singer tap command not provided")
 	}
-	tap := singer.NewTap[Schema](&singer.Config{
-		Mappings: args.SingerConfig,
-		Cmd:      cmd,
-		TapType:  args.TapType,
+	tap := singer.NewTap(&singer.Config{
+		Mappings:             args.SingerConfig,
+		Cmd:                  cmd,
+		TapType:              args.TapType,
+		StreamPropertiesFile: args.StreamPropertiesFile,
 	})
-	extractor := &SingerApiExtractor[Record, State, Schema]{
+	extractor := &SingerApiExtractor[Record, singer.TapStateValue]{
 		args: args,
 		tap:  tap,
 	}
@@ -70,18 +69,13 @@ func NewSingerApiExtractor[Record, State, Schema any](args *SingerExtractorArgs[
 	return extractor
 }
 
-func (e *SingerApiExtractor[Record, State, Schema]) setupSingerTap() {
+func (e *SingerApiExtractor[Record, State]) setupSingerTap() {
 	e.tap.WriteConfig()
-	e.tap.DiscoverProperties()
-	e.tap.SetProperties(func(s *singer.Stream[Schema]) bool {
-		b := e.args.TapSchemaSetter(s)
-		e.streamVersion = hash(s)
-		return b
-	})
+	e.streamVersion = e.tap.SetProperties(e.args.TapSchemaSetter)
 }
 
 // TODO fix this...
-func (e *SingerApiExtractor[Record, State, Schema]) getState() (*singer.TapState[State], errors.Error) {
+func (e *SingerApiExtractor[Record, State]) getState() (*singer.TapState[State], errors.Error) {
 	db := e.args.Ctx.GetDal()
 	rawState := singer.RawTapState{
 		Id: e.getStateId(),
@@ -96,20 +90,20 @@ func (e *SingerApiExtractor[Record, State, Schema]) getState() (*singer.TapState
 }
 
 // TODO fix this...
-func (e *SingerApiExtractor[Record, State, Schema]) pushState(state *singer.TapState[State]) errors.Error {
+func (e *SingerApiExtractor[Record, State]) pushState(state *singer.TapState[State]) errors.Error {
 	db := e.args.Ctx.GetDal()
 	rawState := singer.FromState[State](e.args.ConnectionId, state)
 	rawState.Id = e.getStateId()
 	return db.CreateOrUpdate(rawState)
 }
 
-func (e *SingerApiExtractor[Record, State, Schema]) getStateId() string {
+func (e *SingerApiExtractor[Record, State]) getStateId() string {
 	//TODO should this account for the schema state?
 	return fmt.Sprintf("{singer:%d:%s:%d}", e.args.ConnectionId, e.args.TapType, e.streamVersion)
 }
 
 // Execute add doc
-func (e *SingerApiExtractor[Record, State, Schema]) Execute() (err errors.Error) {
+func (e *SingerApiExtractor[Record, State]) Execute() (err errors.Error) {
 	initialState, err := e.getState()
 	if err != nil && err.GetType() != errors.NotFound {
 		return err
@@ -118,12 +112,12 @@ func (e *SingerApiExtractor[Record, State, Schema]) Execute() (err errors.Error)
 		e.tap.WriteState(initialState.Value)
 	}
 	divider := NewBatchSaveDivider2(e.args.Ctx, e.args.BatchSize)
-	var state *singer.TapState[State]
+	var state singer.TapState[State]
 	defer func() {
 		err = divider.Close()
-		if err == nil && state != nil {
+		if err == nil && state.Value != nil {
 			// save the last state we got in the DB
-			if err = e.pushState(state); err != nil {
+			if err = e.pushState(&state); err != nil {
 				err = errors.Default.Wrap(err, "error storing state for retrieved singer tap records")
 			}
 		}
@@ -149,19 +143,17 @@ func (e *SingerApiExtractor[Record, State, Schema]) Execute() (err errors.Error)
 			if err = e.pushToDB(divider, results); err != nil {
 				return err
 			}
-			if e.args.TapStateSetter != nil {
-				state = singer.NewTapState(e.args.TapStateSetter(tapRecord.TimeExtracted))
-			}
 			e.args.Ctx.IncProgress(1)
 			continue
-		} else if state, ok = singer.AsTapState[State](d.Data); ok {
+		} else if tapState, ok := singer.AsTapState[State](d.Data); ok {
+			state = *tapState
 			continue
 		}
 	}
 	return nil
 }
 
-func (e *SingerApiExtractor[Record, State, Schema]) pushToDB(divider *BatchSaveDivider, results []any) errors.Error {
+func (e *SingerApiExtractor[Record, State]) pushToDB(divider *BatchSaveDivider, results []any) errors.Error {
 	for _, result := range results {
 		// get the batch operator for the specific type
 		batch, err := divider.ForType(reflect.TypeOf(result))
@@ -175,12 +167,4 @@ func (e *SingerApiExtractor[Record, State, Schema]) pushToDB(divider *BatchSaveD
 		e.args.Ctx.IncProgress(1)
 	}
 	return nil
-}
-
-func hash(x any) uint64 {
-	version, err := hashstructure.Hash(x, nil)
-	if err != nil {
-		panic(err)
-	}
-	return version
 }

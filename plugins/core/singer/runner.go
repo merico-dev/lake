@@ -21,7 +21,9 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/mitchellh/hashstructure"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -29,16 +31,14 @@ import (
 	"sync"
 )
 
-var propertiesCache = map[string]any{}
-
-type TapProperties[Schema any] struct {
-	Streams []*Stream[Schema] `json:"streams"`
+type TapProperties struct {
+	Streams []*Stream `json:"streams"`
 }
 
-type Tap[Schema any] struct {
+type Tap struct {
 	cmd            string
 	tempLocation   string
-	propertiesFile *fileData[TapProperties[Schema]]
+	propertiesFile *fileData[TapProperties]
 	stateFile      *fileData[[]byte]
 	configFile     *fileData[[]byte]
 	cfg            *Config
@@ -49,20 +49,43 @@ type fileData[Content any] struct {
 	content Content
 }
 
-func NewTap[Schema any](cfg *Config) *Tap[Schema] {
+func NewTap(cfg *Config) *Tap {
 	tempDir, err := os.MkdirTemp("", "singer"+"_*")
 	if err != nil {
 		panic(err)
 	}
-	_ = tempDir
-	return &Tap[Schema]{
-		cmd:          cfg.Cmd,
-		tempLocation: tempDir,
-		cfg:          cfg,
+	propsFile := readProperties(tempDir, cfg)
+	return &Tap{
+		cmd:            cfg.Cmd,
+		tempLocation:   tempDir,
+		propertiesFile: propsFile,
+		cfg:            cfg,
 	}
 }
 
-func (t *Tap[Schema]) WriteProperties() {
+func readProperties(tempDir string, cfg *Config) *fileData[TapProperties] {
+	globalDir := config.GetConfig().GetString("SINGER_PROPERTIES_DIR")
+	_, err := os.Stat(globalDir)
+	if err != nil {
+		panic(errors.Default.Wrap(err, "error getting singer props directory"))
+	}
+	globalPath := filepath.Join(globalDir, cfg.StreamPropertiesFile)
+	b, err := os.ReadFile(globalPath)
+	if err != nil {
+		panic(err)
+	}
+	var props TapProperties
+	err = json.Unmarshal(b, &props)
+	if err != nil {
+		panic(err)
+	}
+	return &fileData[TapProperties]{
+		path:    filepath.Join(tempDir, "properties.json"),
+		content: props,
+	}
+}
+
+func (t *Tap) WriteProperties() {
 	file, err := os.OpenFile(t.propertiesFile.path, os.O_RDWR|os.O_CREATE|os.O_TRUNC, os.ModePerm)
 	if err != nil {
 		panic(err)
@@ -77,7 +100,7 @@ func (t *Tap[Schema]) WriteProperties() {
 	}
 }
 
-func (t *Tap[Schema]) WriteConfig() {
+func (t *Tap) WriteConfig() {
 	b, err := json.Marshal(t.cfg.Mappings)
 	if err != nil {
 		panic(err)
@@ -96,7 +119,7 @@ func (t *Tap[Schema]) WriteConfig() {
 	}
 }
 
-func (t *Tap[Schema]) WriteState(state interface{}) {
+func (t *Tap) WriteState(state interface{}) {
 	b, err := json.Marshal(state)
 	if err != nil {
 		panic(err)
@@ -115,46 +138,15 @@ func (t *Tap[Schema]) WriteState(state interface{}) {
 	}
 }
 
-func (t *Tap[Schema]) discoverProperties() *TapProperties[Schema] {
-	args := []string{"--config", t.configFile.path, "--discover"}
-	cmd := exec.Command(t.cmd, args...)
-	response, err := RunProcess(cmd)
-	if err != nil {
-		panic(err)
-	}
-	if response.Err != nil {
-		panic(response.Err)
-	}
-	var properties TapProperties[Schema]
-	if err = json.Unmarshal(response.Data, &properties); err != nil {
-		panic(err)
-	}
-	return &properties
-}
-
-func (t *Tap[Schema]) DiscoverProperties() {
-	propsRaw, ok := propertiesCache[t.cfg.TapType]
-	var props *TapProperties[Schema]
-	if !ok {
-		props = t.discoverProperties()
-		propertiesCache[t.cfg.TapType] = props
-	} else {
-		props = propsRaw.(*TapProperties[Schema])
-	}
-	t.propertiesFile = &fileData[TapProperties[Schema]]{
-		path:    filepath.Join(t.tempLocation, "properties.json"),
-		content: *props,
-	}
-}
-
-func (t *Tap[Schema]) SetProperties(f func(stream *Stream[Schema]) bool) {
+func (t *Tap) SetProperties(f func(stream *Stream) bool) uint64 {
 	err := t.modifyStreams(f)
 	if err != nil {
 		panic(err)
 	}
+	return hash(t.propertiesFile.content)
 }
 
-func (t *Tap[Schema]) Run() <-chan *ProcessResponse[TapResponse] {
+func (t *Tap) Run() <-chan *ProcessResponse[TapResponse] {
 	t.WriteProperties()
 	args := []string{"--config", t.configFile.path, "--properties", t.propertiesFile.path}
 	if t.stateFile != nil {
@@ -256,10 +248,10 @@ func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<
 	return stream, nil
 }
 
-func (t *Tap[Schema]) modifyStreams(modifier func(stream *Stream[Schema]) bool) error {
+func (t *Tap) modifyStreams(modifier func(stream *Stream) bool) error {
 	var err error
 	properties := t.propertiesFile.content
-	filteredStreams := []*Stream[Schema]{}
+	filteredStreams := []*Stream{}
 	for i := 0; i < len(properties.Streams); i++ {
 		stream := properties.Streams[i]
 		if modifier(stream) {
@@ -282,4 +274,12 @@ func (t *Tap[Schema]) modifyStreams(modifier func(stream *Stream[Schema]) bool) 
 	}
 	_ = writer.Flush()
 	return nil
+}
+
+func hash(x any) uint64 {
+	version, err := hashstructure.Hash(x, nil)
+	if err != nil {
+		panic(err)
+	}
+	return version
 }
