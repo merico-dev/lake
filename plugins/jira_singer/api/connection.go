@@ -20,11 +20,12 @@ package api
 import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/apache/incubator-devlake/plugins/github/api"
+	"github.com/apache/incubator-devlake/plugins/jira/api"
 )
 
 // TODO Please modify the following code to fit your needs
 func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, errors.Error) {
+	// decode
 	return api.TestConnection(input)
 }
 

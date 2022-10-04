@@ -113,7 +113,9 @@ func (e *SingerApiExtractor[Record, State]) Execute() (err errors.Error) {
 	}
 	divider := NewBatchSaveDivider2(e.args.Ctx, e.args.BatchSize)
 	var state singer.TapState[State]
+	recordsProcessed := 0
 	defer func() {
+		e.args.Ctx.GetLogger().Info("%s processed %d records", e.args.TapClass, recordsProcessed)
 		err = divider.Close()
 		if err == nil && state.Value != nil {
 			// save the last state we got in the DB
@@ -144,8 +146,10 @@ func (e *SingerApiExtractor[Record, State]) Execute() (err errors.Error) {
 				return err
 			}
 			e.args.Ctx.IncProgress(1)
+			recordsProcessed++
 			continue
 		} else if tapState, ok := singer.AsTapState[State](d.Data); ok {
+			e.args.Ctx.GetLogger().Info("state: %v", tapState.Value)
 			state = *tapState
 			continue
 		}
