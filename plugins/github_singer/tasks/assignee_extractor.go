@@ -49,7 +49,10 @@ func ExtractAssignee(taskCtx core.SubTaskContext) errors.Error {
 			TapSchemaSetter: func(stream *singer.Stream) bool {
 				ret := true
 				if stream.Stream == "assignees" {
-					stream.Schema["selected"] = true
+					for _, meta := range stream.Metadata {
+						innerMeta := meta["metadata"].(map[string]any)
+						innerMeta["selected"] = true
+					}
 				} else {
 					ret = false
 				}
@@ -61,7 +64,7 @@ func ExtractAssignee(taskCtx core.SubTaskContext) errors.Error {
 }
 
 var ExtractAssigneeMeta = core.SubTaskMeta{
-	Name:             "ExtractPr",
+	Name:             "ExtractAssignee",
 	EntryPoint:       ExtractAssignee,
 	EnabledByDefault: true,
 	Description:      "Extract raw data into tool layer table github_singer_pr",

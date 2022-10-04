@@ -49,7 +49,10 @@ func ExtractPr(taskCtx core.SubTaskContext) errors.Error {
 			TapSchemaSetter: func(stream *singer.Stream) bool {
 				ret := true
 				if stream.Stream == "pull_requests" {
-					stream.Schema["selected"] = true
+					for _, meta := range stream.Metadata {
+						innerMeta := meta["metadata"].(map[string]any)
+						innerMeta["selected"] = true
+					}
 				} else {
 					ret = false
 				}

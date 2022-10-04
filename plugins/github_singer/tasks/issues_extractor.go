@@ -49,7 +49,12 @@ func ExtractIssues(taskCtx core.SubTaskContext) errors.Error {
 			TapSchemaSetter: func(stream *singer.Stream) bool {
 				ret := true
 				if stream.Stream == "issues" {
-					stream.Schema["selected"] = true
+					for _, meta := range stream.Metadata {
+						innerMeta := meta["metadata"].(map[string]any)
+						if _, ok := innerMeta["table-key-properties"]; ok {
+							innerMeta["selected"] = true
+						}
+					}
 				} else {
 					ret = false
 				}

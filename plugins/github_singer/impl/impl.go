@@ -29,6 +29,7 @@ import (
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
+	"strings"
 	"time"
 )
 
@@ -54,8 +55,8 @@ func (plugin GithubSinger) Init(config *viper.Viper, logger core.Logger, db *gor
 func (plugin GithubSinger) SubTaskMetas() []core.SubTaskMeta {
 	// TODO add your sub task here
 	return []core.SubTaskMeta{
-		//tasks.ExtractPrMeta,
-		//tasks.ExtractIssuesMeta,
+		tasks.ExtractPrMeta,
+		tasks.ExtractIssuesMeta,
 		tasks.ExtractAssigneeMeta,
 	}
 }
@@ -81,12 +82,13 @@ func (plugin GithubSinger) PrepareTaskData(taskCtx core.TaskContext, options map
 	//		return nil, errors.BadInput.Wrap(err, "invalid value for `since`")
 	//	}
 	//}
+	endpoint := strings.TrimSuffix(connection.Endpoint, "/")
 	config := &models.GithubConfig{
 		AccessToken:    connection.Token,
 		Repository:     options["repo"].(string),
 		StartDate:      options["start_date"].(time.Time),
 		RequestTimeout: 300,
-		BaseUrl:        connection.Endpoint,
+		BaseUrl:        endpoint,
 	}
 	return &tasks.GithubSingerTaskData{
 		Options: op,
