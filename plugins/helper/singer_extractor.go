@@ -149,7 +149,6 @@ func (e *SingerApiExtractor[Record, State]) Execute() (err errors.Error) {
 			recordsProcessed++
 			continue
 		} else if tapState, ok := singer.AsTapState[State](d.Data); ok {
-			e.args.Ctx.GetLogger().Info("state: %v", tapState.Value)
 			state = *tapState
 			continue
 		}
