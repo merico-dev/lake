@@ -2,6 +2,8 @@
 
 package generated
 
+import "time"
+
 type Issues struct {
 	// SdcRepository corresponds to the JSON schema field "_sdc_repository".
 	SdcRepository *string `json:"_sdc_repository,omitempty"`
@@ -16,7 +18,7 @@ type Issues struct {
 	Body *string `json:"body,omitempty"`
 
 	// ClosedAt corresponds to the JSON schema field "closed_at".
-	ClosedAt *string `json:"closed_at,omitempty"`
+	ClosedAt *time.Time `json:"closed_at,omitempty"`
 
 	// Comments corresponds to the JSON schema field "comments".
 	Comments *int `json:"comments,omitempty"`
@@ -25,7 +27,7 @@ type Issues struct {
 	CommentsUrl *string `json:"comments_url,omitempty"`
 
 	// CreatedAt corresponds to the JSON schema field "created_at".
-	CreatedAt *string `json:"created_at,omitempty"`
+	CreatedAt *time.Time `json:"created_at,omitempty"`
 
 	// EventsUrl corresponds to the JSON schema field "events_url".
 	EventsUrl *string `json:"events_url,omitempty"`
@@ -44,6 +46,9 @@ type Issues struct {
 
 	// Locked corresponds to the JSON schema field "locked".
 	Locked *bool `json:"locked,omitempty"`
+
+	// Milestone corresponds to the JSON schema field "milestone".
+	Milestone *IssuesMilestone `json:"milestone,omitempty"`
 
 	// NodeId corresponds to the JSON schema field "node_id".
 	NodeId *string `json:"node_id,omitempty"`
@@ -64,7 +69,7 @@ type Issues struct {
 	Title *string `json:"title,omitempty"`
 
 	// UpdatedAt corresponds to the JSON schema field "updated_at".
-	UpdatedAt *string `json:"updated_at,omitempty"`
+	UpdatedAt *time.Time `json:"updated_at,omitempty"`
 
 	// Url corresponds to the JSON schema field "url".
 	Url *string `json:"url,omitempty"`
@@ -96,6 +101,11 @@ type IssuesLabelsElem struct {
 
 	// Url corresponds to the JSON schema field "url".
 	Url *string `json:"url,omitempty"`
+}
+
+type IssuesMilestone struct {
+	// Id corresponds to the JSON schema field "id".
+	Id *int `json:"id,omitempty"`
 }
 
 type IssuesPullRequest struct {
