@@ -1462,6 +1462,9 @@
       "schema": {
         "properties": {
           "milestone": {
+            "type": [
+              "object"
+            ],
             "properties": {
               "id": {
                 "type": [

@@ -1,6 +1,17 @@
 #!/bin/sh
 
-json_path=$1 # e.g. "./github.json"
+#===================================== constants =======================================
+
+time_format='
+  {
+    "type": "time.Time",
+    "imports": ["time"]
+  }
+'
+
+#======================================================================================
+
+json_path=$1 # e.g. "./config/singer/github.json"
 tap_stream=$2 # e.g. "issues"
 plugin_path=$3 # e.g. "./plugins/github_singer"
 
@@ -17,15 +28,25 @@ tmp_dir=$(mktemp -d -t schema-XXXXX)
 
 json_schema_path="$tmp_dir"/"$tap_stream"
 
-echo $json_schema_path
-
-cat "$json_path" |  jq '
+# add, as necessary, more elif blocks for additional transformations
+modified_schema=$(cat "$json_path" |  jq --argjson tf "$time_format" '
     .streams[] |
     select(.stream=="'"$tap_stream"'").schema |
-    . += { "$schema": "http://json-schema.org/draft-07/schema#" }
-  ' > "$json_schema_path" &&\
-sed -i -r "/\"null\",/d" "$json_schema_path"
-sed -i -r "/.*additionalProperties.*/d" "$json_schema_path"
+      . += { "$schema": "http://json-schema.org/draft-07/schema#" } |
+      walk(
+        if type == "object" and .format == "date-time" then
+          . += { "goJSONSchema": ($tf) }
+        elif "place_holder" == "" then
+          empty
+        else . end
+      )
+')
+
+# additional cleanup
+modified_schema=$(echo "$modified_schema" | sed -r "/\"null\",/d")
+modified_schema=$(echo "$modified_schema" | sed -r "/.*additionalProperties.*/d")
+
+echo "$modified_schema" > "$json_schema_path" &&\
 
 # see output
 cat "$json_schema_path" | jq -r
