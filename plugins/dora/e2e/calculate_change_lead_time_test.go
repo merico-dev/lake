@@ -45,7 +45,7 @@ func TestCalculateCLTimeDataFlow(t *testing.T) {
 	dataflowTester.FlushTabler(&code.PullRequest{})
 	// import raw data table
 	dataflowTester.ImportCsvIntoTabler("./raw_tables/lake_cicd_pipeline_commits.csv", &devops.CiCDPipelineCommit{})
-	dataflowTester.ImportCsvIntoTabler("./raw_tables/lake_cicd_tasks_for_other_jobs.csv", &devops.CICDTask{})
+	dataflowTester.ImportCsvIntoTabler("./raw_tables/lake_cicd_tasks_for_change_lead_time.csv", &devops.CICDTask{})
 	dataflowTester.ImportCsvIntoTabler("./raw_tables/pull_requests.csv", &code.PullRequest{})
 	dataflowTester.ImportCsvIntoTabler("./raw_tables/pull_request_comments.csv", &code.PullRequestComment{})
 	dataflowTester.ImportCsvIntoTabler("./raw_tables/pull_request_commits.csv", &code.PullRequestCommit{})
