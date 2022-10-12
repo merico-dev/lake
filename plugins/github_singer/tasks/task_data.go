@@ -19,6 +19,7 @@ package tasks
 
 import (
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/plugins/core/tap"
 	"github.com/apache/incubator-devlake/plugins/github_singer/models"
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
@@ -33,6 +34,7 @@ type GithubSingerOptions struct {
 	// You can use it in sub tasks and you need pass it in main.go and pipelines.
 	ConnectionId uint64   `json:"connectionId"`
 	Tasks        []string `json:"tasks,omitempty"`
+	TapProvider  func() (tap.Tap, errors.Error)
 }
 
 type GithubSingerTaskData struct {

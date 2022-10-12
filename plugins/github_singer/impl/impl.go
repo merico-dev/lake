@@ -22,6 +22,7 @@ import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/tap"
 	"github.com/apache/incubator-devlake/plugins/github_singer/api"
 	"github.com/apache/incubator-devlake/plugins/github_singer/models"
 	"github.com/apache/incubator-devlake/plugins/github_singer/models/migrationscripts"
@@ -89,6 +90,13 @@ func (plugin GithubSinger) PrepareTaskData(taskCtx core.TaskContext, options map
 		StartDate:      options["start_date"].(time.Time),
 		RequestTimeout: 300,
 		BaseUrl:        endpoint,
+	}
+	op.TapProvider = func() (tap.Tap, errors.Error) {
+		return helper.NewSingerTapClient(&helper.SingerTapArgs{
+			Mappings:             config,
+			TapClass:             "TAP_GITHUB",
+			StreamPropertiesFile: "github.json",
+		})
 	}
 	return &tasks.GithubSingerTaskData{
 		Options: op,

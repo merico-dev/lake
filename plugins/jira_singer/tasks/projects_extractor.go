@@ -20,7 +20,6 @@ package tasks
 import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/apache/incubator-devlake/plugins/core/singer"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/jira_singer/models/generated"
 )
@@ -28,12 +27,13 @@ import (
 var _ core.SubTaskEntryPoint = ExtractProjects
 
 func ExtractProjects(taskCtx core.SubTaskContext) errors.Error {
-	data := taskCtx.GetData().(*GithubSingerTaskData)
-	extractor := helper.NewSingerApiExtractor(
-		&helper.SingerExtractorArgs[generated.Projects]{
+	data := taskCtx.GetData().(*JiraSingerTaskData)
+	extractor, err := helper.NewTapExtractor(
+		&helper.TapExtractorArgs[generated.Projects]{
 			Ctx:          taskCtx,
-			SingerConfig: data.Config,
+			TapProvider:  data.Options.TapProvider,
 			ConnectionId: data.Options.ConnectionId,
+			StreamName:   "projects",
 			Extract: func(resData *generated.Projects) ([]interface{}, errors.Error) {
 				//extractedModels := make([]interface{}, 0)
 				//println(resData.Data)
@@ -43,23 +43,11 @@ func ExtractProjects(taskCtx core.SubTaskContext) errors.Error {
 				//return extractedModels, nil
 				return nil, nil
 			},
-			TapType:              "jira_projects",
-			TapClass:             "TAP_JIRA",
-			StreamPropertiesFile: "jira.json",
-			TapSchemaSetter: func(stream *singer.Stream) bool {
-				ret := true
-				if stream.Stream == "projects" {
-					for _, meta := range stream.Metadata {
-						innerMeta := meta["metadata"].(map[string]any)
-						innerMeta["selected"] = true
-					}
-				} else {
-					ret = false
-				}
-				return ret
-			},
 		},
 	)
+	if err != nil {
+		return err
+	}
 	return extractor.Execute()
 }
 

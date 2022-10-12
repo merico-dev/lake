@@ -22,6 +22,7 @@ import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/core/tap"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/jira_singer/api"
 	"github.com/apache/incubator-devlake/plugins/jira_singer/models"
@@ -82,7 +83,17 @@ func (plugin JiraSinger) PrepareTaskData(taskCtx core.TaskContext, options map[s
 		RequestTimeout: 300,
 		Groups:         "jira-administrators, site-admins, jira-software-users",
 	}
-	return &tasks.GithubSingerTaskData{
+	op.TapProvider = func() (tap.Tap, errors.Error) {
+		return helper.NewSingerTapClient(&helper.SingerTapArgs{
+			Mappings:             config,
+			TapClass:             "TAP_JIRA",
+			StreamPropertiesFile: "jira.json",
+		})
+	}
+	if err != nil {
+		return nil, err
+	}
+	return &tasks.JiraSingerTaskData{
 		Options: op,
 		Config:  config,
 	}, nil
@@ -119,7 +130,7 @@ func (plugin JiraSinger) MakePipelinePlan(connectionId uint64, scope []*core.Blu
 }
 
 func (plugin JiraSinger) Close(taskCtx core.TaskContext) errors.Error {
-	_, ok := taskCtx.GetData().(*tasks.GithubSingerTaskData)
+	_, ok := taskCtx.GetData().(*tasks.JiraSingerTaskData)
 	if !ok {
 		return errors.Default.New(fmt.Sprintf("GetData failed when try to close %+v", taskCtx))
 	}

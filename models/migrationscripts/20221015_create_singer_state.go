@@ -20,27 +20,28 @@ package migrationscripts
 import (
 	"context"
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
 	"gorm.io/datatypes"
 	"gorm.io/gorm"
+	"time"
 )
 
 type createSingerTapState struct{}
 
-type SingerTapState20220928 struct {
-	archived.NoPKModel
+type SingerTapState20221015 struct {
 	Id           string `gorm:"primaryKey;type:varchar(255)"`
 	ConnectionId uint64
 	Type         string `gorm:"primaryKey;type:varchar(255)"`
 	Value        datatypes.JSON
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
-func (SingerTapState20220928) TableName() string {
-	return "singer_tap_state"
+func (SingerTapState20221015) TableName() string {
+	return "tap_state"
 }
 
 func (*createSingerTapState) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AutoMigrate(SingerTapState20220928{})
+	err := db.Migrator().AutoMigrate(SingerTapState20221015{})
 	if err != nil {
 		return errors.Convert(err)
 	}
@@ -52,5 +53,5 @@ func (*createSingerTapState) Version() uint64 {
 }
 
 func (*createSingerTapState) Name() string {
-	return "Create singer tap state table"
+	return "Create tap state table"
 }
