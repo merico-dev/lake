@@ -135,7 +135,6 @@
         {
           "breadcrumb": [],
           "metadata": {
-            "selected": true,
             "table-key-properties": [
               "id",
               "team_slug"
@@ -1463,6 +1462,7 @@
         "properties": {
           "milestone": {
             "type": [
+              "null",
               "object"
             ],
             "properties": {

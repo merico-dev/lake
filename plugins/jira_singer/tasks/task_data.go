@@ -19,29 +19,31 @@ package tasks
 
 import (
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/plugins/core/tap"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/jira_singer/models"
 )
 
-type GithubSingerApiParams struct {
+type JiraSingerApiParams struct {
 }
 
-type GithubSingerOptions struct {
+type JiraSingerOptions struct {
 	// TODO add some custom options here if necessary
 	// options means some custom params required by plugin running.
 	// Such As How many rows do your want
 	// You can use it in sub tasks and you need pass it in main.go and pipelines.
 	ConnectionId uint64   `json:"connectionId"`
 	Tasks        []string `json:"tasks,omitempty"`
+	TapProvider  func() (tap.Tap, errors.Error)
 }
 
-type GithubSingerTaskData struct {
-	Options *GithubSingerOptions `json:"-"`
+type JiraSingerTaskData struct {
+	Options *JiraSingerOptions `json:"-"`
 	Config  *models.JiraConfig
 }
 
-func DecodeAndValidateTaskOptions(options map[string]interface{}) (*GithubSingerOptions, errors.Error) {
-	var op GithubSingerOptions
+func DecodeAndValidateTaskOptions(options map[string]interface{}) (*JiraSingerOptions, errors.Error) {
+	var op JiraSingerOptions
 	if err := helper.Decode(options, &op, nil); err != nil {
 		return nil, err
 	}

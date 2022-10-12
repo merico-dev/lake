@@ -20,7 +20,6 @@ package tasks
 import (
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/apache/incubator-devlake/plugins/core/singer"
 	"github.com/apache/incubator-devlake/plugins/github_singer/models/generated"
 	"github.com/apache/incubator-devlake/plugins/helper"
 )
@@ -29,10 +28,10 @@ var _ core.SubTaskEntryPoint = ExtractIssues
 
 func ExtractIssues(taskCtx core.SubTaskContext) errors.Error {
 	data := taskCtx.GetData().(*GithubSingerTaskData)
-	extractor := helper.NewSingerApiExtractor(
-		&helper.SingerExtractorArgs[generated.Issues]{
+	extractor, err := helper.NewTapExtractor(
+		&helper.TapExtractorArgs[generated.Issues]{
 			Ctx:          taskCtx,
-			SingerConfig: data.Config,
+			TapProvider:  data.Options.TapProvider,
 			ConnectionId: data.Options.ConnectionId,
 			Extract: func(resData *generated.Issues) ([]interface{}, errors.Error) {
 				//extractedModels := make([]interface{}, 0)
@@ -43,25 +42,12 @@ func ExtractIssues(taskCtx core.SubTaskContext) errors.Error {
 				//return extractedModels, nil
 				return nil, nil
 			},
-			TapType:              "github_issues",
-			TapClass:             "TAP_GITHUB",
-			StreamPropertiesFile: "github.json",
-			TapSchemaSetter: func(stream *singer.Stream) bool {
-				ret := true
-				if stream.Stream == "issues" {
-					for _, meta := range stream.Metadata {
-						innerMeta := meta["metadata"].(map[string]any)
-						if _, ok := innerMeta["table-key-properties"]; ok {
-							innerMeta["selected"] = true
-						}
-					}
-				} else {
-					ret = false
-				}
-				return ret
-			},
+			StreamName: "issues",
 		},
 	)
+	if err != nil {
+		return err
+	}
 	return extractor.Execute()
 }
 

@@ -3,7 +3,6 @@ module github.com/apache/incubator-devlake
 go 1.19
 
 require (
-	github.com/Jeffail/gabs/v2 v2.6.1
 	github.com/cockroachdb/errors v1.9.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
@@ -26,7 +25,7 @@ require (
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.8.1
 	github.com/stoewer/go-strcase v1.2.0
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	github.com/swaggo/gin-swagger v1.4.3
 	github.com/swaggo/swag v1.8.3
 	github.com/tidwall/gjson v1.14.3
