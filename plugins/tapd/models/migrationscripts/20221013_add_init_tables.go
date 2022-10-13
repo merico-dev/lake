@@ -135,7 +135,7 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 }
 
 func (*addInitTables) Version() uint64 {
-	return 20221009201138
+	return 20221013201138
 }
 
 func (*addInitTables) Name() string {

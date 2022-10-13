@@ -143,9 +143,12 @@ export const FormWrapper = styled.div`
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
-      height: 38px;
+      padding: 10px;
       background-color: #f0f4fe;
+
+      & > span {
+        flex: 1 0;
+      }
 
       & > svg {
         cursor: pointer;

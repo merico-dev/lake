@@ -63,24 +63,6 @@ const Deployment = (props) => {
     setSelectValue(sv)
   }
 
-  // @todo: check w/ product team about using standard message and avoid customized hints
-  const getDeployTagHint = (providerId, providerName = 'Plugin') => {
-    let tagHint = ''
-    switch (providerId) {
-      case Providers.JENKINS:
-        // eslint-disable-next-line max-len
-        tagHint = `The ${providerName} build with a name that matches the given regEx is considered as a deployment. You can define your Deployments for three environments: Production, Staging and Testing.`
-        break
-      case Providers.GITHUB:
-      case Providers.GITLAB:
-      case 'default':
-        // eslint-disable-next-line max-len
-        tagHint = `A CI job/build with a name that matches the given regEx is considered as a Deployment.`
-        break
-    }
-    return tagHint
-  }
-
   const radioLabels = useMemo(() => {
     let radio1
     let radio2
@@ -106,6 +88,39 @@ const Deployment = (props) => {
     return [radio1, radio2]
   }, [provider])
 
+  const tagHints = useMemo(() => {
+    let hint1
+    let hint2
+
+    const providerId = provider?.id
+
+    switch (providerId) {
+      case Providers.JENKINS:
+        hint1 =
+          'A Jenkins build with a name that matches the given regEx will be considered as a Deployment.'
+        hint2 =
+          // eslint-disable-next-line max-len
+          'A Jenkins build that matches the given regEx will be considered as a build in the Production environment. If you leave this field empty, all data will be tagged as in the Production environment.'
+        break
+      case Providers.GITHUB:
+        hint1 =
+          'A GitHub Action job with a name that matches the given regEx will be considered as a Deployment.'
+        hint2 =
+          // eslint-disable-next-line max-len
+          'A GitHub Action job that matches the given regEx will be considered as a job in the Production environment. If you leave this field empty, all data will be tagged as in the Production environment.'
+        break
+      case Providers.GITLAB:
+        hint1 =
+          'A GitLab CI job with a name that matches the given regEx will be considered as a Deployment.'
+        hint2 =
+          // eslint-disable-next-line max-len
+          'A GitLab CI job that matches the given regEx will be considered as a job in the Production environment. If you leave this field empty, all data will be tagged as in the Production environment.'
+        break
+    }
+
+    return [hint1, hint2]
+  }, [provider])
+
   return (
     <>
       <h5>CI/CD</h5>
@@ -127,12 +142,7 @@ const Deployment = (props) => {
         <Radio label={radioLabels[0]} value={1} />
         {selectValue === 1 && (
           <>
-            <p>
-              {getDeployTagHint(
-                provider?.id,
-                ProviderLabels[provider?.id?.toUpperCase()]
-              )}
-            </p>
+            <p>{tagHints[0]}</p>
             <div className='formContainer'>
               <FormGroup
                 disabled={isSaving}
@@ -165,11 +175,7 @@ const Deployment = (props) => {
                 />
               </FormGroup>
             </div>
-            <p>
-              The environment that matches the given regEx is considered as the
-              Production environment. If you leave this field empty, all data
-              will be tagged as in the Production environment.
-            </p>
+            <p>{tagHints[1]}</p>
             <FormGroup
               disabled={isSaving}
               inline={true}

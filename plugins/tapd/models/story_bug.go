@@ -23,7 +23,7 @@ import (
 
 type TapdStoryBug struct {
 	ConnectionId uint64 `gorm:"primaryKey"`
-	WorkspaceId  uint64 `gorm:"primaryKey" json:"workspace_id,string"`
+	WorkspaceId  uint64 `gorm:"primaryKey" json:"workspace_id"`
 	StoryId      uint64 `gorm:"primaryKey" json:"story_id,string"`
 	BugId        uint64 `gorm:"primaryKey" json:"bug_id,string"`
 	common.NoPKModel

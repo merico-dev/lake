@@ -55,9 +55,9 @@ export const AddModal = ({ onSubmit, onCancel }) => {
       postIssuesEndpoint: `${postUrlPrefix}${res.postIssuesEndpoint}`,
       closeIssuesEndpoint: `${postUrlPrefix}${res.closeIssuesEndpoint}`,
       postDeploymentsCurl: `curl ${postUrlPrefix}${res.postPipelineDeployTaskEndpoint} -X 'POST' -d "{
-  \\"repo_url\\":\\"$CIRCLE_REPOSITORY_URL\\",
-  \\"commit_sha\\":\\"$CIRCLE_SHA1\\",
-  \\"start_time\\":\\"$start_time\\"
+  \\"commit_sha\\":\\"the sha of deployment commit\\",
+  \\"repo_url\\":\\"the repo URL of the deployment commit\\",
+  \\"start_time\\":\\"Optional, eg. 2020-01-01T12:00:00+00:00\\"
 }"`
     })
   }
@@ -142,7 +142,7 @@ export const AddModal = ({ onSubmit, onCancel }) => {
               <h3>Deployment</h3>
               <p>POST to register a deployment</p>
               <div className='block'>
-                <span style={{ flex: '1 0' }}>{record.postDeploymentsCurl}</span>
+                <span>{record.postDeploymentsCurl}</span>
                 <CopyToClipboard text={record.postDeploymentsCurl}>
                   <CopyIcon width={16} height={16} />
                 </CopyToClipboard>

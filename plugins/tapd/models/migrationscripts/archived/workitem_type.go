@@ -17,7 +17,10 @@ limitations under the License.
 
 package archived
 
-import "github.com/apache/incubator-devlake/plugins/helper"
+import (
+	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
+	"github.com/apache/incubator-devlake/plugins/helper"
+)
 
 type TapdWorkitemType struct {
 	ConnectionId   uint64          `gorm:"primaryKey;type:BIGINT  NOT NULL"`
@@ -37,6 +40,7 @@ type TapdWorkitemType struct {
 	Modified       *helper.CSTTime `json:"modified"`
 	IconViper      string          `json:"icon_viper"`
 	IconSmallViper string          `json:"icon_small_viper"`
+	archived.NoPKModel
 }
 
 func (TapdWorkitemType) TableName() string {

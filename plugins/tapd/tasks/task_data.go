@@ -44,11 +44,9 @@ type TypeMapping struct {
 	StandardType string `json:"standardType"`
 }
 
-type StatusMappings struct {
-	TodoStatus       []string `json:"todoStatus"`
-	InProgressStatus []string `json:"inprogressStatus"`
-	DoneStatus       []string `json:"doneStatus"`
-}
+type OriginalStatus []string
+
+type StatusMappings map[string]OriginalStatus
 
 type TypeMappings map[string]TypeMapping
 

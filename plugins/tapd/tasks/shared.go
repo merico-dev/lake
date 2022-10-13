@@ -22,7 +22,6 @@ import (
 	goerror "errors"
 	"fmt"
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/models/domainlayer/ticket"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
@@ -175,14 +174,11 @@ func getStatusMapping(data *TapdTaskData) map[string]string {
 	}
 	statusMapping = make(map[string]string)
 	mapping := data.Options.TransformationRules.StatusMappings
-	for _, v := range mapping.DoneStatus {
-		statusMapping[v] = ticket.DONE
+	for std, orig := range mapping {
+		for _, v := range orig {
+			statusMapping[v] = std
+		}
 	}
-	for _, v := range mapping.InProgressStatus {
-		statusMapping[v] = ticket.IN_PROGRESS
-	}
-	for _, v := range mapping.TodoStatus {
-		statusMapping[v] = ticket.TODO
-	}
+
 	return statusMapping
 }
