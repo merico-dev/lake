@@ -1,0 +1,3 @@
+Generate domain models from go lang definitions.
+- parse go lang definitions
+- generate equivalent SQLModel tables
