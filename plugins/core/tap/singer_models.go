@@ -33,7 +33,7 @@ type (
 	}
 	// SingerTapConfig the set of variables needed to initialize a SingerTapImpl
 	SingerTapConfig struct {
-		Mappings             interface{}
+		Config               interface{}
 		Cmd                  string
 		StreamPropertiesFile string
 		TapSchemaSetter      func(stream *SingerTapStream)

@@ -26,7 +26,7 @@ import (
 // SingerTapArgs the args needed to instantiate tap.Tap for singer-taps
 type SingerTapArgs struct {
 	// The struct that represents the config.json of the tap
-	Mappings interface{}
+	Config interface{}
 	// Name of the env variable that expands to the tap binary path
 	TapClass string
 	// The name of the properties/catalog JSON file of the tap
@@ -43,7 +43,7 @@ func NewSingerTapClient(args *SingerTapArgs) (tap.Tap, errors.Error) {
 		return nil, errors.Default.New("singer tap command not provided")
 	}
 	return tap.NewSingerTap(&tap.SingerTapConfig{
-		Mappings:             args.Mappings,
+		Config:               args.Config,
 		Cmd:                  cmd,
 		StreamPropertiesFile: args.StreamPropertiesFile,
 		// This function is called for the selected streams at runtime.
