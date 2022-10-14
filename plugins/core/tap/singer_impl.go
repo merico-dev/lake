@@ -64,7 +64,7 @@ func NewSingerTap(cfg *SingerTapConfig) (*SingerTapImpl, errors.Error) {
 }
 
 func (t *SingerTapImpl) SetConfig() errors.Error {
-	b, err := json.Marshal(t.Mappings)
+	b, err := json.Marshal(t.Config)
 	if err != nil {
 		return errors.Default.Wrap(err, "error reading singer-tap mappings")
 	}

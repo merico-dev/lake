@@ -30,7 +30,7 @@ import (
 // TapExtractorArgs args to initialize a TapExtractor
 type TapExtractorArgs[Record any] struct {
 	Ctx core.SubTaskContext
-	// The tap client
+	// The function that creates and returns a tap client
 	TapProvider func() (tap.Tap, errors.Error)
 	// The specific tap stream to invoke at runtime
 	StreamName   string
