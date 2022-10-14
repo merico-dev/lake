@@ -25,12 +25,12 @@ import (
 	"time"
 )
 
-type createSingerTapState struct{}
+type createTapState struct{}
 
 type SingerTapState20221015 struct {
 	Id           string `gorm:"primaryKey;type:varchar(255)"`
 	ConnectionId uint64
-	Type         string `gorm:"primaryKey;type:varchar(255)"`
+	Type         string
 	Value        datatypes.JSON
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
@@ -40,7 +40,7 @@ func (SingerTapState20221015) TableName() string {
 	return "tap_state"
 }
 
-func (*createSingerTapState) Up(ctx context.Context, db *gorm.DB) errors.Error {
+func (*createTapState) Up(ctx context.Context, db *gorm.DB) errors.Error {
 	err := db.Migrator().AutoMigrate(SingerTapState20221015{})
 	if err != nil {
 		return errors.Convert(err)
@@ -48,10 +48,10 @@ func (*createSingerTapState) Up(ctx context.Context, db *gorm.DB) errors.Error {
 	return nil
 }
 
-func (*createSingerTapState) Version() uint64 {
+func (*createTapState) Version() uint64 {
 	return 20221015000001
 }
 
-func (*createSingerTapState) Name() string {
+func (*createTapState) Name() string {
 	return "Create tap state table"
 }

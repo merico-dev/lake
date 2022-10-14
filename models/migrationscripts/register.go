@@ -51,6 +51,6 @@ func All() []core.MigrationScript {
 		new(commitLineChange),
 		new(changeLeadTimeMinutesToInt64),
 		new(addRepoSnapshot),
-		new(createSingerTapState),
+		new(createTapState),
 	}
 }
