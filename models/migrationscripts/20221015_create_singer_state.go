@@ -18,10 +18,9 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/plugins/core"
 	"gorm.io/datatypes"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -40,8 +39,8 @@ func (SingerTapState20221015) TableName() string {
 	return "tap_state"
 }
 
-func (*createTapState) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AutoMigrate(SingerTapState20221015{})
+func (*createTapState) Up(basicRes core.BasicRes) errors.Error {
+	err := basicRes.GetDal().AutoMigrate(SingerTapState20221015{})
 	if err != nil {
 		return errors.Convert(err)
 	}
