@@ -39,6 +39,7 @@ type (
 		TapSchemaSetter      func(stream *SingerTapStream)
 	}
 
+	// SingerTapProperties wraps SingerTapStreams
 	SingerTapProperties struct {
 		Streams []*SingerTapStream `json:"streams"`
 	}

@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package tap
+package utils
 
 import (
 	"bufio"
@@ -27,8 +27,14 @@ import (
 	"sync"
 )
 
+// ProcessResponse wraps output of a process
+type ProcessResponse[T any] struct {
+	Data T
+	Err  error
+}
+
 // RunProcess runs the cmd and returns its raw standard output. This is a blocking function.
-func RunProcess(cmd *exec.Cmd) (*Response[[]byte], error) {
+func RunProcess(cmd *exec.Cmd) (*ProcessResponse[[]byte], error) {
 	cmd.Env = append(cmd.Env, os.Environ()...)
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
@@ -39,22 +45,22 @@ func RunProcess(cmd *exec.Cmd) (*Response[[]byte], error) {
 		scanner := bufio.NewScanner(stderr)
 		scanner.Split(bufio.ScanLines)
 		for scanner.Scan() {
-			remoteErrorMsg.Write(scanner.Bytes())
-			remoteErrorMsg.WriteString("\n")
+			_, _ = remoteErrorMsg.Write(scanner.Bytes())
+			_, _ = remoteErrorMsg.WriteString("\n")
 		}
 	}()
 	output, err := cmd.Output()
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("remote error message:\n%s", remoteErrorMsg.String()))
 	}
-	return &Response[[]byte]{
+	return &ProcessResponse[[]byte]{
 		Data: output,
 	}, nil
 }
 
 // StreamProcess runs the cmd and returns its standard output on a line-by-line basis, on a channel. The converter functor will allow you
 // to convert the incoming raw to your custom data type T. This is a nonblocking function.
-func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<-chan *Response[T], error) {
+func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<-chan *ProcessResponse[T], error) {
 	cmd.Env = append(cmd.Env, os.Environ()...)
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -67,7 +73,7 @@ func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<
 	if err = cmd.Start(); err != nil {
 		return nil, err
 	}
-	stream := make(chan *Response[T], 32)
+	stream := make(chan *ProcessResponse[T], 32)
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
 	go func() {
@@ -78,9 +84,9 @@ func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<
 			data := make([]byte, len(src))
 			copy(data, src)
 			if result, err := converter(data); err != nil {
-				stream <- &Response[T]{Err: err}
+				stream <- &ProcessResponse[T]{Err: err}
 			} else {
-				stream <- &Response[T]{Data: result}
+				stream <- &ProcessResponse[T]{Data: result}
 			}
 		}
 		wg.Done()
@@ -90,13 +96,13 @@ func StreamProcess[T any](cmd *exec.Cmd, converter func(b []byte) (T, error)) (<
 		scanner := bufio.NewScanner(stderr)
 		scanner.Split(bufio.ScanLines)
 		for scanner.Scan() {
-			remoteErrorMsg.Write(scanner.Bytes())
-			remoteErrorMsg.WriteString("\n")
+			_, _ = remoteErrorMsg.Write(scanner.Bytes())
+			_, _ = remoteErrorMsg.WriteString("\n")
 		}
 	}()
 	go func() {
 		if err = cmd.Wait(); err != nil {
-			stream <- &Response[T]{Err: errors.Default.Wrap(err, fmt.Sprintf("remote error response:\n%s", remoteErrorMsg))}
+			stream <- &ProcessResponse[T]{Err: errors.Default.Wrap(err, fmt.Sprintf("remote error response:\n%s", remoteErrorMsg))}
 		}
 		wg.Done()
 	}()

@@ -29,10 +29,7 @@ type (
 	// Result alias for a generic response from a streamed tap
 	Result map[string]interface{}
 	// Response wraps a unit of data returned by a tap
-	Response[T any] struct {
-		Data T
-		Err  error
-	}
+
 	// Record the fields embedded in a singer-tap record. The specifics of the record are tap-implementation specific.
 	Record[R any] struct {
 		Type          string    `json:"type"`
@@ -57,6 +54,7 @@ type (
 	}
 )
 
+// TableName the table name
 func (*RawState) TableName() string {
 	return "tap_state"
 }

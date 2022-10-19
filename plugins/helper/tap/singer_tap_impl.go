@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/utils"
 	"github.com/mitchellh/hashstructure"
 	"os"
 	"os/exec"
@@ -29,6 +30,7 @@ import (
 )
 
 type (
+	// SingerTapImpl the Singer implementation of Tap
 	SingerTapImpl struct {
 		*SingerTapConfig
 		cmd            string
@@ -44,6 +46,7 @@ type (
 	}
 )
 
+// NewSingerTap the constructor for SingerTapImpl
 func NewSingerTap(cfg *SingerTapConfig) (*SingerTapImpl, errors.Error) {
 	tempDir, err := errors.Convert01(os.MkdirTemp("", "singer"+"_*"))
 	if err != nil {
@@ -63,6 +66,7 @@ func NewSingerTap(cfg *SingerTapConfig) (*SingerTapImpl, errors.Error) {
 	}, nil
 }
 
+// SetConfig implements Tap.SetConfig
 func (t *SingerTapImpl) SetConfig() errors.Error {
 	b, err := json.Marshal(t.Config)
 	if err != nil {
@@ -83,6 +87,7 @@ func (t *SingerTapImpl) SetConfig() errors.Error {
 	return nil
 }
 
+// SetState implements Tap.SetState
 func (t *SingerTapImpl) SetState(state interface{}) errors.Error {
 	b, err := json.Marshal(state)
 	if err != nil {
@@ -103,6 +108,7 @@ func (t *SingerTapImpl) SetState(state interface{}) errors.Error {
 	return nil
 }
 
+// SetProperties implements Tap.SetProperties
 func (t *SingerTapImpl) SetProperties(requiredStream string) (uint64, errors.Error) {
 	selected := t.selectStream(requiredStream)
 	err := t.writeProperties()
@@ -112,17 +118,19 @@ func (t *SingerTapImpl) SetProperties(requiredStream string) (uint64, errors.Err
 	return hash(selected)
 }
 
+// GetName implements Tap.GetName
 func (t *SingerTapImpl) GetName() string {
 	return t.name
 }
 
-func (t *SingerTapImpl) Run() (<-chan *Response[Result], errors.Error) {
+// Run implements Tap.Run
+func (t *SingerTapImpl) Run() (<-chan *utils.ProcessResponse[Result], errors.Error) {
 	args := []string{"--config", t.configFile.path, "--properties", t.propertiesFile.path}
 	if t.stateFile != nil {
 		args = append(args, []string{"--state", t.stateFile.path}...)
 	}
 	cmd := exec.Command(t.cmd, args...)
-	stream, err := StreamProcess[Result](cmd, func(b []byte) (Result, error) {
+	stream, err := utils.StreamProcess[Result](cmd, func(b []byte) (Result, error) {
 		result := Result{}
 		if err := json.Unmarshal(b, &result); err != nil {
 			return result, errors.Default.WrapRaw(err)

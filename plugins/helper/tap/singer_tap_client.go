@@ -15,12 +15,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package helper
+package tap
 
 import (
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/plugins/core/tap"
 )
 
 // SingerTapArgs the args needed to instantiate tap.Tap for singer-taps
@@ -32,22 +31,22 @@ type SingerTapArgs struct {
 	// The name of the properties/catalog JSON file of the tap
 	StreamPropertiesFile string
 	// Optional - use for any extra tweaking of streams at runtime
-	AdditionalSchemaSetter func(stream *tap.SingerTapStream)
+	AdditionalSchemaSetter func(stream *SingerTapStream)
 }
 
 // NewSingerTapClient returns an instance of tap.Tap for singer-taps
-func NewSingerTapClient(args *SingerTapArgs) (tap.Tap, errors.Error) {
+func NewSingerTapClient(args *SingerTapArgs) (Tap, errors.Error) {
 	env := config.GetConfig()
 	cmd := env.GetString(args.TapClass)
 	if cmd == "" {
 		return nil, errors.Default.New("singer tap command not provided")
 	}
-	return tap.NewSingerTap(&tap.SingerTapConfig{
+	return NewSingerTap(&SingerTapConfig{
 		Config:               args.Config,
 		Cmd:                  cmd,
 		StreamPropertiesFile: args.StreamPropertiesFile,
 		// This function is called for the selected streams at runtime.
-		TapSchemaSetter: func(stream *tap.SingerTapStream) {
+		TapSchemaSetter: func(stream *SingerTapStream) {
 			// default behavior
 			for _, meta := range stream.Metadata {
 				innerMeta := meta["metadata"].(map[string]any)
