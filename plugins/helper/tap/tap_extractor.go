@@ -64,6 +64,9 @@ func NewTapExtractor[Record any](args *TapExtractorArgs[Record]) (*TapExtractor[
 	if err != nil {
 		return nil, err
 	}
+	if args.BatchSize == 0 {
+		args.BatchSize = 100
+	}
 	return extractor, nil
 }
 
