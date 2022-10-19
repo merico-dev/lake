@@ -15,14 +15,14 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package helper
+package tap
 
 import (
 	goerror "errors"
 	"fmt"
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/apache/incubator-devlake/plugins/core/tap"
+	"github.com/apache/incubator-devlake/plugins/helper"
 	"gorm.io/gorm"
 	"reflect"
 )
@@ -31,7 +31,7 @@ import (
 type TapExtractorArgs[Record any] struct {
 	Ctx core.SubTaskContext
 	// The function that creates and returns a tap client
-	TapProvider func() (tap.Tap, errors.Error)
+	TapProvider func() (Tap, errors.Error)
 	// The specific tap stream to invoke at runtime
 	StreamName   string
 	ConnectionId uint64
@@ -42,7 +42,7 @@ type TapExtractorArgs[Record any] struct {
 // TapExtractor the extractor that communicates with singer taps
 type TapExtractor[Record any] struct {
 	*TapExtractorArgs[Record]
-	tap           tap.Tap
+	tap           Tap
 	streamVersion uint64
 }
 
@@ -67,9 +67,9 @@ func NewTapExtractor[Record any](args *TapExtractorArgs[Record]) (*TapExtractor[
 	return extractor, nil
 }
 
-func (e *TapExtractor[Record]) getState() (*tap.State, errors.Error) {
+func (e *TapExtractor[Record]) getState() (*State, errors.Error) {
 	db := e.Ctx.GetDal()
-	rawState := tap.RawState{
+	rawState := RawState{
 		Id: e.getStateId(),
 	}
 	if err := db.First(&rawState); err != nil {
@@ -78,12 +78,12 @@ func (e *TapExtractor[Record]) getState() (*tap.State, errors.Error) {
 		}
 		return nil, err
 	}
-	return tap.ToState(&rawState), nil
+	return ToState(&rawState), nil
 }
 
-func (e *TapExtractor[Record]) pushState(state *tap.State) errors.Error {
+func (e *TapExtractor[Record]) pushState(state *State) errors.Error {
 	db := e.Ctx.GetDal()
-	rawState := tap.FromState(e.ConnectionId, state)
+	rawState := FromState(e.ConnectionId, state)
 	rawState.Id = e.getStateId()
 	return db.CreateOrUpdate(rawState)
 }
@@ -92,7 +92,7 @@ func (e *TapExtractor[Record]) getStateId() string {
 	return fmt.Sprintf("{%s:%d:%d}", fmt.Sprintf("%s::%s", e.tap.GetName(), e.StreamName), e.ConnectionId, e.streamVersion)
 }
 
-func (e *TapExtractor[Record]) close(state *tap.State, divider *BatchSaveDivider) errors.Error {
+func (e *TapExtractor[Record]) close(state *State, divider *helper.BatchSaveDivider) errors.Error {
 	err := divider.Close()
 	if err == nil && state.Value != nil {
 		// save the last state we got in the DB
@@ -115,8 +115,8 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 			return err
 		}
 	}
-	divider := NewNonRawBatchSaveDivider(e.Ctx, e.BatchSize)
-	var state tap.State
+	divider := helper.NewNonRawBatchSaveDivider(e.Ctx, e.BatchSize)
+	var state State
 	recordsProcessed := 0
 	defer func() {
 		e.Ctx.GetLogger().Info("%s processed %d records", e.tap.GetName(), recordsProcessed)
@@ -142,7 +142,7 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 			return err
 		default:
 		}
-		if tapRecord, ok := tap.AsTapRecord[Record](result.Data); ok {
+		if tapRecord, ok := AsTapRecord[Record](result.Data); ok {
 			var results []interface{}
 			results, err = e.Extract(tapRecord.Record)
 			if err != nil {
@@ -154,7 +154,7 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 			e.Ctx.IncProgress(1)
 			recordsProcessed++
 			continue
-		} else if tapState, ok := tap.AsTapState(result.Data); ok {
+		} else if tapState, ok := AsTapState(result.Data); ok {
 			state = *tapState
 			continue
 		}
@@ -162,7 +162,7 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 	return nil
 }
 
-func (e *TapExtractor[Record]) pushToDB(divider *BatchSaveDivider, results []any) errors.Error {
+func (e *TapExtractor[Record]) pushToDB(divider *helper.BatchSaveDivider, results []any) errors.Error {
 	for _, result := range results {
 		// get the batch operator for the specific type
 		batch, err := divider.ForType(reflect.TypeOf(result))
