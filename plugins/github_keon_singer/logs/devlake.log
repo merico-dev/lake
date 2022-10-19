@@ -1,0 +1,1245 @@
+time="2022-10-19 15:05:34" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 15:05:34" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 15:05:34" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 15:05:35" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 15:05:36" level=info msg=" [github_singer] [ExtractPr] tap-github processed 40 records"
+time="2022-10-19 15:05:36" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 15:05:36" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 15:05:36" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 128 records"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 15:05:38" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 15:38:14" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 15:38:14" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 15:38:14" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 2 records"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 15:38:16" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 15:38:17" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 15:38:17" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 15:38:17" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 15:51:48" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 15:51:48" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 15:51:48" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 15:51:49" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 15:51:49" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 15:51:49" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 15:51:49" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 2 records"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 15:51:50" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:15:57" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:15:57" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:15:57" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:17:43" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:17:43" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:17:43" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:18:25" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:18:25" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:18:25" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:18:32" level=info msg=" [github_singer] [ExtractPr] tap-github processed 0 records"
+time="2022-10-19 16:18:41" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:18:41" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:18:41" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:21:26" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:21:26" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:21:26" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:22:32" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:22:32" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:22:32" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:26:16" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:26:16" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:26:16" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[4.926ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:26:25.182','2022-10-19 16:26:25.182','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:26:25.182','2022-10-19 16:26:25.182','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:26:25.182',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:26:25" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 2 records"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:26:25" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:26:26" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:26:26" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:26:26" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:27:55" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:27:55" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:27:55" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:27:56" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:27:56" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:27:56" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.498ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:27:56.7','2022-10-19 16:27:56.7','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:27:56.7','2022-10-19 16:27:56.7','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:27:56.7',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:27:56" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:27:56" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:27:56" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:27:57" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:53:10" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:53:10" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:53:10" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.521ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:53:11.062','2022-10-19 16:53:11.062','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:53:11.062','2022-10-19 16:53:11.062','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:53:11.062',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:53:11" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:53:11" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:53:12" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:53:12" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:53:12" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:54:31" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:54:31" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:54:31" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:54:32" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:54:32" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:54:32" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.501ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:54:32.44','2022-10-19 16:54:32.44','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:54:32.44','2022-10-19 16:54:32.44','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:54:32.44',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:54:32" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:54:32" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:54:32" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:54:33" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:54:57" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:54:57" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:54:57" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.340ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:54:58.082','2022-10-19 16:54:58.082','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:54:58.082','2022-10-19 16:54:58.082','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:54:58.082',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:54:58" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:54:58" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:54:59" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:54:59" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:54:59" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:55:25" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:55:25" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:55:25" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:55:26" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:55:26" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:55:26" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.492ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:55:26.632','2022-10-19 16:55:26.632','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:55:26.632','2022-10-19 16:55:26.632','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:55:26.632',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:55:26" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:55:26" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:55:26" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:55:27" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:56:46" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:56:46" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:56:46" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.582ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:56:47.151','2022-10-19 16:56:47.151','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:56:47.151','2022-10-19 16:56:47.151','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:56:47.151',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:56:47" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:56:47" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:56:48" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:56:48" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:56:48" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 16:57:00" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 16:57:00" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 16:57:00" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 16:57:01" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 16:57:01" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 16:57:01" level=info msg=" [github_singer] [31;1m/home/keon/dev/lake/impl/dalgorm/dalgorm.go:141 [35;1mError 1054: Unknown column 'head_repo_id' in 'field list'
+[0m[33m[1.414ms] [34;1m[rows:0][0m INSERT INTO `_tool_github_pull_requests` (`connection_id`,`github_id`,`repo_id`,`head_repo_id`,`number`,`state`,`title`,`github_created_at`,`github_updated_at`,`closed_at`,`additions`,`deletions`,`comments`,`commits`,`review_comments`,`merged`,`merged_at`,`body`,`type`,`component`,`merge_commit_sha`,`head_ref`,`base_ref`,`base_commit_sha`,`head_commit_sha`,`url`,`author_name`,`author_id`,`created_at`,`updated_at`,`_raw_data_params`,`_raw_data_table`,`_raw_data_id`,`_raw_data_remark`) VALUES (1,1041580640,123,0,0,'DUMMY','','2022-08-30 23:02:21','2022-10-19 21:22:18',NULL,0,0,0,0,0,false,NULL,'### ⚠️ Config-UI / Plugin Registry
+> WIP DO NOT MERGE
+
+- [ ] Create a Defined Plugin Registration Schema (JSON Registration Files)
+- [ ] Create **Local Plugin Registry** Configuration
+   - [ ] JIRA
+   - [ ] GitLab
+   - [ ] GitHub
+   - [ ] Jenkins
+   - [ ] TAPD
+   - [ ] AE
+   - [ ] DBT
+   - [ ] StarRocks
+   - [ ] RefDiff
+   - [ ] GitExtractor
+   - [ ] Feishu
+   - [ ] Azure 🆕 
+   - [ ] Bitbucket 🆕 
+   - [ ] Gitee 🆕 
+- [ ] Implement `useIntegrations` Hook
+   - [ ] Create `Plugin` and other related **Data Models**
+   - [ ] Define Integrations Data Configuration Objects
+   - [ ] Validate JSON Plugin Configuration
+- [ ] Create **Dynamic / Live Plugin Registry** (Allow Plugins to load via API)
+- [ ] Create Basic Documentation for Plugin JSON Registration
+- [ ] Refactor Integrations Data Dependencies
+
+### Description
+
+This PR creates a **Plugin Registry** on **Configuration-UI** as outlined on #2882.
+
+### Milestone
+`TBD`
+
+### Local Plugin Registry
+The **local** registry defines plugins that are bundled with DevLake. Users creating "Private" local plugins may add and register plugins with the local registry.
+
+### API Plugin Registry (**Future** Feature)
+The **api** registry allows plugins to be defined by the backend and plugins can be fetched dynamically and merged with the local registry. `FEATURE` `TBD`
+
+### Plugin Registration Schema (JSON)
+
+```
+{
+  "id": "gitlab",
+  "type": "integration",
+  "enabled": true,
+  "multiConnection": true,
+  "isBeta": false,
+  "isProvider": true,
+  "name": "GitLab",
+  "icon": "src/images/integrations/gitlab.svg",
+  "private": false,
+  "connection": {
+    "authentication": "token",
+    "fields": {
+      "name": { "enable": true, "required": true, "readonly": false },
+      "endpoint": { },
+      "proxy": { },
+      "token": { },
+      "rateLimitPerHour": { }
+    },
+    "labels": {
+      "name": "Connection Name",
+      "endpoint": "Endpoint URL",
+      "proxy": "Proxy URL",
+      "token": "Access Token",
+      "rateLimitPerHour": "Rate Limit (per hour)"
+    },
+    "placeholders": {
+      "name": "eg. GitLab",
+      "endpoint": "eg. https://gitlab.com/api/v4/",
+      "proxy": "eg. http://proxy.localhost:8080",
+      "token": "eg. ff9d1ad0e5c04f1f98fa",
+      "rateLimitPerHour": "1000"
+    },
+    "tooltips": {}
+  },
+  "entities": ["CODE", "TICKET", "CROSS"]
+}
+```
+
+### Does this close any open issues?
+#2882
+
+### Screenshots
+`[<PENDING>]`
+','','','','','','','','','',0,'2022-10-19 16:57:01.619','2022-10-19 16:57:01.619','','',0,''),(1,1061859843,123,0,0,'DUMMY','','2022-09-20 17:09:12','2022-10-19 20:56:37',NULL,0,0,0,0,0,false,NULL,'This PR adds support for abstract Taps, using a Golang interface, wrapped by a "Tap Extractor". The default implementation is for Singer-Taps. Using this scheme, the collector layer is completely eliminated (done by the taps instead). The design has focused on keeping things as consistent as possible with the current architecture.
+
+### Does this close any open issues?
+Closes #3123 
+
+### Screenshots
+Tap state table
+![image](https://user-images.githubusercontent.com/25063936/195739106-2519fb6e-426c-4dec-9eea-8c82f1b1e0a1.png)
+
+Sample Tap-Extractor skeleton code
+![image](https://user-images.githubusercontent.com/25063936/195744211-198ff31b-5f7e-4be1-bd83-a8b1c4ae1ec3.png)
+
+Plugin entry-code:
+![image](https://user-images.githubusercontent.com/25063936/195744686-031a5802-8629-43c6-8148-149a70270e5d.png)
+
+
+
+### Other Information
+Any other information that is important to this PR.
+','','','','','','','','','',0,'2022-10-19 16:57:01.619','2022-10-19 16:57:01.619','','',0,'') ON DUPLICATE KEY UPDATE `updated_at`='2022-10-19 16:57:01.619',`repo_id`=VALUES(`repo_id`),`head_repo_id`=VALUES(`head_repo_id`),`number`=VALUES(`number`),`state`=VALUES(`state`),`title`=VALUES(`title`),`github_created_at`=VALUES(`github_created_at`),`github_updated_at`=VALUES(`github_updated_at`),`closed_at`=VALUES(`closed_at`),`additions`=VALUES(`additions`),`deletions`=VALUES(`deletions`),`comments`=VALUES(`comments`),`commits`=VALUES(`commits`),`review_comments`=VALUES(`review_comments`),`merged`=VALUES(`merged`),`merged_at`=VALUES(`merged_at`),`body`=VALUES(`body`),`type`=VALUES(`type`),`component`=VALUES(`component`),`merge_commit_sha`=VALUES(`merge_commit_sha`),`head_ref`=VALUES(`head_ref`),`base_ref`=VALUES(`base_ref`),`base_commit_sha`=VALUES(`base_commit_sha`),`head_commit_sha`=VALUES(`head_commit_sha`),`url`=VALUES(`url`),`author_name`=VALUES(`author_name`),`author_id`=VALUES(`author_id`),`_raw_data_params`=VALUES(`_raw_data_params`),`_raw_data_table`=VALUES(`_raw_data_table`),`_raw_data_id`=VALUES(`_raw_data_id`),`_raw_data_remark`=VALUES(`_raw_data_remark`)"
+time="2022-10-19 16:57:01" level=error msg=" [github_singer] [ExtractPr] error closing tap executor
+	caused by: Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Wraps: (2) Error 1054: Unknown column 'head_repo_id' in 'field list'
+	Error types: (1) *hintdetail.withDetail (2) *mysql.MySQLError"
+time="2022-10-19 16:57:01" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 16:57:01" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 16:57:02" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 17:05:15" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 17:05:15" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 17:05:15" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] [ExtractPr] tap-github processed 2 records"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 17:05:17" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 17:05:18" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 17:05:18" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 17:05:18" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-19 17:08:44" level=info msg=" [github_singer] start plugin"
+time="2022-10-19 17:08:44" level=info msg=" [github_singer] total step: 3"
+time="2022-10-19 17:08:44" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-19 17:08:45" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-19 17:08:45" level=info msg=" [github_singer] [ExtractPr] tap-github processed 1 records"
+time="2022-10-19 17:08:45" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-19 17:08:45" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-19 17:08:46" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-19 17:08:46" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 1 records"
+time="2022-10-19 17:08:46" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-19 17:08:46" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-19 17:08:47" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-19 17:08:47" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-19 17:08:47" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-20 16:09:32" level=info msg=" [github_singer] start plugin"
+time="2022-10-20 16:09:32" level=info msg=" [github_singer] total step: 3"
+time="2022-10-20 16:09:32" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-20 16:09:34" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-20 16:09:34" level=info msg=" [github_singer] [ExtractPr] tap-github processed 23 records"
+time="2022-10-20 16:09:34" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-20 16:09:34" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-20 16:09:35" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] [ExtractIssues] tap-github processed 42 records"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] [ExtractAssignee] tap-github processed 30 records"
+time="2022-10-20 16:09:36" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-21 13:35:19" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:35:19" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:35:19" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:40:17" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:40:17" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:40:17" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:40:18" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:40:18" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 21 records"
+time="2022-10-21 13:42:34" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:42:34" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:42:34" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:42:35" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:42:35" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 21 records"
+time="2022-10-21 13:44:04" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:44:04" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:44:04" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:44:05" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:44:05" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 21 records"
+time="2022-10-21 13:44:26" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:44:26" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:44:26" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:44:27" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:44:27" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 21 records"
+time="2022-10-21 13:55:45" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:55:45" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:55:45" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:55:46" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:55:46" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 21 records"
+time="2022-10-21 13:55:46" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-21 13:55:46" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-21 13:55:47" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-21 13:55:47" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-21 13:55:47" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-21 13:55:48" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-21 13:55:48" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-21 13:56:12" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:56:12" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:56:12" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:57:16" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:57:16" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 1 records"
+time="2022-10-21 13:59:15" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 13:59:15" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 13:59:15" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 13:59:16" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 13:59:16" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 1 records"
+time="2022-10-21 13:59:16" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-21 13:59:16" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-21 13:59:17" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-21 13:59:17" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-21 13:59:17" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-21 13:59:18" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-21 13:59:18" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-21 14:23:46" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 14:23:46" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 14:23:46" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 14:23:47" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 14:23:51" level=info msg=" [github_singer] [ExtractPr] finished records: 121"
+time="2022-10-21 14:23:54" level=info msg=" [github_singer] [ExtractPr] finished records: 241"
+time="2022-10-21 14:24:38" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 14:24:38" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 14:24:38" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 14:24:53" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 14:24:56" level=info msg=" [github_singer] [ExtractPr] finished records: 181"
+time="2022-10-21 14:25:00" level=info msg=" [github_singer] [ExtractPr] finished records: 301"
+time="2022-10-21 14:25:03" level=info msg=" [github_singer] [ExtractPr] finished records: 391"
+time="2022-10-21 14:25:07" level=info msg=" [github_singer] [ExtractPr] finished records: 511"
+time="2022-10-21 14:25:11" level=info msg=" [github_singer] [ExtractPr] finished records: 631"
+time="2022-10-21 14:25:14" level=info msg=" [github_singer] [ExtractPr] finished records: 751"
+time="2022-10-21 14:25:29" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 816 records"
+time="2022-10-21 14:25:55" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-21 14:25:55" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-21 14:26:39" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-21 14:26:43" level=info msg=" [github_singer] [ExtractIssues] finished records: 8"
+time="2022-10-21 14:26:46" level=info msg=" [github_singer] [ExtractIssues] finished records: 24"
+time="2022-10-21 14:26:50" level=info msg=" [github_singer] [ExtractIssues] finished records: 30"
+time="2022-10-21 14:26:53" level=info msg=" [github_singer] [ExtractIssues] finished records: 271"
+time="2022-10-21 14:26:56" level=info msg=" [github_singer] [ExtractIssues] finished records: 511"
+time="2022-10-21 14:26:59" level=info msg=" [github_singer] [ExtractIssues] finished records: 744"
+time="2022-10-21 14:27:02" level=info msg=" [github_singer] [ExtractIssues] finished records: 901"
+time="2022-10-21 14:27:04" level=info msg=" [github_singer] [ExtractIssues] finished records: 1000"
+time="2022-10-21 14:27:07" level=info msg=" [github_singer] [ExtractIssues] finished records: 1201"
+time="2022-10-21 14:27:10" level=info msg=" [github_singer] [ExtractIssues] finished records: 1411"
+time="2022-10-21 14:27:38" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-21 14:27:38" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-21 14:27:45" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 0 records"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 0 records"
+time="2022-10-21 14:28:55" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 0 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 1 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 0 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 0 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:56" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractIssues] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] [ExtractAssignee] tap-github flushing 0 records"
+time="2022-10-21 14:28:57" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-21 14:29:30" level=info msg=" [github_singer] start plugin"
+time="2022-10-21 14:29:30" level=info msg=" [github_singer] total step: 3"
+time="2022-10-21 14:29:30" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-21 14:29:31" level=info msg=" [github_singer] [ExtractPr] finished records: 1"
+time="2022-10-21 14:29:31" level=info msg=" [github_singer] [ExtractPr] tap-github flushing 1 records"
+time="2022-10-21 14:29:31" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-21 14:29:31" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-21 14:29:32" level=info msg=" [github_singer] [ExtractIssues] finished records: 1"
+time="2022-10-21 14:29:32" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-21 14:29:32" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-21 14:29:32" level=info msg=" [github_singer] [ExtractAssignee] finished records: 1"
+time="2022-10-21 14:29:32" level=info msg=" [github_singer] finished step: 3 / 3"
+time="2022-10-23 23:19:21" level=info msg=" [github_singer] start plugin"
+time="2022-10-23 23:19:21" level=info msg=" [github_singer] total step: 3"
+time="2022-10-23 23:19:21" level=info msg=" [github_singer] executing subtask ExtractPr"
+time="2022-10-23 23:19:21" level=info msg=" [github_singer] finished step: 1 / 3"
+time="2022-10-23 23:19:21" level=info msg=" [github_singer] executing subtask ExtractIssues"
+time="2022-10-23 23:19:22" level=info msg=" [github_singer] finished step: 2 / 3"
+time="2022-10-23 23:19:22" level=info msg=" [github_singer] executing subtask ExtractAssignee"
+time="2022-10-23 23:19:22" level=info msg=" [github_singer] finished step: 3 / 3"

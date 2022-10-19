@@ -1,0 +1,9 @@
+{
+  "start_date": "2010-01-01",
+  "username": "keon.amini@merico.dev",
+  "password": "<token>",
+  "base_url": "https://merico.atlassian.net",
+  "user_agent": "",
+  "request_timeout": 300,
+  "groups": "jira-administrators, site-admins, jira-software-users"
+}
