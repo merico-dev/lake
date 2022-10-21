@@ -18,7 +18,6 @@ limitations under the License.
 package tap
 
 import (
-	goerror "errors"
 	"fmt"
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
@@ -27,8 +26,8 @@ import (
 	"reflect"
 )
 
-// TapExtractorArgs args to initialize a TapExtractor
-type TapExtractorArgs[Record any] struct {
+// ExtractorArgs args to initialize a Extractor
+type ExtractorArgs[Record any] struct {
 	Ctx core.SubTaskContext
 	// The function that creates and returns a tap client
 	TapProvider func() (Tap, errors.Error)
@@ -36,25 +35,24 @@ type TapExtractorArgs[Record any] struct {
 	StreamName   string
 	ConnectionId uint64
 	Extract      func(*Record) ([]interface{}, errors.Error)
-	BatchSize    int
 }
 
-// TapExtractor the extractor that communicates with singer taps
-type TapExtractor[Record any] struct {
-	*TapExtractorArgs[Record]
+// Extractor the extractor that communicates with singer taps
+type Extractor[Record any] struct {
+	*ExtractorArgs[Record]
 	tap           Tap
 	streamVersion uint64
 }
 
-// NewTapExtractor constructor for TapExtractor
-func NewTapExtractor[Record any](args *TapExtractorArgs[Record]) (*TapExtractor[Record], errors.Error) {
+// NewTapExtractor constructor for Extractor
+func NewTapExtractor[Record any](args *ExtractorArgs[Record]) (*Extractor[Record], errors.Error) {
 	tapClient, err := args.TapProvider()
 	if err != nil {
 		return nil, err
 	}
-	extractor := &TapExtractor[Record]{
-		TapExtractorArgs: args,
-		tap:              tapClient,
+	extractor := &Extractor[Record]{
+		ExtractorArgs: args,
+		tap:           tapClient,
 	}
 	err = extractor.tap.SetConfig()
 	if err != nil {
@@ -64,19 +62,16 @@ func NewTapExtractor[Record any](args *TapExtractorArgs[Record]) (*TapExtractor[
 	if err != nil {
 		return nil, err
 	}
-	if args.BatchSize == 0 {
-		args.BatchSize = 100
-	}
 	return extractor, nil
 }
 
-func (e *TapExtractor[Record]) getState() (*State, errors.Error) {
+func (e *Extractor[Record]) getState() (*State, errors.Error) {
 	db := e.Ctx.GetDal()
 	rawState := RawState{
 		Id: e.getStateId(),
 	}
 	if err := db.First(&rawState); err != nil {
-		if goerror.Is(err, gorm.ErrRecordNotFound) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.NotFound.Wrap(err, "record not found")
 		}
 		return nil, err
@@ -84,30 +79,19 @@ func (e *TapExtractor[Record]) getState() (*State, errors.Error) {
 	return ToState(&rawState), nil
 }
 
-func (e *TapExtractor[Record]) pushState(state *State) errors.Error {
+func (e *Extractor[Record]) pushState(state *State) errors.Error {
 	db := e.Ctx.GetDal()
 	rawState := FromState(e.ConnectionId, state)
 	rawState.Id = e.getStateId()
 	return db.CreateOrUpdate(rawState)
 }
 
-func (e *TapExtractor[Record]) getStateId() string {
+func (e *Extractor[Record]) getStateId() string {
 	return fmt.Sprintf("{%s:%d:%d}", fmt.Sprintf("%s::%s", e.tap.GetName(), e.StreamName), e.ConnectionId, e.streamVersion)
 }
 
-func (e *TapExtractor[Record]) close(state *State, divider *helper.BatchSaveDivider) errors.Error {
-	err := divider.Close()
-	if err == nil && state.Value != nil {
-		// save the last state we got in the DB
-		if err = e.pushState(state); err != nil {
-			err = errors.Default.Wrap(err, "error storing state for retrieved singer tap records")
-		}
-	}
-	return err
-}
-
 // Execute executes the extractor
-func (e *TapExtractor[Record]) Execute() (err errors.Error) {
+func (e *Extractor[Record]) Execute() (err errors.Error) {
 	initialState, err := e.getState()
 	if err != nil && err.GetType() != errors.NotFound {
 		return err
@@ -118,22 +102,13 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 			return err
 		}
 	}
-	divider := helper.NewNonRawBatchSaveDivider(e.Ctx, e.BatchSize)
-	var state State
-	recordsProcessed := 0
-	defer func() {
-		e.Ctx.GetLogger().Info("%s processed %d records", e.tap.GetName(), recordsProcessed)
-		err2 := e.close(&state, divider)
-		if err2 != nil {
-			e.Ctx.GetLogger().Error(err2, "error closing tap executor")
-		}
-	}()
 	resultStream, err := e.tap.Run()
 	if err != nil {
 		return err
 	}
 	e.Ctx.SetProgress(0, -1)
 	ctx := e.Ctx.GetContext()
+	var batchedResults []interface{}
 	for result := range resultStream {
 		if result.Err != nil {
 			err = errors.Default.Wrap(result.Err, "error found in streamed tap result")
@@ -146,39 +121,51 @@ func (e *TapExtractor[Record]) Execute() (err errors.Error) {
 		default:
 		}
 		if tapRecord, ok := AsTapRecord[Record](result.Data); ok {
-			var results []interface{}
-			results, err = e.Extract(tapRecord.Record)
+			var extractedResults []interface{}
+			extractedResults, err = e.Extract(tapRecord.Record)
 			if err != nil {
 				return err
 			}
-			if err = e.pushToDB(divider, results); err != nil {
-				return err
-			}
+			batchedResults = append(batchedResults, extractedResults...)
 			e.Ctx.IncProgress(1)
-			recordsProcessed++
 			continue
 		} else if tapState, ok := AsTapState(result.Data); ok {
-			state = *tapState
+			err = e.pushResults(batchedResults)
+			if err != nil {
+				return err
+			}
+			err = e.pushState(tapState)
+			if err != nil {
+				return errors.Default.Wrap(err, "error saving tap state")
+			}
+			batchedResults = nil
 			continue
 		}
 	}
 	return nil
 }
 
-func (e *TapExtractor[Record]) pushToDB(divider *helper.BatchSaveDivider, results []any) errors.Error {
+func (e *Extractor[Record]) pushResults(results []any) errors.Error {
+	if len(results) == 0 {
+		return nil
+	}
+	e.Ctx.GetLogger().Info("%s flushing %d records", e.tap.GetName(), len(results))
+	divider := helper.NewNonRawBatchSaveDivider(e.Ctx, 1+len(results))
 	for _, result := range results {
-		// get the batch operator for the specific type
 		batch, err := divider.ForType(reflect.TypeOf(result))
 		if err != nil {
-			return errors.Default.Wrap(err, "error getting batch from result")
+			return err
 		}
 		err = batch.Add(result)
 		if err != nil {
-			return errors.Default.Wrap(err, "error adding result to batch")
+			return err
 		}
-		e.Ctx.IncProgress(1)
+	}
+	err := divider.Close()
+	if err != nil {
+		return errors.Default.Wrap(err, "error flushing tap records to DB")
 	}
 	return nil
 }
 
-var _ core.SubTask = (*TapExtractor[any])(nil)
+var _ core.SubTask = (*Extractor[any])(nil)
