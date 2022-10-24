@@ -29,7 +29,7 @@ type (
 		TapStreamId   string              `json:"tap_stream_id"`
 		Schema        SingerTapSchema     `json:"schema"`
 		Metadata      []SingerTapMetadata `json:"metadata"`
-		KeyProperties []string            `json:"key_properties"`
+		KeyProperties interface{}         `json:"key_properties"`
 	}
 	// SingerTapConfig the set of variables needed to initialize a SingerTapImpl
 	SingerTapConfig struct {

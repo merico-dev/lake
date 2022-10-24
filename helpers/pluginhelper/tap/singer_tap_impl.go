@@ -125,7 +125,7 @@ func (t *SingerTapImpl) GetName() string {
 
 // Run implements Tap.Run
 func (t *SingerTapImpl) Run() (<-chan *utils.ProcessResponse[Result], errors.Error) {
-	args := []string{"--config", t.configFile.path, "--properties", t.propertiesFile.path}
+	args := []string{"--config", t.configFile.path, "--catalog", t.propertiesFile.path}
 	if t.stateFile != nil {
 		args = append(args, []string{"--state", t.stateFile.path}...)
 	}
