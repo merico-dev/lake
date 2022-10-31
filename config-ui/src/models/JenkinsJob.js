@@ -51,7 +51,7 @@ class JenkinsJob {
   }
 
   getConfiguredEntityId() {
-    return this.name.toString() || this.id
+    return this.name?.toString() || this.id
   }
 
   getTransformationScopeOptions() {

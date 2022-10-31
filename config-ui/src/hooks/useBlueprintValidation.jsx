@@ -91,7 +91,7 @@ function useBlueprintValidation({
   }, [])
 
   const validateRepositoryName = useCallback((projects = []) => {
-    const repoRegExp = /([a-z0-9_-]){2,}\/([a-z0-9_-]){2,}$/gi
+    const repoRegExp = /([a-z0-9_-]){2,}\/([\\.a-z0-9_-]){2,}$/gi
     return projects.every((p) => p.value.match(repoRegExp))
   }, [])
 
