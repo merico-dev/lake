@@ -15,7 +15,7 @@ require (
 	github.com/libgit2/git2go/v33 v33.0.6
 	github.com/magiconair/properties v1.8.5
 	github.com/manifoldco/promptui v0.9.0
-	github.com/merico-dev/graphql v0.0.0-20220804061427-a2245fa66df2
+	github.com/merico-dev/graphql v0.0.0-20221027131946-77460a1fd4cd
 	github.com/mitchellh/mapstructure v1.4.1
 	github.com/panjf2000/ants/v2 v2.4.6
 	github.com/robfig/cron/v3 v3.0.0

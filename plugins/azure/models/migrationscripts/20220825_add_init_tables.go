@@ -18,37 +18,27 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
-
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/azure/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
-type addInitTables struct{}
+type addInitTables20220825 struct{}
 
-func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	if !db.Migrator().HasTable(&archived.AzureConnection{}) {
-		err := db.Migrator().AutoMigrate(&archived.AzureConnection{})
-		if err != nil {
-			return errors.Convert(err)
-		}
-	}
-	err := db.Migrator().AutoMigrate(
+func (*addInitTables20220825) Up(basicRes core.BasicRes) errors.Error {
+	return migrationhelper.AutoMigrateTables(
+		basicRes,
+		&archived.AzureConnection{},
 		&archived.AzureRepo{},
 		&archived.AzureBuildDefinition{},
 	)
-	if err != nil {
-		return errors.Convert(err)
-	}
-
-	return nil
 }
 
-func (*addInitTables) Version() uint64 {
+func (*addInitTables20220825) Version() uint64 {
 	return 20220825231237
 }
 
-func (*addInitTables) Name() string {
+func (*addInitTables20220825) Name() string {
 	return "Azure init schemas"
 }

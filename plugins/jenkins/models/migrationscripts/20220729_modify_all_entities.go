@@ -18,27 +18,27 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
 type modifyAllEntities struct{}
 
-type JenkinsJobDag0729 struct {
+type jenkinsJobDag20220729 struct {
 	ConnetionId   uint64 `gorm:"primaryKey"`
 	UpstreamJob   string `gorm:"primaryKey;type:varchar(255)"`
 	DownstreamJob string `gorm:"primaryKey;type:varchar(255)"`
 	archived.NoPKModel
 }
 
-func (JenkinsJobDag0729) TableName() string {
+func (jenkinsJobDag20220729) TableName() string {
 	return "_tool_jenkins_job_dags"
 }
 
 // JenkinsBuild db entity for jenkins build
-type JenkinsBuild0729 struct {
+type jenkinsBuild20220729 struct {
 	TriggeredBy string `gorm:"type:varchar(255)"`
 	Type        string `gorm:"index;type:varchar(255)" `
 	Class       string `gorm:"index;type:varchar(255)" `
@@ -46,11 +46,11 @@ type JenkinsBuild0729 struct {
 	Building    bool
 }
 
-func (JenkinsBuild0729) TableName() string {
+func (jenkinsBuild20220729) TableName() string {
 	return "_tool_jenkins_builds"
 }
 
-type JenkinsBuildRepo0729 struct {
+type jenkinsBuildRepo20220729 struct {
 	ConnectionId uint64 `gorm:"primaryKey"`
 	BuildName    string `gorm:"primaryKey;type:varchar(255)"`
 	CommitSha    string `gorm:"primaryKey;type:varchar(255)"`
@@ -59,11 +59,11 @@ type JenkinsBuildRepo0729 struct {
 	archived.NoPKModel
 }
 
-func (JenkinsBuildRepo0729) TableName() string {
+func (jenkinsBuildRepo20220729) TableName() string {
 	return "_tool_jenkins_build_repos"
 }
 
-type JenkinsStage0729 struct {
+type jenkinsStage20200729 struct {
 	archived.NoPKModel
 	ConnectionId        uint64 `gorm:"primaryKey"`
 	ID                  string `json:"id" gorm:"primaryKey;type:varchar(255)"`
@@ -77,41 +77,19 @@ type JenkinsStage0729 struct {
 	Type                string `gorm:"index;type:varchar(255)"`
 }
 
-func (JenkinsStage0729) TableName() string {
+func (jenkinsStage20200729) TableName() string {
 	return "_tool_jenkins_stages"
 }
 
-func (*modifyAllEntities) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AddColumn(JenkinsBuild0729{}, "type")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AddColumn(JenkinsBuild0729{}, "class")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AddColumn(JenkinsBuild0729{}, "triggered_by")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AddColumn(JenkinsBuild0729{}, "building")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AddColumn(JenkinsBuild0729{}, "has_stages")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AutoMigrate(
-		JenkinsJobDag0729{},
-		JenkinsBuildRepo0729{},
-		JenkinsStage0729{},
-	)
-	if err != nil {
-		return errors.Convert(err)
-	}
+func (*modifyAllEntities) Up(basicRes core.BasicRes) errors.Error {
 
-	return nil
+	return migrationhelper.AutoMigrateTables(
+		basicRes,
+		jenkinsBuild20220729{},
+		jenkinsJobDag20220729{},
+		jenkinsBuildRepo20220729{},
+		jenkinsStage20200729{},
+	)
 }
 
 func (*modifyAllEntities) Version() uint64 {

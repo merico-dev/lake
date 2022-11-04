@@ -57,7 +57,7 @@ func ConvertBugChangelog(taskCtx core.SubTaskContext) errors.Error {
 	logger := taskCtx.GetLogger()
 	db := taskCtx.GetDal()
 	statusList := make([]models.TapdBugStatus, 0)
-	_, getStdStatus, err := getDefaltStdStatusMapping(data, db, statusList)
+	statusLanguageMap, getStdStatus, err := getDefaltStdStatusMapping(data, db, statusList)
 	if err != nil {
 		return err
 	}
@@ -100,6 +100,8 @@ func ConvertBugChangelog(taskCtx core.SubTaskContext) errors.Error {
 				CreatedDate:       *cl.Created,
 			}
 			if domainCl.FieldName == "status" {
+				domainCl.OriginalFromValue = statusLanguageMap[domainCl.OriginalFromValue]
+				domainCl.OriginalToValue = statusLanguageMap[domainCl.OriginalToValue]
 				if len(customStatusMap) != 0 {
 					domainCl.FromValue = customStatusMap[domainCl.OriginalFromValue]
 					domainCl.ToValue = customStatusMap[domainCl.OriginalToValue]

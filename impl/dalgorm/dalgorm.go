@@ -272,6 +272,11 @@ func (d *Dalgorm) DropIndexes(table string, indexNames ...string) errors.Error {
 	return nil
 }
 
+// Dialect returns the dialect of the database
+func (d *Dalgorm) Dialect() string {
+	return d.db.Dialector.Name()
+}
+
 // NewDalgorm FIXME ...
 func NewDalgorm(db *gorm.DB) *Dalgorm {
 	return &Dalgorm{db}

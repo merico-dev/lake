@@ -19,7 +19,6 @@ package impl
 
 import (
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/webhook/api"
 	"github.com/apache/incubator-devlake/plugins/webhook/models/migrationscripts"
@@ -31,6 +30,7 @@ import (
 var _ core.PluginMeta = (*Webhook)(nil)
 var _ core.PluginInit = (*Webhook)(nil)
 var _ core.PluginApi = (*Webhook)(nil)
+var _ core.PluginMigration = (*Webhook)(nil)
 
 type Webhook struct{}
 
@@ -48,7 +48,7 @@ func (plugin Webhook) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/webhook"
 }
 
-func (plugin Webhook) MigrationScripts() []migration.Script {
+func (plugin Webhook) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

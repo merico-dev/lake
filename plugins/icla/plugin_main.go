@@ -19,11 +19,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/plugins/helper"
 
+	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/icla/models"
+	"github.com/apache/incubator-devlake/plugins/icla/models/migrationscripts"
 	"github.com/apache/incubator-devlake/plugins/icla/tasks"
 	"github.com/apache/incubator-devlake/runner"
 	"github.com/spf13/cobra"
@@ -36,6 +37,7 @@ var _ core.PluginMeta = (*Icla)(nil)
 var _ core.PluginInit = (*Icla)(nil)
 var _ core.PluginTask = (*Icla)(nil)
 var _ core.PluginApi = (*Icla)(nil)
+var _ core.PluginMigration = (*Icla)(nil)
 var _ core.CloseablePluginTask = (*Icla)(nil)
 
 // PluginEntry is a variable exported for Framework to search and load
@@ -54,12 +56,7 @@ func (plugin Icla) Description() string {
 }
 
 func (plugin Icla) Init(config *viper.Viper, logger core.Logger, db *gorm.DB) errors.Error {
-	// AutoSchemas is a **develop** script to auto migrate models easily.
-	// FIXME Don't submit it as a open source plugin
-	return errors.Convert(db.Migrator().AutoMigrate(
-		// TODO add your models in here
-		&models.IclaCommitter{},
-	))
+	return nil
 }
 
 func (plugin Icla) SubTaskMetas() []core.SubTaskMeta {
@@ -90,6 +87,10 @@ func (plugin Icla) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 // PkgPath information lost when compiled as plugin(.so)
 func (plugin Icla) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/icla"
+}
+
+func (plugin Icla) MigrationScripts() []core.MigrationScript {
+	return migrationscripts.All()
 }
 
 func (plugin Icla) ApiResources() map[string]map[string]core.ApiResourceHandler {

@@ -18,20 +18,16 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
-	"encoding/base64"
-	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/bitbucket/models/migrationscripts/archived"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"gorm.io/gorm"
-	"strings"
 )
 
-type addInitTables struct{}
+type addInitTables20220803 struct{}
 
-func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (script *addInitTables20220803) Up(basicRes core.BasicRes) errors.Error {
+	err := basicRes.GetDal().DropTables(
 		//history table
 		&archived.BitbucketRepo{},
 		&archived.BitbucketRepoCommit{},
@@ -43,10 +39,11 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.BitbucketIssueComment{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	err = db.Migrator().AutoMigrate(
+	return migrationhelper.AutoMigrateTables(
+		basicRes,
 		&archived.BitbucketRepo{},
 		&archived.BitbucketRepoCommit{},
 		&archived.BitbucketConnection{},
@@ -57,61 +54,12 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.BitbucketPrComment{},
 		&archived.BitbucketIssueComment{},
 	)
-	if err != nil {
-		return errors.Convert(err)
-	}
-
-	var result *gorm.DB
-	var bitbucketConns []archived.BitbucketConnection
-	result = db.Find(&bitbucketConns)
-	if result.Error != nil {
-		return errors.Convert(result.Error)
-	}
-
-	for _, v := range bitbucketConns {
-		conn := &archived.BitbucketConnection{}
-		conn.ID = v.ID
-		conn.Name = v.Name
-		conn.Endpoint = v.Endpoint
-		conn.Proxy = v.Proxy
-		conn.RateLimitPerHour = v.RateLimitPerHour
-
-		c := config.GetConfig()
-		encKey := c.GetString(core.EncodeKeyEnvStr)
-		if encKey == "" {
-			return errors.BadInput.New("bitbucket invalid encKey")
-		}
-		var auth string
-		if auth, err = core.Decrypt(encKey, v.BasicAuth.GetEncodedToken()); err != nil {
-			return errors.Convert(err)
-		}
-		var pk []byte
-		pk, err = base64.StdEncoding.DecodeString(auth)
-		if err != nil {
-			return errors.Default.Wrap(err, "error creating connection entry for BitBucket")
-		}
-		originInfo := strings.Split(string(pk), ":")
-		if len(originInfo) == 2 {
-			conn.Username = originInfo[0]
-			conn.Password, err = core.Encrypt(encKey, originInfo[1])
-			if err != nil {
-				return errors.Convert(err)
-			}
-			// create
-			tx := db.Create(&conn)
-			if tx.Error != nil {
-				return errors.Default.Wrap(tx.Error, "error adding connection to DB")
-			}
-		}
-	}
-
-	return nil
 }
 
-func (*addInitTables) Version() uint64 {
+func (*addInitTables20220803) Version() uint64 {
 	return 20220803220824
 }
 
-func (*addInitTables) Name() string {
+func (*addInitTables20220803) Name() string {
 	return "Bitbucket init schema 20220803"
 }

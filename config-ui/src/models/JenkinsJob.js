@@ -26,6 +26,7 @@
  * @property {string|number?} title
  * @property {boolean?} useApi
  * @property {project|board|job?} variant
+ * @property {string?} providerId
  */
 class JenkinsJob {
   constructor(data = {}) {
@@ -37,6 +38,7 @@ class JenkinsJob {
 
     this.useApi = data?.useApi || true
     this.variant = data?.variant || 'job'
+    this.providerId = 'jenkins'
   }
 
   get(property) {

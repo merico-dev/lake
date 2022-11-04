@@ -25,6 +25,7 @@ import (
 	githubTasks "github.com/apache/incubator-devlake/plugins/github/tasks"
 	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/merico-dev/graphql"
+	"strings"
 	"time"
 )
 
@@ -170,7 +171,7 @@ func convertGithubIssue(issue GraphqlQueryIssue, connectionId uint64, repository
 		Number:          issue.Number,
 		State:           issue.State,
 		Title:           issue.Title,
-		Body:            issue.Body,
+		Body:            strings.ReplaceAll(issue.Body, "\x00", `<0x00>`),
 		Url:             issue.Url,
 		ClosedAt:        issue.ClosedAt,
 		GithubCreatedAt: issue.CreatedAt,

@@ -18,37 +18,16 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
-	"time"
-
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/github/models/migrationscripts/archived"
 )
-
-type GithubPipeline20220803 struct {
-	archived.NoPKModel
-	ConnectionId uint64     `gorm:"primaryKey"`
-	RepoId       int        `gorm:"primaryKey"`
-	Branch       string     `json:"branch" gorm:"primaryKey;type:varchar(255)"`
-	Commit       string     `json:"commit" gorm:"primaryKey;type:varchar(255)"`
-	StartedDate  *time.Time `json:"started_time"`
-	FinishedDate *time.Time `json:"finished_time"`
-	Duration     float64    `json:"duration"`
-	Status       string     `json:"status" gorm:"type:varchar(255)"`
-	Result       string     `json:"results" gorm:"type:varchar(255)"`
-	Type         string     `json:"type" gorm:"type:varchar(255)"`
-}
-
-func (GithubPipeline20220803) TableName() string {
-	return "_tool_github_pipelines"
-}
 
 type addGithubPipelineTable struct{}
 
-func (u *addGithubPipelineTable) Up(ctx context.Context, db *gorm.DB) errors.Error {
+func (u *addGithubPipelineTable) Up(basicRes core.BasicRes) errors.Error {
 	// create table
-	err := db.Migrator().CreateTable(GithubPipeline20220803{})
+	err := basicRes.GetDal().AutoMigrate(&archived.GithubPipeline{})
 	if err != nil {
 		return errors.Default.Wrap(err, "create table _tool_github_pipelines error")
 	}

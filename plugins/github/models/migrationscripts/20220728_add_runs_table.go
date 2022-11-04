@@ -18,56 +18,17 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
-	"time"
-
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/github/models/migrationscripts/archived"
 )
-
-type GithubRun20220728 struct {
-	archived.NoPKModel
-	ConnectionId     uint64     `gorm:"primaryKey"`
-	RepoId           int        `gorm:"primaryKey"`
-	ID               int64      `json:"id" gorm:"primaryKey;autoIncrement:false"`
-	Name             string     `json:"name" gorm:"type:varchar(255)"`
-	NodeID           string     `json:"node_id" gorm:"type:varchar(255)"`
-	HeadBranch       string     `json:"head_branch" gorm:"type:varchar(255)"`
-	HeadSha          string     `json:"head_sha" gorm:"type:varchar(255)"`
-	Path             string     `json:"path" gorm:"type:varchar(255)"`
-	RunNumber        int        `json:"run_number"`
-	Event            string     `json:"event" gorm:"type:varchar(255)"`
-	Status           string     `json:"status" gorm:"type:varchar(255)"`
-	Conclusion       string     `json:"conclusion" gorm:"type:varchar(255)"`
-	WorkflowID       int        `json:"workflow_id"`
-	CheckSuiteID     int64      `json:"check_suite_id"`
-	CheckSuiteNodeID string     `json:"check_suite_node_id" gorm:"type:varchar(255)"`
-	URL              string     `json:"url" gorm:"type:varchar(255)"`
-	HTMLURL          string     `json:"html_url" gorm:"type:varchar(255)"`
-	GithubCreatedAt  *time.Time `json:"created_at"`
-	GithubUpdatedAt  *time.Time `json:"updated_at"`
-	RunAttempt       int        `json:"run_attempt"`
-	RunStartedAt     *time.Time `json:"run_started_at"`
-	JobsURL          string     `json:"jobs_url" gorm:"type:varchar(255)"`
-	LogsURL          string     `json:"logs_url" gorm:"type:varchar(255)"`
-	CheckSuiteURL    string     `json:"check_suite_url" gorm:"type:varchar(255)"`
-	ArtifactsURL     string     `json:"artifacts_url" gorm:"type:varchar(255)"`
-	CancelURL        string     `json:"cancel_url" gorm:"type:varchar(255)"`
-	RerunURL         string     `json:"rerun_url" gorm:"type:varchar(255)"`
-	WorkflowURL      string     `json:"workflow_url" gorm:"type:varchar(255)"`
-	Type             string     `json:"type" gorm:"type:varchar(255)"`
-}
-
-func (GithubRun20220728) TableName() string {
-	return "_tool_github_runs"
-}
 
 type addGithubRunsTable struct{}
 
-func (u *addGithubRunsTable) Up(ctx context.Context, db *gorm.DB) errors.Error {
+func (u *addGithubRunsTable) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
 	// create table
-	err := db.Migrator().CreateTable(GithubRun20220728{})
+	err := db.AutoMigrate(&archived.GithubRun{})
 	if err != nil {
 		return errors.Default.Wrap(err, "create table _tool_github_runs error")
 	}

@@ -28,7 +28,8 @@ type StarRocksConfig struct {
 	BeHost      string `mapstructure:"be_host"`
 	BePort      int    `mapstructure:"be_port"`
 	Tables      []string
-	BatchSize   int    `mapstructure:"batch_size"`
-	DomainLayer string `mapstructure:"domain_layer"`
-	Extra       string
+	BatchSize   int               `mapstructure:"batch_size"`
+	OrderBy     map[string]string `mapstructure:"order_by"`
+	DomainLayer string            `mapstructure:"domain_layer"`
+	Extra       map[string]string
 }

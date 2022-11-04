@@ -18,13 +18,12 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
 
 	"github.com/apache/incubator-devlake/plugins/github/models/migrationscripts/archived"
-	"gorm.io/gorm"
 )
 
 type addInitTables struct {
@@ -35,8 +34,9 @@ func (u *addInitTables) SetConfigGetter(config core.ConfigGetter) {
 	u.config = config
 }
 
-func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (u *addInitTables) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
+	err := db.DropTables(
 		&archived.GithubRepo{},
 		&archived.GithubConnection{},
 		&archived.GithubCommit{},
@@ -73,32 +73,36 @@ func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 
 	// create connection
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	err = db.Migrator().CreateTable(archived.GithubConnection{})
+	err = db.AutoMigrate(archived.GithubConnection{})
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
-	encodeKey := u.config.GetString(core.EncodeKeyEnvStr)
+	encodeKey := basicRes.GetConfig(core.EncodeKeyEnvStr)
 	connection := &archived.GithubConnection{}
-	connection.Endpoint = u.config.GetString(`GITHUB_ENDPOINT`)
-	connection.Proxy = u.config.GetString(`GITHUB_PROXY`)
-	connection.Token = u.config.GetString(`GITHUB_AUTH`)
+	connection.Endpoint = basicRes.GetConfig(`GITHUB_ENDPOINT`)
+	connection.Proxy = basicRes.GetConfig(`GITHUB_PROXY`)
+	connection.Token = basicRes.GetConfig(`GITHUB_AUTH`)
 	connection.Name = `GitHub`
 	if connection.Endpoint != `` && connection.Token != `` && encodeKey != `` {
 		err = helper.UpdateEncryptFields(connection, func(plaintext string) (string, errors.Error) {
 			return core.Encrypt(encodeKey, plaintext)
 		})
 		if err != nil {
-			return errors.Convert(err)
+			return err
 		}
 		// update from .env and save to db
-		db.Create(connection)
+		err = db.Create(connection)
+		if err != nil {
+			return err
+		}
 	}
 
 	// create other table with connection id
-	err = db.Migrator().AutoMigrate(
+	err = migrationhelper.AutoMigrateTables(
+		basicRes,
 		&archived.GithubRepo{},
 		&archived.GithubCommit{},
 		&archived.GithubRepoCommit{},
@@ -120,7 +124,7 @@ func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.GithubAccountOrg{},
 		&archived.GithubAccount{},
 	)
-	return errors.Convert(err)
+	return err
 }
 
 func (*addInitTables) Version() uint64 {

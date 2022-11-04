@@ -22,7 +22,6 @@ import (
 	"time"
 
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/github/api"
 	"github.com/apache/incubator-devlake/plugins/github/models"
@@ -176,7 +175,7 @@ func (plugin Github) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/github"
 }
 
-func (plugin Github) MigrationScripts() []migration.Script {
+func (plugin Github) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

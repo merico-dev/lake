@@ -18,34 +18,30 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"fmt"
-	"reflect"
 	"strings"
 	"time"
 
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"github.com/apache/incubator-devlake/plugins/helper"
-	"github.com/apache/incubator-devlake/plugins/jenkins/api"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
 type modifyJenkinsBuild struct{}
 
-type JenkinsBuildOld struct {
+type jenkinsBuild20220916Before struct {
 	archived.NoPKModel
 	// collected fields
 	ConnectionId      uint64    `gorm:"primaryKey"`
 	JobName           string    `gorm:"primaryKey;type:varchar(255)"`
 	Duration          float64   // build time
-	DisplayName       string    `gorm:"type:varchar(255)"` // "#7"
+	FullDisplayName   string    `gorm:"primaryKey;type:varchar(255)"` // "#7"
 	EstimatedDuration float64   // EstimatedDuration
 	Number            int64     `gorm:"primaryKey"`
 	Result            string    // Result
 	Timestamp         int64     // start time
 	StartTime         time.Time // convered by timestamp
-	CommitSha         string    `gorm:"type:varchar(255)"`
 	Type              string    `gorm:"index;type:varchar(255)"`
 	Class             string    `gorm:"index;type:varchar(255)" `
 	TriggeredBy       string    `gorm:"type:varchar(255)"`
@@ -53,11 +49,11 @@ type JenkinsBuildOld struct {
 	HasStages         bool
 }
 
-func (JenkinsBuildOld) TableName() string {
+func (jenkinsBuild20220916Before) TableName() string {
 	return "_tool_jenkins_builds"
 }
 
-type JenkinsBuil0916 struct {
+type jenkinsBuild20220916After struct {
 	archived.NoPKModel
 	// collected fields
 	ConnectionId      uint64    `gorm:"primaryKey"`
@@ -76,74 +72,38 @@ type JenkinsBuil0916 struct {
 	HasStages         bool
 }
 
-func (JenkinsBuil0916) TableName() string {
+func (jenkinsBuild20220916After) TableName() string {
 	return "_tool_jenkins_builds"
 }
 
-type JenkinsBuildRepo0916 struct {
-}
+func (script *modifyJenkinsBuild) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
 
-func (JenkinsBuildRepo0916) TableName() string {
-	return "_tool_jenkins_build_repos"
-}
-
-func (*modifyJenkinsBuild) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	cursor, err := db.Model(&JenkinsBuildOld{}).Rows()
+	err := db.RenameTable("_tool_jenkins_build_repos", "_tool_jenkins_build_commits")
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
-	err = db.Migrator().RenameTable(&JenkinsBuildOld{}, "_tool_jenkins_builds_old")
+	err = db.RenameColumn("_tool_jenkins_builds", "display_name", "full_display_name")
 	if err != nil {
-		return errors.Default.Wrap(err, "fail to rename _tool_jenkins_builds")
+		return err
 	}
-	err = db.Migrator().RenameTable(&JenkinsBuildRepo0916{}, "_tool_jenkins_build_commits")
+	err = migrationhelper.TransformTable(
+		basicRes,
+		script,
+		"_tool_jenkins_builds",
+		func(s *jenkinsBuild20220916Before) (*jenkinsBuild20220916After, errors.Error) {
+			// copy data
+			dst := jenkinsBuild20220916After(*s)
+			if strings.Contains(s.FullDisplayName, s.JobName) {
+				dst.FullDisplayName = s.FullDisplayName
+			} else {
+				dst.FullDisplayName = fmt.Sprintf("%s %s", s.JobName, s.FullDisplayName)
+			}
+			return &dst, nil
+		},
+	)
 	if err != nil {
-		return errors.Default.Wrap(err, "fail to rename _tool_jenkins_builds")
-	}
-	err = db.Migrator().AutoMigrate(&JenkinsBuil0916{})
-	if err != nil {
-		return errors.Default.Wrap(err, "fail to create _tool_jenkins_builds")
-	}
-	batch, err := helper.NewBatchSave(api.BasicRes, reflect.TypeOf(&JenkinsBuil0916{}), 300)
-	if err != nil {
-		return errors.Default.Wrap(err, "error getting batch from table")
-	}
-	defer batch.Close()
-	for cursor.Next() {
-		build := JenkinsBuildOld{}
-		err = db.ScanRows(cursor, &build)
-		if err != nil {
-			return errors.Convert(err)
-		}
-		newBuild := &JenkinsBuil0916{
-			NoPKModel:         build.NoPKModel,
-			ConnectionId:      build.ConnectionId,
-			JobName:           build.JobName,
-			Duration:          build.Duration,
-			FullDisplayName:   build.DisplayName,
-			EstimatedDuration: build.EstimatedDuration,
-			Number:            build.Number,
-			Result:            build.Result,
-			Timestamp:         build.Timestamp,
-			StartTime:         build.StartTime,
-			Type:              build.Type,
-			Class:             build.Class,
-			TriggeredBy:       build.TriggeredBy,
-			Building:          build.Building,
-			HasStages:         build.HasStages,
-		}
-		if strings.Contains(build.DisplayName, build.JobName) {
-			newBuild.FullDisplayName = build.DisplayName
-		} else {
-			newBuild.FullDisplayName = fmt.Sprintf("%s %s", build.JobName, build.DisplayName)
-		}
-		err = batch.Add(newBuild)
-		if err != nil {
-			return errors.Convert(err)
-		}
-	}
-	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
 	return nil

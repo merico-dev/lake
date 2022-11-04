@@ -18,6 +18,7 @@ limitations under the License.
 package tasks
 
 import (
+	"github.com/apache/incubator-devlake/errors"
 	"time"
 
 	"github.com/apache/incubator-devlake/plugins/gitee/models"
@@ -36,4 +37,54 @@ type GiteeTaskData struct {
 	ApiClient *helper.ApiAsyncClient
 	Repo      *models.GiteeRepo
 	Since     *time.Time
+}
+
+func DecodeAndValidateTaskOptions(options map[string]interface{}) (*GiteeOptions, errors.Error) {
+	var op GiteeOptions
+	err := helper.Decode(options, &op, nil)
+	if err != nil {
+		return nil, err
+	}
+	if op.Owner == "" {
+		return nil, errors.BadInput.New("owner is required for GitHub execution")
+	}
+	if op.Repo == "" {
+		return nil, errors.BadInput.New("repo is required for GitHub execution")
+	}
+	if op.PrType == "" {
+		op.PrType = "type/(.*)$"
+	}
+	if op.PrComponent == "" {
+		op.PrComponent = "component/(.*)$"
+	}
+	if op.PrBodyClosePattern == "" {
+		op.PrBodyClosePattern = "(?mi)(fix|close|resolve|fixes|closes|resolves|fixed|closed|resolved)[\\s]*.*(((and )?(#|https:\\/\\/github.com\\/%s\\/%s\\/issues\\/)\\d+[ ]*)+)"
+	}
+	if op.IssueSeverity == "" {
+		op.IssueSeverity = "severity/(.*)$"
+	}
+	if op.IssuePriority == "" {
+		op.IssuePriority = "^(highest|high|medium|low)$"
+	}
+	if op.IssueComponent == "" {
+		op.IssueComponent = "component/(.*)$"
+	}
+	if op.IssueTypeBug == "" {
+		op.IssueTypeBug = "^(bug|failure|error)$"
+	}
+	if op.IssueTypeIncident == "" {
+		op.IssueTypeIncident = ""
+	}
+	if op.IssueTypeRequirement == "" {
+		op.IssueTypeRequirement = "^(feat|feature|proposal|requirement)$"
+	}
+	if op.DeploymentPattern == "" {
+		op.DeploymentPattern = "(?i)deploy"
+	}
+
+	// find the needed GitHub now
+	if op.ConnectionId == 0 {
+		return nil, errors.BadInput.New("connectionId is invalid")
+	}
+	return &op, nil
 }

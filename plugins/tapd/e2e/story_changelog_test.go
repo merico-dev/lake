@@ -51,9 +51,9 @@ func TestTapdStoryChangelogDataFlow(t *testing.T) {
 					},
 				},
 				StatusMappings: map[string]tasks.OriginalStatus{
-					"doneStatus":       []string{"已关闭"},
-					"inprogressStatus": []string{"开发中", "developing", "test-11test-11test-12"},
-					"todoStatus":       []string{"重新打开", "planning", "test-11test-11test-11"},
+					"DONE":        []string{"已关闭"},
+					"IN_PROGRESS": []string{"接受/处理", "开发中", "developing", "test-11test-11test-12"},
+					"TODO":        []string{"新", "planning", "test-11test-11test-11"},
 				},
 			},
 		},

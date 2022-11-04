@@ -51,6 +51,7 @@ type TransformationRules struct {
 	IssueTypeBug         string `mapstructure:"issueTypeBug" env:"GITEE_ISSUE_TYPE_BUG" json:"issueTypeBug"`
 	IssueTypeIncident    string `mapstructure:"issueTypeIncident" env:"GITEE_ISSUE_TYPE_INCIDENT" json:"issueTypeIncident"`
 	IssueTypeRequirement string `mapstructure:"issueTypeRequirement" env:"GITEE_ISSUE_TYPE_REQUIREMENT" json:"issueTypeRequirement"`
+	DeploymentPattern    string `mapstructure:"deploymentPattern" json:"deploymentPattern"`
 }
 
 func (GiteeConnection) TableName() string {

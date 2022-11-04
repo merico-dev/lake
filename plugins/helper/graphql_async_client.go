@@ -19,23 +19,27 @@ package helper
 
 import (
 	"context"
-	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/plugins/core"
-	"github.com/merico-dev/graphql"
+	"fmt"
 	"sync"
 	"time"
+
+	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/utils"
+	"github.com/merico-dev/graphql"
 )
 
 // GraphqlAsyncClient send graphql one by one
 type GraphqlAsyncClient struct {
-	ctx          context.Context
-	cancel       context.CancelFunc
-	client       *graphql.Client
-	logger       core.Logger
-	mu           sync.Mutex
-	waitGroup    sync.WaitGroup
-	workerErrors []error
+	ctx       context.Context
+	cancel    context.CancelFunc
+	client    *graphql.Client
+	logger    core.Logger
+	mu        sync.Mutex
+	waitGroup sync.WaitGroup
 
+	maxRetry         int
+	waitBeforeRetry  time.Duration
 	rateExhaustCond  *sync.Cond
 	rateRemaining    int
 	getRateRemaining func(context.Context, *graphql.Client, core.Logger) (rateRemaining int, resetAt *time.Time, err errors.Error)
@@ -44,12 +48,12 @@ type GraphqlAsyncClient struct {
 
 // CreateAsyncGraphqlClient creates a new GraphqlAsyncClient
 func CreateAsyncGraphqlClient(
-	ctx context.Context,
+	taskCtx core.TaskContext,
 	graphqlClient *graphql.Client,
 	logger core.Logger,
 	getRateRemaining func(context.Context, *graphql.Client, core.Logger) (rateRemaining int, resetAt *time.Time, err errors.Error),
-) *GraphqlAsyncClient {
-	ctxWithCancel, cancel := context.WithCancel(ctx)
+) (*GraphqlAsyncClient, errors.Error) {
+	ctxWithCancel, cancel := context.WithCancel(taskCtx.GetContext())
 	graphqlAsyncClient := &GraphqlAsyncClient{
 		ctx:              ctxWithCancel,
 		cancel:           cancel,
@@ -59,14 +63,48 @@ func CreateAsyncGraphqlClient(
 		rateRemaining:    0,
 		getRateRemaining: getRateRemaining,
 	}
+
 	if getRateRemaining != nil {
-		rateRemaining, resetAt, err := getRateRemaining(ctx, graphqlClient, logger)
+		rateRemaining, resetAt, err := getRateRemaining(taskCtx.GetContext(), graphqlClient, logger)
 		if err != nil {
 			panic(err)
 		}
 		graphqlAsyncClient.updateRateRemaining(rateRemaining, resetAt)
 	}
-	return graphqlAsyncClient
+
+	// load retry/timeout from configuration
+	// use API_RETRY as max retry time
+	// use API_TIMEOUT as retry before wait seconds to confirm the prev request finish
+	timeout := 30 * time.Second
+	retry, err := utils.StrToIntOr(taskCtx.GetConfig("API_RETRY"), 3)
+	if err != nil {
+		return nil, errors.BadInput.Wrap(err, "failed to parse API_RETRY")
+	}
+	timeoutConf := taskCtx.GetConfig("API_TIMEOUT")
+	if timeoutConf != "" {
+		// override timeout value if API_TIMEOUT is provided
+		timeout, err = errors.Convert01(time.ParseDuration(timeoutConf))
+		if err != nil {
+			return nil, errors.BadInput.Wrap(err, "failed to parse API_TIMEOUT")
+		}
+	}
+	graphqlAsyncClient.SetMaxRetry(retry, timeout)
+
+	return graphqlAsyncClient, nil
+}
+
+// GetMaxRetry returns the maximum retry attempts for a request
+func (apiClient *GraphqlAsyncClient) GetMaxRetry() (int, time.Duration) {
+	return apiClient.maxRetry, apiClient.waitBeforeRetry
+}
+
+// SetMaxRetry sets the maximum retry attempts for a request
+func (apiClient *GraphqlAsyncClient) SetMaxRetry(
+	maxRetry int,
+	waitBeforeRetry time.Duration,
+) {
+	apiClient.maxRetry = maxRetry
+	apiClient.waitBeforeRetry = waitBeforeRetry
 }
 
 // updateRateRemaining call getRateRemaining to update rateRemaining periodically
@@ -80,12 +118,16 @@ func (apiClient *GraphqlAsyncClient) updateRateRemaining(rateRemaining int, rese
 		if resetAt != nil && resetAt.After(time.Now()) {
 			nextDuring = time.Until(*resetAt)
 		}
-		<-time.After(nextDuring)
-		newRateRemaining, newResetAt, err := apiClient.getRateRemaining(apiClient.ctx, apiClient.client, apiClient.logger)
-		if err != nil {
-			panic(err)
+		select {
+		case <-apiClient.ctx.Done():
+			return
+		case <-time.After(nextDuring):
+			newRateRemaining, newResetAt, err := apiClient.getRateRemaining(apiClient.ctx, apiClient.client, apiClient.logger)
+			if err != nil {
+				panic(err)
+			}
+			apiClient.updateRateRemaining(newRateRemaining, newResetAt)
 		}
-		apiClient.updateRateRemaining(newRateRemaining, newResetAt)
 	}()
 }
 
@@ -96,7 +138,9 @@ func (apiClient *GraphqlAsyncClient) SetGetRateCost(getRateCost func(q interface
 }
 
 // Query send a graphql request when get lock
-func (apiClient *GraphqlAsyncClient) Query(q interface{}, variables map[string]interface{}) errors.Error {
+// []graphql.DataError are the errors returned in response body
+// errors.Error is other error
+func (apiClient *GraphqlAsyncClient) Query(q interface{}, variables map[string]interface{}) ([]graphql.DataError, errors.Error) {
 	apiClient.waitGroup.Add(1)
 	defer apiClient.waitGroup.Done()
 	apiClient.mu.Lock()
@@ -108,26 +152,40 @@ func (apiClient *GraphqlAsyncClient) Query(q interface{}, variables map[string]i
 		apiClient.logger.Info(`rate limit remaining exhausted, waiting for next period.`)
 		apiClient.rateExhaustCond.Wait()
 	}
-	select {
-	case <-apiClient.ctx.Done():
-		return nil
-	default:
-		err := apiClient.client.Query(apiClient.ctx, q, variables)
-		if err != nil {
-			return errors.Default.Wrap(err, "error making GraphQL call")
+
+	retryTime := 0
+	var err error
+	//  if it needs retry, check and retry
+	for retryTime < apiClient.maxRetry {
+		select {
+		case <-apiClient.ctx.Done():
+			return nil, nil
+		default:
+			var dataErrors []graphql.DataError
+			dataErrors, err := apiClient.client.Query(apiClient.ctx, q, variables)
+			if err != nil {
+				apiClient.logger.Warn(err, "retry #%d graphql calling after %ds", retryTime, apiClient.waitBeforeRetry/time.Second)
+				retryTime++
+				<-time.After(apiClient.waitBeforeRetry)
+				continue
+			}
+			if dataErrors != nil {
+				return dataErrors, nil
+			}
+			cost := 1
+			if apiClient.getRateCost != nil {
+				cost = apiClient.getRateCost(q)
+			}
+			apiClient.rateRemaining -= cost
+			apiClient.logger.Debug(`query cost %d in %v`, cost, variables)
+			return nil, nil
 		}
-		cost := 1
-		if apiClient.getRateCost != nil {
-			cost = apiClient.getRateCost(q)
-		}
-		apiClient.rateRemaining -= cost
-		apiClient.logger.Debug(`query cost %d in %v`, cost, variables)
-		return nil
 	}
+	return nil, errors.Default.Wrap(err, fmt.Sprintf("got error when querying GraphQL (from the %dth retry)", retryTime))
 }
 
 // NextTick to return the NextTick of scheduler
-func (apiClient *GraphqlAsyncClient) NextTick(task func() errors.Error) {
+func (apiClient *GraphqlAsyncClient) NextTick(task func() errors.Error, taskErrorChecker func(err errors.Error)) {
 	// to make sure task will be enqueued
 	apiClient.waitGroup.Add(1)
 	go func() {
@@ -140,29 +198,17 @@ func (apiClient *GraphqlAsyncClient) NextTick(task func() errors.Error) {
 				// But if done out of this go func, so task will run after waitGroup finish
 				// I have no idea about this now...
 				defer apiClient.waitGroup.Done()
-				apiClient.checkError(task())
 			}()
 		}
 	}()
 }
 
 // Wait blocks until all async requests were done
-func (apiClient *GraphqlAsyncClient) Wait() errors.Error {
+func (apiClient *GraphqlAsyncClient) Wait() {
 	apiClient.waitGroup.Wait()
-	if len(apiClient.workerErrors) > 0 {
-		return errors.Default.Combine(apiClient.workerErrors)
-	}
-	return nil
 }
 
-func (apiClient *GraphqlAsyncClient) checkError(err errors.Error) {
-	if err == nil {
-		return
-	}
-	apiClient.workerErrors = append(apiClient.workerErrors, err)
-}
-
-// HasError return if any error occurred
-func (apiClient *GraphqlAsyncClient) HasError() bool {
-	return len(apiClient.workerErrors) > 0
+// Release will release the ApiAsyncClient with scheduler
+func (apiClient *GraphqlAsyncClient) Release() {
+	apiClient.cancel()
 }

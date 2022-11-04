@@ -19,12 +19,12 @@ package impl
 
 import (
 	"fmt"
+
 	"github.com/apache/incubator-devlake/errors"
 
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/feishu/api"
 	"github.com/apache/incubator-devlake/plugins/feishu/models"
@@ -37,7 +37,7 @@ var _ core.PluginMeta = (*Feishu)(nil)
 var _ core.PluginInit = (*Feishu)(nil)
 var _ core.PluginTask = (*Feishu)(nil)
 var _ core.PluginApi = (*Feishu)(nil)
-var _ core.Migratable = (*Feishu)(nil)
+var _ core.PluginMigration = (*Feishu)(nil)
 var _ core.CloseablePluginTask = (*Feishu)(nil)
 
 type Feishu struct{}
@@ -123,7 +123,7 @@ func (plugin Feishu) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/feishu"
 }
 
-func (plugin Feishu) MigrationScripts() []migration.Script {
+func (plugin Feishu) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

@@ -67,6 +67,7 @@ jobs:
           echo Node IP: ${NODE_IP}
           helm install --wait --timeout 300s deploy-test deployment/helm \
             --set service.uiPort=30000 \
+            --set mysql.image.tag=8-debian \
             --set option.localtime=""
           kubectl get pods -o wide
           kubectl get services -o wide

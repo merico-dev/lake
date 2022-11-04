@@ -30,6 +30,7 @@
  * @property {object?} location
  * @property {boolean?} useApi
  * @property {project|board?} variant
+ * @property {string?} providerId
  */
 class JiraBoard {
   constructor(data = {}) {
@@ -56,6 +57,7 @@ class JiraBoard {
 
     this.useApi = data?.useApi || true
     this.variant = data?.variant || 'board'
+    this.providerId = 'jira'
   }
 
   get(property) {

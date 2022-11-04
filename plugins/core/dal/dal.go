@@ -102,6 +102,8 @@ type Dal interface {
 	RenameColumn(table, oldColumnName, newColumnName string) errors.Error
 	// DropIndexes drops all specified tables
 	DropIndexes(table string, indexes ...string) errors.Error
+	// Dialect returns the dialect of current database
+	Dialect() string
 }
 
 // GetColumnNames returns table Column Names in database

@@ -30,6 +30,7 @@ import { integrationsData } from '@/data/integrations'
 import { ProviderIcons, Providers } from '@/data/Providers'
 import { DataEntityTypes } from '@/data/DataEntities'
 import { DEFAULT_DATA_ENTITIES } from '@/data/BlueprintWorkflow'
+import { Variants } from '@/data/Variants'
 
 import ConnectionTabs from '@/components/blueprints/ConnectionTabs'
 import NoData from '@/components/NoData'
@@ -120,10 +121,10 @@ const DataTransformations = (props) => {
     if (useDropdownSelector) {
       console.log('>>>>> PROJECT / BOARD ENTITY SELECTED!', activeEntity)
       switch (activeEntity?.type) {
-        case 'board':
+        case Variants.BOARD:
           addBoardTransformation(activeEntity?.entity)
           break
-        case 'project':
+        case Variants.PROJECT:
         default:
           addProjectTransformation(activeEntity?.entity)
           break

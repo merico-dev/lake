@@ -29,6 +29,7 @@
  * @property {string?} repo
  * @property {boolean?} useApi
  * @property {project|board?} variant
+ * @property {string?} providerId
  */
 class GitHubProject {
   constructor(data = {}) {
@@ -47,6 +48,7 @@ class GitHubProject {
 
     this.useApi = data?.useApi || false
     this.variant = data?.variant || 'project'
+    this.providerId = 'github'
   }
 
   get(property) {

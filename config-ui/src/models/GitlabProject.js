@@ -48,6 +48,7 @@
  * @property {boolean?} archived
  * @property {boolean?} useApi
  * @property {project|board?} variant
+ * @property {string?} providerId
  */
 class GitlabProject {
   constructor(data = {}) {
@@ -86,6 +87,7 @@ class GitlabProject {
 
     this.useApi = data?.useApi || false
     this.variant = data?.variant || 'project'
+    this.providerId = 'gitlab'
   }
 
   get(property) {

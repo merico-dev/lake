@@ -18,13 +18,12 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
 
 	"github.com/apache/incubator-devlake/plugins/feishu/models/migrationscripts/archived"
-	"gorm.io/gorm"
 )
 
 type addInitTables struct {
@@ -35,37 +34,44 @@ func (u *addInitTables) SetConfigGetter(config core.ConfigGetter) {
 	u.config = config
 }
 
-func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (u *addInitTables) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
+
+	err := db.DropTables(
 		&archived.FeishuConnection{},
 		&archived.FeishuMeetingTopUserItem{},
 	)
 	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().CreateTable(
-		&archived.FeishuConnection{},
-		&archived.FeishuMeetingTopUserItem{},
-	)
-	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	encodeKey := u.config.GetString(core.EncodeKeyEnvStr)
+	err = migrationhelper.AutoMigrateTables(
+		basicRes,
+		&archived.FeishuConnection{},
+		&archived.FeishuMeetingTopUserItem{},
+	)
+	if err != nil {
+		return err
+	}
+
+	encodeKey := basicRes.GetConfig(core.EncodeKeyEnvStr)
 	connection := &archived.FeishuConnection{}
-	connection.Endpoint = u.config.GetString(`FEISHU_ENDPOINT`)
-	connection.AppId = u.config.GetString(`FEISHU_APPID`)
-	connection.SecretKey = u.config.GetString(`FEISHU_APPSCRECT`)
+	connection.Endpoint = basicRes.GetConfig(`FEISHU_ENDPOINT`)
+	connection.AppId = basicRes.GetConfig(`FEISHU_APPID`)
+	connection.SecretKey = basicRes.GetConfig(`FEISHU_APPSCRECT`)
 	connection.Name = `Feishu`
 	if connection.Endpoint != `` && connection.AppId != `` && connection.SecretKey != `` && encodeKey != `` {
 		err = helper.UpdateEncryptFields(connection, func(plaintext string) (string, errors.Error) {
 			return core.Encrypt(encodeKey, plaintext)
 		})
 		if err != nil {
-			return errors.Convert(err)
+			return err
 		}
 		// update from .env and save to db
-		db.Create(connection)
+		err = db.CreateIfNotExist(connection)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

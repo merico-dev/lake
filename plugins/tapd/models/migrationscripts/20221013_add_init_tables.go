@@ -18,17 +18,17 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
-
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
+	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/tapd/models/migrationscripts/archived"
-	"gorm.io/gorm"
 )
 
 type addInitTables struct{}
 
-func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (*addInitTables) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
+	err := db.DropTables(
 		"_raw_tapd_api_bug_changelogs",
 		"_raw_tapd_api_bugs",
 		"_raw_tapd_api_bug_commits",
@@ -90,10 +90,11 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.TapdWorkitemType{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	return errors.Convert(db.Migrator().AutoMigrate(
+	return migrationhelper.AutoMigrateTables(
+		basicRes,
 		&archived.TapdWorkspace{},
 		&archived.TapdSubWorkspace{},
 		&archived.TapdWorklog{},
@@ -131,7 +132,7 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.TapdStoryCategory{},
 		&archived.TapdStoryBug{},
 		&archived.TapdWorkitemType{},
-	))
+	)
 }
 
 func (*addInitTables) Version() uint64 {

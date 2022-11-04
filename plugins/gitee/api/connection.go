@@ -82,7 +82,7 @@ func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, erro
 // @Summary create gitee connection
 // @Description Create gitee connection
 // @Tags plugins/gitee
-// @Param body body models.GithubConnection true "json body"
+// @Param body body models.GiteeConnection true "json body"
 // @Success 200  {object} models.GiteeConnection
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"
@@ -99,7 +99,7 @@ func PostConnections(input *core.ApiResourceInput) (*core.ApiResourceOutput, err
 // @Summary patch gitee connection
 // @Description Patch gitee connection
 // @Tags plugins/gitee
-// @Param body body models.GithubConnection true "json body"
+// @Param body body models.GiteeConnection true "json body"
 // @Success 200  {object} models.GiteeConnection
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internel Error"

@@ -19,6 +19,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/github/models"
@@ -71,7 +72,6 @@ func (plugin GithubGraphql) SubTaskMetas() []core.SubTaskMeta {
 		githubTasks.ExtractApiPrReviewCommentsMeta,
 
 		tasks.CollectAccountMeta,
-
 		githubTasks.ConvertJobsMeta,
 		githubTasks.EnrichPullRequestIssuesMeta,
 		githubTasks.ConvertRepoMeta,
@@ -127,17 +127,23 @@ func (plugin GithubGraphql) PrepareTaskData(taskCtx core.TaskContext, options ma
 	)
 	httpClient := oauth2.NewClient(taskCtx.GetContext(), src)
 	client := graphql.NewClient(connection.Endpoint+`graphql`, httpClient)
-	graphqlClient := helper.CreateAsyncGraphqlClient(taskCtx.GetContext(), client, taskCtx.GetLogger(),
+	graphqlClient, err := helper.CreateAsyncGraphqlClient(taskCtx, client, taskCtx.GetLogger(),
 		func(ctx context.Context, client *graphql.Client, logger core.Logger) (rateRemaining int, resetAt *time.Time, err errors.Error) {
 			var query GraphQueryRateLimit
-			err = errors.Convert(client.Query(taskCtx.GetContext(), &query, nil))
+			dataErrors, err := errors.Convert01(client.Query(taskCtx.GetContext(), &query, nil))
 			if err != nil {
 				return 0, nil, err
+			}
+			if dataErrors != nil && len(dataErrors) > 0 {
+				return 0, nil, errors.Default.Wrap(dataErrors[0], `query rate limit fail`)
 			}
 			logger.Info(`github graphql init success with remaining %d/%d and will reset at %s`,
 				query.RateLimit.Remaining, query.RateLimit.Limit, query.RateLimit.ResetAt)
 			return int(query.RateLimit.Remaining), &query.RateLimit.ResetAt, nil
 		})
+	if err != nil {
+		return nil, err
+	}
 
 	graphqlClient.SetGetRateCost(func(q interface{}) int {
 		v := reflect.ValueOf(q)
@@ -162,6 +168,16 @@ func (plugin GithubGraphql) RootPkgPath() string {
 }
 
 func (plugin GithubGraphql) ApiResources() map[string]map[string]core.ApiResourceHandler {
+	return nil
+}
+
+func (plugin GithubGraphql) Close(taskCtx core.TaskContext) errors.Error {
+	data, ok := taskCtx.GetData().(*githubTasks.GithubTaskData)
+	if !ok {
+		return errors.Default.New(fmt.Sprintf("GetData failed when try to close %+v", taskCtx))
+	}
+	data.ApiClient.Release()
+	data.GraphqlClient.Release()
 	return nil
 }
 

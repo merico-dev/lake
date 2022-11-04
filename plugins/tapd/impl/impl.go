@@ -19,14 +19,13 @@ package impl
 
 import (
 	"fmt"
-	"github.com/apache/incubator-devlake/errors"
 	"time"
 
-	"github.com/apache/incubator-devlake/plugins/helper"
+	"github.com/apache/incubator-devlake/errors"
 
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/models/domainlayer/didgen"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/helper"
 	"github.com/apache/incubator-devlake/plugins/tapd/api"
 	"github.com/apache/incubator-devlake/plugins/tapd/models"
 	"github.com/apache/incubator-devlake/plugins/tapd/models/migrationscripts"
@@ -39,7 +38,7 @@ var _ core.PluginMeta = (*Tapd)(nil)
 var _ core.PluginInit = (*Tapd)(nil)
 var _ core.PluginTask = (*Tapd)(nil)
 var _ core.PluginApi = (*Tapd)(nil)
-var _ core.Migratable = (*Tapd)(nil)
+var _ core.PluginMigration = (*Tapd)(nil)
 var _ core.CloseablePluginTask = (*Tapd)(nil)
 
 type Tapd struct{}
@@ -216,7 +215,7 @@ func (plugin Tapd) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/tapd"
 }
 
-func (plugin Tapd) MigrationScripts() []migration.Script {
+func (plugin Tapd) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

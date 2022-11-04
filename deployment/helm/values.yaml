@@ -49,10 +49,11 @@ mysql:
     size: 5Gi
 
   # image for mysql
+  # mysql:8 for latest version with mysql-8, which avaliable for amd64/arm64v8 arch.
   image:
     repository: mysql
-    tag: 8.0.26
-    pullPolicy: IfNotPresent
+    tag: 8
+    pullPolicy: Always
   
   # resources config for mysql if have
   resources: {}
@@ -71,7 +72,7 @@ grafana:
   # image for grafana
   image:
     repository: apache/devlake-dashboard
-    tag: v0.12.0-rc2
+    tag: latest
     pullPolicy: Always
   
   resources: {}
@@ -86,7 +87,7 @@ grafana:
 lake:
   image:
     repository: apache/devlake
-    tag: v0.12.0-rc2
+    tag: latest
     pullPolicy: Always
   # storage for config
   storage:
@@ -107,7 +108,7 @@ lake:
 ui:
   image:
     repository: apache/devlake-config-ui
-    tag: v0.12.0-rc2
+    tag: latest
     pullPolicy: Always
 
   resources: {}

@@ -18,36 +18,35 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/core"
-	"gorm.io/gorm/clause"
-
 	"github.com/apache/incubator-devlake/plugins/jenkins/models/migrationscripts/archived"
-	"gorm.io/gorm"
 )
 
 type addInitTables struct{}
 
-func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (*addInitTables) Up(basicRes core.BasicRes) errors.Error {
+	db := basicRes.GetDal()
+	err := db.DropTables(
 		"_raw_jenkins_api_jobs",
 		"_raw_jenkins_api_builds",
 		&archived.JenkinsJob{},
 		&archived.JenkinsBuild{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	err = db.Migrator().AutoMigrate(
+	err = migrationhelper.AutoMigrateTables(
+		basicRes,
 		&archived.JenkinsJob{},
 		&archived.JenkinsBuild{},
 		&archived.JenkinsConnection{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
 	v := config.GetConfig()
@@ -68,12 +67,12 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 	conn.Username = useName
 	conn.Password, err = core.Encrypt(encKey, passWord)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
-	err = db.Clauses(clause.OnConflict{DoNothing: true}).Create(conn).Error
+	err = db.CreateIfNotExist(conn)
 
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
 	return nil

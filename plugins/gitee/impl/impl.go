@@ -19,9 +19,9 @@ package impl
 
 import (
 	"fmt"
+
 	"github.com/apache/incubator-devlake/errors"
 
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/gitee/api"
 	"github.com/apache/incubator-devlake/plugins/gitee/models"
@@ -36,7 +36,7 @@ var _ core.PluginMeta = (*Gitee)(nil)
 var _ core.PluginInit = (*Gitee)(nil)
 var _ core.PluginTask = (*Gitee)(nil)
 var _ core.PluginApi = (*Gitee)(nil)
-var _ core.Migratable = (*Gitee)(nil)
+var _ core.PluginMigration = (*Gitee)(nil)
 var _ core.CloseablePluginTask = (*Gitee)(nil)
 
 type Gitee string
@@ -188,7 +188,7 @@ func (plugin Gitee) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/gitee"
 }
 
-func (plugin Gitee) MigrationScripts() []migration.Script {
+func (plugin Gitee) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 
@@ -207,6 +207,10 @@ func (plugin Gitee) ApiResources() map[string]map[string]core.ApiResourceHandler
 			"DELETE": api.DeleteConnection,
 		},
 	}
+}
+
+func (plugin Gitee) MakePipelinePlan(connectionId uint64, scope []*core.BlueprintScopeV100) (core.PipelinePlan, errors.Error) {
+	return api.MakePipelinePlan(plugin.SubTaskMetas(), connectionId, scope)
 }
 
 func (plugin Gitee) Close(taskCtx core.TaskContext) errors.Error {

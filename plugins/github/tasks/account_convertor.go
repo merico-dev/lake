@@ -52,7 +52,19 @@ func ConvertAccounts(taskCtx core.SubTaskContext) errors.Error {
 	db := taskCtx.GetDal()
 	data := taskCtx.GetData().(*GithubTaskData)
 
-	cursor, err := db.Cursor(dal.From(&githubModels.GithubAccount{}), dal.Where("connection_id = ?", data.Options.ConnectionId))
+	cursor, err := db.Cursor(
+		dal.Select("_tool_github_accounts.*"),
+		dal.From(&githubModels.GithubAccount{}),
+		dal.Where(
+			"repo_github_id = ? and _tool_github_accounts.connection_id=?",
+			data.Repo.GithubId,
+			data.Options.ConnectionId,
+		),
+		dal.Join(`left join _tool_github_repo_accounts gra on (
+			_tool_github_accounts.connection_id = gra.connection_id
+			AND _tool_github_accounts.id = gra.account_id
+		)`),
+	)
 	if err != nil {
 		return err
 	}

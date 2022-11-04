@@ -18,49 +18,16 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
-	"time"
-
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/datatypes"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/github/models/migrationscripts/archived"
 )
-
-type GithubJob20220729 struct {
-	archived.NoPKModel
-	ConnectionId  uint64         `gorm:"primaryKey"`
-	RepoId        int            `gorm:"primaryKey"`
-	ID            int            `json:"id" gorm:"primaryKey;autoIncrement:false"`
-	RunID         int            `json:"run_id"`
-	RunURL        string         `json:"run_url" gorm:"type:varchar(255)"`
-	NodeID        string         `json:"node_id" gorm:"type:varchar(255)"`
-	HeadSha       string         `json:"head_sha" gorm:"type:varchar(255)"`
-	URL           string         `json:"url" gorm:"type:varchar(255)"`
-	HTMLURL       string         `json:"html_url" gorm:"type:varchar(255)"`
-	Status        string         `json:"status" gorm:"type:varchar(255)"`
-	Conclusion    string         `json:"conclusion" gorm:"type:varchar(255)"`
-	StartedAt     *time.Time     `json:"started_at"`
-	CompletedAt   *time.Time     `json:"completed_at"`
-	Name          string         `json:"name" gorm:"type:varchar(255)"`
-	Steps         datatypes.JSON `json:"steps"`
-	CheckRunURL   string         `json:"check_run_url" gorm:"type:varchar(255)"`
-	Labels        datatypes.JSON `json:"labels"`
-	RunnerID      int            `json:"runner_id"`
-	RunnerName    string         `json:"runner_name" gorm:"type:varchar(255)"`
-	RunnerGroupID int            `json:"runner_group_id"`
-	Type          string         `json:"type" gorm:"type:varchar(255)"`
-}
-
-func (GithubJob20220729) TableName() string {
-	return "_tool_github_jobs"
-}
 
 type addGithubJobsTable struct{}
 
-func (u *addGithubJobsTable) Up(ctx context.Context, db *gorm.DB) errors.Error {
+func (u *addGithubJobsTable) Up(basicRes core.BasicRes) errors.Error {
 	// create table
-	err := db.Migrator().CreateTable(GithubJob20220729{})
+	err := basicRes.GetDal().AutoMigrate(&archived.GithubJob{})
 	if err != nil {
 		return errors.Default.Wrap(err, "create table _tool_github_jobs error")
 	}

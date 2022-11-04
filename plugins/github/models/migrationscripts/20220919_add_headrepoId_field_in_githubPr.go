@@ -18,58 +18,26 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
-	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
-	"time"
-
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
-type addFieldHeadRepoId20220919 struct {
-	ConnectionId    uint64 `gorm:"primaryKey"`
-	GithubId        int    `gorm:"primaryKey"`
-	RepoId          int    `gorm:"index"`
-	HeadRepoId      int
-	Number          int    `gorm:"index"` // This number is used in GET requests to the API associated to reviewers / comments / etc.
-	State           string `gorm:"type:varchar(255)"`
-	Title           string
-	GithubCreatedAt time.Time
-	GithubUpdatedAt time.Time `gorm:"index"`
-	ClosedAt        *time.Time
-	// In order to get the following fields, we need to collect PRs individually from GitHub
-	Additions      int
-	Deletions      int
-	Comments       int
-	Commits        int
-	ReviewComments int
-	Merged         bool
-	MergedAt       *time.Time
-	Body           string
-	Type           string `gorm:"type:varchar(255)"`
-	Component      string `gorm:"type:varchar(255)"`
-	MergeCommitSha string `gorm:"type:varchar(40)"`
-	HeadRef        string `gorm:"type:varchar(255)"`
-	BaseRef        string `gorm:"type:varchar(255)"`
-	BaseCommitSha  string `gorm:"type:varchar(255)"`
-	HeadCommitSha  string `gorm:"type:varchar(255)"`
-	Url            string `gorm:"type:varchar(255)"`
-	AuthorName     string `gorm:"type:varchar(100)"`
-	AuthorId       int
-	archived.NoPKModel
+type pullRequest20220919 struct {
+	HeadRepoId int
 }
 
-func (addFieldHeadRepoId20220919) TableName() string {
+func (pullRequest20220919) TableName() string {
 	return "_tool_github_pull_requests"
 }
 
 type addHeadRepoIdFieldInGithubPr struct{}
 
-func (*addHeadRepoIdFieldInGithubPr) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AddColumn(addFieldHeadRepoId20220919{}, "head_repo_id")
-	_ = db.Exec("SELECT * FROM ? LIMIT 1", clause.Table{Name: addFieldHeadRepoId20220919{}.TableName()})
-	return errors.Convert(err)
+func (*addHeadRepoIdFieldInGithubPr) Up(basicRes core.BasicRes) errors.Error {
+	err := basicRes.GetDal().AutoMigrate(&pullRequest20220919{})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (*addHeadRepoIdFieldInGithubPr) Version() uint64 {

@@ -18,68 +18,66 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
+	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
-
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/plugins/ae/models/migrationscripts/archived"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
-	"gorm.io/gorm"
 )
 
-type addInitTables struct {
-	config core.ConfigGetter
-}
+type addInitTables20220714 struct{}
 
-func (u *addInitTables) SetConfigGetter(config core.ConfigGetter) {
-	u.config = config
-}
-
-func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().DropTable(
+func (u *addInitTables20220714) Up(basicRes core.BasicRes) errors.Error {
+	err := basicRes.GetDal().DropTables(
 		&archived.AECommit{},
 		&archived.AEProject{},
 		"_raw_ae_project",
 		"_raw_ae_commits",
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	err = db.Migrator().AutoMigrate(
+	err = migrationhelper.AutoMigrateTables(
+		basicRes,
 		&archived.AECommit{},
 		&archived.AEProject{},
 		&archived.AeConnection{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	encodeKey := u.config.GetString(core.EncodeKeyEnvStr)
+	c := config.GetConfig()
+	encodeKey := c.GetString(core.EncodeKeyEnvStr)
 	connection := &archived.AeConnection{}
-	connection.Endpoint = u.config.GetString("AE_ENDPOINT")
-	connection.Proxy = u.config.GetString("AE_PROXY")
-	connection.SecretKey = u.config.GetString("AE_SECRET_KEY")
-	connection.AppId = u.config.GetString("AE_APP_ID")
+	connection.Endpoint = c.GetString("AE_ENDPOINT")
+	connection.Proxy = c.GetString("AE_PROXY")
+	connection.SecretKey = c.GetString("AE_SECRET_KEY")
+	connection.AppId = c.GetString("AE_APP_ID")
 	connection.Name = "AE"
 	if connection.Endpoint != "" && connection.AppId != "" && connection.SecretKey != "" && encodeKey != "" {
 		err = helper.UpdateEncryptFields(connection, func(plaintext string) (string, errors.Error) {
 			return core.Encrypt(encodeKey, plaintext)
 		})
 		if err != nil {
-			return errors.Default.Wrap(err, "error encrypting fields")
+			return err
 		}
 		// update from .env and save to db
-		db.Create(connection)
+		err = basicRes.GetDal().Create(connection)
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
 }
 
-func (*addInitTables) Version() uint64 {
+func (*addInitTables20220714) Version() uint64 {
 	return 20220714201133
 }
 
-func (*addInitTables) Name() string {
+func (*addInitTables20220714) Name() string {
 	return "AE init schemas"
 }

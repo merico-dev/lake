@@ -19,9 +19,8 @@ package impl
 
 import (
 	"fmt"
-	"github.com/apache/incubator-devlake/errors"
 
-	"github.com/apache/incubator-devlake/migration"
+	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/ae/api"
 	"github.com/apache/incubator-devlake/plugins/ae/models"
 	"github.com/apache/incubator-devlake/plugins/ae/models/migrationscripts"
@@ -36,7 +35,7 @@ var _ core.PluginMeta = (*AE)(nil)
 var _ core.PluginInit = (*AE)(nil)
 var _ core.PluginTask = (*AE)(nil)
 var _ core.PluginApi = (*AE)(nil)
-var _ core.Migratable = (*AE)(nil)
+var _ core.PluginMigration = (*AE)(nil)
 var _ core.CloseablePluginTask = (*AE)(nil)
 
 type AE struct{}
@@ -100,7 +99,7 @@ func (plugin AE) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/ae"
 }
 
-func (plugin AE) MigrationScripts() []migration.Script {
+func (plugin AE) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

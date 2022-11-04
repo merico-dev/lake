@@ -19,15 +19,14 @@ package impl
 
 import (
 	"fmt"
+
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/azure/api"
 	"github.com/apache/incubator-devlake/plugins/azure/models"
 	"github.com/apache/incubator-devlake/plugins/azure/models/migrationscripts"
 	"github.com/apache/incubator-devlake/plugins/azure/tasks"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/helper"
-
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
@@ -38,6 +37,7 @@ var _ core.PluginInit = (*Azure)(nil)
 var _ core.PluginTask = (*Azure)(nil)
 var _ core.PluginApi = (*Azure)(nil)
 var _ core.CloseablePluginTask = (*Azure)(nil)
+var _ core.PluginMigration = (*Azure)(nil)
 
 // PluginEntry exports for Framework to search and load
 var PluginEntry Azure //nolint
@@ -117,7 +117,7 @@ func (plugin Azure) ApiResources() map[string]map[string]core.ApiResourceHandler
 	}
 }
 
-func (plugin Azure) MigrationScripts() []migration.Script {
+func (plugin Azure) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

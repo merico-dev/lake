@@ -19,20 +19,20 @@ package migrationscripts
 
 import (
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/plugins/bitbucket/models/migrationscripts/archived"
 	"github.com/apache/incubator-devlake/plugins/core"
+	"github.com/apache/incubator-devlake/plugins/icla/models/migrationscripts/archived"
 )
 
-type addDeployment20221013 struct{}
+type addIclaCommitter struct{}
 
-func (*addDeployment20221013) Up(basicRes core.BasicRes) errors.Error {
-	return basicRes.GetDal().AutoMigrate(&archived.BitbucketDeployment{})
+func (script *addIclaCommitter) Up(basicRes core.BasicRes) errors.Error {
+	return basicRes.GetDal().AutoMigrate(&archived.IclaCommitter{})
 }
 
-func (*addDeployment20221013) Version() uint64 {
-	return 20221013152349
+func (*addIclaCommitter) Version() uint64 {
+	return 20221021183022
 }
 
-func (*addDeployment20221013) Name() string {
-	return "bitbucket add _tool_bitbucket_deployments table"
+func (*addIclaCommitter) Name() string {
+	return "create _tool_icla_committers"
 }

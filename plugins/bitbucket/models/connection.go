@@ -50,14 +50,6 @@ type TransformationRules struct {
 	IssueTypeRequirement string `mapstructure:"issueTypeRequirement" json:"issueTypeRequirement"`
 }
 
-type ApiUserResponse struct {
-	Username      string `json:"username"`
-	DisplayName   string `json:"display_name"`
-	AccountId     int    `json:"account_id"`
-	Uuid          string `json:"uuid"`
-	AccountStatus string `json:"account_status"`
-}
-
 type BitbucketConnection struct {
 	helper.RestConnection `mapstructure:",squash"`
 	helper.BasicAuth      `mapstructure:",squash"`

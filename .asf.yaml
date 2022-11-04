@@ -15,6 +15,7 @@
 #  specific language governing permissions and limitations
 #  under the License.
 
+# document for this: https://github.com/apache/skywalking/blob/master/.asf.yaml
 github:
   description: "Apache DevLake is an open-source dev data platform to ingest, analyze, and visualize the fragmented data from DevOps tools, extracting insights for engineering excellence, developer experience, and community growth."
   homepage: https://devlake.apache.org/
@@ -40,9 +41,41 @@ github:
     - jira
     - devops
   enabled_merge_buttons:
+    # only allow squash merge
     squash:  true
     merge:   false
-    rebase:  true
+    rebase:  false
+  # delete origin branch after merged
+  del_branch_on_merge: true
+  protected_branches:
+    main:
+      required_status_checks:
+        # strict means "Require branches to be up to date before merging".
+        strict: true
+        # contexts are the names of checks that must pass
+        #contexts:
+        #  - gh-infra/jenkins
+        #  - another/build-that-must-pass
+
+      required_pull_request_reviews:
+        dismiss_stale_reviews: true
+        require_code_owner_reviews: false
+        required_approving_review_count: 1
+    release-v0.11:
+      whatever: Just a placehold to make it in protection
+    release-v0.12:
+      whatever: Just a placehold to make it in protection
+    release-v0.13:
+      whatever: Just a placehold to make it in protection
+    release-v0.14:
+      whatever: Just a placehold to make it in protection
+    release-v0.15:
+      whatever: Just a placehold to make it in protection
+  # The triage role allows people to assign, edit, and close issues and pull requests,
+  # without giving them write access to the code.
+  collaborators:
+    - mintsweet
+    - keon94
 
 notifications:
   commits: commits@devlake.apache.org

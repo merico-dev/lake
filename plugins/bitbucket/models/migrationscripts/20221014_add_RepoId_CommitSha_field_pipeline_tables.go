@@ -18,51 +18,29 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
-	"time"
-
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
-type Task20221014 struct {
-	ConnectionId        uint64 `gorm:"primaryKey"`
-	BitbucketId         string `gorm:"primaryKey"`
-	Status              string `gorm:"type:varchar(100)"`
-	Result              string `gorm:"type:varchar(100)"`
-	RefName             string `gorm:"type:varchar(255)"`
-	RepoId              string `gorm:"type:varchar(255)"`
-	CommitSha           string `gorm:"type:varchar(255)"`
-	WebUrl              string `gorm:"type:varchar(255)"`
-	DurationInSeconds   uint64
-	BitbucketCreatedOn  *time.Time
-	BitbucketCompleteOn *time.Time
-	archived.NoPKModel
+type bitbucketPipeline20221014 struct {
+	RepoId    string `gorm:"type:varchar(255)"`
+	CommitSha string `gorm:"type:varchar(255)"`
 }
 
-func (Task20221014) TableName() string {
+func (bitbucketPipeline20221014) TableName() string {
 	return "_tool_bitbucket_pipelines"
 }
 
-type addRepoIdAndCommitShaField struct{}
+type addRepoIdAndCommitShaField20221014 struct{}
 
-func (*addRepoIdAndCommitShaField) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AddColumn(Task20221014{}, "repo_id")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	err = db.Migrator().AddColumn(Task20221014{}, "commit_sha")
-	if err != nil {
-		return errors.Convert(err)
-	}
-	return nil
+func (*addRepoIdAndCommitShaField20221014) Up(basicRes core.BasicRes) errors.Error {
+	return basicRes.GetDal().AutoMigrate(&bitbucketPipeline20221014{})
 }
 
-func (*addRepoIdAndCommitShaField) Version() uint64 {
+func (*addRepoIdAndCommitShaField20221014) Version() uint64 {
 	return 20221014114623
 }
 
-func (*addRepoIdAndCommitShaField) Name() string {
+func (*addRepoIdAndCommitShaField20221014) Name() string {
 	return "add column `repo_id` and `commit_sha` at _tool_bitbucket_pipelines"
 }

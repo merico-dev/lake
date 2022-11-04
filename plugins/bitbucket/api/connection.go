@@ -63,12 +63,6 @@ func TestConnection(input *core.ApiResourceInput) (*core.ApiResourceOutput, erro
 		return nil, err
 	}
 
-	resBody := &models.ApiUserResponse{}
-	err = helper.UnmarshalResponse(res, resBody)
-	if err != nil {
-		return nil, err
-	}
-
 	if res.StatusCode != http.StatusOK {
 		return nil, errors.HttpStatus(res.StatusCode).New("unexpected status code when testing connection")
 	}

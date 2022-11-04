@@ -15,27 +15,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package migrationscripts
+package archived
 
 import (
-	"context"
-	"github.com/apache/incubator-devlake/errors"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
 )
 
-type addInitTables struct{}
-
-func (u *addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	err := db.Migrator().AutoMigrate(
-	// TODO add you models
-	)
-	return errors.Convert(err)
+type IclaCommitter struct {
+	UserName string `gorm:"primaryKey;type:varchar(255)"`
+	Name     string `gorm:"primaryKey;type:varchar(255)"`
+	archived.NoPKModel
 }
 
-func (*addInitTables) Version() uint64 {
-	return 20220829000001
-}
-
-func (*addInitTables) Name() string {
-	return "dora init schemas"
+func (IclaCommitter) TableName() string {
+	return "_tool_icla_committer"
 }

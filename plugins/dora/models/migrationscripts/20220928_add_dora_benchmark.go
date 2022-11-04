@@ -18,15 +18,15 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 	"github.com/apache/incubator-devlake/models/migrationscripts/archived"
-	"gorm.io/gorm"
+	"github.com/apache/incubator-devlake/plugins/core"
 )
 
 type addDoraBenchmark struct{}
 
-type DoraBenchmark struct {
+type doraBenchmark struct {
 	archived.Model
 	Metric string `gorm:"type:varchar(255)"`
 	Low    string `gorm:"type:varchar(255)"`
@@ -35,29 +35,29 @@ type DoraBenchmark struct {
 	Elite  string `gorm:"type:varchar(255)"`
 }
 
-func (DoraBenchmark) TableName() string {
+func (doraBenchmark) TableName() string {
 	return "dora_benchmarks"
 }
 
-func (u *addDoraBenchmark) Up(ctx context.Context, db *gorm.DB) errors.Error {
-
-	err := db.Migrator().AutoMigrate(
-		&DoraBenchmark{},
+func (u *addDoraBenchmark) Up(baseRes core.BasicRes) errors.Error {
+	db := baseRes.GetDal()
+	err := migrationhelper.AutoMigrateTables(
+		baseRes,
+		&doraBenchmark{},
 	)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
+
 	defer func() {
 		if err != nil {
-			if db.Migrator().HasTable(&DoraBenchmark{}) {
-				err = db.Migrator().DropTable(&DoraBenchmark{})
-				if err != nil {
-					return
-				}
+			err = db.DropTables(&doraBenchmark{})
+			if err != nil {
+				return
 			}
 		}
 	}()
-	doraBenchmarkDF := &DoraBenchmark{
+	doraBenchmarkDF := &doraBenchmark{
 		Model: archived.Model{
 			ID: 1,
 		},
@@ -67,11 +67,11 @@ func (u *addDoraBenchmark) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		High:   "Between once per week and once per month",
 		Elite:  "On-demand",
 	}
-	err = db.Create(doraBenchmarkDF).Error
+	err = db.Create(doraBenchmarkDF)
 	if err != nil {
 		return errors.Convert(err)
 	}
-	doraBenchmarkLTC := &DoraBenchmark{
+	doraBenchmarkLTC := &doraBenchmark{
 		Model: archived.Model{
 			ID: 2,
 		},
@@ -81,11 +81,11 @@ func (u *addDoraBenchmark) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		High:   "Less than one week",
 		Elite:  "Less than one hour",
 	}
-	err = db.Create(doraBenchmarkLTC).Error
+	err = db.Create(doraBenchmarkLTC)
 	if err != nil {
 		return errors.Convert(err)
 	}
-	doraBenchmarkTTS := &DoraBenchmark{
+	doraBenchmarkTTS := &doraBenchmark{
 		Model: archived.Model{
 			ID: 3,
 		},
@@ -95,11 +95,11 @@ func (u *addDoraBenchmark) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		High:   "Less than one day",
 		Elite:  "Less than one hour",
 	}
-	err = db.Create(doraBenchmarkTTS).Error
+	err = db.Create(doraBenchmarkTTS)
 	if err != nil {
 		return errors.Convert(err)
 	}
-	doraBenchmarkCFR := &DoraBenchmark{
+	doraBenchmarkCFR := &doraBenchmark{
 		Model: archived.Model{
 			ID: 4,
 		},
@@ -109,7 +109,7 @@ func (u *addDoraBenchmark) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		High:   "16%-20%",
 		Elite:  "0-15%",
 	}
-	err = db.Create(doraBenchmarkCFR).Error
+	err = db.Create(doraBenchmarkCFR)
 	if err != nil {
 		return errors.Convert(err)
 	}

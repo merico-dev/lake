@@ -18,41 +18,21 @@ limitations under the License.
 package migrationscripts
 
 import (
-	"context"
-	"fmt"
-	"github.com/apache/incubator-devlake/errors"
+	"strconv"
 
-	"github.com/apache/incubator-devlake/config"
-	"gorm.io/gorm/clause"
+	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 
 	"github.com/apache/incubator-devlake/plugins/core"
 
 	"github.com/apache/incubator-devlake/plugins/gitee/models/migrationscripts/archived"
-	"gorm.io/gorm"
 )
 
 type addInitTables struct{}
 
-func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
-	rawTableList := []string{
-		"_raw_gitee_api_commit",
-		"_raw_gitee_api_issues",
-		"_raw_gitee_api_pull_requests",
-		"_raw_gitee_api_pull_request_commits",
-		"_raw_gitee_api_pull_request_reviews",
-		"_raw_gitee_api_repo",
-		"_raw_gitee_api_comments",
-		"_raw_gitee_api_commits",
-		"_raw_gitee_issue_comments",
-	}
-	for _, v := range rawTableList {
-		err := db.Exec(fmt.Sprintf("DROP TABLE IF EXISTS %s CASCADE", v)).Error
-		if err != nil {
-			return errors.Convert(err)
-		}
-	}
-
-	err := db.Migrator().DropTable(
+func (*addInitTables) Up(baseRes core.BasicRes) errors.Error {
+	db := baseRes.GetDal()
+	err := db.DropTables(
 		&archived.GiteeRepo{},
 		&archived.GiteeCommit{},
 		&archived.GiteeRepoCommit{},
@@ -68,13 +48,23 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 		&archived.GiteeReviewer{},
 		&archived.GiteeConnection{},
 		"_tool_gitee_users",
+		"_raw_gitee_api_commit",
+		"_raw_gitee_api_issues",
+		"_raw_gitee_api_pull_requests",
+		"_raw_gitee_api_pull_request_commits",
+		"_raw_gitee_api_pull_request_reviews",
+		"_raw_gitee_api_repo",
+		"_raw_gitee_api_comments",
+		"_raw_gitee_api_commits",
+		"_raw_gitee_issue_comments",
 	)
 
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
-	err = db.Migrator().AutoMigrate(
+	err = migrationhelper.AutoMigrateTables(
+		baseRes,
 		&archived.GiteeRepo{},
 		&archived.GiteeCommit{},
 		&archived.GiteeRepoCommit{},
@@ -93,27 +83,30 @@ func (*addInitTables) Up(ctx context.Context, db *gorm.DB) errors.Error {
 	)
 
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 
 	conn := &archived.GiteeConnection{}
-	v := config.GetConfig()
-	encKey := v.GetString(core.EncodeKeyEnvStr)
+	encKey := baseRes.GetConfig(core.EncodeKeyEnvStr)
 
 	conn.Name = "init gitee connection"
 	conn.ID = 1
-	conn.Endpoint = v.GetString("GITEE_ENDPOINT")
-	conn.Token, err = core.Encrypt(encKey, v.GetString("GITEE_AUTH"))
+	conn.Endpoint = baseRes.GetConfig("GITEE_ENDPOINT")
+	conn.Token, err = core.Encrypt(encKey, baseRes.GetConfig("GITEE_AUTH"))
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
-	conn.Proxy = v.GetString("GITEE_PROXY")
-	conn.RateLimitPerHour = v.GetInt("GITEE_API_REQUESTS_PER_HOUR")
+	conn.Proxy = baseRes.GetConfig("GITEE_PROXY")
 
-	err = db.Clauses(clause.OnConflict{DoNothing: true}).Create(conn).Error
+	var err1 error
+	conn.RateLimitPerHour, err1 = strconv.Atoi(baseRes.GetConfig("GITEE_API_REQUESTS_PER_HOUR"))
+	if err1 != nil {
+		conn.RateLimitPerHour = 1000
+	}
 
+	err = db.CreateIfNotExist(conn)
 	if err != nil {
-		return errors.Convert(err)
+		return err
 	}
 	return nil
 }

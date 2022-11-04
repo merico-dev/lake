@@ -21,7 +21,6 @@ import (
 	"fmt"
 
 	"github.com/apache/incubator-devlake/errors"
-	"github.com/apache/incubator-devlake/migration"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/dora/models/migrationscripts"
 	"github.com/apache/incubator-devlake/plugins/dora/tasks"
@@ -34,6 +33,7 @@ var _ core.PluginMeta = (*Dora)(nil)
 var _ core.PluginInit = (*Dora)(nil)
 var _ core.PluginTask = (*Dora)(nil)
 var _ core.CloseablePluginTask = (*Dora)(nil)
+var _ core.PluginMigration = (*Dora)(nil)
 
 type Dora struct{}
 
@@ -80,7 +80,7 @@ func (plugin Dora) RootPkgPath() string {
 	return "github.com/apache/incubator-devlake/plugins/dora"
 }
 
-func (plugin Dora) MigrationScripts() []migration.Script {
+func (plugin Dora) MigrationScripts() []core.MigrationScript {
 	return migrationscripts.All()
 }
 

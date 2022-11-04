@@ -82,6 +82,7 @@ func main() {
 	batchSize := cmd.Flags().StringP("batch_size", "b", "", "StarRocks insert batch size")
 	_ = cmd.MarkFlagRequired("batch_size")
 	extra := cmd.Flags().StringP("extra", "e", "", "StarRocks create table sql extra")
+	orderBy := cmd.Flags().StringP("order_by", "o", "", "Source tables order by, default is primary key")
 	cmd.Run = func(cmd *cobra.Command, args []string) {
 		runner.DirectRun(cmd, args, PluginEntry, map[string]interface{}{
 			"source_type": sourceType,
@@ -96,6 +97,7 @@ func main() {
 			"tables":      tables,
 			"batch_size":  batchSize,
 			"extra":       extra,
+			"order_by":    orderBy,
 		})
 	}
 	runner.RunCmd(cmd)

@@ -4,7 +4,7 @@ connection_id,id,field,workspace_id,bug_id,author,old_value,new_value,memo,creat
 1,11991001000090,current_owner,991,11991001000025,test-11test-11test-11,test-11test-11;,test-11test-11test-11;,,2019-12-17T09:35:34.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,3,
 1,11991001000091,delete_bug,991,11991001000025,test-11test-11test-11,--,--,delete bug,2019-12-17T09:49:27.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,4,
 1,11991001000093,bugtype,991,11991001000026,test-11test-11test-11,,App,,2019-12-17T09:53:19.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,5,
-1,11991001000094,bugtype,991,11991001000026,test-11test-11test-11,App,H5,,2019-12-17T09:53:27.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,6,
+1,11991001000094,status,991,11991001000026,test-11test-11test-11,new,in_progress,,2019-12-17T09:53:27.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,6,
 1,11991001000095,bugtype,991,11991001000026,test-11test-11test-11,H5,test-11test-11,,2019-12-17T09:53:29.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,7,
 1,11991001000096,bugtype,991,11991001000026,test-11test-11test-11,test-11test-11,App,,2019-12-17T09:53:32.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,8,
 1,11991001000097,delete_bug,991,11991001000026,test-11test-11test-11,--,--,delete bug,2019-12-17T09:53:54.000+00:00,"{""ConnectionId"":1,""CompanyId"":0,""WorkspaceId"":991}",_raw_tapd_api_bug_changelogs,9,

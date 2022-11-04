@@ -18,8 +18,9 @@ limitations under the License.
 package tasks
 
 import (
-	"github.com/apache/incubator-devlake/errors"
 	"reflect"
+
+	"github.com/apache/incubator-devlake/errors"
 
 	"github.com/apache/incubator-devlake/models/domainlayer/crossdomain"
 
@@ -63,7 +64,8 @@ func ConvertAccounts(taskCtx core.SubTaskContext) errors.Error {
 				DomainEntity: domainlayer.DomainEntity{
 					Id: accountIdGen.Generate(data.Options.ConnectionId, userTool.User),
 				},
-				UserName: userTool.Name,
+				UserName: userTool.User,
+				FullName: userTool.Name,
 			}
 
 			return []interface{}{

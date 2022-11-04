@@ -21,18 +21,21 @@
 #
 # compile specific plugin and fire up api server:
 #   PLUGIN=<PLUGIN_NAME> make dev
+#   PLUGIN=<PLUGIN_NAME> PLUGIN2=<PLUGIN_NAME2> make dev
 #
 # compile all plugins and fire up api server in DEBUG MODE with `delve`:
 #   make debug
 #
 # compile specific plugin and fire up api server in DEBUG MODE with `delve`:
 #   PLUGIN=<PLUGIN_NAME> make dev
+#   PLUGIN=<PLUGIN_NAME> PLUGIN2=<PLUGIN_NAME> make dev
 
 set -e
 
 echo "Usage: "
 echo "  build all plugins:              $0 [golang build flags...]"
 echo "  build and keep one plugin only: PLUGIN=jira $0 [golang build flags...]"
+echo "  build and keep two plugin only: PLUGIN=jira PLUGIN2=github $0 [golang build flags...]"
 
 SCRIPT_DIR="$( cd "$( dirname "$0" )" && pwd )"
 PLUGIN_SRC_DIR=$SCRIPT_DIR/../plugins
@@ -42,6 +45,10 @@ if [ -z "$PLUGIN" ]; then
     PLUGINS=$(find $PLUGIN_SRC_DIR/* -maxdepth 0 -type d -not -name core -not -name helper -not -empty)
 else
     PLUGINS=$PLUGIN_SRC_DIR/$PLUGIN
+fi
+
+if [ $PLUGIN ] && [ $PLUGIN2 ]; then
+    PLUGINS="$PLUGINS $PLUGIN_SRC_DIR/$PLUGIN2"
 fi
 
 rm -rf $PLUGIN_OUTPUT_DIR/*
