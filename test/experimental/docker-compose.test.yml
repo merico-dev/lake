@@ -1,0 +1,32 @@
+version: "3"
+services:
+
+  mysql-test:
+    image: mysql:8.0.26
+    platform: linux/x86_64
+    volumes:
+      - mysql-test-storage:/var/lib/mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: lake
+      MYSQL_USER: merico
+      MYSQL_PASSWORD: merico
+
+  postgres-test:
+    image: postgres:14.2-alpine
+    restart: always
+    ports:
+      - "3308:5432"
+    volumes:
+      - postgres-test-storage:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: lake
+      POSTGRES_USER: merico
+      POSTGRES_PASSWORD: merico
+
+volumes:
+  mysql-test-storage:
+  postgres-test-storage:
