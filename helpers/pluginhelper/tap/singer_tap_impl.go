@@ -19,6 +19,7 @@ package tap
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
@@ -127,7 +128,7 @@ func (t *SingerTap) GetName() string {
 }
 
 // Run implements Tap.Run
-func (t *SingerTap) Run() (<-chan *utils.ProcessResponse[Output[json.RawMessage]], errors.Error) {
+func (t *SingerTap) Run(ctx context.Context) (<-chan *Response, errors.Error) {
 	cmd := utils.CreateCmd(
 		t.cmd,
 		"--config",
@@ -136,17 +137,32 @@ func (t *SingerTap) Run() (<-chan *utils.ProcessResponse[Output[json.RawMessage]
 		t.propertiesFile.path,
 		ifElse(t.stateFile.path != "", "--state "+t.stateFile.path, ""),
 	)
-	stream, err := utils.StreamProcess(cmd, func(b []byte) (Output[json.RawMessage], error) {
-		var output Output[json.RawMessage]
-		output, err := NewSingerTapOutput(b)
-		if err != nil {
-			return nil, err
-		}
-		return output, nil //data is expected to be JSON
+	rawStream, err := utils.StreamProcess(cmd, &utils.StreamProcessOptions{
+		OnStdout: func(b []byte) (any, errors.Error) {
+			var output Output[json.RawMessage]
+			output, err := NewSingerTapOutput(b)
+			if err != nil {
+				return nil, err
+			}
+			return output, nil //data is expected to be JSON
+		},
 	})
 	if err != nil {
 		return nil, errors.Default.Wrap(err, "error starting process stream from singer-tap")
 	}
+	stream := make(chan *Response)
+	go func() {
+		defer close(stream)
+		for result := range rawStream.Receive() {
+			if err = result.GetError(); err != nil {
+				stream <- &Response{Err: err}
+			}
+			out := result.GetStdout()
+			if out != nil {
+				stream <- &Response{Out: out.(Output[json.RawMessage])}
+			}
+		}
+	}()
 	return stream, nil
 }
 
