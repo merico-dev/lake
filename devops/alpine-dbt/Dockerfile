@@ -14,15 +14,18 @@
 # limitations under the License.
 #
 
-# current tag: mericodev/alpine-dbt:0.0.1
-FROM --platform=linux/amd64 alpine:3.15
-RUN apk add --no-cache musl-dev libgit2-dev libffi-dev \
+# current tag: mericodev/alpine-dbt:0.0.2
+FROM --platform=linux/amd64 alpine:3.17.0
+
+RUN apk add --no-cache musl-dev libffi-dev mysql-dev \
     && apk add --no-cache gcc
 
 ENV PYTHONUNBUFFERED=1
-RUN apk add --update --no-cache python3-dev && ln -sf python3 /usr/bin/python
+RUN apk add --update --no-cache tar curl python3-dev && ln -sf python3 /usr/bin/python
 RUN python3 -m ensurepip
 RUN pip3 install --no-cache --upgrade pip setuptools
 RUN pip3 install dbt-mysql
 RUN pip3 install dbt-postgres
-RUN apk add --no-cache tar
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN ln -sf /root/.local/bin/poetry /usr/local/bin

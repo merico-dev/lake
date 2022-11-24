@@ -35,9 +35,11 @@ WORKDIR /app
 COPY . /app
 ENV GOBIN=/app/bin
 
+RUN cp -r /deps/* /
+
 RUN make clean && make all
 
-FROM --platform=linux/amd64 mericodev/alpine-dbt:0.0.1
+FROM --platform=linux/amd64 mericodev/alpine-dbt:latest
 
 EXPOSE 8080
 
@@ -45,14 +47,15 @@ WORKDIR /app
 
 COPY --from=builder /app/bin /app/bin
 COPY --from=builder /usr/share/zoneinfo /usr/share/zoneinfo
-COPY --from=builder /app/requirements.txt /app/requirements.txt
+# copy over all custom lib files
+COPY --from=builder /deps /
+# other stuff
 COPY --from=builder /app/config/tap /app/config/tap
+COPY --from=builder /app/python /app/python
 
 # Setup Python
-RUN python -m venv /app/.venv
-RUN echo "source /app/.venv/bin/activate" >> ~/.profile
-RUN source ~/.profile
-RUN pip install --upgrade pip -r requirements.txt
+RUN pip install --upgrade pip -r python/requirements.txt &&\
+    python/build.sh
 
 ENV PATH="/app/bin:${PATH}"
 
