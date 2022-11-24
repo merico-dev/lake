@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "circle_ci"
+version = "0.1.0"
+description = ""
+authors = ["Camille Teruel <camille.teruel@meri.co>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pydevlake = { path = "../../pydevlake", develop = false }
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
