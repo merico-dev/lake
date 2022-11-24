@@ -18,8 +18,13 @@ limitations under the License.
 package api
 
 import (
+	"github.com/apache/incubator-devlake/api/remote"
 	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/services/remote/bridge"
+	"github.com/spf13/viper"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	_ "github.com/apache/incubator-devlake/api/docs"
@@ -52,7 +57,10 @@ func CreateApiService() {
 	v := config.GetConfig()
 	gin.SetMode(v.GetString("MODE"))
 	router := gin.Default()
-
+	remotePluginsEnabled := v.GetBool("ENABLE_REMOTE_PLUGINS")
+	if remotePluginsEnabled {
+		router.POST("/plugins/register", remote.RegisterPlugin(router, registerPluginEndpoints))
+	}
 	// Wait for user confirmation if db migration is needed
 	router.GET("/proceed-db-migration", func(ctx *gin.Context) {
 		if !services.MigrationRequireConfirmation() {
@@ -95,8 +103,24 @@ func CreateApiService() {
 	}))
 
 	RegisterRouter(router)
-	err := router.Run(v.GetString("PORT"))
+	port := v.GetString("PORT")
+	if remotePluginsEnabled {
+		go bootstrapRemotePlugins(v)
+	}
+	err := router.Run(port)
 	if err != nil {
 		panic(err)
+	}
+}
+
+func bootstrapRemotePlugins(v *viper.Viper) {
+	port := v.GetString("PORT")
+	portNum, err := strconv.Atoi(strings.Split(port, ":")[1])
+	if err != nil {
+		panic(err)
+	}
+	err = bridge.Bootstrap(v, portNum)
+	if err != nil {
+		logger.Global.Error(err, "")
 	}
 }

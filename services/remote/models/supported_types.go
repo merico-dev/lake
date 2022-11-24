@@ -15,21 +15,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package errors
+package models
 
-import "errors"
+import "time"
 
-// Is convenience passthrough for the native errors.Is method
-func Is(err, target error) bool {
-	return errors.Is(err, target)
-}
-
-// As convenience passthrough for the native errors.As method
-func As(err error, target any) bool {
-	return errors.As(err, &target)
-}
-
-// SetStackTrace Overrides stacktrace settings. Use this for testing purposes only
-func SetStackTrace(set bool) {
-	enableStacktraces = set
+var supportedTypes = map[string]any{
+	"time":   time.Time{},
+	"uint64": uint64(0),
+	"uint32": uint32(0),
+	"uint16": uint16(0),
+	"uint8":  uint8(0),
+	"uint":   uint(0),
 }

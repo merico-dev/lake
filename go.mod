@@ -3,6 +3,7 @@ module github.com/apache/incubator-devlake
 go 1.19
 
 require (
+	github.com/RaveNoX/go-jsonmerge v1.0.0
 	github.com/cockroachdb/errors v1.9.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-gonic/gin v1.7.7
@@ -22,6 +23,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/afero v1.6.0
+	github.com/spf13/cast v1.4.1
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.8.1
 	github.com/stoewer/go-strcase v1.2.0
@@ -112,7 +114,6 @@ require (
 	github.com/rogpeppe/go-internal v1.8.1 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sergi/go-diff v1.1.0 // indirect
-	github.com/spf13/cast v1.4.1 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.6-0.20200504143853-81378bbcd8a1 // indirect
 	github.com/stretchr/objx v0.4.0 // indirect

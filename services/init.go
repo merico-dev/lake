@@ -18,6 +18,7 @@ limitations under the License.
 package services
 
 import (
+	"github.com/apache/incubator-devlake/services/remote"
 	"time"
 
 	"github.com/apache/incubator-devlake/errors"
@@ -74,6 +75,7 @@ func Init() {
 	if err != nil {
 		panic(err)
 	}
+	remote.Init(cfg, log, db)
 	for pluginName, pluginInst := range core.AllPlugins() {
 		if migratable, ok := pluginInst.(core.PluginMigration); ok {
 			migrator.Register(migratable.MigrationScripts(), pluginName)

@@ -1,3 +1,0 @@
-setuptools
-wheel
-tap-pagerduty==0.2.0

@@ -77,25 +77,29 @@ func RegisterRouter(r *gin.Engine) {
 	//r.DELETE("/projects/:projectName/metrics/:pluginName", project.DeleteProjectMetrics)
 	r.POST("/projects/:projectName/metrics", project.PostProjectMetrics)
 
-	// mount all api resources for all plugins
-	pluginsApiResources, err := services.GetPluginsApiResources()
+	resources, err := services.GetPluginsApiResources()
 	if err != nil {
 		panic(err)
 	}
-	for pluginName, apiResources := range pluginsApiResources {
-		for resourcePath, resourceHandlers := range apiResources {
-			for method, h := range resourceHandlers {
-				r.Handle(
-					method,
-					fmt.Sprintf("/plugins/%s/%s", pluginName, resourcePath),
-					handlePluginCall(pluginName, h),
-				)
-			}
+	// mount all api resources for all plugins
+	for pluginName, apiResources := range resources {
+		registerPluginEndpoints(r, pluginName, apiResources)
+	}
+}
+
+func registerPluginEndpoints(r *gin.Engine, pluginName string, apiResources map[string]map[string]core.ApiResourceHandler) {
+	for resourcePath, resourceHandlers := range apiResources {
+		for method, h := range resourceHandlers {
+			r.Handle(
+				method,
+				fmt.Sprintf("/plugins/%s/%s", pluginName, resourcePath),
+				handlePluginCall(h),
+			)
 		}
 	}
 }
 
-func handlePluginCall(pluginName string, handler core.ApiResourceHandler) func(c *gin.Context) {
+func handlePluginCall(handler core.ApiResourceHandler) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var err error
 		input := &core.ApiResourceInput{}

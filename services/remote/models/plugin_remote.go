@@ -15,21 +15,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package errors
+package models
 
-import "errors"
+import (
+	"github.com/apache/incubator-devlake/errors"
+	"github.com/apache/incubator-devlake/plugins/core"
+)
 
-// Is convenience passthrough for the native errors.Is method
-func Is(err, target error) bool {
-	return errors.Is(err, target)
-}
-
-// As convenience passthrough for the native errors.As method
-func As(err error, target any) bool {
-	return errors.As(err, &target)
-}
-
-// SetStackTrace Overrides stacktrace settings. Use this for testing purposes only
-func SetStackTrace(set bool) {
-	enableStacktraces = set
+// RemotePlugin API supported by plugins running in different/remote processes
+type RemotePlugin interface {
+	core.PluginApi
+	core.PluginTask
+	core.PluginMeta
+	RunMigrations(forceMigrate bool) errors.Error
 }

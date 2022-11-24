@@ -15,21 +15,28 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package errors
+package bridge
 
-import "errors"
+import "path/filepath"
 
-// Is convenience passthrough for the native errors.Is method
-func Is(err, target error) bool {
-	return errors.Is(err, target)
+const (
+	pythonExec = "python"
+	poetryExec = "poetry"
+)
+
+func NewPythonCmdInvoker(scriptPath string) *CmdInvoker {
+	return NewCmdInvoker("", func(methodName string, args ...string) (string, []string) {
+		allArgs := []string{scriptPath, methodName}
+		allArgs = append(allArgs, args...)
+		return pythonExec, allArgs
+	})
 }
 
-// As convenience passthrough for the native errors.As method
-func As(err error, target any) bool {
-	return errors.As(err, &target)
-}
-
-// SetStackTrace Overrides stacktrace settings. Use this for testing purposes only
-func SetStackTrace(set bool) {
-	enableStacktraces = set
+func NewPythonPoetryCmdInvoker(scriptPath string) *CmdInvoker {
+	tomlPath := filepath.Dir(filepath.Dir(scriptPath)) //the main entrypoint expected to be at toplevel
+	return NewCmdInvoker(tomlPath, func(methodName string, args ...string) (string, []string) {
+		allArgs := []string{"run", pythonExec, scriptPath, methodName}
+		allArgs = append(allArgs, args...)
+		return poetryExec, allArgs
+	})
 }

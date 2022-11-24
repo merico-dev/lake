@@ -79,7 +79,8 @@ func DecodeMapStruct(input map[string]interface{}, result interface{}) errors.Er
 
 // Decode decodes `source` into `target`. Pass an optional validator to validate the target.
 func Decode(source interface{}, target interface{}, vld *validator.Validate) errors.Error {
-	if err := mapstructure.Decode(source, target); err != nil {
+	target = UnwrapObject(target)
+	if err := mapstructure.Decode(source, &target); err != nil {
 		return errors.Default.Wrap(err, "error decoding map into target type")
 	}
 	if vld != nil {

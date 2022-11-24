@@ -71,6 +71,8 @@ func setDefaultValue(v *viper.Viper) {
 	v.SetDefault("PLUGIN_DIR", "bin/plugins")
 	v.SetDefault("TEMPORAL_TASK_QUEUE", "DEVLAKE_TASK_QUEUE")
 	v.SetDefault("TAP_PROPERTIES_DIR", "config/tap")
+	v.SetDefault("ENABLE_REMOTE_PLUGINS", "true")
+	v.SetDefault("REMOTE_PLUGINS_STARTUP_PATH", "python/plugins/start.sh")
 }
 
 // replaceNewEnvItemInOldContent replace old config to new config in env file content

@@ -15,21 +15,27 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package errors
+package models
 
-import "errors"
+type (
+	PipelineScope struct {
+		ScopeId   string
+		ScopeName string
+		TableName string
+	}
+	WrappedPipelineScope struct {
+		Scope PipelineScope
+	}
+)
 
-// Is convenience passthrough for the native errors.Is method
-func Is(err, target error) bool {
-	return errors.Is(err, target)
+func (p *WrappedPipelineScope) ScopeId() string {
+	return p.Scope.ScopeId
 }
 
-// As convenience passthrough for the native errors.As method
-func As(err error, target any) bool {
-	return errors.As(err, &target)
+func (p *WrappedPipelineScope) ScopeName() string {
+	return p.Scope.ScopeName
 }
 
-// SetStackTrace Overrides stacktrace settings. Use this for testing purposes only
-func SetStackTrace(set bool) {
-	enableStacktraces = set
+func (p *WrappedPipelineScope) TableName() string {
+	return p.Scope.TableName
 }

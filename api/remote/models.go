@@ -15,21 +15,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package errors
+package remote
 
-import "errors"
+import (
+	"encoding/json"
+	"github.com/apache/incubator-devlake/services/remote/models"
+)
 
-// Is convenience passthrough for the native errors.Is method
-func Is(err, target error) bool {
-	return errors.Is(err, target)
+type SwaggerDoc struct {
+	Name     string          `json:"name" validate:"required"`
+	Resource string          `json:"resource" validate:"required"`
+	Schema   json.RawMessage `json:"schema" validate:"required"`
 }
 
-// As convenience passthrough for the native errors.As method
-func As(err error, target any) bool {
-	return errors.As(err, &target)
-}
-
-// SetStackTrace Overrides stacktrace settings. Use this for testing purposes only
-func SetStackTrace(set bool) {
-	enableStacktraces = set
+type PluginDetails struct {
+	PluginInfo models.PluginInfo `json:"plugin_info" validate:"required"`
+	Swagger    SwaggerDoc        `json:"swagger" validate:"required"`
 }

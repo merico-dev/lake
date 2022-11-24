@@ -130,7 +130,7 @@ func (c *ConnectionApiHelper) First(connection interface{}, params map[string]st
 
 // FirstById finds connection from db by id and decrypt it
 func (c *ConnectionApiHelper) FirstById(connection interface{}, id uint64) errors.Error {
-	err := c.db.First(connection, dal.Where("id = ?", id))
+	err := CallDB(c.db.First, connection, dal.Where("id = ?", id))
 	if err != nil {
 		return err
 	}
@@ -140,11 +140,11 @@ func (c *ConnectionApiHelper) FirstById(connection interface{}, id uint64) error
 
 // List returns all connections with password/token decrypted
 func (c *ConnectionApiHelper) List(connections interface{}) errors.Error {
-	err := c.db.All(connections)
+	err := CallDB(c.db.All, connections)
 	if err != nil {
 		return err
 	}
-	conns := reflect.ValueOf(connections).Elem()
+	conns := reflect.ValueOf(UnwrapObject(connections)).Elem()
 	for i := 0; i < conns.Len(); i++ {
 		c.decrypt(conns.Index(i).Addr().Interface())
 	}
@@ -153,7 +153,7 @@ func (c *ConnectionApiHelper) List(connections interface{}) errors.Error {
 
 // Delete connection
 func (c *ConnectionApiHelper) Delete(connection interface{}) errors.Error {
-	return c.db.Delete(connection)
+	return CallDB(c.db.Delete, connection)
 }
 
 func (c *ConnectionApiHelper) merge(connection interface{}, body map[string]interface{}) errors.Error {
@@ -162,15 +162,13 @@ func (c *ConnectionApiHelper) merge(connection interface{}, body map[string]inte
 
 func (c *ConnectionApiHelper) save(connection interface{}) errors.Error {
 	c.encrypt(connection)
-
-	err := c.db.CreateOrUpdate(connection)
+	err := CallDB(c.db.CreateOrUpdate, connection)
 	if err != nil {
 		if strings.Contains(err.Error(), "duplicate") {
 			return errors.BadInput.Wrap(err, "duplicated Connection Name")
 		}
 		return err
 	}
-
 	c.decrypt(connection)
 	return nil
 }
@@ -195,6 +193,7 @@ func (c *ConnectionApiHelper) encrypt(connection interface{}) {
 
 // UpdateEncryptFields update fields of val with tag `encrypt:"yes|true"`
 func UpdateEncryptFields(val interface{}, update func(in string) (string, errors.Error)) errors.Error {
+	val = UnwrapObject(val)
 	v := reflect.ValueOf(val)
 	if v.Kind() != reflect.Ptr {
 		panic(errors.Default.New(fmt.Sprintf("val is not a pointer: %v", val)))
