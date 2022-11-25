@@ -4,8 +4,13 @@ from datetime import time
 from typing import TypeVar, Generic
 
 from .doc_models import *
+from dataclasses import dataclass, field
 
 T = TypeVar('T')
+
+
+def default(f):
+    return field(default_factory=lambda: f)
 
 
 # no-op decorator for labelling purposes
@@ -27,9 +32,9 @@ class Field(Generic[T]):
 class BaseConnection(DocSchema):
     table: str = ""
     Name: str = ""
-    ID: int | Field[int] = Field(0, 'gotype:"uint64"')
-    CreatedAt: time | Field[time] = Field(time(), 'gotype:"time"')
-    UpdatedAt: time | Field[time] = Field(time(), 'gotype:"time"')
+    ID: int | Field[int] = default(Field(0, 'gotype:"uint64"'))
+    CreatedAt: time | Field[time] = default(Field(time(), 'gotype:"time"'))
+    UpdatedAt: time | Field[time] = default(Field(time(), 'gotype:"time"'))
 
     def get_doc_schema(self):
         return BaseConnectionSchema()

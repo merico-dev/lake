@@ -19,8 +19,6 @@ class AbstractPlugin(PluginAPI, PluginMethods, ABC):
         self.set_all_default_docs()
 
     def startup(self, endpoint: str):
-        from ..test.debugger import start_debugger
-        start_debugger()
         self.endpoint = endpoint
         if self.plugin_path != "":
             self.plugin_info.plugin_path = self.plugin_path

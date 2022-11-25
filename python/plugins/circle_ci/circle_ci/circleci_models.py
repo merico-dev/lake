@@ -5,7 +5,7 @@ from pydevlake.core.models import *
 class Connection(BaseConnection):
     endpoint: str = ""
     rateLimitPerHour: int = 0
-    token: Field[str] | str = Field(value="", tags='encrypt:"yes"')
+    token: Field[str] | str = default(Field(value="", tags='encrypt:"yes"'))
     proxy: str = ""
 
     def get_doc_schema(self):

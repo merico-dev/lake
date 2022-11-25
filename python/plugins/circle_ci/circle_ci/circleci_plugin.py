@@ -12,7 +12,6 @@ from pydevlake.core.ipc import plugin_method, convert
 class CircleCIPlugin(AbstractPlugin):
 
     def get_plugin_info(self):
-        # start_debugger()
         print("running init()")
         plugin_info = PluginInfo(
             name="circle_ci",
@@ -80,7 +79,7 @@ class CircleCIPlugin(AbstractPlugin):
 
     @plugin_method
     def Collect_Data(self, ctx):
-        # start_debugger()
+        # import pydevlake.keon.debugger
         a: dict = ctx.settings.__dict__
         b = a['db_url']
         for i in range(1, 10):
@@ -94,7 +93,6 @@ class CircleCIPlugin(AbstractPlugin):
 
     @plugin_method
     def Extract_Data(self, ctx):
-        # start_debugger()
         a: dict = ctx.settings.__dict__
         b = a['db_url']
         for i in range(1, 5):

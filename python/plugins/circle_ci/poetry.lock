@@ -190,7 +190,7 @@ description = "Devlake plugin framwork"
 category = "main"
 optional = false
 python-versions = "^3.10"
-develop = false
+develop = true
 
 [package.dependencies]
 apispec = "^6.0.2"
@@ -363,7 +363,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "462a9584d5d3f95e59e1b06a3782fc954135743c8963e52f47fb07ea6c03f1a5"
+content-hash = "9057035f9ea219d89eb3e7ad8697bcf424257a1242f8dddc713d48907aba7948"
 
 [metadata.files]
 apispec = [
