@@ -21,10 +21,11 @@ import (
 	"encoding/json"
 	goerror "errors"
 	"fmt"
-	"github.com/apache/incubator-devlake/errors"
 	"io"
 	"net/http"
 	"net/url"
+
+	"github.com/apache/incubator-devlake/errors"
 
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/dal"
@@ -102,7 +103,7 @@ func CollectIssues(taskCtx core.SubTaskContext) errors.Error {
 			Table: RAW_ISSUE_TABLE,
 		},
 		ApiClient:   data.ApiClient,
-		PageSize:    100,
+		PageSize:    1,
 		Incremental: incremental,
 		/*
 			url may use arbitrary variables from different connection in any order, we need GoTemplate to allow more
