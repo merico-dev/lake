@@ -4,7 +4,7 @@ from pydevlake import startup
 from streams.pipelines import Pipelines
 from streams.workflows import Workflows
 
-from circleci_plugin import CircleCIPlugin
+from circleci_plugin import CircleCIApi, plugin_info, CircleCITask, CircleCISubtasks
 
 
 class CircleCIPlugin2(Plugin):
@@ -23,5 +23,5 @@ class CircleCIPlugin2(Plugin):
 if __name__ == '__main__':
     # CircleCIPlugin2.cli() #TODO adapt this to the AbstractPlugin base class
     print("starting circle_ci")
-    startup.init_cmd(__file__, CircleCIPlugin())
+    startup.init_cmd(__file__, plugin_info)
     # pass

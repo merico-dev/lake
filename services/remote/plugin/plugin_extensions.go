@@ -21,7 +21,7 @@ import (
 	"encoding/json"
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
-	bridge2 "github.com/apache/incubator-devlake/services/remote/bridge"
+	"github.com/apache/incubator-devlake/services/remote/bridge"
 	"github.com/apache/incubator-devlake/services/remote/models"
 )
 
@@ -34,19 +34,19 @@ type (
 	}
 )
 
-func newMetricPlugin(info *models.PluginInfo, invoker bridge2.Invoker) models.RemotePlugin {
+func newMetricPlugin(info *models.PluginInfo, invoker bridge.Invoker) models.RemotePlugin {
 	plugin := newPlugin(info, invoker)
 	return &remoteMetricPlugin{plugin}
 }
 
-func newDatasourcePlugin(info *models.PluginInfo, invoker bridge2.Invoker) models.RemotePlugin {
+func newDatasourcePlugin(info *models.PluginInfo, invoker bridge.Invoker) models.RemotePlugin {
 	plugin := newPlugin(info, invoker)
 	return &remoteDatasourcePlugin{plugin}
 }
 
 func (p *remoteMetricPlugin) MakeMetricPluginPipelinePlanV200(projectName string, options json.RawMessage) (core.PipelinePlan, errors.Error) {
 	plan := core.PipelinePlan{}
-	err := p.invoker.Call("MakeMetricPluginPipelinePlanV200", bridge2.DefaultContext, projectName, options).Get(&plan)
+	err := p.invoker.Call("MakeMetricPluginPipelinePlanV200", bridge.DefaultContext, projectName, options).Get(&plan)
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +55,8 @@ func (p *remoteMetricPlugin) MakeMetricPluginPipelinePlanV200(projectName string
 
 func (p *remoteDatasourcePlugin) MakeDataSourcePipelinePlanV200(connectionId uint64, bpScopes []*core.BlueprintScopeV200) (core.PipelinePlan, []core.Scope, errors.Error) {
 	plan := core.PipelinePlan{}
-	scopes := []models.PipelineScope{}
-	err := p.invoker.Call("MakeDataSourcePluginPipelinePlanV200", bridge2.DefaultContext, connectionId, bpScopes).Get(&plan, &scopes)
+	var scopes []models.PipelineScope
+	err := p.invoker.Call("MakeDataSourcePluginPipelinePlanV200", bridge.DefaultContext, connectionId, bpScopes).Get(&plan, &scopes)
 	if err != nil {
 		return nil, nil, err
 	}

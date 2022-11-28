@@ -1,53 +1,25 @@
-import signal
-import sys
-from abc import ABC, abstractmethod
-
-from .api import *
+from pydevlake.core.models import PluginInfo, ApiParamsInput, ApiParamsOutput
+from .api import PluginAPI
 from .doc import normalize_doc_types
-from .registry import Registry
+from .ipc import plugin_method
 from .swagger import docgen
 
 
-class AbstractPlugin(PluginAPI, PluginMethods, ABC):
+class DefaultPluginAPI(PluginAPI):
 
-    def __init__(self):
-        self.endpoint = "not_set"
-        self.is_cancelled = False
-        signal.signal(signal.SIGTERM, self.__handle_cancellation__)
-        self.plugin_info = self.get_plugin_info()
-        self.plugin_path = self.plugin_info.plugin_path
+    def __init__(self, plugin_info: PluginInfo):
+        self.plugin_info = plugin_info
         self.set_all_default_docs()
 
-    def startup(self, endpoint: str):
-        self.endpoint = endpoint
-        if self.plugin_path != "":
-            self.plugin_info.plugin_path = self.plugin_path
-        registry = Registry(endpoint)
-        plugins: list[AbstractPlugin]
-        registry.register_plugin(self.plugin_info)
-        print("python plugin={} completed initialization.".format(self.plugin_info.name))
-
-    @abstractmethod
-    def get_plugin_info(self) -> PluginInfo:
-        pass
-
-    def __handle_cancellation__(self, signum, frame):
-        print("received cancellation request")
-        # impl code has to use this variable
-        self.is_cancelled = True
-
-    def __terminate__(self):
-        sys.exit(0)
-
-    @plugin_method
+    @plugin_method()
     def post_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
-    @plugin_method
+    @plugin_method()
     def patch_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
-    @plugin_method
+    @plugin_method()
     def get_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
         """
         Get Connection.
@@ -61,7 +33,7 @@ class AbstractPlugin(PluginAPI, PluginMethods, ABC):
         """
         pass
 
-    @plugin_method
+    @plugin_method()
     def list_connections(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
         """
         Get all Connections.
@@ -75,7 +47,7 @@ class AbstractPlugin(PluginAPI, PluginMethods, ABC):
         """
         pass
 
-    @plugin_method
+    @plugin_method()
     def delete_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 

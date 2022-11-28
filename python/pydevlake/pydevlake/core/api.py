@@ -1,50 +1,47 @@
-from .ipc import plugin_method
+from .context import Context
 from .models import *
 
 
-# Must correspond to Golang's default plugin APIs
+class PluginState(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def is_cancelled(self) -> bool:
+        pass
+
+    @abc.abstractmethod
+    def terminate(self) -> bool:
+        pass
+
+
 class PluginAPI(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    @plugin_method
-    def test_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
+    def post_connection(self, ctx: Context, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
     @abc.abstractmethod
-    @plugin_method
-    def post_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
+    def patch_connection(self, ctx: Context, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
     @abc.abstractmethod
-    @plugin_method
-    def patch_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
+    def get_connection(self, ctx: Context, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
     @abc.abstractmethod
-    @plugin_method
-    def get_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
+    def list_connections(self, ctx: Context, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
     @abc.abstractmethod
-    @plugin_method
-    def list_connections(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
-        pass
-
-    @abc.abstractmethod
-    @plugin_method
-    def delete_connection(self, ctx, input: ApiParamsInput) -> ApiParamsOutput:
+    def delete_connection(self, ctx: Context, input: ApiParamsInput) -> ApiParamsOutput:
         pass
 
 
 # Must correspond to Golang's plugin interfaces
-class PluginMethods(metaclass=abc.ABCMeta):
+class PluginTask(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    @plugin_method
-    def RunMigrations(self, ctx: dict, force: bool):
+    def RunMigrations(self, ctx: Context, force: bool):
         pass
 
     @abc.abstractmethod
-    @plugin_method
-    def PrepareTaskData(self, ctx: dict, opts: dict):
+    def PrepareTaskData(self, ctx: Context, opts: any):
         pass

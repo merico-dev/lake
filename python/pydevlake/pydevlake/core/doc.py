@@ -41,20 +41,3 @@ def normalize_doc_types(*types: Iterable[Type[DocSchema]]):
         except AttributeError:
             raise
     return normalized
-
-
-def api_doc(path: str, doc_str: str, *types):
-    def fn(func: Callable):
-        def wrapper(*args, **kwargs):
-            return func(*args, **kwargs)
-
-        doc_gen = func.__annotations__.get("docgen")
-        if doc_gen is not True:
-            if doc_str != "":
-                resolved = normalize_doc_types(*types)
-                func.__doc__ = doc_str.format(*resolved)
-                docgen.generate_doc("/plugins/{}".format(path), func)
-            func.__annotations__.__setitem__("docgen", True)
-        return wrapper
-
-    return fn

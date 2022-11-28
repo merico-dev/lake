@@ -4,6 +4,8 @@ import requests as requests
 from .models import PluginInfo, PluginDetails, SwaggerDoc
 from .swagger import docgen
 
+registered_types = []
+
 
 class Registry:
 

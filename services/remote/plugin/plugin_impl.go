@@ -72,7 +72,7 @@ func (p *remotePluginImpl) SubTaskMetas() []core.SubTaskMeta {
 
 func (p *remotePluginImpl) PrepareTaskData(taskCtx core.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {
 	var output map[string]any
-	err := p.invoker.Call("PrepareTaskData", taskCtx, options).Get(&output)
+	err := p.invoker.Call("PrepareTaskData", bridge.NewChildRemoteContext(taskCtx), options).Get(&output)
 	if err != nil {
 		return nil, err
 	}
