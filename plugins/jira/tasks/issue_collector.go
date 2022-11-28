@@ -103,7 +103,7 @@ func CollectIssues(taskCtx core.SubTaskContext) errors.Error {
 			Table: RAW_ISSUE_TABLE,
 		},
 		ApiClient:   data.ApiClient,
-		PageSize:    1,
+		PageSize:    100,
 		Incremental: incremental,
 		/*
 			url may use arbitrary variables from different connection in any order, we need GoTemplate to allow more
@@ -123,7 +123,7 @@ func CollectIssues(taskCtx core.SubTaskContext) errors.Error {
 			query.Set("jql", jql)
 			query.Set("startAt", fmt.Sprintf("%v", reqData.Pager.Skip))
 			query.Set("maxResults", fmt.Sprintf("%v", reqData.Pager.Size))
-			query.Set("expand", "changelog")
+			//query.Set("expand", "changelog")
 			return query, nil
 		},
 		/*

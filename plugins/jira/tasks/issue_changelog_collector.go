@@ -20,15 +20,15 @@ package tasks
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-devlake/errors"
 	"net/http"
 	"net/url"
 	"reflect"
 
+	"github.com/apache/incubator-devlake/errors"
+
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/apache/incubator-devlake/plugins/core/dal"
 	"github.com/apache/incubator-devlake/plugins/helper"
-	"github.com/apache/incubator-devlake/plugins/jira/models"
 	"github.com/apache/incubator-devlake/plugins/jira/tasks/apiv2models"
 )
 
@@ -46,9 +46,9 @@ var CollectIssueChangelogsMeta = core.SubTaskMeta{
 
 func CollectIssueChangelogs(taskCtx core.SubTaskContext) errors.Error {
 	data := taskCtx.GetData().(*JiraTaskData)
-	if data.JiraServerInfo.DeploymentType == models.DeploymentServer {
-		return nil
-	}
+	// if data.JiraServerInfo.DeploymentType == models.DeploymentServer {
+	// 	return nil
+	// }
 	log := taskCtx.GetLogger()
 	db := taskCtx.GetDal()
 
@@ -102,7 +102,8 @@ func CollectIssueChangelogs(taskCtx core.SubTaskContext) errors.Error {
 		Incremental:   since == nil,
 		GetTotalPages: GetTotalPagesFromResponse,
 		Input:         iterator,
-		UrlTemplate:   "api/3/issue/{{ .Input.IssueId }}/changelog",
+		//UrlTemplate:   "api/3/issue/{{ .Input.IssueId }}/changelog",
+		UrlTemplate: "api/2/issue/{{ .Input.IssueId }}?changelog",
 		Query: func(reqData *helper.RequestData) (url.Values, errors.Error) {
 			query := url.Values{}
 			query.Set("startAt", fmt.Sprintf("%v", reqData.Pager.Skip))
