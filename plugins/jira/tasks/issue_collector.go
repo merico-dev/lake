@@ -103,7 +103,7 @@ func CollectIssues(taskCtx core.SubTaskContext) errors.Error {
 			Table: RAW_ISSUE_TABLE,
 		},
 		ApiClient:   data.ApiClient,
-		PageSize:    100,
+		PageSize:    50,
 		Incremental: incremental,
 		/*
 			url may use arbitrary variables from different connection in any order, we need GoTemplate to allow more
