@@ -18,8 +18,11 @@ limitations under the License.
 package impl
 
 import (
+	"encoding/json"
 	goerror "errors"
 	"fmt"
+	"github.com/apache/incubator-devlake/plugins/jira/tasks/apiv2models"
+	"io"
 	"net/http"
 	"time"
 
@@ -168,7 +171,29 @@ func (plugin Jira) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 	if err != nil {
 		return nil, errors.Default.Wrap(err, "unable to get Jira connection")
 	}
-
+	jiraApiClient, err := tasks.NewJiraApiClient(taskCtx, connection)
+	if err != nil {
+		return nil, errors.Default.Wrap(err, "failed to create jira api client")
+	}
+	info, code, err := tasks.GetJiraServerInfo(jiraApiClient)
+	if err != nil || code != http.StatusOK || info == nil {
+		return nil, errors.HttpStatus(code).Wrap(err, "fail to get Jira server info")
+	}
+	if op.BoardId != 0 {
+		var jiraBoard models.JiraBoard
+		// get repo from db
+		err = db.First(&jiraBoard, dal.Where(`connection_id = ? and board_id = ?`, connection.ID, op.BoardId))
+		if err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				err = saveJiraScope(taskCtx, jiraApiClient, op)
+				if err != nil {
+					return nil, errors.Default.Wrap(err, fmt.Sprintf("fail to save scope %d", op.BoardId))
+				}
+			} else {
+				return nil, errors.Default.Wrap(err, fmt.Sprintf("fail to save scope %d", op.BoardId))
+			}
+		}
+	}
 	if op.BoardId == 0 && op.ScopeId != "" {
 		var jiraBoard models.JiraBoard
 		// get repo from db
@@ -201,14 +226,6 @@ func (plugin Jira) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 		}
 	}
 
-	jiraApiClient, err := tasks.NewJiraApiClient(taskCtx, connection)
-	if err != nil {
-		return nil, errors.Default.Wrap(err, "failed to create jira api client")
-	}
-	info, code, err := tasks.GetJiraServerInfo(jiraApiClient)
-	if err != nil || code != http.StatusOK || info == nil {
-		return nil, errors.HttpStatus(code).Wrap(err, "fail to get Jira server info")
-	}
 	taskData := &tasks.JiraTaskData{
 		Options:        &op,
 		ApiClient:      jiraApiClient,
@@ -220,6 +237,34 @@ func (plugin Jira) PrepareTaskData(taskCtx core.TaskContext, options map[string]
 	}
 
 	return taskData, nil
+}
+
+func saveJiraScope(taskCtx core.TaskContext, jiraApiClient *helper.ApiAsyncClient, op tasks.JiraOptions) errors.Error {
+	res, err := jiraApiClient.Get(fmt.Sprintf("agile/1.0/board/%d", op.BoardId), nil, nil)
+	if err != nil {
+		return errors.HttpStatus(res.StatusCode).Wrap(err, fmt.Sprintf("fail to get Jira Board %d", op.BoardId))
+	}
+	var board apiv2models.Board
+	if res.StatusCode != http.StatusOK {
+		return errors.HttpStatus(res.StatusCode).New(fmt.Sprintf("unexpected status code when requesting repo detail from %s", res.Request.URL.String()))
+	}
+	defer res.Body.Close()
+	body, err := errors.Convert01(io.ReadAll(res.Body))
+	if err != nil {
+		return err
+	}
+	err = errors.Convert(json.Unmarshal(body, &board))
+	if err != nil {
+		return err
+	}
+	jiraBoard := *board.ToToolLayer(op.ConnectionId)
+	if jiraBoard.BoardId != 0 {
+		err = taskCtx.GetDal().CreateIfNotExist(&jiraBoard)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (plugin Jira) MakePipelinePlan(connectionId uint64, scope []*core.BlueprintScopeV100) (core.PipelinePlan, errors.Error) {

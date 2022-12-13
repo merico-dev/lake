@@ -267,31 +267,32 @@ func EnrichOptions(taskCtx core.TaskContext,
 			op.TransformationRuleId = githubRepo.TransformationRuleId
 		}
 		// If we still cannot find the record in db, we have to request from remote server and save it to db
-		if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-			var repo *tasks.GithubApiRepo
-			repo, err = api.MemorizedGetApiRepo(repo, op, apiClient)
-			if err != nil {
-				return err
-			}
-			log.Debug(fmt.Sprintf("Current repo: %s", repo.FullName))
-			var scope models.GithubRepo
-			scope.ConnectionId = op.ConnectionId
-			scope.GithubId = repo.GithubId
-			scope.CreatedDate = repo.CreatedAt.ToNullableTime()
-			scope.Language = repo.Language
-			scope.Description = repo.Description
-			scope.HTMLUrl = repo.HTMLUrl
-			scope.ConnectionId = op.ConnectionId
-			scope.Name = repo.FullName
-			err = taskCtx.GetDal().CreateIfNotExist(&scope)
-			if err != nil {
-				return err
-			}
-
-			op.GithubId = repo.GithubId
-		}
 		if err != nil {
-			return errors.Default.Wrap(err, fmt.Sprintf("fail to find repo %s/%s", op.Owner, op.Repo))
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				var repo *tasks.GithubApiRepo
+				repo, err = api.MemorizedGetApiRepo(repo, op, apiClient)
+				if err != nil {
+					return err
+				}
+				log.Debug(fmt.Sprintf("Current repo: %s", repo.FullName))
+				var scope models.GithubRepo
+				scope.ConnectionId = op.ConnectionId
+				scope.GithubId = repo.GithubId
+				scope.CreatedDate = repo.CreatedAt.ToNullableTime()
+				scope.Language = repo.Language
+				scope.Description = repo.Description
+				scope.HTMLUrl = repo.HTMLUrl
+				scope.ConnectionId = op.ConnectionId
+				scope.Name = repo.FullName
+				err = taskCtx.GetDal().CreateIfNotExist(&scope)
+				if err != nil {
+					return err
+				}
+
+				op.GithubId = repo.GithubId
+			} else {
+				return errors.Default.Wrap(err, fmt.Sprintf("fail to find repo %s/%s", op.Owner, op.Repo))
+			}
 		}
 	}
 	// for bp v200 which we only set ScopeId for options

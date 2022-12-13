@@ -35,7 +35,11 @@ func MakePipelinePlan(subtaskMetas []core.SubTaskMeta, connectionId uint64, scop
 		if err != nil {
 			return nil, errors.Convert(err)
 		}
-		_, err := tasks.DecodeAndValidateTaskOptions(taskOptions)
+		op, err := tasks.DecodeTaskOptions(taskOptions)
+		if err != nil {
+			return nil, err
+		}
+		err = tasks.ValidateTaskOptions(op)
 		if err != nil {
 			return nil, err
 		}

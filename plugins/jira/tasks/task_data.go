@@ -112,17 +112,24 @@ type JiraApiParams struct {
 	BoardId      uint64
 }
 
-func DecodeAndValidateTaskOptions(options map[string]interface{}) (*JiraOptions, errors.Error) {
+func ValidateTaskOptions(op *JiraOptions) errors.Error {
+	if op.ConnectionId == 0 {
+		return errors.BadInput.New(fmt.Sprintf("invalid connectionId:%d", op.ConnectionId))
+	}
+	if op.BoardId == 0 {
+		return errors.BadInput.New(fmt.Sprintf("invalid boardId:%d", op.BoardId))
+	}
+	if op.TransformationRules == nil && op.TransformationRuleId == 0 {
+		op.TransformationRules = &JiraTransformationRule{}
+	}
+	return nil
+}
+
+func DecodeTaskOptions(options map[string]interface{}) (*JiraOptions, errors.Error) {
 	var op JiraOptions
 	err := helper.Decode(options, &op, nil)
 	if err != nil {
 		return nil, err
-	}
-	if op.ConnectionId == 0 {
-		return nil, errors.BadInput.New(fmt.Sprintf("invalid connectionId:%d", op.ConnectionId))
-	}
-	if op.BoardId == 0 {
-		return nil, errors.BadInput.New(fmt.Sprintf("invalid boardId:%d", op.BoardId))
 	}
 	return &op, nil
 }
