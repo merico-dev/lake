@@ -18,14 +18,15 @@ limitations under the License.
 package logger
 
 import (
+	"os"
+	"path/filepath"
+	"strings"
+
 	"github.com/apache/incubator-devlake/config"
 	"github.com/apache/incubator-devlake/errors"
 	"github.com/apache/incubator-devlake/plugins/core"
 	"github.com/sirupsen/logrus"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
-	"os"
-	"path/filepath"
-	"strings"
 )
 
 var inner *logrus.Logger
@@ -52,12 +53,11 @@ func init() {
 	})
 	basePath := cfg.GetString("LOGGING_DIR")
 	if basePath == "" {
-		inner.Warn("LOGGING_DIR is not set. Log files will not be generated.")
+		basePath = "./logs"
+	}
+	if abs, err := filepath.Abs(basePath); err != nil {
+		panic(err)
 	} else {
-		abs, err := filepath.Abs(basePath)
-		if err != nil {
-			panic(err)
-		}
 		basePath = filepath.Join(abs, "devlake.log")
 	}
 	var err errors.Error
