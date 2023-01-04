@@ -30,6 +30,8 @@ ARG GOPROXY=
 # docker build --build-arg HTTPS_PROXY=http://localhost:4780 -t mericodev/lake .
 ARG HTTP_PROXY=
 ARG HTTPS_PROXY=
+ARG TAG=
+ARG SHA=
 
 WORKDIR /app
 COPY . /app
