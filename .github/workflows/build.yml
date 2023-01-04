@@ -46,7 +46,7 @@ jobs:
           password: ${{ env.DOCKERHUB_TOKEN }}
       - name: Build lake image
         run: |
-          docker build --build-arg TAG=${{ github.ref_name }}  --build-arg SHA={{ github.sha }} -t ${{ env.IMAGE_LAKE }}:latest --file ./Dockerfile .
+          docker build --build-arg TAG=${{ github.ref_name }} --build-arg SHA=${{ github.sha }} -t ${{ env.IMAGE_LAKE }}:latest --file ./Dockerfile .
           docker tag ${{ env.IMAGE_LAKE }}:latest ${{ env.IMAGE_LAKE }}:${{ github.ref_name }}
           docker push ${{ env.IMAGE_LAKE }}:${{ github.ref_name }}
           if printf ${{ github.ref_name }} | grep -Pq '^v(\d+).(\d+).(\d+)$'; then
