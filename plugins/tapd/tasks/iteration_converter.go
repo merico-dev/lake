@@ -35,7 +35,7 @@ func ConvertIteration(taskCtx core.SubTaskContext) errors.Error {
 	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_ITERATION_TABLE, false)
 	logger := taskCtx.GetLogger()
 	db := taskCtx.GetDal()
-	logger.Info("collect board:%d", data.Options.WorkspaceId)
+	logger.Info("collect iteration :%d", data.Options.WorkspaceId)
 	clauses := []dal.Clause{
 		dal.From(&models.TapdIteration{}),
 		dal.Where("connection_id = ? AND workspace_id = ?", data.Options.ConnectionId, data.Options.WorkspaceId),
@@ -48,9 +48,12 @@ func ConvertIteration(taskCtx core.SubTaskContext) errors.Error {
 	defer cursor.Close()
 
 	getStdSprintStatus := func(original string) string {
-		if original == "open" {
+		switch original {
+		case "open":
+			return "ACTIVE"
+		case "done":
 			return "CLOSED"
-		} else {
+		default:
 			return ""
 		}
 	}
