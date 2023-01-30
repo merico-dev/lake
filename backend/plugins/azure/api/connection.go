@@ -19,38 +19,27 @@ package api
 
 import (
 	"context"
-	"fmt"
+	"net/http"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	plugin "github.com/apache/incubator-devlake/core/plugin"
-	"github.com/apache/incubator-devlake/core/utils"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/azure/models"
-	"net/http"
-	"time"
 )
 
 func TestConnection(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
 	// decode
-	var connection models.TestConnectionRequest
+	var connection models.AzureConn
 	if err := api.Decode(input.Body, &connection, vld); err != nil {
 		return nil, errors.BadInput.Wrap(err, "could not decode request parameters")
 	}
 	// test connection
-	encodedToken := utils.GetEncodedToken(connection.Username, connection.Password)
-	apiClient, err := api.NewApiClient(
-		context.TODO(),
-		connection.Endpoint,
-		map[string]string{
-			"Authorization": fmt.Sprintf("Basic %v", encodedToken),
-		},
-		3*time.Second,
-		connection.Proxy,
-		basicRes,
-	)
+	apiClient, err := api.NewApiClientFromConnection(context.TODO(), basicRes, connection)
 	if err != nil {
-		return nil, err
+		return nil, errors.Convert(err)
 	}
-	res, err := apiClient.Get("", nil, nil)
+
+	res, err := apiClient.Get("projects", nil, nil)
 	if err != nil {
 		return nil, err
 	}
