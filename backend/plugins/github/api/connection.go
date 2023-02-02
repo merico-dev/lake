@@ -20,14 +20,15 @@ package api
 import (
 	"context"
 	"fmt"
+	"net/http"
+	"strings"
+	"time"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/github/models"
 	"github.com/apache/incubator-devlake/server/api/shared"
-	"net/http"
-	"strings"
-	"time"
 )
 
 type GithubTestConnResponse struct {
@@ -38,14 +39,14 @@ type GithubTestConnResponse struct {
 // @Summary test github connection
 // @Description Test github Connection
 // @Tags plugins/github
-// @Param body body models.TestConnectionRequest true "json body"
+// @Param body body models.GithubConn true "json body"
 // @Success 200  {object} GithubTestConnResponse
 // @Failure 400  {string} errcode.Error "Bad Request"
 // @Failure 500  {string} errcode.Error "Internal Error"
 // @Router /plugins/github/test [POST]
 func TestConnection(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
 	// process input
-	var params models.TestConnectionRequest
+	var params models.GithubConn
 	err := api.Decode(input.Body, &params, vld)
 	if err != nil {
 		return nil, err

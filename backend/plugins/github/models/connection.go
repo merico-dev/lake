@@ -18,19 +18,52 @@ limitations under the License.
 package models
 
 import (
+	"fmt"
+	"net/http"
+	"strings"
+
+	"github.com/apache/incubator-devlake/core/errors"
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/api/apihelperabstract"
 )
 
-type TestConnectionRequest struct {
-	Endpoint string `json:"endpoint" validate:"required,url"`
-	Token    string `json:"token" validate:"required"`
-	Proxy    string `json:"proxy"`
+// GithubAccessToken supports fetching data with multiple tokens
+type GithubAccessToken struct {
+	helper.AccessToken `mapstructure:",squash"`
+	tokens             []string `gorm:"-" json:"-" mapstructure:"-"`
+	tokenIndex         int      `gorm:"-" json:"-" mapstructure:"-"`
 }
 
+// GithubConn holds the essential information to connect to the Github API
+type GithubConn struct {
+	helper.RestConnection `mapstructure:",squash"`
+	GithubAccessToken     `mapstructure:",squash"`
+}
+
+// PrepareApiClient splits Token to tokens for SetupAuthentication to utilize
+func (conn *GithubConn) PrepareApiClient(apiClient apihelperabstract.ApiClientAbstract) errors.Error {
+	conn.tokens = strings.Split(conn.Token, ",")
+	return nil
+}
+
+// SetupAuthentication sets up the HTTP Request Authentication
+func (gat *GithubAccessToken) SetupAuthentication(req *http.Request) errors.Error {
+	// Rotates token on each request.
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", gat.tokens[gat.tokenIndex]))
+	// Set next token index
+	gat.tokenIndex = (gat.tokenIndex + 1) % len(gat.tokens)
+	return nil
+}
+
+// GetTokensCount returns total number of tokens
+func (gat *GithubAccessToken) GetTokensCount() int {
+	return len(gat.tokens)
+}
+
+// GithubConnection holds GithubConn plus ID/Name for database storage
 type GithubConnection struct {
 	helper.BaseConnection `mapstructure:",squash"`
-	helper.RestConnection `mapstructure:",squash"`
-	helper.AccessToken    `mapstructure:",squash"`
+	GithubConn            `mapstructure:",squash"`
 	EnableGraphql         bool `mapstructure:"enableGraphql" json:"enableGraphql"`
 }
 

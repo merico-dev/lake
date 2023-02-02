@@ -30,7 +30,6 @@ import (
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
-	"github.com/apache/incubator-devlake/helpers/pluginhelper/api/apihelperabstract"
 )
 
 type AeAppKey helper.AppKey
@@ -45,10 +44,6 @@ func (aak AeAppKey) SetupAuthentication(req *http.Request) errors.Error {
 	req.Header.Set("x-ae-nonce-str", nonceStr)
 	req.Header.Set("x-ae-sign", sign)
 	return nil
-}
-
-func (aak AeAppKey) GetAppKeyAuthenticator() apihelperabstract.ApiAuthenticator {
-	return aak
 }
 
 // AeConn holds the essential information to connect to the AE API

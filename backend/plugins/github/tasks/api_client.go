@@ -18,33 +18,21 @@ limitations under the License.
 package tasks
 
 import (
-	"fmt"
+	"net/http"
+	"strconv"
+	"time"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 	"github.com/apache/incubator-devlake/plugins/github/models"
-	"net/http"
-	"strconv"
-	"strings"
-	"time"
 )
 
 func CreateApiClient(taskCtx plugin.TaskContext, connection *models.GithubConnection) (*api.ApiAsyncClient, errors.Error) {
-	// load configuration
-	tokens := strings.Split(connection.Token, ",")
-	tokenIndex := 0
-	// create synchronize api client so we can calculate api rate limit dynamically
-	apiClient, err := api.NewApiClient(taskCtx.GetContext(), connection.Endpoint, nil, 0, connection.Proxy, taskCtx)
+	apiClient, err := api.NewApiClientFromConnection(taskCtx.GetContext(), taskCtx, connection)
 	if err != nil {
 		return nil, err
 	}
-	// Rotates token on each request.
-	apiClient.SetBeforeFunction(func(req *http.Request) errors.Error {
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", tokens[tokenIndex]))
-		// Set next token index
-		tokenIndex = (tokenIndex + 1) % len(tokens)
-		return nil
-	})
 
 	// create rate limit calculator
 	rateLimiter := &api.ApiRateLimitCalculator{
@@ -74,7 +62,7 @@ func CreateApiClient(taskCtx plugin.TaskContext, connection *models.GithubConnec
 			// so, we calculate the rate limit of a single token, and presume all tokens are the same, to
 			// simplify the algorithm for now
 			// TODO: consider different token has different rate-limit
-			return rateLimit * len(tokens), 1 * time.Hour, nil
+			return rateLimit * connection.GetTokensCount(), 1 * time.Hour, nil
 		},
 	}
 	asyncApiClient, err := api.CreateAsyncApiClient(

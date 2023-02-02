@@ -63,7 +63,6 @@ type ApiClient struct {
 }
 
 // NewApiClientFromConnection creates ApiClient based on given connection.
-// The connection must
 func NewApiClientFromConnection(
 	ctx gocontext.Context,
 	br context.BasicRes,
@@ -72,6 +71,13 @@ func NewApiClientFromConnection(
 	apiClient, err := NewApiClient(ctx, connection.GetEndpoint(), nil, 0, connection.GetProxy(), br)
 	if err != nil {
 		return nil, err
+	}
+	// if connection needs to prepare the ApiClient, i.e. fetch token for future requests
+	if prepareApiClient, ok := connection.(apihelperabstract.PrepareApiClient); ok {
+		err = prepareApiClient.PrepareApiClient(apiClient)
+		if err != nil {
+			return nil, err
+		}
 	}
 	// if connection requires authorization
 	if authenticator, ok := connection.(apihelperabstract.ApiAuthenticator); ok {

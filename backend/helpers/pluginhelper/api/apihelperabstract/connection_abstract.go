@@ -43,6 +43,12 @@ type ConnectionValidator interface {
 	ValidateConnection(connection interface{}, valdator *validator.Validate) errors.Error
 }
 
+// PrepareApiClient is to be implemented by the concrete Connection which requires
+// preparation for the ApiClient created by NewApiClientFromConnection, i.e. fetch token for future requests
+type PrepareApiClient interface {
+	PrepareApiClient(apiClient ApiClientAbstract) errors.Error
+}
+
 // MultiAuth
 const (
 	AUTH_METHOD_BASIC  = "BasicAuth"
