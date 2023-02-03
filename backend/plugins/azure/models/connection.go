@@ -21,24 +21,16 @@ import (
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
 )
 
-// This object conforms to what the frontend currently sends.
-type AzureConnection struct {
-	helper.BaseConnection `mapstructure:",squash"`
+// AzureConn holds the essential information to connect to the Azure API
+type AzureConn struct {
 	helper.RestConnection `mapstructure:",squash"`
 	helper.BasicAuth      `mapstructure:",squash"`
 }
 
-type AzureResponse struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
-	AzureConnection
-}
-
-type TestConnectionRequest struct {
-	Endpoint string `json:"endpoint" validate:"required"`
-	Username string `json:"username" validate:"required"`
-	Password string `json:"password" validate:"required"`
-	Proxy    string `json:"proxy"`
+// AzureConnection holds AzureConn plus ID/Name for database storage
+type AzureConnection struct {
+	helper.BaseConnection `mapstructure:",squash"`
+	AzureConn             `mapstructure:",squash"`
 }
 
 func (AzureConnection) TableName() string {

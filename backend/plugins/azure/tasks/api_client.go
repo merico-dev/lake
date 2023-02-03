@@ -18,7 +18,6 @@ limitations under the License.
 package tasks
 
 import (
-	"fmt"
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
@@ -27,11 +26,7 @@ import (
 
 func CreateApiClient(taskCtx plugin.TaskContext, connection *models.AzureConnection) (*api.ApiAsyncClient, errors.Error) {
 	// create synchronize api client so we can calculate api rate limit dynamically
-	headers := map[string]string{
-		"Authorization": fmt.Sprintf("Basic %v", connection.GetEncodedToken()),
-	}
-
-	apiClient, err := api.NewApiClient(taskCtx.GetContext(), connection.Endpoint, headers, 0, connection.Proxy, taskCtx)
+	apiClient, err := api.NewApiClientFromConnection(taskCtx.GetContext(), taskCtx, connection)
 	if err != nil {
 		return nil, err
 	}
