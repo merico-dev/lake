@@ -45,21 +45,8 @@ func ExtractAccounts(taskCtx plugin.SubTaskContext) errors.Error {
 			if err != nil {
 				return nil, err
 			}
-
-			results := make([]interface{}, 0)
-			GitlabAccount := &models.GitlabAccount{
-				ConnectionId:    data.Options.ConnectionId,
-				GitlabId:        userRes.GitlabId,
-				Username:        userRes.Username,
-				Name:            userRes.Name,
-				State:           userRes.State,
-				MembershipState: userRes.MembershipState,
-				AvatarUrl:       userRes.AvatarUrl,
-				WebUrl:          userRes.WebUrl,
-			}
-			results = append(results, GitlabAccount)
-
-			return results, nil
+			userRes.ConnectionId = data.Options.ConnectionId
+			return []interface{}{&userRes}, nil
 		},
 	})
 
