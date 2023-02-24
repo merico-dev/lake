@@ -134,7 +134,7 @@ EXPOSE 8080
 
 WORKDIR /app
 # Setup Python
-COPY python/requirements.txt /app/requirements.txt
+COPY backend/python/requirements.txt /app/requirements.txt
 RUN python3 -m pip install --no-cache --upgrade pip setuptools && \
     python3 -m pip install --no-cache dbt-mysql dbt-postgres && \
     python3 -m pip install --no-cache -r requirements.txt && \

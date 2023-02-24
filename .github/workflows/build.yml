@@ -106,6 +106,7 @@ jobs:
           push: false
           target: build
           tags: ${{ secrets.DOCKERHUB_OWNER }}/devlake:build-cache-${{ matrix.platform }}
+          file: ./backend/Dockerfile
           platforms: linux/${{ matrix.platform }}
           cache-from: ${{ secrets.DOCKERHUB_OWNER }}/devlake:amd64-builder
           cache-to: type=local,mode=min,dest=/tmp/devlake-build-cache-${{ matrix.platform }}
@@ -154,6 +155,7 @@ jobs:
           push: true
           tags: ${{ steps.get_push_tags.outputs.TAGS }}
           platforms: linux/amd64,linux/arm64
+          file: ./backend/Dockerfile
           cache-from: |
             ${{ secrets.DOCKERHUB_OWNER }}/devlake:amd64-builder
             ${{ secrets.DOCKERHUB_OWNER }}/devlake:base
