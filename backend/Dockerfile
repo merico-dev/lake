@@ -153,12 +153,13 @@ RUN ldconfig -vn /app/libs
 
 # apps
 COPY --from=build /app/bin /app/bin
-COPY --from=build /app/resources/tap /app/resources/tap
+COPY --from=build /app/config/tap /app/config/tap
 
 ENV PATH="/app/bin:${PATH}"
 
+#add tini, prevent zombie process 
 RUN apt-get update && \
-    apt-get install -y tini #add tini, prevent zombie process \
+    apt-get install -y tini 
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
