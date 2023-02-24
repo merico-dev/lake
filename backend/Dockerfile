@@ -161,7 +161,7 @@ ENV PATH="/app/bin:${PATH}"
 RUN apt-get update && \
     apt-get install -y tini 
 
-ENTRYPOINT ["/sbin/tini", "--"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
 CMD ["lake"]
 
