@@ -152,8 +152,8 @@ COPY --from=build /usr/local/deps/target/lib/*.so* /app/libs
 RUN ldconfig -vn /app/libs
 
 # apps
-COPY --from=build /app/bin /app/bin
-COPY --from=build /app/config/tap /app/config/tap
+COPY --from=build /app/backend/bin /app/bin
+COPY --from=build /app/backend/resources/tap /app/resources/tap
 
 ENV PATH="/app/bin:${PATH}"
 
