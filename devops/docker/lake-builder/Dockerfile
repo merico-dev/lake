@@ -14,27 +14,61 @@
 # limitations under the License.
 #
 
-# current tag: mericodev/lake-builder:0.0.8
-FROM alpine:3.15 as builder
+FROM --platform=linux/amd64 debian:bullseye as debian-amd64
+RUN apt-get update
+RUN apt-get install -y libssh2-1-dev libssl-dev zlib1g-dev
 
-# this distro version gives us libgit2 1.3.0 which we want for gitextractor
-RUN apk update && apk upgrade && apk add libgit2-dev
+FROM golang:1.19.7-bullseye as builder
 
-FROM golang:1.19.1-alpine3.16
-# libs/headers needed to compile gitextractor
-# copy headers over directly (it'll be a new dir)
-COPY --from=builder /usr/include /usr/include
-# copy all contents of the base lib to a temp directory to avoid overwrites of newer versions
-COPY --from=builder /usr/lib /tmp/lib
-# copy the rest of required dirs directly
-COPY --from=builder /usr/lib/pkgconfig /usr/lib/pkgconfig
-COPY --from=builder /usr/bin/pkg-config /usr/bin/pkg-config
-# copy only the new .so files from tmp to lib
-RUN mv -vn /tmp/lib/*.so* /usr/lib/ &&\
-    rm -rf /tmp/lib
+# Base dependencies
+RUN apt-get update
+RUN apt-get install -y gcc binutils libfindbin-libs-perl cmake libssh2-1-dev libssl-dev zlib1g-dev \
+    gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu
 
-# other base dependencies
-#RUN apk add --update gcc=130.2.1_pre1-r3 g++=10.2.1_pre1-r3
-RUN apk update && apk upgrade && apk add --no-cache tzdata gcc g++ make tar
-RUN go install github.com/vektra/mockery/v2@v2.14.0
-RUN go install github.com/swaggo/swag/cmd/swag@v1.8.4
+COPY --from=debian-amd64 /usr/include /rootfs-amd64/usr/include
+COPY --from=debian-amd64 /usr/lib/x86_64-linux-gnu /rootfs-amd64/usr/lib/x86_64-linux-gnu
+COPY --from=debian-amd64 /lib/x86_64-linux-gnu /rootfs-amd64/lib/x86_64-linux-gnu
+
+## Build libs/headers needed for gitextractor plugin
+RUN \
+    mkdir -p /tmp/build/x86_64 && cd /tmp/build/x86_64 && \
+    wget https://github.com/libgit2/libgit2/archive/refs/tags/v1.3.2.tar.gz -O - | tar -xz && \
+    cd libgit2-1.3.2 && \
+    mkdir build && cd build && \
+    cmake .. -DCMAKE_C_COMPILER=x86_64-linux-gnu-gcc -DBUILD_SHARED_LIBS=ON -DCMAKE_SYSROOT=/rootfs-amd64 -DCMAKE_INSTALL_PREFIX=/usr/local/deps/x86_64 &&\
+    make -j install &&\
+    mkdir -p /tmp/deps &&\
+    cp *libgit2* /tmp/deps/ &&\
+    cp -r ../include /tmp/deps/include
+
+FROM python:3.11.2-slim-bullseye
+
+RUN apt update && apt upgrade && apt -y install tzdata make tar curl gcc g++ pkg-config git \
+    libssh2-1 zlib1g libffi-dev default-libmysqlclient-dev
+
+# Install Libs/Headers from previous stage
+COPY --from=builder /tmp/deps/*.so* /usr/lib/
+COPY --from=builder /tmp/deps/*.pc /usr/lib/x86_64-linux-gnu/pkgconfig/
+COPY --from=builder /tmp/deps/include/ /usr/include/
+ENV PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+
+# Install Golang
+RUN curl -L https://git.io/vQhTU | bash -s -- --version 1.19.7
+RUN mv /root/go /go &&\
+    mv /root/.go /usr/local/go &&\
+    ln -sf /usr/local/go/bin/* /usr/bin
+
+# Install Golang Tools
+RUN export GOPATH=/go &&  \
+    go install github.com/vektra/mockery/v2@v2.14.0 &&  \
+    go install github.com/swaggo/swag/cmd/swag@v1.8.4
+
+# Golang Env
+ENV GOPATH=/go
+# Make sure GOROOT is unset
+ENV GOROOT=
+ENV PATH=${GOPATH}/bin:${PATH}
+
+# Python Poetry package manager
+RUN curl -sSL https://install.python-poetry.org | python3 -
+RUN ln -sf /root/.local/bin/poetry /usr/local/bin
