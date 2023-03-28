@@ -15,14 +15,14 @@
 #
 
 FROM --platform=linux/amd64 debian:bullseye as debian-amd64
-RUN apt-get -y update
-RUN apt-get install -y libssh2-1-dev libssl-dev zlib1g-dev
+RUN apt-get -y update && apt -y upgrade &&\
+    apt-get install -y libssh2-1-dev libssl-dev zlib1g-dev
 
 FROM golang:1.19.7-bullseye as builder
 
 # Base dependencies
-RUN apt-get -y update
-RUN apt-get install -y gcc binutils libfindbin-libs-perl cmake libssh2-1-dev libssl-dev zlib1g-dev \
+RUN apt-get -y update && apt -y upgrade &&\
+    apt-get install -y gcc binutils libfindbin-libs-perl cmake libssh2-1-dev libssl-dev zlib1g-dev \
     gcc-x86-64-linux-gnu binutils-x86-64-linux-gnu
 
 COPY --from=debian-amd64 /usr/include /rootfs-amd64/usr/include
@@ -44,7 +44,9 @@ RUN \
 FROM python:3.11.2-slim-bullseye
 
 RUN apt -y update && apt -y upgrade && apt -y install tzdata make tar curl gcc g++ pkg-config git \
-    libssh2-1 zlib1g libffi-dev default-libmysqlclient-dev
+    libssh2-1 zlib1g libffi-dev  \
+    default-libmysqlclient-dev \
+    libpq-dev
 
 # Install Libs/Headers from previous stage
 COPY --from=builder /tmp/deps/*.so* /usr/lib/
