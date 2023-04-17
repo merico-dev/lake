@@ -137,6 +137,7 @@ WORKDIR /app
 COPY python/ /app/python/
 RUN python3 -m pip install --no-cache --upgrade pip setuptools && \
     python3 -m pip install --no-cache dbt-mysql dbt-postgres && \
+    python3 -m pip install --no-cache mashumaro==3.5.1 && \
     python3 -m pip install --no-cache -r python/requirements.txt && \
     rm -fr /usr/share/python-wheels/*
 # Setup Python Poetry package manager
