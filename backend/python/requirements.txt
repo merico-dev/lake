@@ -1,3 +1,4 @@
 # runtime miscellaneous dependencies
 setuptools
 wheel
+mashumaro==3.5.1
