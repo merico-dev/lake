@@ -111,7 +111,7 @@ RUN cd /usr/local/deps/target/lib && \
     done
 
 
-FROM python:3.9.9-slim-bullseye as base
+FROM python:3.10-slim-bullseye as base
 
 ENV PYTHONUNBUFFERED=1
 
