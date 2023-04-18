@@ -22,7 +22,7 @@ license = "Apache-2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "~3.9"
 sqlmodel = "^0.0.8"
 mysqlclient = "^2.1.1"
 requests = "^2.28.1"
