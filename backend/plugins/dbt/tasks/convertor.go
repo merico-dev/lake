@@ -114,20 +114,13 @@ func DbtConverter(taskCtx plugin.SubTaskContext) (err errors.Error) {
 	defaultPackagesPath := filepath.Join(projectPath, "packages.yml")
 	_, err = errors.Convert01(os.Stat(defaultPackagesPath))
 	if err == nil {
-		cmdDeps := exec.Command("dbt", "deps")
-		logger.Info("dbt deps run script: ", cmdDeps)
-		// prevent zombie process
-		defer func() {
-			if err = errors.Convert(cmdDeps.Wait()); err != nil {
-				logger.Error(nil, "dbt deps run cmd.cmdDeps() error")
-			}
-		}()
-		if err = errors.Convert(cmdDeps.Start()); err != nil {
+		cmd := exec.Command("dbt", "deps")
+		err = errors.Convert(cmd.Start())
+		if err != nil {
 			return err
 		}
-
 	}
-	//set default threads = 1, prevent dbt threads can not release, so occur zombie process
+
 	dbtExecParams := []string{"dbt", "run", "--project-dir", projectPath}
 	if projectVars != nil {
 		jsonProjectVars, err := json.Marshal(projectVars)
