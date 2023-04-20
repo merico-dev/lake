@@ -26,30 +26,32 @@ import (
 	"github.com/apache/incubator-devlake/helpers/migrationhelper"
 )
 
-var _ plugin.MigrationScript = (*addGitlabCommitAuthoredDate)(nil)
+var _ plugin.MigrationScript = (*addBitbucketCommitAuthoredDate)(nil)
 
-type GitlabMrCommit20230420 struct {
-	CommitAuthoredDate time.Time
+type BitbucketPrCommit20230420 struct {
+	CommitAuthoredName  string `gorm:"type:varchar(255)"`
+	CommitAuthoredEmail string `gorm:"type:varchar(255)"`
+	CommitAuthoredDate  time.Time
 }
 
-func (GitlabMrCommit20230420) TableName() string {
-	return "_tool_gitlab_mr_commits"
+func (BitbucketPrCommit20230420) TableName() string {
+	return "_tool_bitbucket_pull_request_commits"
 }
 
-type addGitlabCommitAuthoredDate struct{}
+type addBitbucketCommitAuthoredDate struct{}
 
-func (script *addGitlabCommitAuthoredDate) Up(basicRes context.BasicRes) errors.Error {
+func (script *addBitbucketCommitAuthoredDate) Up(basicRes context.BasicRes) errors.Error {
 
 	return migrationhelper.AutoMigrateTables(
 		basicRes,
-		&GitlabMrCommit20230420{},
+		&BitbucketPrCommit20230420{},
 	)
 }
 
-func (*addGitlabCommitAuthoredDate) Version() uint64 {
-	return 20230420135127
+func (*addBitbucketCommitAuthoredDate) Version() uint64 {
+	return 20230420135129
 }
 
-func (*addGitlabCommitAuthoredDate) Name() string {
-	return "add commit_authored_date to _tool_gitlab_mr_commits table"
+func (*addBitbucketCommitAuthoredDate) Name() string {
+	return "add commit_authored_date to _tool_bitbucket_pull_request_commits table"
 }

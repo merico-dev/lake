@@ -88,11 +88,18 @@ func ExtractApiPullRequestCommits(taskCtx plugin.SubTaskContext) errors.Error {
 			}
 			results = append(results, bitbucketCommit)
 
+			authorInfo := apiPullRequestCommit.Author.Raw
+			authorName := strings.TrimRight(strings.Split(authorInfo, "<")[0], " ")
+			authorEmail := strings.Trim(strings.Split(authorInfo, "<")[1], ">")
+
 			bitbucketPullRequestCommit := &models.BitbucketPrCommit{
-				ConnectionId:  data.Options.ConnectionId,
-				RepoId:        repoId,
-				PullRequestId: pull.BitbucketId,
-				CommitSha:     apiPullRequestCommit.Hash,
+				ConnectionId:        data.Options.ConnectionId,
+				RepoId:              repoId,
+				PullRequestId:       pull.BitbucketId,
+				CommitSha:           apiPullRequestCommit.Hash,
+				CommitAuthoredName:  authorName,
+				CommitAuthoredEmail: authorEmail,
+				CommitAuthoredDate:  apiPullRequestCommit.Date,
 			}
 			if err != nil {
 				return nil, err
