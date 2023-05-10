@@ -61,11 +61,9 @@ func CollectIncidents(taskCtx plugin.SubTaskContext) errors.Error {
 	data := taskCtx.GetData().(*PagerDutyTaskData)
 	db := taskCtx.GetDal()
 	args := api.RawDataSubTaskArgs{
-		Ctx: taskCtx,
-		Params: PagerDutyParams{
-			ConnectionId: data.Options.ConnectionId,
-		},
-		Table: RAW_INCIDENTS_TABLE,
+		Ctx:     taskCtx,
+		Options: data.Options,
+		Table:   RAW_INCIDENTS_TABLE,
 	}
 	collector, err := api.NewStatefulApiCollectorForFinalizableEntity(api.FinalizableApiCollectorArgs{
 		RawDataSubTaskArgs: args,

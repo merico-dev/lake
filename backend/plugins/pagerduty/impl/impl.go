@@ -20,6 +20,7 @@ package impl
 import (
 	"fmt"
 	"github.com/apache/incubator-devlake/core/context"
+	"github.com/apache/incubator-devlake/core/dal"
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	helper "github.com/apache/incubator-devlake/helpers/pluginhelper/api"
@@ -35,6 +36,8 @@ var _ plugin.PluginMeta = (*PagerDuty)(nil)
 var _ plugin.PluginInit = (*PagerDuty)(nil)
 var _ plugin.PluginTask = (*PagerDuty)(nil)
 var _ plugin.PluginApi = (*PagerDuty)(nil)
+
+var _ plugin.PluginModel = (*PagerDuty)(nil)
 var _ plugin.PluginBlueprintV100 = (*PagerDuty)(nil)
 var _ plugin.CloseablePluginTask = (*PagerDuty)(nil)
 
@@ -54,6 +57,15 @@ func (p PagerDuty) SubTaskMetas() []plugin.SubTaskMeta {
 		tasks.CollectIncidentsMeta,
 		tasks.ExtractIncidentsMeta,
 		tasks.ConvertIncidentsMeta,
+	}
+}
+
+func (p PagerDuty) GetTablesInfo() []dal.Tabler {
+	return []dal.Tabler{
+		models.Service{},
+		models.Incident{},
+		models.User{},
+		models.Assignment{},
 	}
 }
 
@@ -130,8 +142,9 @@ func (p PagerDuty) ApiResources() map[string]map[string]plugin.ApiResourceHandle
 			"PUT": api.PutScope,
 		},
 		"connections/:connectionId/scopes/:scopeId": {
-			"GET":   api.GetScope,
-			"PATCH": api.UpdateScope,
+			"GET":    api.GetScope,
+			"PATCH":  api.UpdateScope,
+			"DELETE": api.DeleteScope,
 		},
 		"connections/:connectionId/transformation_rules": {
 			"POST": api.CreateTransformationRule,

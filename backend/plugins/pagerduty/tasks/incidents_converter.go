@@ -68,11 +68,9 @@ func ConvertIncidents(taskCtx plugin.SubTaskContext) errors.Error {
 	idGen := didgen.NewDomainIdGenerator(&models.Incident{})
 	converter, err := api.NewDataConverter(api.DataConverterArgs{
 		RawDataSubTaskArgs: api.RawDataSubTaskArgs{
-			Ctx: taskCtx,
-			Params: PagerDutyParams{
-				ConnectionId: data.Options.ConnectionId,
-			},
-			Table: RAW_INCIDENTS_TABLE,
+			Ctx:     taskCtx,
+			Options: data.Options,
+			Table:   RAW_INCIDENTS_TABLE,
 		},
 		InputRowType: reflect.TypeOf(IncidentWithUser{}),
 		Input:        cursor,

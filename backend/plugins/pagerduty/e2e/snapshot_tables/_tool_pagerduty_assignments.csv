@@ -1,4 +1,4 @@
 incident_number,user_id,created_at,updated_at,_raw_data_params,_raw_data_table,_raw_data_id,_raw_data_remark,connection_id,assigned_at
-4,P25K520,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1}",_raw_pagerduty_incidents,1,,1,2022-11-03T07:02:36.000+00:00
-4,PQYACO3,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1}",_raw_pagerduty_incidents,1,,1,2022-11-03T06:23:06.000+00:00
-5,PQYACO3,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1}",_raw_pagerduty_incidents,2,,1,2022-11-03T06:44:37.000+00:00
+4,P25K520,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1,""ScopeId"":""PIKL83L""}",_raw_pagerduty_incidents,1,,1,2022-11-03T07:02:36.000+00:00
+4,PQYACO3,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1,""ScopeId"":""PIKL83L""}",_raw_pagerduty_incidents,1,,1,2022-11-03T06:23:06.000+00:00
+5,PQYACO3,2022-11-03T07:11:37.415+00:00,2022-11-03T07:11:37.415+00:00,"{""ConnectionId"":1,""ScopeId"":""PIKL83L""}",_raw_pagerduty_incidents,2,,1,2022-11-03T06:44:37.000+00:00
