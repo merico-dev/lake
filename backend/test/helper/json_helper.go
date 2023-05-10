@@ -44,6 +44,18 @@ func ToMap(x any) map[string]any {
 	return m
 }
 
+func FromMap[T any](x map[string]any) *T {
+	b, err := json.Marshal(x)
+	if err != nil {
+		panic(err)
+	}
+	t := new(T)
+	if err = json.Unmarshal(b, &t); err != nil {
+		panic(err)
+	}
+	return t
+}
+
 // ToCleanJson FIXME
 func ToCleanJson(inline bool, x any) json.RawMessage {
 	j, err := json.Marshal(x)

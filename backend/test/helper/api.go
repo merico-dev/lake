@@ -26,6 +26,8 @@ import (
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/models"
 	"github.com/apache/incubator-devlake/core/plugin"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/api"
+	"github.com/apache/incubator-devlake/server/api/blueprints"
 	apiProject "github.com/apache/incubator-devlake/server/api/project"
 	"github.com/stretchr/testify/require"
 )
@@ -86,6 +88,20 @@ func (d *DevlakeClient) CreateBasicBlueprintV2(name string, config *BlueprintV2C
 		inlineJson: false,
 	}, http.MethodPost, fmt.Sprintf("%s/blueprints", d.Endpoint), nil, &blueprint)
 	return blueprint
+}
+
+func (d *DevlakeClient) ListBlueprints() blueprints.PaginatedBlueprint {
+	return sendHttpRequest[blueprints.PaginatedBlueprint](d.testCtx, d.timeout, debugInfo{
+		print:      true,
+		inlineJson: false,
+	}, http.MethodGet, fmt.Sprintf("%s/blueprints", d.Endpoint), nil, nil)
+}
+
+func (d *DevlakeClient) GetBlueprint(blueprintId uint64) models.Blueprint {
+	return sendHttpRequest[models.Blueprint](d.testCtx, d.timeout, debugInfo{
+		print:      true,
+		inlineJson: false,
+	}, http.MethodGet, fmt.Sprintf("%s/blueprint/%d", d.Endpoint, blueprintId), nil, nil)
 }
 
 func (d *DevlakeClient) CreateProject(project *ProjectConfig) models.ApiOutputProject {
@@ -152,18 +168,30 @@ func (d *DevlakeClient) UpdateScope(pluginName string, connectionId uint64, scop
 	}, http.MethodPatch, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes/%s", d.Endpoint, pluginName, connectionId, scopeId), nil, scope)
 }
 
-func (d *DevlakeClient) ListScopes(pluginName string, connectionId uint64) []any {
-	return sendHttpRequest[[]any](d.testCtx, d.timeout, debugInfo{
+func (d *DevlakeClient) ListScopes(pluginName string, connectionId uint64, listBlueprints bool) []ScopeResponse {
+	scopesRaw := sendHttpRequest[[]map[string]any](d.testCtx, d.timeout, debugInfo{
 		print:      true,
 		inlineJson: false,
-	}, http.MethodGet, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes", d.Endpoint, pluginName, connectionId), nil, nil)
+	}, http.MethodGet, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes?blueprints=%v", d.Endpoint, pluginName, connectionId, listBlueprints), nil, nil)
+	var responses []ScopeResponse
+	for _, scopeRaw := range scopesRaw {
+		responses = append(responses, getScopeResponse(scopeRaw))
+	}
+	return responses
 }
 
-func (d *DevlakeClient) GetScope(pluginName string, connectionId uint64, scopeId string) any {
-	return sendHttpRequest[any](d.testCtx, d.timeout, debugInfo{
+func (d *DevlakeClient) GetScope(pluginName string, connectionId uint64, scopeId string, listBlueprints bool) any {
+	return sendHttpRequest[api.ScopeRes[any]](d.testCtx, d.timeout, debugInfo{
 		print:      true,
 		inlineJson: false,
-	}, http.MethodGet, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes/%s", d.Endpoint, pluginName, connectionId, scopeId), nil, nil)
+	}, http.MethodGet, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes/%s?blueprints=%v", d.Endpoint, pluginName, connectionId, scopeId, listBlueprints), nil, nil)
+}
+
+func (d *DevlakeClient) DeleteScope(pluginName string, connectionId uint64, scopeId string, deleteDataOnly bool) []models.Blueprint {
+	return sendHttpRequest[[]models.Blueprint](d.testCtx, d.timeout, debugInfo{
+		print:      true,
+		inlineJson: false,
+	}, http.MethodDelete, fmt.Sprintf("%s/plugins/%s/connections/%d/scopes/%s?delete_data_only=%v", d.Endpoint, pluginName, connectionId, scopeId, deleteDataOnly), nil, nil)
 }
 
 func (d *DevlakeClient) CreateTransformationRule(pluginName string, connectionId uint64, rules any) any {
@@ -315,4 +343,10 @@ func (d *DevlakeClient) monitorPipeline(id uint64) models.Pipeline {
 		return false, nil
 	}))
 	return pipelineResult
+}
+
+func getScopeResponse(scopeRaw map[string]any) ScopeResponse {
+	response := Cast[ScopeResponse](scopeRaw)
+	response.Scope = scopeRaw
+	return response
 }

@@ -47,9 +47,7 @@ require (
 	gorm.io/gorm v1.24.1-0.20221019064659-5dd2bb482755
 )
 
-require (
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
-)
+require github.com/jmespath/go-jmespath v0.4.0 // indirect
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect

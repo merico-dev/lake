@@ -145,9 +145,10 @@ func (m *ApiCollectorStateManager) Execute() errors.Error {
 func NewStatefulApiCollectorForFinalizableEntity(args FinalizableApiCollectorArgs) (plugin.SubTask, errors.Error) {
 	// create a manager which could execute multiple collector but acts as a single subtask to callers
 	manager, err := NewStatefulApiCollector(RawDataSubTaskArgs{
-		Ctx:    args.Ctx,
-		Params: args.Params,
-		Table:  args.Table,
+		Ctx:     args.Ctx,
+		Options: args.Options,
+		Params:  args.Params,
+		Table:   args.Table,
 	}, args.TimeAfter)
 	if err != nil {
 		return nil, err

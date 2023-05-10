@@ -88,22 +88,23 @@ func registerPluginEndpoints(r *gin.Engine, pluginName string, apiResources map[
 			r.Handle(
 				method,
 				fmt.Sprintf("/plugins/%s/%s", pluginName, resourcePath),
-				handlePluginCall(h),
+				handlePluginCall(pluginName, h),
 			)
 		}
 	}
 }
 
-func handlePluginCall(handler plugin.ApiResourceHandler) func(c *gin.Context) {
+func handlePluginCall(pluginName string, handler plugin.ApiResourceHandler) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var err error
 		input := &plugin.ApiResourceInput{}
+		input.Params = make(map[string]string)
 		if len(c.Params) > 0 {
-			input.Params = make(map[string]string)
 			for _, param := range c.Params {
 				input.Params[param.Key] = param.Value
 			}
 		}
+		input.Params["plugin"] = pluginName
 		input.Query = c.Request.URL.Query()
 		if c.Request.Body != nil {
 			if strings.HasPrefix(c.Request.Header.Get("Content-Type"), "multipart/form-data;") {

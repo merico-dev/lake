@@ -106,7 +106,6 @@ func (extractor *ApiExtractor) Execute() errors.Error {
 		if err != nil {
 			return errors.Default.Wrap(err, "error calling plugin Extract implementation")
 		}
-
 		for _, result := range results {
 			// get the batch operator for the specific type
 			batch, err := divider.ForType(reflect.TypeOf(result))

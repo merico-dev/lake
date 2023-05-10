@@ -26,6 +26,7 @@ import (
 	"github.com/apache/incubator-devlake/core/models/migrationscripts"
 	"github.com/apache/incubator-devlake/core/plugin"
 	"github.com/apache/incubator-devlake/core/runner"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/services"
 	"github.com/apache/incubator-devlake/impls/dalgorm"
 	"github.com/apache/incubator-devlake/impls/logruslog"
 	"github.com/go-playground/validator/v10"
@@ -37,6 +38,8 @@ import (
 var cfg config.ConfigReader
 var logger log.Logger
 var db dal.Dal
+
+var bpManager *services.BlueprintManager
 var basicRes context.BasicRes
 var migrator plugin.Migrator
 var cronManager *cron.Cron
@@ -55,7 +58,7 @@ func InitResources() {
 	cfg = basicRes.GetConfigReader()
 	logger = basicRes.GetLogger()
 	db = basicRes.GetDal()
-
+	bpManager = services.NewBlueprintManager(db)
 	// initialize db migrator
 	migrator, err = runner.InitMigrator(basicRes)
 	if err != nil {

@@ -353,10 +353,14 @@ func (collector *ApiCollector) fetchPagesUndetermined(reqData *RequestData) {
 }
 
 func (collector *ApiCollector) generateUrl(pager *Pager, input interface{}) (string, errors.Error) {
+	params := collector.args.Params
+	if collector.args.Options != nil {
+		params = collector.args.Options.GetParams()
+	}
 	var buf bytes.Buffer
 	err := collector.urlTemplate.Execute(&buf, &RequestData{
 		Pager:  pager,
-		Params: collector.args.Params,
+		Params: params,
 		Input:  input,
 	})
 	if err != nil {

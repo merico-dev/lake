@@ -78,23 +78,21 @@ func CreateTestConnection(client *helper.DevlakeClient) *helper.Connection {
 	return connection
 }
 
-func CreateTestScope(client *helper.DevlakeClient, connectionId uint64) any {
-	res := client.CreateTransformationRule(PLUGIN_NAME, connectionId, FakeTxRule{Name: "Tx rule", Env: "test env"})
-	rule, ok := res.(map[string]interface{})
-	if !ok {
-		panic("Cannot cast transform rule")
-	}
-	ruleId := uint64(rule["id"].(float64))
-
-	scope := client.CreateScope(PLUGIN_NAME,
+func CreateTestScope(client *helper.DevlakeClient, rule *FakeTxRule, connectionId uint64) *FakeProject {
+	scopes := helper.Cast[[]FakeProject](client.CreateScope(PLUGIN_NAME,
 		connectionId,
 		FakeProject{
 			Id:                   "p1",
 			Name:                 "Project 1",
 			ConnectionId:         connectionId,
 			Url:                  "http://fake.org/api/project/p1",
-			TransformationRuleId: ruleId,
+			TransformationRuleId: rule.Id,
 		},
-	)
-	return scope
+	))
+	return &scopes[0]
+}
+
+func CreateTestTransformationRule(client *helper.DevlakeClient, connectionId uint64) *FakeTxRule {
+	rule := helper.Cast[FakeTxRule](client.CreateTransformationRule(PLUGIN_NAME, connectionId, FakeTxRule{Name: "Tx rule", Env: "test env"}))
+	return &rule
 }

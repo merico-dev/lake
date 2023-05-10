@@ -20,6 +20,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-devlake/helpers/pluginhelper/services"
 	"strings"
 
 	"github.com/apache/incubator-devlake/core/dal"
@@ -31,6 +32,10 @@ import (
 	"github.com/robfig/cron/v3"
 )
 
+var (
+	blueprintLog = logruslog.Global.Nested("blueprint")
+)
+
 // BlueprintQuery is a query for GetBlueprints
 type BlueprintQuery struct {
 	Pagination
@@ -38,10 +43,6 @@ type BlueprintQuery struct {
 	IsManual *bool  `form:"isManual"`
 	Label    string `form:"label"`
 }
-
-var (
-	blueprintLog = logruslog.Global.Nested("blueprint")
-)
 
 type BlueprintJob struct {
 	Blueprint *models.Blueprint
@@ -63,7 +64,7 @@ func CreateBlueprint(blueprint *models.Blueprint) errors.Error {
 	if err != nil {
 		return err
 	}
-	err = SaveDbBlueprint(blueprint)
+	err = bpManager.SaveDbBlueprint(blueprint)
 	if err != nil {
 		return err
 	}
@@ -76,7 +77,13 @@ func CreateBlueprint(blueprint *models.Blueprint) errors.Error {
 
 // GetBlueprints returns a paginated list of Blueprints based on `query`
 func GetBlueprints(query *BlueprintQuery) ([]*models.Blueprint, int64, errors.Error) {
-	blueprints, count, err := GetDbBlueprints(query)
+	blueprints, count, err := bpManager.GetDbBlueprints(&services.GetBlueprintQuery{
+		Enable:      query.Enable,
+		IsManual:    query.IsManual,
+		Label:       query.Label,
+		SkipRecords: query.GetSkip(),
+		PageSize:    query.GetPageSize(),
+	})
 	if err != nil {
 		return nil, 0, errors.Convert(err)
 	}
@@ -85,7 +92,7 @@ func GetBlueprints(query *BlueprintQuery) ([]*models.Blueprint, int64, errors.Er
 
 // GetBlueprint returns the detail of a given Blueprint ID
 func GetBlueprint(blueprintId uint64) (*models.Blueprint, errors.Error) {
-	blueprint, err := GetDbBlueprint(blueprintId)
+	blueprint, err := bpManager.GetDbBlueprint(blueprintId)
 	if err != nil {
 		if db.IsErrorNotFound(err) {
 			return nil, errors.NotFound.New("blueprint not found")
@@ -100,7 +107,7 @@ func GetBlueprintByProjectName(projectName string) (*models.Blueprint, errors.Er
 	if projectName == "" {
 		return nil, errors.Internal.New("can not use the empty projectName to search the unique blueprint")
 	}
-	blueprint, err := GetDbBlueprintByProjectName(projectName)
+	blueprint, err := bpManager.GetDbBlueprintByProjectName(projectName)
 	if err != nil {
 		// Allow specific projectName to fail to find the corresponding blueprint
 		if db.IsErrorNotFound(err) {
@@ -177,7 +184,7 @@ func saveBlueprint(blueprint *models.Blueprint) (*models.Blueprint, errors.Error
 	if err != nil {
 		return nil, errors.BadInput.WrapRaw(err)
 	}
-	err = SaveDbBlueprint(blueprint)
+	err = bpManager.SaveDbBlueprint(blueprint)
 	if err != nil {
 		return nil, err
 	}
@@ -221,7 +228,10 @@ func PatchBlueprint(id uint64, body map[string]interface{}) (*models.Blueprint, 
 func ReloadBlueprints(c *cron.Cron) errors.Error {
 	enable := true
 	isManual := false
-	blueprints, _, err := GetDbBlueprints(&BlueprintQuery{Enable: &enable, IsManual: &isManual})
+	blueprints, _, err := bpManager.GetDbBlueprints(&services.GetBlueprintQuery{
+		Enable:   &enable,
+		IsManual: &isManual,
+	})
 	if err != nil {
 		return err
 	}

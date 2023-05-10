@@ -33,6 +33,14 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
+type TestOpts struct{}
+
+func (t TestOpts) GetParams() any {
+	return struct {
+		Name string
+	}{Name: "testparams"}
+}
+
 func TestFetchPageUndetermined(t *testing.T) {
 	mockDal := new(mockdal.Dal)
 	mockDal.On("AutoMigrate", mock.Anything, mock.Anything).Return(nil).Once()
@@ -76,16 +84,13 @@ func TestFetchPageUndetermined(t *testing.T) {
 	mockApi.On("WaitAsync").Return(nil)
 	mockApi.On("GetAfterFunction", mock.Anything).Return(nil)
 	mockApi.On("SetAfterFunction", mock.Anything).Return()
-	params := struct {
-		Name string
-	}{Name: "testparams"}
 	mockApi.On("Release").Return()
 
 	collector, err := NewApiCollector(ApiCollectorArgs{
 		RawDataSubTaskArgs: RawDataSubTaskArgs{
-			Ctx:    mockCtx,
-			Table:  "whatever rawtable",
-			Params: params,
+			Ctx:     mockCtx,
+			Table:   "whatever rawtable",
+			Options: &TestOpts{},
 		},
 		ApiClient:      mockApi,
 		Input:          mockInput,
