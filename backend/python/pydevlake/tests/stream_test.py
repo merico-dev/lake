@@ -105,7 +105,7 @@ def test_extract_data(stream, raw_data, ctx):
     with Session(ctx.engine) as session:
         for each in raw_data:
             raw_model = stream.raw_model(session)
-            raw_model.params = json.dumps({"connection_id": ctx.connection.id, "scope_id": ctx.scope.id})
+            raw_model.params = json.dumps({"connection_id": ctx.connection.id, "scope_id": ctx.scope.id}, separators=(',', ':'))
             session.add(raw_model(data=json.dumps(each)))
         session.commit()
 
@@ -131,7 +131,7 @@ def test_convert_data(stream, raw_data, ctx):
                     connection_id=ctx.connection.id,
                     name=each["n"],
                     raw_data_table="_raw_dummy_model",
-                    raw_data_params=json.dumps({"connection_id": ctx.connection.id, "scope_id": ctx.scope.id})
+                    raw_data_params=json.dumps({"connection_id": ctx.connection.id, "scope_id": ctx.scope.id}, separators=(',', ':'))
                 )
             )
         session.commit()

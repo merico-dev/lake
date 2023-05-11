@@ -41,10 +41,14 @@ func NewDynamicTabler(tableName string, objType reflect.Type) *DynamicTabler {
 	}
 }
 
+func (d *DynamicTabler) NewValue() any {
+	return reflect.New(d.objType).Interface()
+}
+
 func (d *DynamicTabler) New() *DynamicTabler {
 	return &DynamicTabler{
 		objType: d.objType,
-		wrapped: reflect.New(d.objType).Interface(),
+		wrapped: d.NewValue(),
 		table:   d.table,
 	}
 }
@@ -80,6 +84,15 @@ func (d *DynamicTabler) Set(x any) {
 
 func (d *DynamicTabler) Unwrap() any {
 	return d.wrapped
+}
+
+func (d *DynamicTabler) UnwrapSlice() []any {
+	var arr []any
+	slice := reflect.ValueOf(d.wrapped).Elem()
+	for i := 0; i < slice.Len(); i++ {
+		arr = append(arr, slice.Index(i).Interface())
+	}
+	return arr
 }
 
 func (d *DynamicTabler) TableName() string {

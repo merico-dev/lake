@@ -64,6 +64,7 @@ class PluginInfo(Message):
     subtask_metas: list[SubtaskMeta]
     extension: str = "datasource"
     type: str = "python-poetry"
+    tables: list[str]
 
 
 class RemoteProgress(Message):

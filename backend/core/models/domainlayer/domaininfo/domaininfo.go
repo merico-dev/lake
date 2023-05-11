@@ -47,7 +47,7 @@ func GetDomainTablesInfo() []Tabler {
 		&code.RefsPrCherrypick{},
 		&code.Repo{},
 		&code.RepoCommit{},
-		&code.RepoLanguage{},
+		//&code.RepoLanguage{},
 		// crossdomain
 		&crossdomain.Account{},
 		&crossdomain.BoardRepo{},

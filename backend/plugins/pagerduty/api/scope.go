@@ -74,7 +74,7 @@ func UpdateScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, err
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/ [GET]
 func GetScopeList(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.GetScopeList(input, "Id")
+	return scopeHelper.GetScopeList(input)
 }
 
 // GetScope get one PagerDuty service
@@ -89,7 +89,7 @@ func GetScopeList(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, er
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/{serviceId} [GET]
 func GetScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.GetScope(input, "id")
+	return scopeHelper.GetScope(input, "")
 }
 
 // DeleteScope delete plugin data associated with the scope and optionally the scope itself
@@ -104,5 +104,5 @@ func GetScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /plugins/pagerduty/connections/{connectionId}/scopes/{serviceId} [DELETE]
 func DeleteScope(input *plugin.ApiResourceInput) (*plugin.ApiResourceOutput, errors.Error) {
-	return scopeHelper.DeleteScope(input, "Id", "ScopeId", nil)
+	return scopeHelper.Delete(input)
 }

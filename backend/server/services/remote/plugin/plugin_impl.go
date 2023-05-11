@@ -43,6 +43,7 @@ type (
 		transformationRuleTabler *coreModels.DynamicTabler
 		resources                map[string]map[string]plugin.ApiResourceHandler
 		openApiSpec              string
+		tables                   []dal.Tabler
 	}
 	RemotePluginTaskData struct {
 		DbUrl              string                 `json:"db_url"`
@@ -96,11 +97,18 @@ func newPlugin(info *models.PluginInfo, invoker bridge.Invoker) (*remotePluginIm
 			DomainTypes:      subtask.DomainTypes,
 		})
 	}
+	for _, tableName := range info.Tables {
+		p.tables = append(p.tables, coreModels.NewDynamicTabler(tableName, nil))
+	}
 	return &p, nil
 }
 
 func (p *remotePluginImpl) SubTaskMetas() []plugin.SubTaskMeta {
 	return p.subtaskMetas
+}
+
+func (p *remotePluginImpl) GetTablesInfo() []dal.Tabler {
+	return p.tables
 }
 
 func (p *remotePluginImpl) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {

@@ -28,6 +28,7 @@ import (
 
 var (
 	connectionHelper *api.ConnectionApiHelper
+	scopeHelper      *api.GenericScopeApiHelper[any, any, any]
 	basicRes         context.BasicRes
 	vld              *validator.Validate
 )

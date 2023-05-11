@@ -18,9 +18,12 @@ limitations under the License.
 package models
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/apache/incubator-devlake/impls/dalgorm"
 	"reflect"
 	"strings"
+	"time"
 
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/models"
@@ -66,6 +69,33 @@ func GenerateStructType(schema map[string]any, encrypt bool, baseType reflect.Ty
 		structFields = append(structFields, *field)
 	}
 	return reflect.StructOf(structFields), nil
+}
+
+func MapTo(x any, y any) errors.Error {
+	b, err := json.Marshal(x)
+	if err != nil {
+		return errors.Convert(err)
+	}
+	if err = json.Unmarshal(b, y); err != nil {
+		return errors.Convert(err)
+	}
+	return nil
+}
+
+func ToDatabaseMap(tableName string, ifc any, createdAt *time.Time, updatedAt *time.Time) (map[string]any, errors.Error) {
+	m := map[string]any{}
+	err := MapTo(ifc, &m)
+	if err != nil {
+		return nil, err
+	}
+	if createdAt != nil {
+		m["createdAt"] = createdAt
+	}
+	if updatedAt != nil {
+		m["updatedAt"] = updatedAt
+	}
+	m = dalgorm.ToDatabaseMap(tableName, m)
+	return m, nil
 }
 
 func isBaseTypeField(fieldName string, baseType reflect.Type) bool {

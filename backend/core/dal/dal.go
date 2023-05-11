@@ -174,9 +174,9 @@ type Dal interface {
 	// Begin create a new transaction
 	Begin() Transaction
 	// IsErrorNotFound returns true if error is record-not-found
-	IsErrorNotFound(err errors.Error) bool
+	IsErrorNotFound(err error) bool
 	// IsDuplicationError returns true if error is duplicate-error
-	IsDuplicationError(err errors.Error) bool
+	IsDuplicationError(err error) bool
 	// RawCursor (Deprecated) executes raw sql query and returns a database cursor.
 	RawCursor(query string, params ...interface{}) (*sql.Rows, errors.Error)
 }

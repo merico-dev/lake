@@ -131,6 +131,7 @@ func TestBlueprintV200(t *testing.T) {
 	})
 	rule := CreateTestTransformationRule(client, connection.ID)
 	scope := CreateTestScope(client, rule, connection.ID)
+
 	blueprint := client.CreateBasicBlueprintV2(
 		"Test blueprint",
 		&helper.BlueprintV2Config{
@@ -159,6 +160,13 @@ func TestBlueprintV200(t *testing.T) {
 	project := client.GetProject(projectName)
 	require.Equal(t, blueprint.Name, project.Blueprint.Name)
 	client.TriggerBlueprint(blueprint.ID)
+	scopesResponse := client.ListScopes(PLUGIN_NAME, connection.ID, true)
+	require.Equal(t, 1, len(scopesResponse))
+	require.Equal(t, 1, len(scopesResponse[0].Blueprints))
+	bps := client.DeleteScope(PLUGIN_NAME, connection.ID, scope.Id, false)
+	require.Equal(t, 1, len(bps))
+	scopesResponse = client.ListScopes(PLUGIN_NAME, connection.ID, true)
+	require.Equal(t, 0, len(scopesResponse))
 }
 
 func TestCreateTxRule(t *testing.T) {

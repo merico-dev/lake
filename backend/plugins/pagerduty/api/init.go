@@ -39,10 +39,19 @@ func Init(br context.BasicRes) {
 		basicRes,
 		vld,
 	)
-	scopeHelper = api.NewScopeHelper[models.PagerDutyConnection, models.Service, models.PagerdutyTransformationRule](
+	params := &api.ReflectionParameters{
+		ScopeIdFieldName:  "Id",
+		ScopeIdColumnName: "id",
+		RawScopeParamName: "ScopeId",
+	}
+	scopeHelper = api.NewScopeHelper2[models.PagerDutyConnection, models.Service, models.PagerdutyTransformationRule](
 		basicRes,
 		vld,
 		connectionHelper,
+		api.NewScopeDatabaseHelperImpl[models.PagerDutyConnection, models.Service, models.PagerdutyTransformationRule](
+			basicRes, connectionHelper, params),
+		params,
+		&api.ScopeHelperOptions{},
 	)
 	trHelper = api.NewTransformationRuleHelper[models.PagerdutyTransformationRule](
 		basicRes,

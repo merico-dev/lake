@@ -147,6 +147,15 @@
                     },
                     {
                         "$$ref": "#/components/parameters/scopeId"
+                    },
+                    {
+                        "name": "blueprints",
+                        "required": false,
+                        "description": "return blueprints using these scopes in the payload",
+                        "in": "query",
+                        "schema": {
+                            "$$ref": "bool"
+                        }
                     }
                 ],
                 "responses": {
@@ -190,6 +199,33 @@
                         }
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete a scope and its associated data",
+                "parameters": [
+                    {
+                        "$$ref": "#/components/parameters/connectionId"
+                    },
+                    {
+                        "$$ref": "#/components/parameters/scopeId"
+                    },
+                    {
+                        "name": "scope",
+                        "required": true,
+                        "in": "body",
+                        "schema": {
+                            "$$ref": "#/components/schemas/scope"
+                        }
+                    },
+                    {
+                        "name": "delete_data_only",
+                        "required": false,
+                        "in": "query",
+                        "schema": {
+                            "$$ref": "bool"
+                        }
+                    }
+                ]
             }
         },
         "/plugins/{{.PluginName}}/connections/{connectionId}/scopes": {
@@ -201,6 +237,15 @@
                     },
                     {
                         "$$ref": "#/components/parameters/page"
+                    },
+                    {
+                        "name": "blueprints",
+                        "required": false,
+                        "description": "return blueprints using these scopes in the payload",
+                        "in": "query",
+                        "schema": {
+                            "$$ref": "bool"
+                        }
                     }
                 ],
                 "responses": {

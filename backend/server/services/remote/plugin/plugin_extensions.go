@@ -19,6 +19,7 @@ package plugin
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/apache/incubator-devlake/core/dal"
 	"github.com/apache/incubator-devlake/core/errors"
@@ -54,7 +55,7 @@ func (p remoteDatasourcePlugin) MakeDataSourcePipelinePlanV200(connectionId uint
 		wrappedToolScope := p.scopeTabler.New()
 		err = api.CallDB(db.First, wrappedToolScope, dal.Where("id = ?", bpScope.Id))
 		if err != nil {
-			return nil, nil, errors.NotFound.New("record not found")
+			return nil, nil, errors.Default.Wrap(err, fmt.Sprintf("error getting scope %s", bpScope.Name))
 		}
 		toolScope := models.ScopeModel{}
 		err := wrappedToolScope.To(&toolScope)

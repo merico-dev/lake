@@ -200,7 +200,7 @@ class Plugin(ABC):
     def get_stream(self, stream_name: str):
         stream = self._streams.get(stream_name)
         if stream is None:
-            raise Exception(f'Unkown stream {stream_name}')
+            raise Exception(f'Unknown stream {stream_name}')
         return stream
 
     def plugin_info(self) -> msg.PluginInfo:
@@ -216,12 +216,12 @@ class Plugin(ABC):
             )
             for subtask in self.subtasks
         ]
-
         if self.transformation_rule_type:
             tx_rule_model_info = msg.DynamicModelInfo.from_model(self.transformation_rule_type)
         else:
             tx_rule_model_info = None
-
+        plugin_tables = [stream(self.name).raw_model_table for stream in self.streams] + \
+                        [stream.tool_model.__tablename__ for stream in self.streams]
         return msg.PluginInfo(
             name=self.name,
             description=self.description,
@@ -230,7 +230,8 @@ class Plugin(ABC):
             connection_model_info=msg.DynamicModelInfo.from_model(self.connection_type),
             transformation_rule_model_info=tx_rule_model_info,
             scope_model_info=msg.DynamicModelInfo.from_model(self.tool_scope_type),
-            subtask_metas=subtask_metas
+            subtask_metas=subtask_metas,
+            tables=plugin_tables,
         )
 
     def _plugin_path(self):

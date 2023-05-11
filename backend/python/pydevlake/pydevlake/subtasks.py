@@ -130,7 +130,7 @@ class Subtask:
         return json.dumps({
             "connection_id": ctx.connection.id,
             "scope_id": ctx.scope.id
-        })
+        }, separators=(',', ':'))
 
 class SubtaskRun(SQLModel, table=True):
     """

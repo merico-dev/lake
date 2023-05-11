@@ -65,8 +65,9 @@ func GetDefaultAPI(
 			"GET": papi.ListScopes,
 		},
 		"connections/:connectionId/scopes/:scopeId": {
-			"GET":   papi.GetScope,
-			"PATCH": papi.PatchScope,
+			"GET":    papi.GetScope,
+			"PATCH":  papi.UpdateScope,
+			"DELETE": papi.DeleteScope,
 		},
 		"connections/:connectionId/remote-scopes": {
 			"GET": papi.GetRemoteScopes,
@@ -86,6 +87,22 @@ func GetDefaultAPI(
 			"PATCH": papi.PatchTransformationRule,
 		}
 	}
-
+	scopeHelper = createScopeHelper(papi)
 	return resources
+}
+
+func createScopeHelper(pa *pluginAPI) *api.GenericScopeApiHelper[any, any, any] {
+	params := &api.ReflectionParameters{
+		ScopeIdFieldName:  "Id",
+		ScopeIdColumnName: "id",
+		RawScopeParamName: "scope_id",
+	}
+	return api.NewGenericScopeHelper[any, any, any](
+		basicRes,
+		nil,
+		connectionHelper,
+		NewScopeDatabaseHelperImpl(pa, basicRes, params),
+		params,
+		&api.ScopeHelperOptions{},
+	)
 }
