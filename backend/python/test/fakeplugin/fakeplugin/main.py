@@ -19,6 +19,7 @@ from typing import Optional
 import json
 
 from sqlmodel import Field
+from pydantic import SecretStr
 
 from pydevlake import Plugin, Connection, TransformationRule, Stream, ToolModel, ToolScope, RemoteScopeGroup, DomainType
 from pydevlake.domain_layer.devops import CicdScope, CICDPipeline, CICDStatus, CICDResult, CICDType
@@ -96,7 +97,7 @@ class FakePipelineStream(Stream):
 
 
 class FakeConnection(Connection):
-    token: str
+    token: SecretStr
 
 
 class FakeProject(ToolScope, table=True):

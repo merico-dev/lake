@@ -20,33 +20,35 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-devlake/impls/dalgorm"
 	"reflect"
 	"strings"
 	"time"
 
+	"github.com/apache/incubator-devlake/impls/dalgorm"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/models"
+	"github.com/apache/incubator-devlake/core/utils"
 	"gorm.io/datatypes"
 )
 
-func LoadTableModel(tableName string, schema map[string]any, encrypt bool, parentModel any) (*models.DynamicTabler, errors.Error) {
-	structType, err := GenerateStructType(schema, encrypt, reflect.TypeOf(parentModel))
+func LoadTableModel(tableName string, schema utils.JsonObject, parentModel any) (*models.DynamicTabler, errors.Error) {
+	structType, err := GenerateStructType(schema, reflect.TypeOf(parentModel))
 	if err != nil {
 		return nil, err
 	}
 	return models.NewDynamicTabler(tableName, structType), nil
 }
 
-func GenerateStructType(schema map[string]any, encrypt bool, baseType reflect.Type) (reflect.Type, errors.Error) {
+func GenerateStructType(schema utils.JsonObject, baseType reflect.Type) (reflect.Type, errors.Error) {
 	var structFields []reflect.StructField
-	propsRaw, ok := schema["properties"]
-	if !ok {
-		return nil, errors.BadInput.New("Missing properties in JSON schema")
+	props, err := utils.GetProperty[utils.JsonObject](schema, "properties")
+	if err != nil {
+		return nil, err
 	}
-	props, ok := propsRaw.(map[string]any)
-	if !ok {
-		return nil, errors.BadInput.New("JSON schema properties must be an object")
+	required, err := utils.GetProperty[[]string](schema, "required")
+	if err != nil {
+		return nil, err
 	}
 	if baseType != nil {
 		anonymousField := reflect.StructField{
@@ -61,8 +63,8 @@ func GenerateStructType(schema map[string]any, encrypt bool, baseType reflect.Ty
 		if isBaseTypeField(k, baseType) {
 			continue
 		}
-		spec := v.(map[string]any)
-		field, err := generateStructField(k, encrypt, spec)
+		spec := v.(utils.JsonObject)
+		field, err := generateStructField(k, spec, isRequired(k, required))
 		if err != nil {
 			return nil, err
 		}
@@ -98,6 +100,15 @@ func ToDatabaseMap(tableName string, ifc any, createdAt *time.Time, updatedAt *t
 	return m, nil
 }
 
+func isRequired(fieldName string, required []string) bool {
+	for _, r := range required {
+		if fieldName == r {
+			return true
+		}
+	}
+	return false
+}
+
 func isBaseTypeField(fieldName string, baseType reflect.Type) bool {
 	fieldName = canonicalFieldName(fieldName)
 	for i := 0; i < baseType.NumField(); i++ {
@@ -118,26 +129,33 @@ func canonicalFieldName(fieldName string) string {
 	return strings.ToLower(strings.Replace(fieldName, "_", "", -1))
 }
 
-func generateStructField(name string, encrypt bool, schema map[string]any) (*reflect.StructField, errors.Error) {
-	goType, err := getGoType(schema)
+var (
+	uint64Type  = reflect.TypeOf(uint64(0))
+	float64Type = reflect.TypeOf(float64(0))
+	boolType    = reflect.TypeOf(false)
+	stringType  = reflect.TypeOf("")
+	timeType    = reflect.TypeOf(time.Time{})
+	jsonMapType = reflect.TypeOf(datatypes.JSONMap{})
+)
+
+func generateStructField(name string, schema utils.JsonObject, required bool) (*reflect.StructField, errors.Error) {
+	goType, err := getGoType(schema, required)
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("couldn't resolve type for field: \"%s\"", name))
+	}
+	tag, err := getTag(name, schema, goType, required)
+	if err != nil {
+		return nil, err
 	}
 	sf := &reflect.StructField{
 		Name: strings.Title(name), //nolint:staticcheck
 		Type: goType,
-		Tag:  reflect.StructTag(fmt.Sprintf("json:\"%s\"", name)),
-	}
-	if encrypt {
-		sf.Tag = reflect.StructTag(fmt.Sprintf("json:\"%s\" "+
-			"gorm:\"serializer:encdec\"", //just encrypt everything for GORM operations - makes things easy
-			name))
+		Tag:  tag,
 	}
 	return sf, nil
 }
 
-func getGoType(schema map[string]any) (reflect.Type, errors.Error) {
-	var goType reflect.Type
+func getGoType(schema utils.JsonObject, required bool) (reflect.Type, errors.Error) {
 	jsonType, ok := schema["type"].(string)
 	if !ok {
 		return nil, errors.BadInput.New("\"type\" property must be a string")
@@ -145,15 +163,70 @@ func getGoType(schema map[string]any) (reflect.Type, errors.Error) {
 	switch jsonType {
 	//TODO: support more types
 	case "integer":
-		goType = reflect.TypeOf(uint64(0))
+		return uint64Type, nil
+	case "number":
+		return float64Type, nil
 	case "boolean":
-		goType = reflect.TypeOf(false)
+		return boolType, nil
 	case "string":
-		goType = reflect.TypeOf("")
+		format, err := utils.GetProperty[string](schema, "format")
+		if err == nil && format == "date-time" {
+			if required {
+				return timeType, nil
+			} else {
+				return reflect.PtrTo(timeType), nil
+			}
+		} else {
+			return stringType, nil
+		}
 	case "object":
-		goType = reflect.TypeOf(datatypes.JSONMap{})
+		return jsonMapType, nil
 	default:
 		return nil, errors.BadInput.New(fmt.Sprintf("Unsupported type %s", jsonType))
 	}
-	return goType, nil
+}
+
+func getTag(name string, schema utils.JsonObject, goType reflect.Type, required bool) (reflect.StructTag, errors.Error) {
+	tags := []string{}
+	tags = append(tags, fmt.Sprintf("json:\"%s\"", name))
+	gormTag := getGormTag(schema, goType)
+	if gormTag != "" {
+		tags = append(tags, gormTag)
+	}
+	if required {
+		tags = append(tags, "validate:\"required\"")
+	}
+	return reflect.StructTag(strings.Join(tags, " ")), nil
+}
+
+func getGormTag(schema utils.JsonObject, goType reflect.Type) string {
+	gormTags := []string{}
+	primaryKey, err := utils.GetProperty[bool](schema, "primaryKey")
+	if err == nil && primaryKey {
+		gormTags = append(gormTags, "primaryKey")
+	}
+	if goType == stringType {
+		maxLength, err := utils.GetProperty[float64](schema, "maxLength")
+		maxLengthInt := int(maxLength)
+		if err == nil {
+			if maxLengthInt > 255 {
+				gormTags = append(gormTags, "type:text")
+			} else {
+				gormTags = append(gormTags, fmt.Sprintf("type:varchar(%d)", maxLengthInt))
+			}
+		} else if primaryKey {
+			// primary keys must have a key length
+			gormTags = append(gormTags, "type:varchar(255)")
+		} else {
+			gormTags = append(gormTags, "type:text")
+		}
+	}
+	format, err := utils.GetProperty[string](schema, "format")
+	if err == nil && format == "password" {
+		gormTags = append(gormTags, "serializer:encdec")
+	}
+	if len(gormTags) == 0 {
+		return ""
+	}
+	return fmt.Sprintf("gorm:\"%s\"", strings.Join(gormTags, ";"))
 }

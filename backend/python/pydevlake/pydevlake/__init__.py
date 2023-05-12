@@ -21,14 +21,16 @@ pytest.register_assert_rewrite('pydevlake.testing')
 from sqlmodel import Field as _Field
 
 
-def Field(*args, schema_extra: Optional[dict[str, Any]]=None, source: Optional[str]=None, **kwargs):
+def Field(*args, primary_key: bool=False, source: Optional[str]=None, **kwargs):
     """
     A wrapper around sqlmodel.Field that adds a source parameter.
     """
-    schema_extra = schema_extra or {}
+    schema_extra = kwargs.get('schema_extra', {})
     if source:
         schema_extra['source'] = source
-    return _Field(*args, **kwargs, schema_extra=schema_extra)
+    if primary_key:
+        schema_extra['primaryKey'] = True
+    return _Field(*args, **kwargs, primary_key=primary_key, schema_extra=schema_extra)
 
 
 from .model import ToolModel, ToolScope, DomainScope, Connection, TransformationRule, domain_id

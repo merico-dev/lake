@@ -100,11 +100,14 @@ and those that are used to customize conversion to domain models that are groupe
 For example, to add `url` and `token` parameter, edit `MyPluginConnection` as follow:
 
 ```python
+from pydantic import SecretStr
+
 class MyPluginConnection(Connection):
     url: str
-    token: str
+    token: SecretStr
 ```
 
+Using type `SecretStr` instead of `str` will encode the value in the database.
 All plugin methods that have a connection parameter will be called with an instance of this class.
 Note that you should not define `__init__`.
 

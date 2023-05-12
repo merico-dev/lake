@@ -18,15 +18,17 @@ from enum import Enum
 from typing import Optional
 import re
 
-from sqlmodel import Session, Column, Text
+from sqlmodel import Session
+from pydantic import SecretStr
 
 from pydevlake import Field, Connection, TransformationRule
 from pydevlake.model import ToolModel, ToolScope
 from pydevlake.pipeline_tasks import RefDiffOptions
 
 
+
 class AzureDevOpsConnection(Connection):
-    token: str
+    token: SecretStr
     organization: Optional[str]
 
 
@@ -52,7 +54,7 @@ class GitPullRequest(ToolModel, table=True):
         Completed = "completed"
 
     pull_request_id: int = Field(primary_key=True)
-    description: Optional[str] = Field(sa_column=Column(Text))
+    description: Optional[str]
     status: PRStatus
     created_by_id: str = Field(source='/createdBy/id')
     created_by_name: str = Field(source='/createdBy/displayName')

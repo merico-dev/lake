@@ -62,8 +62,8 @@ type DynamicModelInfo struct {
 	TableName  string         `json:"table_name" validate:"required"`
 }
 
-func (d DynamicModelInfo) LoadDynamicTabler(encrypt bool, parentModel any) (*models.DynamicTabler, errors.Error) {
-	return LoadTableModel(d.TableName, d.JsonSchema, encrypt, parentModel)
+func (d DynamicModelInfo) LoadDynamicTabler(parentModel any) (*models.DynamicTabler, errors.Error) {
+	return LoadTableModel(d.TableName, d.JsonSchema, parentModel)
 }
 
 type ScopeModel struct {

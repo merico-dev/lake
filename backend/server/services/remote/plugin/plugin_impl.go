@@ -55,19 +55,19 @@ type (
 )
 
 func newPlugin(info *models.PluginInfo, invoker bridge.Invoker) (*remotePluginImpl, errors.Error) {
-	connectionTabler, err := info.ConnectionModelInfo.LoadDynamicTabler(true, common.Model{})
+	connectionTabler, err := info.ConnectionModelInfo.LoadDynamicTabler(common.Model{})
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't load Connection type for plugin %s", info.Name))
 	}
 
 	var txRuleTabler *coreModels.DynamicTabler
 	if info.TransformationRuleModelInfo != nil {
-		txRuleTabler, err = info.TransformationRuleModelInfo.LoadDynamicTabler(false, models.TransformationModel{})
+		txRuleTabler, err = info.TransformationRuleModelInfo.LoadDynamicTabler(models.TransformationModel{})
 		if err != nil {
 			return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't load TransformationRule type for plugin %s", info.Name))
 		}
 	}
-	scopeTabler, err := info.ScopeModelInfo.LoadDynamicTabler(false, models.ScopeModel{})
+	scopeTabler, err := info.ScopeModelInfo.LoadDynamicTabler(models.ScopeModel{})
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't load Scope type for plugin %s", info.Name))
 	}

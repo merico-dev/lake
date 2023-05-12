@@ -20,7 +20,7 @@ from inspect import getmodule
 from datetime import datetime
 
 import inflect
-from pydantic import AnyUrl, validator
+from pydantic import AnyUrl, SecretStr, validator
 from sqlalchemy import Column, DateTime
 from sqlalchemy.orm import declared_attr, Session
 from sqlalchemy.inspection import inspect
@@ -48,6 +48,9 @@ class ToolTable(SQLModel):
 
     class Config:
         allow_population_by_field_name = True
+        json_encoders = {
+            SecretStr: lambda v: v.get_secret_value() if v else None
+        }
 
         @classmethod
         def alias_generator(cls, attr_name: str) -> str:
