@@ -24,30 +24,24 @@ import (
 	"github.com/apache/incubator-devlake/core/plugin"
 )
 
-const (
-	PythonPoetryCmd PluginType      = "python-poetry"
-	PythonCmd       PluginType      = "python"
-	None            PluginExtension = ""
-	Metric          PluginExtension = "metric"
-	Datasource      PluginExtension = "datasource"
-)
+type PluginExtension string
 
-type (
-	PluginType      string
-	PluginExtension string
+const (
+	None       PluginExtension = ""
+	Metric     PluginExtension = "metric"
+	Datasource PluginExtension = "datasource"
 )
 
 type PluginInfo struct {
-	Type                        PluginType        `json:"type" validate:"required"`
-	Name                        string            `json:"name" validate:"required"`
-	Extension                   PluginExtension   `json:"extension"`
-	ConnectionModelInfo         *DynamicModelInfo `json:"connection_model_info" validate:"required"`
-	TransformationRuleModelInfo *DynamicModelInfo `json:"transformation_rule_model_info"`
-	ScopeModelInfo              *DynamicModelInfo `json:"scope_model_info" validate:"dive"`
-	Description                 string            `json:"description"`
-	PluginPath                  string            `json:"plugin_path" validate:"required"`
-	SubtaskMetas                []SubtaskMeta     `json:"subtask_metas" validate:"dive"`
-	Tables                      []string          `json:"tables"`
+	Name                        string              `json:"name" validate:"required"`
+	Description                 string              `json:"description"`
+	ConnectionModelInfo         *DynamicModelInfo   `json:"connection_model_info" validate:"required"`
+	TransformationRuleModelInfo *DynamicModelInfo   `json:"transformation_rule_model_info"`
+	ScopeModelInfo              *DynamicModelInfo   `json:"scope_model_info" validate:"required"`
+	ToolModelInfos              []*DynamicModelInfo `json:"tool_model_infos"`
+	PluginPath                  string              `json:"plugin_path" validate:"required"`
+	SubtaskMetas                []SubtaskMeta       `json:"subtask_metas"`
+	Extension                   PluginExtension     `json:"extension"`
 }
 
 // Type aliases used by the API helper for better readability

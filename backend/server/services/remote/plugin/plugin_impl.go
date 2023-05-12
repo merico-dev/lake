@@ -41,9 +41,9 @@ type (
 		connectionTabler         *coreModels.DynamicTabler
 		scopeTabler              *coreModels.DynamicTabler
 		transformationRuleTabler *coreModels.DynamicTabler
+		toolModelTablers         []*coreModels.DynamicTabler
 		resources                map[string]map[string]plugin.ApiResourceHandler
 		openApiSpec              string
-		tables                   []dal.Tabler
 	}
 	RemotePluginTaskData struct {
 		DbUrl              string                 `json:"db_url"`
@@ -71,6 +71,14 @@ func newPlugin(info *models.PluginInfo, invoker bridge.Invoker) (*remotePluginIm
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't load Scope type for plugin %s", info.Name))
 	}
+	toolModelTablers := make([]*coreModels.DynamicTabler, len(info.ToolModelInfos))
+	for i, toolModelInfo := range info.ToolModelInfos {
+		toolModelTabler, err := toolModelInfo.LoadDynamicTabler(common.NoPKModel{})
+		if err != nil {
+			return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't load ToolModel type for plugin %s", info.Name))
+		}
+		toolModelTablers[i] = toolModelTabler
+	}
 	openApiSpec, err := doc.GenerateOpenApiSpec(info)
 	if err != nil {
 		return nil, errors.Default.Wrap(err, fmt.Sprintf("Couldn't generate OpenAPI spec for plugin %s", info.Name))
@@ -83,6 +91,7 @@ func newPlugin(info *models.PluginInfo, invoker bridge.Invoker) (*remotePluginIm
 		connectionTabler:         connectionTabler,
 		scopeTabler:              scopeTabler,
 		transformationRuleTabler: txRuleTabler,
+		toolModelTablers:         toolModelTablers,
 		resources:                GetDefaultAPI(invoker, connectionTabler, txRuleTabler, scopeTabler, connectionHelper),
 		openApiSpec:              *openApiSpec,
 	}
@@ -97,9 +106,6 @@ func newPlugin(info *models.PluginInfo, invoker bridge.Invoker) (*remotePluginIm
 			DomainTypes:      subtask.DomainTypes,
 		})
 	}
-	for _, tableName := range info.Tables {
-		p.tables = append(p.tables, coreModels.NewDynamicTabler(tableName, nil))
-	}
 	return &p, nil
 }
 
@@ -108,7 +114,11 @@ func (p *remotePluginImpl) SubTaskMetas() []plugin.SubTaskMeta {
 }
 
 func (p *remotePluginImpl) GetTablesInfo() []dal.Tabler {
-	return p.tables
+	tables := make([]dal.Tabler, 0)
+	for i, toolModelTabler := range p.toolModelTablers {
+		tables[i] = toolModelTabler
+	}
+	return tables
 }
 
 func (p *remotePluginImpl) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {
@@ -192,16 +202,23 @@ func (p *remotePluginImpl) ApiResources() map[string]map[string]plugin.ApiResour
 }
 
 func (p *remotePluginImpl) RunMigrations(forceMigrate bool) errors.Error {
-	err := api.CallDB(basicRes.GetDal().AutoMigrate, p.connectionTabler.New())
+	dal := basicRes.GetDal()
+	err := api.CallDB(dal.AutoMigrate, p.connectionTabler.New())
 	if err != nil {
 		return err
 	}
-	err = api.CallDB(basicRes.GetDal().AutoMigrate, p.scopeTabler.New())
+	err = api.CallDB(dal.AutoMigrate, p.scopeTabler.New())
 	if err != nil {
 		return err
 	}
 	if p.transformationRuleTabler != nil {
-		err = api.CallDB(basicRes.GetDal().AutoMigrate, p.transformationRuleTabler.New())
+		err = api.CallDB(dal.AutoMigrate, p.transformationRuleTabler.New())
+		if err != nil {
+			return err
+		}
+	}
+	for _, toolModelTabler := range p.toolModelTablers {
+		err = api.CallDB(dal.AutoMigrate, toolModelTabler.New())
 		if err != nil {
 			return err
 		}
