@@ -37,7 +37,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-type AwsCognitorProvider struct {
+type AwsCognitoProvider struct {
 	jwks         Jwks
 	logger       log.Logger
 	client       *cognitoidentityprovider.CognitoIdentityProvider
@@ -45,7 +45,7 @@ type AwsCognitorProvider struct {
 	expectClaims jwt.MapClaims
 }
 
-func NewCognitoProvider(basicRes context.BasicRes) *AwsCognitorProvider {
+func NewCognitoProvider(basicRes context.BasicRes) *AwsCognitoProvider {
 	// Get configuration
 	v := config.GetConfig()
 	// TODO: verify the configuration
@@ -55,7 +55,7 @@ func NewCognitoProvider(basicRes context.BasicRes) *AwsCognitorProvider {
 	}))
 	// Create a Cognito Identity Provider client
 	client := cognitoidentityprovider.New(sess)
-	cgt := &AwsCognitorProvider{
+	cgt := &AwsCognitoProvider{
 		client:   client,
 		clientId: aws.String(v.GetString("AWS_AUTH_USER_POOL_WEB_CLIENT_ID")),
 		logger:   basicRes.GetLogger().Nested("cognito"),
@@ -81,7 +81,7 @@ func NewCognitoProvider(basicRes context.BasicRes) *AwsCognitorProvider {
 	return cgt
 }
 
-func (cgt *AwsCognitorProvider) fetchJWKS(jwksURL string) errors.Error {
+func (cgt *AwsCognitoProvider) fetchJWKS(jwksURL string) errors.Error {
 	// Get the JWKS from the URL
 	resp, err := http.Get(jwksURL)
 	if err != nil {
@@ -101,7 +101,7 @@ func (cgt *AwsCognitorProvider) fetchJWKS(jwksURL string) errors.Error {
 	return nil
 }
 
-func (cgt *AwsCognitorProvider) SignIn(loginReq *LoginRequest) (*LoginResponse, errors.Error) {
+func (cgt *AwsCognitoProvider) SignIn(loginReq *LoginRequest) (*LoginResponse, errors.Error) {
 	// Create the input for InitiateAuth
 	input := &cognitoidentityprovider.InitiateAuthInput{
 		AuthFlow: aws.String("USER_PASSWORD_AUTH"),
@@ -136,7 +136,7 @@ func (cgt *AwsCognitorProvider) SignIn(loginReq *LoginRequest) (*LoginResponse, 
 	return loginRes, nil
 }
 
-func (cgt *AwsCognitorProvider) CheckAuth(tokenString string) (*jwt.Token, errors.Error) {
+func (cgt *AwsCognitoProvider) CheckAuth(tokenString string) (*jwt.Token, errors.Error) {
 	// Parse the JWT token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Check the signing method
@@ -204,7 +204,7 @@ type Jwks struct {
 	} `json:"keys"`
 }
 
-func (cgt *AwsCognitorProvider) NewPassword(newPasswordReq *NewPasswordRequest) (*LoginResponse, errors.Error) {
+func (cgt *AwsCognitoProvider) NewPassword(newPasswordReq *NewPasswordRequest) (*LoginResponse, errors.Error) {
 	input := &cognitoidentityprovider.RespondToAuthChallengeInput{
 		ChallengeName: aws.String("NEW_PASSWORD_REQUIRED"),
 		ChallengeResponses: map[string]*string{

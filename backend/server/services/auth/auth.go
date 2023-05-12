@@ -49,9 +49,6 @@ type AuthenticationResult struct {
 	TokenType    *string `json:"tokenType" type:"string"`
 }
 
-type ChallengeParameters struct {
-}
-
 type NewPasswordRequest struct {
 	Username    string `json:"username"`
 	NewPassword string `json:"newPassword"`
