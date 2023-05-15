@@ -40,7 +40,7 @@ const RAW_ISSUE_COMMENT_TABLE = "jira_api_issue_comments"
 var CollectIssueCommentsMeta = plugin.SubTaskMeta{
 	Name:             "collectIssueComments",
 	EntryPoint:       CollectIssueComments,
-	EnabledByDefault: false,
+	EnabledByDefault: true,
 	Description:      "collect Jira issue comments, supports both timeFilter and diffSync.",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET, plugin.DOMAIN_TYPE_CROSS},
 }
