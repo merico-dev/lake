@@ -29,9 +29,9 @@ import (
 var _ plugin.SubTaskEntryPoint = ExtractIssueComments
 
 var ExtractIssueCommentsMeta = plugin.SubTaskMeta{
-	Name:             "extractIssueChangelogs",
+	Name:             "extractIssueComments",
 	EntryPoint:       ExtractIssueComments,
-	EnabledByDefault: false,
+	EnabledByDefault: true,
 	Description:      "extract Jira Issue comments",
 	DomainTypes:      []string{plugin.DOMAIN_TYPE_TICKET, plugin.DOMAIN_TYPE_CROSS},
 }
