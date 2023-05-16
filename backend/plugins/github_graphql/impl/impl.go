@@ -89,8 +89,8 @@ func (p GithubGraphql) SubTaskMetas() []plugin.SubTaskMeta {
 		// collect others
 		githubTasks.CollectApiCommentsMeta,
 		githubTasks.ExtractApiCommentsMeta,
-		githubTasks.CollectApiEventsMeta,
-		githubTasks.ExtractApiEventsMeta,
+		//githubTasks.CollectApiEventsMeta,
+		//githubTasks.ExtractApiEventsMeta,
 		githubTasks.CollectApiPrReviewCommentsMeta,
 		githubTasks.ExtractApiPrReviewCommentsMeta,
 
