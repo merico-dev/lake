@@ -22,6 +22,7 @@ import (
 	"github.com/apache/incubator-devlake/core/dal"
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/models"
+	"github.com/apache/incubator-devlake/core/models/common"
 	"github.com/apache/incubator-devlake/core/plugin"
 )
 
@@ -189,6 +190,16 @@ func (b *BlueprintManager) GetDbBlueprintByProjectName(projectName string) (*mod
 		return nil, err
 	}
 	return dbBlueprint, nil
+}
+
+// DeleteBlueprint deletes a blueprint by its id
+func (b *BlueprintManager) DeleteBlueprint(id uint64) errors.Error {
+	dbBlueprint := &models.Blueprint{
+		Model: common.Model{
+			ID: id,
+		},
+	}
+	return b.db.Delete(&dbBlueprint)
 }
 
 func (b *BlueprintManager) fillBlueprintDetail(blueprint *models.Blueprint) errors.Error {

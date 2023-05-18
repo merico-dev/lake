@@ -42,7 +42,7 @@ func RegisterRouter(r *gin.Engine) {
 	r.GET("/pipelines/:pipelineId", pipelines.Get)
 	r.PATCH("/blueprints/:blueprintId", blueprints.Patch)
 	r.POST("/blueprints/:blueprintId/trigger", blueprints.Trigger)
-	// r.DELETE("/blueprints/:blueprintId", blueprints.Delete)
+	r.DELETE("/blueprints/:blueprintId", blueprints.Delete)
 
 	r.GET("/blueprints", blueprints.Index)
 	r.POST("/blueprints", blueprints.Post)

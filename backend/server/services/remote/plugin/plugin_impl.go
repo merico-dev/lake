@@ -111,6 +111,10 @@ func (p *remotePluginImpl) GetTablesInfo() []dal.Tabler {
 	return p.tables
 }
 
+func (p *remotePluginImpl) GetScopeHelper() plugin.BaseScopeHelper {
+	return scopeHelper
+}
+
 func (p *remotePluginImpl) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]interface{}) (interface{}, errors.Error) {
 	dbUrl := taskCtx.GetConfig("db_url")
 	connectionId := uint64(options["connectionId"].(float64))

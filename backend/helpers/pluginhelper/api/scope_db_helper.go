@@ -32,6 +32,7 @@ type ScopeDatabaseHelper[Conn any, Scope any, Tr any] interface {
 	GetScope(connectionId uint64, scopeId string) (Scope, errors.Error)
 	ListScopes(input *plugin.ApiResourceInput, connectionId uint64) ([]*Scope, errors.Error)
 	DeleteScope(connectionId uint64, scopeId string) errors.Error
+	DeleteScopes(connectionId uint64, scopeIds []string) errors.Error
 	GetTransformationRule(ruleId uint64) (Tr, errors.Error)
 	ListTransformationRules(ruleIds []uint64) ([]*Tr, errors.Error)
 }
@@ -91,6 +92,13 @@ func (s *ScopeDatabaseHelperImpl[Conn, Scope, Tr]) ListScopes(input *plugin.ApiR
 	var scopes []*Scope
 	err := s.db.All(&scopes, dal.Where("connection_id = ?", connectionId), dal.Limit(limit), dal.Offset(offset))
 	return scopes, err
+}
+
+func (s *ScopeDatabaseHelperImpl[Conn, Scope, Tr]) DeleteScopes(connectionId uint64, scopeIds []string) errors.Error {
+	scope := new(Scope)
+	err := s.db.Delete(&scope, dal.Where(fmt.Sprintf("connection_id = ? AND %s IN (?)", s.params.ScopeIdColumnName),
+		connectionId, scopeIds))
+	return err
 }
 
 func (s *ScopeDatabaseHelperImpl[Conn, Scope, Tr]) DeleteScope(connectionId uint64, scopeId string) errors.Error {

@@ -122,51 +122,33 @@ func TestRunPipeline(t *testing.T) {
 	require.Equal(t, "", pipeline.ErrorName)
 }
 
-func TestBlueprintV200(t *testing.T) {
+func TestBlueprintV200_withScopeDeletion(t *testing.T) {
 	client := CreateClient(t)
-	connection := CreateTestConnection(client)
-	projectName := "Test project"
-	client.CreateProject(&helper.ProjectConfig{
-		ProjectName: projectName,
-	})
-	rule := CreateTestTransformationRule(client, connection.ID)
-	scope := CreateTestScope(client, rule, connection.ID)
-
-	blueprint := client.CreateBasicBlueprintV2(
-		"Test blueprint",
-		&helper.BlueprintV2Config{
-			Connection: &plugin.BlueprintConnectionV200{
-				Plugin:       "fake",
-				ConnectionId: connection.ID,
-				Scopes: []*plugin.BlueprintScopeV200{
-					{
-						Id:   scope.Id,
-						Name: "Test scope",
-						Entities: []string{
-							plugin.DOMAIN_TYPE_CICD,
-						},
-					},
-				},
-			},
-			SkipOnFail:  true,
-			ProjectName: projectName,
-		},
-	)
-
-	plan, err := blueprint.UnmarshalPlan()
-	require.NoError(t, err)
-	_ = plan
-
-	project := client.GetProject(projectName)
-	require.Equal(t, blueprint.Name, project.Blueprint.Name)
-	client.TriggerBlueprint(blueprint.ID)
-	scopesResponse := client.ListScopes(PLUGIN_NAME, connection.ID, true)
+	params := CreateTestBlueprint(t, client)
+	client.TriggerBlueprint(params.blueprint.ID)
+	scopesResponse := client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
 	require.Equal(t, 1, len(scopesResponse))
 	require.Equal(t, 1, len(scopesResponse[0].Blueprints))
-	bps := client.DeleteScope(PLUGIN_NAME, connection.ID, scope.Id, false)
+	bps := client.DeleteScope(PLUGIN_NAME, params.connection.ID, params.scope.Id, false)
 	require.Equal(t, 1, len(bps))
-	scopesResponse = client.ListScopes(PLUGIN_NAME, connection.ID, true)
+	scopesResponse = client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
 	require.Equal(t, 0, len(scopesResponse))
+	bpsResult := client.ListBlueprints()
+	require.Equal(t, 1, len(bpsResult.Blueprints))
+}
+
+func TestBlueprintV200_withBlueprintDeletion(t *testing.T) {
+	client := CreateClient(t)
+	params := CreateTestBlueprint(t, client)
+	client.TriggerBlueprint(params.blueprint.ID)
+	scopesResponse := client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
+	require.Equal(t, 1, len(scopesResponse))
+	require.Equal(t, 1, len(scopesResponse[0].Blueprints))
+	client.DeleteBlueprint(params.blueprint.ID, false)
+	scopesResponse = client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
+	require.Equal(t, 0, len(scopesResponse))
+	bps := client.ListBlueprints()
+	require.Equal(t, 0, len(bps.Blueprints))
 }
 
 func TestCreateTxRule(t *testing.T) {

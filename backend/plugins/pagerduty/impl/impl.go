@@ -118,6 +118,10 @@ func (p PagerDuty) MigrationScripts() []plugin.MigrationScript {
 	return migrationscripts.All()
 }
 
+func (p PagerDuty) GetScopeHelper() plugin.BaseScopeHelper {
+	return api.ScopeHelper.GenericScopeApiHelper
+}
+
 func (p PagerDuty) ApiResources() map[string]map[string]plugin.ApiResourceHandler {
 	return map[string]map[string]plugin.ApiResourceHandler{
 		"test": {

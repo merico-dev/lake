@@ -104,6 +104,11 @@ func (s *ScopeDatabaseHelperImpl) DeleteScope(connectionId uint64, scopeId strin
 	return api.CallDB(s.db.Delete, rawScope, dal.Where("connection_id = ? AND id = ?", connectionId, scopeId))
 }
 
+func (s *ScopeDatabaseHelperImpl) DeleteScopes(connectionId uint64, scopeIds []string) errors.Error {
+	rawScope := s.pa.scopeType.New()
+	return api.CallDB(s.db.Delete, rawScope, dal.Where("connection_id = ? AND id IN (?)", connectionId, scopeIds))
+}
+
 func (s *ScopeDatabaseHelperImpl) GetTransformationRule(ruleId uint64) (models.RemoteTransformation, errors.Error) {
 	rule := s.pa.txRuleType.New()
 	err := api.CallDB(s.db.First, rule, dal.Where("id = ?", ruleId))

@@ -15,20 +15,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package models
+package plugin
 
-import (
-	"github.com/apache/incubator-devlake/core/errors"
-	"github.com/apache/incubator-devlake/core/plugin"
-)
+import "github.com/apache/incubator-devlake/core/errors"
 
-// RemotePlugin API supported by plugins running in different/remote processes
-type RemotePlugin interface {
-	plugin.PluginApi
-	plugin.PluginTask
-	plugin.PluginMeta
-	plugin.PluginOpenApiSpec
-	plugin.PluginModel
-	plugin.PluginHelper
-	RunMigrations(forceMigrate bool) errors.Error
+// Plugins that expose helper APIs for use in other parts of the framework should implement this
+type PluginHelper interface {
+	GetScopeHelper() BaseScopeHelper
+}
+
+type BulkDeleteScopeRequest struct {
+	ConnectionId   uint64
+	ScopeIds       []string
+	Plugin         string
+	DeleteDataOnly bool
+}
+
+type BaseScopeHelper interface {
+	DeleteScopes(req *BulkDeleteScopeRequest) errors.Error
 }

@@ -61,7 +61,7 @@ type (
 		RawScopeParamName string
 	}
 	ScopeHelperOptions struct {
-		GetScopeParamValue func(db dal.Dal, scopeId string) (string, errors.Error)
+		GetScopeParamValues func(db dal.Dal, scopeIds ...string) ([]string, errors.Error)
 	}
 )
 
@@ -106,7 +106,7 @@ func NewGenericScopeHelper[Conn any, Scope any, Tr any](
 			panic(err)
 		}
 	})
-	return &GenericScopeApiHelper[Conn, Scope, Tr]{
+	helper := &GenericScopeApiHelper[Conn, Scope, Tr]{
 		log:              basicRes.GetLogger(),
 		db:               basicRes.GetDal(),
 		validator:        vld,
@@ -116,6 +116,7 @@ func NewGenericScopeHelper[Conn any, Scope any, Tr any](
 		connHelper:       connHelper,
 		opts:             opts,
 	}
+	return helper
 }
 
 func (c *GenericScopeApiHelper[Conn, Scope, Tr]) PutScopes(input *plugin.ApiResourceInput, scopes []*Scope) ([]*ScopeRes[Scope], errors.Error) {
@@ -272,83 +273,72 @@ func (c *GenericScopeApiHelper[Conn, Scope, Tr]) GetScope(input *plugin.ApiResou
 
 func (c *GenericScopeApiHelper[Conn, Scope, Tr]) DeleteScope(input *plugin.ApiResourceInput) ([]*models.Blueprint, errors.Error) {
 	params := c.extractFromDeleteReqParam(input)
-	if params == nil || params.connectionId == 0 {
-		return nil, errors.BadInput.New("invalid path params: \"connectionId\" not set")
-	}
-	if len(params.scopeId) == 0 || params.scopeId == "0" {
-		return nil, errors.BadInput.New("invalid path params: \"scopeId\" not set/invalid")
-	}
-	err := c.dbHelper.VerifyConnection(params.connectionId)
+	err := c.DeleteScopes(&plugin.BulkDeleteScopeRequest{
+		ConnectionId:   params.connectionId,
+		ScopeIds:       []string{params.scopeId},
+		Plugin:         params.plugin,
+		DeleteDataOnly: params.deleteDataOnly,
+	})
 	if err != nil {
-		return nil, errors.Default.Wrap(err, fmt.Sprintf("error verifying connection for connection ID %d", params.connectionId))
-	}
-	db := c.db
-	blueprintsMap, err := c.bpManager.GetBlueprintsByScopes(params.connectionId, params.scopeId)
-	if err != nil {
-		return nil, errors.Default.Wrap(err, fmt.Sprintf("error retrieving scope with scope ID %s", params.scopeId))
-	}
-	blueprints := blueprintsMap[params.scopeId]
-	// find all tables for this plugin
-	tables, err := getAffectedTables(params.plugin)
-	if err != nil {
-		return nil, errors.Default.Wrap(err, fmt.Sprintf("error getting database tables managed by plugin %s", params.plugin))
-	}
-	// delete all the plugin records referencing this scope
-	if c.reflectionParams.RawScopeParamName != "" {
-		scopeParamValue := params.scopeId
-		if c.opts.GetScopeParamValue != nil {
-			scopeParamValue, err = c.opts.GetScopeParamValue(c.db, params.scopeId)
-			if err != nil {
-				return nil, errors.Default.Wrap(err, fmt.Sprintf("error extracting scope parameter name for scope %s", params.scopeId))
-			}
-		}
-		for _, table := range tables {
-			err = db.Exec(createDeleteQuery(table, c.reflectionParams.RawScopeParamName, scopeParamValue))
-			if err != nil {
-				return nil, errors.Default.Wrap(err, fmt.Sprintf("error deleting data bound to scope %s for plugin %s", params.scopeId, params.plugin))
-			}
-		}
+		return nil, err
 	}
 	var impactedBlueprints []*models.Blueprint
 	if !params.deleteDataOnly {
-		// Delete the scope itself
-		err = c.dbHelper.DeleteScope(params.connectionId, params.scopeId)
+		blueprintsMap, err := c.bpManager.GetBlueprintsByScopes(params.connectionId, params.scopeId)
 		if err != nil {
-			return nil, errors.Default.Wrap(err, fmt.Sprintf("error deleting scope %s", params.scopeId))
+			return nil, errors.Default.Wrap(err, fmt.Sprintf("error retrieving scope with scope ID %s", params.scopeId))
 		}
+		blueprints := blueprintsMap[params.scopeId]
 		// update the blueprints (remove scope reference from them)
-		for _, blueprint := range blueprints {
-			settings, _ := blueprint.UnmarshalSettings()
-			var changed bool
-			err = settings.UpdateConnections(func(c *plugin.BlueprintConnectionV200) errors.Error {
-				var retainedScopes []*plugin.BlueprintScopeV200
-				for _, bpScope := range c.Scopes {
-					if bpScope.Id == params.scopeId { // we'll be removing this one
-						changed = true
-					} else {
-						retainedScopes = append(retainedScopes, bpScope)
-					}
-				}
-				c.Scopes = retainedScopes
-				return nil
-			})
-			if err != nil {
-				return nil, errors.Default.Wrap(err, fmt.Sprintf("error removing scope %s from blueprint %d", params.scopeId, blueprint.ID))
-			}
-			if changed {
-				err = blueprint.UpdateSettings(&settings)
-				if err != nil {
-					return nil, errors.Default.Wrap(err, fmt.Sprintf("error writing new settings into blueprint %s", blueprint.Name))
-				}
-				err = c.bpManager.SaveDbBlueprint(blueprint)
-				if err != nil {
-					return nil, errors.Default.Wrap(err, fmt.Sprintf("error saving the updated blueprint %s", blueprint.Name))
-				}
-				impactedBlueprints = append(impactedBlueprints, blueprint)
-			}
+		impactedBlueprints, err = c.updateBlueprints(blueprints, params.scopeId)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return impactedBlueprints, nil
+}
+
+func (c *GenericScopeApiHelper[Conn, Scope, Tr]) DeleteScopes(req *plugin.BulkDeleteScopeRequest) errors.Error {
+	if req.ConnectionId == 0 {
+		return errors.BadInput.New("connectionId was empty on the input")
+	}
+	if len(req.ScopeIds) == 0 {
+		return errors.BadInput.New("scopeId(s) was empty on the input")
+	}
+	err := c.dbHelper.VerifyConnection(req.ConnectionId)
+	if err != nil {
+		return errors.Default.Wrap(err, fmt.Sprintf("error verifying connection for connection ID %d", req.ConnectionId))
+	}
+	// delete all the plugin records referencing this scope
+	if c.reflectionParams.RawScopeParamName != "" {
+		scopeIds := req.ScopeIds
+		if c.opts.GetScopeParamValues != nil {
+			scopeIds, err = c.opts.GetScopeParamValues(c.db, scopeIds...)
+			if err != nil {
+				return errors.Default.Wrap(err, fmt.Sprintf("error extracting scope parameter name for scopes: %v", scopeIds))
+			}
+		}
+		// find all tables for this plugin
+		tables, err := getAffectedTables(req.Plugin)
+		if err != nil {
+			return errors.Default.Wrap(err, fmt.Sprintf("error getting database tables managed by plugin %s", req.Plugin))
+		}
+		err = c.transactionalDelete(tables, scopeIds)
+		if err != nil {
+			return errors.Default.Wrap(err, fmt.Sprintf("error deleting data bound to scopes for plugin %v", req.ScopeIds))
+		}
+	}
+	if !req.DeleteDataOnly {
+		if len(req.ScopeIds) == 1 {
+			err = c.dbHelper.DeleteScope(req.ConnectionId, req.ScopeIds[0])
+		} else {
+			err = c.dbHelper.DeleteScopes(req.ConnectionId, req.ScopeIds)
+		}
+		if err != nil {
+			return errors.Default.Wrap(err, fmt.Sprintf("error deleting scopes: %v", req.ScopeIds))
+		}
+	}
+	return nil
 }
 
 func (c *GenericScopeApiHelper[Conn, Scope, Tr]) addTransformationName(scopes ...*Scope) ([]*ScopeRes[Scope], errors.Error) {
@@ -542,6 +532,61 @@ func (c *GenericScopeApiHelper[Conn, Scope, Tr]) validatePrimaryKeys(scopes []*S
 	return nil
 }
 
+func (c *GenericScopeApiHelper[Conn, Scope, Tr]) transactionalDelete(tables []string, scopeIds []string) errors.Error {
+	tx := c.db.Begin()
+	for _, table := range tables {
+		query := createDeleteQuery(table, c.reflectionParams.RawScopeParamName, scopeIds...)
+		err := tx.Exec(query)
+		if err != nil {
+			err2 := tx.Rollback()
+			if err2 != nil {
+				c.log.Warn(err2, fmt.Sprintf("error rolling back table data deletion transaction. query was %s", query))
+			}
+			return err
+		}
+	}
+	err := tx.Commit()
+	if err != nil {
+		return errors.Default.Wrap(err, "error committing delete transaction for plugin tables")
+	}
+	return nil
+}
+
+func (c *GenericScopeApiHelper[Conn, Scope, Tr]) updateBlueprints(blueprints []*models.Blueprint, scopeId string) ([]*models.Blueprint, errors.Error) {
+	var impactedBlueprints []*models.Blueprint
+	for _, blueprint := range blueprints {
+		settings, _ := blueprint.UnmarshalSettings()
+		var changed bool
+		err := settings.UpdateConnections(func(c *plugin.BlueprintConnectionV200) errors.Error {
+			var retainedScopes []*plugin.BlueprintScopeV200
+			for _, bpScope := range c.Scopes {
+				if bpScope.Id == scopeId { // we'll be removing this one
+					changed = true
+				} else {
+					retainedScopes = append(retainedScopes, bpScope)
+				}
+			}
+			c.Scopes = retainedScopes
+			return nil
+		})
+		if err != nil {
+			return nil, errors.Default.Wrap(err, fmt.Sprintf("error removing scope %s from blueprint %d", scopeId, blueprint.ID))
+		}
+		if changed {
+			err = blueprint.UpdateSettings(&settings)
+			if err != nil {
+				return nil, errors.Default.Wrap(err, fmt.Sprintf("error writing new settings into blueprint %s", blueprint.Name))
+			}
+			err = c.bpManager.SaveDbBlueprint(blueprint)
+			if err != nil {
+				return nil, errors.Default.Wrap(err, fmt.Sprintf("error saving the updated blueprint %s", blueprint.Name))
+			}
+			impactedBlueprints = append(impactedBlueprints, blueprint)
+		}
+	}
+	return impactedBlueprints, nil
+}
+
 // Implement MarshalJSON method to flatten all fields
 func (sr *ScopeRes[T]) MarshalJSON() ([]byte, error) {
 	var flatMap map[string]interface{}
@@ -558,14 +603,21 @@ func (sr *ScopeRes[T]) MarshalJSON() ([]byte, error) {
 	return result, nil
 }
 
-func createDeleteQuery(tableName string, scopeIdKey string, scopeId string) string {
+func createDeleteQuery(tableName string, scopeIdKey string, scopeIds ...string) string {
 	column := "_raw_data_params"
 	if tableName == (models.CollectorLatestState{}.TableName()) {
 		column = "raw_data_params"
 	} else if strings.HasPrefix(tableName, "_raw_") {
 		column = "params"
 	}
-	query := `DELETE FROM ` + tableName + ` WHERE ` + column + ` LIKE '%"` + scopeIdKey + `":"` + scopeId + `"%'`
+	query := `DELETE FROM ` + tableName + ` WHERE `
+	for i, scopeId := range scopeIds {
+		if i > 0 {
+			query = query + " OR "
+		}
+		query = query + column + ` LIKE '%"` + scopeIdKey + `":"` + scopeId + `"%'`
+	}
+
 	return query
 }
 
@@ -606,3 +658,5 @@ func getAffectedTables(pluginName string) ([]string, errors.Error) {
 	}
 	return tables, nil
 }
+
+var _ plugin.BaseScopeHelper = &GenericScopeApiHelper[any, any, any]{}

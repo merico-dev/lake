@@ -19,6 +19,9 @@ package remote
 
 import (
 	"fmt"
+	"github.com/apache/incubator-devlake/core/models"
+	"github.com/apache/incubator-devlake/core/plugin"
+	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
 	"testing"
@@ -50,6 +53,13 @@ type (
 		Id   uint64 `json:"id"`
 		Name string `json:"name"`
 		Env  string `json:"env"`
+	}
+	BlueprintTestParams struct {
+		connection *helper.Connection
+		project    models.ApiOutputProject
+		blueprint  models.Blueprint
+		rule       *FakeTxRule
+		scope      *FakeProject
 	}
 )
 
@@ -95,4 +105,47 @@ func CreateTestScope(client *helper.DevlakeClient, rule *FakeTxRule, connectionI
 func CreateTestTransformationRule(client *helper.DevlakeClient, connectionId uint64) *FakeTxRule {
 	rule := helper.Cast[FakeTxRule](client.CreateTransformationRule(PLUGIN_NAME, connectionId, FakeTxRule{Name: "Tx rule", Env: "test env"}))
 	return &rule
+}
+
+func CreateTestBlueprint(t *testing.T, client *helper.DevlakeClient) *BlueprintTestParams {
+	t.Helper()
+	connection := CreateTestConnection(client)
+	projectName := "Test project"
+	client.CreateProject(&helper.ProjectConfig{
+		ProjectName: projectName,
+	})
+	rule := CreateTestTransformationRule(client, connection.ID)
+	scope := CreateTestScope(client, rule, connection.ID)
+	blueprint := client.CreateBasicBlueprintV2(
+		"Test blueprint",
+		&helper.BlueprintV2Config{
+			Connection: &plugin.BlueprintConnectionV200{
+				Plugin:       "fake",
+				ConnectionId: connection.ID,
+				Scopes: []*plugin.BlueprintScopeV200{
+					{
+						Id:   scope.Id,
+						Name: "Test scope",
+						Entities: []string{
+							plugin.DOMAIN_TYPE_CICD,
+						},
+					},
+				},
+			},
+			SkipOnFail:  true,
+			ProjectName: projectName,
+		},
+	)
+	plan, err := blueprint.UnmarshalPlan()
+	require.NoError(t, err)
+	_ = plan
+	project := client.GetProject(projectName)
+	require.Equal(t, blueprint.Name, project.Blueprint.Name)
+	return &BlueprintTestParams{
+		connection: connection,
+		project:    project,
+		blueprint:  blueprint,
+		rule:       rule,
+		scope:      scope,
+	}
 }
