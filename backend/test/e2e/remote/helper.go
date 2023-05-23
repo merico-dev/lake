@@ -56,8 +56,8 @@ type (
 	}
 	BlueprintTestParams struct {
 		connection *helper.Connection
-		project    models.ApiOutputProject
-		blueprint  models.Blueprint
+		projects   []models.ApiOutputProject
+		blueprints []models.Blueprint
 		rule       *FakeTxRule
 		scope      *FakeProject
 	}
@@ -107,44 +107,50 @@ func CreateTestTransformationRule(client *helper.DevlakeClient, connectionId uin
 	return &rule
 }
 
-func CreateTestBlueprint(t *testing.T, client *helper.DevlakeClient) *BlueprintTestParams {
+func CreateTestBlueprints(t *testing.T, client *helper.DevlakeClient, count int) *BlueprintTestParams {
 	t.Helper()
 	connection := CreateTestConnection(client)
-	projectName := "Test project"
-	client.CreateProject(&helper.ProjectConfig{
-		ProjectName: projectName,
-	})
 	rule := CreateTestTransformationRule(client, connection.ID)
 	scope := CreateTestScope(client, rule, connection.ID)
-	blueprint := client.CreateBasicBlueprintV2(
-		"Test blueprint",
-		&helper.BlueprintV2Config{
-			Connection: &plugin.BlueprintConnectionV200{
-				Plugin:       "fake",
-				ConnectionId: connection.ID,
-				Scopes: []*plugin.BlueprintScopeV200{
-					{
-						Id:   scope.Id,
-						Name: "Test scope",
-						Entities: []string{
-							plugin.DOMAIN_TYPE_CICD,
+	var bps []models.Blueprint
+	var projects []models.ApiOutputProject
+	for i := 1; i <= count; i++ {
+		projectName := fmt.Sprintf("Test project %d", i)
+		client.CreateProject(&helper.ProjectConfig{
+			ProjectName: projectName,
+		})
+		blueprint := client.CreateBasicBlueprintV2(
+			fmt.Sprintf("Test blueprint %d", i),
+			&helper.BlueprintV2Config{
+				Connection: &plugin.BlueprintConnectionV200{
+					Plugin:       "fake",
+					ConnectionId: connection.ID,
+					Scopes: []*plugin.BlueprintScopeV200{
+						{
+							Id:   scope.Id,
+							Name: "Test scope",
+							Entities: []string{
+								plugin.DOMAIN_TYPE_CICD,
+							},
 						},
 					},
 				},
+				SkipOnFail:  true,
+				ProjectName: projectName,
 			},
-			SkipOnFail:  true,
-			ProjectName: projectName,
-		},
-	)
-	plan, err := blueprint.UnmarshalPlan()
-	require.NoError(t, err)
-	_ = plan
-	project := client.GetProject(projectName)
-	require.Equal(t, blueprint.Name, project.Blueprint.Name)
+		)
+		plan, err := blueprint.UnmarshalPlan()
+		require.NoError(t, err)
+		_ = plan
+		bps = append(bps, blueprint)
+		project := client.GetProject(projectName)
+		require.Equal(t, blueprint.Name, project.Blueprint.Name)
+		projects = append(projects, project)
+	}
 	return &BlueprintTestParams{
 		connection: connection,
-		project:    project,
-		blueprint:  blueprint,
+		projects:   projects,
+		blueprints: bps,
 		rule:       rule,
 		scope:      scope,
 	}

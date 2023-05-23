@@ -104,8 +104,8 @@ func (d *DevlakeClient) GetBlueprint(blueprintId uint64) models.Blueprint {
 	}, http.MethodGet, fmt.Sprintf("%s/blueprints/%d", d.Endpoint, blueprintId), nil, nil)
 }
 
-func (d *DevlakeClient) DeleteBlueprint(blueprintId uint64, deleteBlueprintOnly bool) {
-	sendHttpRequest[models.Blueprint](d.testCtx, d.timeout, debugInfo{
+func (d *DevlakeClient) DeleteBlueprint(blueprintId uint64, deleteBlueprintOnly bool) []models.Blueprint {
+	return sendHttpRequest[[]models.Blueprint](d.testCtx, d.timeout, debugInfo{
 		print:      true,
 		inlineJson: false,
 	}, http.MethodDelete, fmt.Sprintf("%s/blueprints/%d?delete_blueprint_only=%v", d.Endpoint, blueprintId, deleteBlueprintOnly), nil, nil)

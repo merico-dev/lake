@@ -338,6 +338,13 @@ func (c *GenericScopeApiHelper[Conn, Scope, Tr]) DeleteScopes(req *plugin.BulkDe
 			return errors.Default.Wrap(err, fmt.Sprintf("error deleting scopes: %v", req.ScopeIds))
 		}
 	}
+	blueprintsMap, err := c.bpManager.GetBlueprintsByScopes(req.ConnectionId, req.ScopeIds...)
+	impactedBlueprints := map[uint64]*models.Blueprint{}
+	for _, blueprints := range blueprintsMap {
+		for _, blueprint := range blueprints {
+			impactedBlueprints[blueprint.ID] = blueprint
+		}
+	}
 	return nil
 }
 

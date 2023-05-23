@@ -225,32 +225,43 @@ func PatchBlueprint(id uint64, body map[string]interface{}) (*models.Blueprint, 
 }
 
 // DeleteBlueprint FIXME ...
-func DeleteBlueprint(id uint64, deleteBlueprintOnly bool) errors.Error {
+func DeleteBlueprint(id uint64, deleteBlueprintOnly bool) ([]*models.Blueprint, errors.Error) {
 	bp, err := bpManager.GetDbBlueprint(id)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	var impactedBps []*models.Blueprint
 	if !deleteBlueprintOnly {
 		conns, err := bp.GetConnections()
 		if err != nil {
-			return errors.Default.Wrap(err, "Failed to parse connections for the blueprint")
+			return nil, errors.Default.Wrap(err, "Failed to parse connections for the blueprint")
 		}
 		for _, conn := range conns {
 			var scopes []string
 			for _, scope := range conn.Scopes {
 				scopes = append(scopes, scope.Id)
 			}
-			err = deleteScopesForPlugin(conn.Plugin, conn.ConnectionId, scopes)
+			impactedBps, err = deleteScopesForPlugin(conn.Plugin, id, conn.ConnectionId, scopes)
 			if err != nil {
-				return errors.Default.Wrap(err, fmt.Sprintf("Failed to delete scopes tied to plugin %s", conn.Plugin))
+				return nil, errors.Default.Wrap(err, fmt.Sprintf("Failed to delete scopes tied to plugin %s", conn.Plugin))
 			}
 		}
 	}
 	err = bpManager.DeleteBlueprint(bp.ID)
 	if err != nil {
-		return errors.Default.Wrap(err, "Failed to delete the blueprint")
+		return nil, errors.Default.Wrap(err, "Failed to delete the blueprint")
 	}
-	return nil
+	return impactedBps, nil
+}
+
+func mapBlueprintsById(blueprintsMap map[string][]*models.Blueprint) map[uint64]*models.Blueprint {
+	dedupedBps := map[uint64]*models.Blueprint{}
+	for _, blueprints := range blueprintsMap {
+		for _, blueprint := range blueprints {
+			dedupedBps[blueprint.ID] = blueprint
+		}
+	}
+	return dedupedBps
 }
 
 // ReloadBlueprints FIXME ...
@@ -419,13 +430,13 @@ func TriggerBlueprint(id uint64) (*models.Pipeline, errors.Error) {
 	return pipeline, err
 }
 
-func deleteScopesForPlugin(pluginName string, connectionId uint64, scopedIds []string) errors.Error {
+func deleteScopesForPlugin(pluginName string, blueprintId uint64, connectionId uint64, scopedIds []string) ([]*models.Blueprint, errors.Error) {
 	p, err := plugin.GetPlugin(pluginName)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if phelper, ok := p.(plugin.PluginHelper); !ok {
-		return errors.Default.New("plugin does not support this operation")
+		return nil, errors.Default.New("plugin does not support this operation")
 	} else {
 		err = phelper.GetScopeHelper().DeleteScopes(&plugin.BulkDeleteScopeRequest{
 			ConnectionId: connectionId,
@@ -433,8 +444,18 @@ func deleteScopesForPlugin(pluginName string, connectionId uint64, scopedIds []s
 			Plugin:       pluginName,
 		})
 		if err != nil {
-			return err
+			return nil, err
 		}
+		blueprintMap, err := bpManager.GetBlueprintsByScopes(connectionId, scopedIds...)
+		if err != nil {
+			return nil, err
+		}
+		var impactedBlueprints []*models.Blueprint
+		for _, bp := range mapBlueprintsById(blueprintMap) {
+			if bp.ID != blueprintId {
+				impactedBlueprints = append(impactedBlueprints, bp)
+			}
+		}
+		return impactedBlueprints, nil
 	}
-	return nil
 }

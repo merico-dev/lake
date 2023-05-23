@@ -222,7 +222,8 @@ func GetBlueprintPipelines(c *gin.Context) {
 // @Tags framework/blueprints
 // @Accept application/json
 // @Param blueprintId path int true "blueprint id"
-// @Success 200
+// @Param delete_blueprint_only query bool false "if true, only delete the blueprints, not its scopes and data"
+// @Success 200  {object} []models.Blueprint "The list of blueprints whose data may potentially be impacted by this deletion (they shared the same scopes)"
 // @Failure 400  {object} shared.ApiBody "Bad Request"
 // @Failure 500  {object} shared.ApiBody "Internal Error"
 // @Router /blueprints/{blueprintId} [delete]
@@ -238,10 +239,10 @@ func Delete(c *gin.Context) {
 		shared.ApiOutputError(c, errors.BadInput.Wrap(err, "bad blueprintId format supplied"))
 		return
 	}
-	err = services.DeleteBlueprint(id, deleteBlueprintOnly)
+	impactedBps, err := services.DeleteBlueprint(id, deleteBlueprintOnly)
 	if err != nil {
 		shared.ApiOutputError(c, errors.Default.Wrap(err, "error deleting blueprint"))
 		return
 	}
-	shared.ApiOutputSuccess(c, nil, http.StatusOK)
+	shared.ApiOutputSuccess(c, impactedBps, http.StatusOK)
 }

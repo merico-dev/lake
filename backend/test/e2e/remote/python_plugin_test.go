@@ -124,8 +124,8 @@ func TestRunPipeline(t *testing.T) {
 
 func TestBlueprintV200_withScopeDeletion(t *testing.T) {
 	client := CreateClient(t)
-	params := CreateTestBlueprint(t, client)
-	client.TriggerBlueprint(params.blueprint.ID)
+	params := CreateTestBlueprints(t, client, 1)
+	client.TriggerBlueprint(params.blueprints[0].ID)
 	scopesResponse := client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
 	require.Equal(t, 1, len(scopesResponse))
 	require.Equal(t, 1, len(scopesResponse[0].Blueprints))
@@ -139,16 +139,19 @@ func TestBlueprintV200_withScopeDeletion(t *testing.T) {
 
 func TestBlueprintV200_withBlueprintDeletion(t *testing.T) {
 	client := CreateClient(t)
-	params := CreateTestBlueprint(t, client)
-	client.TriggerBlueprint(params.blueprint.ID)
+	params := CreateTestBlueprints(t, client, 2)
+	client.TriggerBlueprint(params.blueprints[0].ID)
 	scopesResponse := client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
 	require.Equal(t, 1, len(scopesResponse))
-	require.Equal(t, 1, len(scopesResponse[0].Blueprints))
-	client.DeleteBlueprint(params.blueprint.ID, false)
+	require.Equal(t, 2, len(scopesResponse[0].Blueprints))
+	impactedBps := client.DeleteBlueprint(params.blueprints[0].ID, false)
+	require.Equal(t, 1, len(impactedBps))
+	require.Equal(t, params.blueprints[1].ID, impactedBps[0].ID)
 	scopesResponse = client.ListScopes(PLUGIN_NAME, params.connection.ID, true)
 	require.Equal(t, 0, len(scopesResponse))
-	bps := client.ListBlueprints()
-	require.Equal(t, 0, len(bps.Blueprints))
+	bpsList := client.ListBlueprints()
+	require.Equal(t, 1, len(bpsList.Blueprints))
+	require.Equal(t, impactedBps[0].ID, bpsList.Blueprints[0].ID)
 }
 
 func TestCreateTxRule(t *testing.T) {
