@@ -24,7 +24,7 @@ from pydantic import SecretStr
 from pydevlake import Field, Connection, TransformationRule
 from pydevlake.model import ToolModel, ToolScope
 from pydevlake.pipeline_tasks import RefDiffOptions
-
+from pydevlake.migration import migration
 
 
 class AzureDevOpsConnection(Connection):
@@ -70,8 +70,8 @@ class GitPullRequest(ToolModel, table=True):
     source_ref_name: Optional[str]
     fork_repo_id: Optional[str] = Field(source='/forkSource/repository/id')
 
-    @classmethod
-    def migrate(self, session: Session):
+    @migration(20230516171431)
+    def change_description_type_to_text(self, session: Session):
         dialect = session.bind.dialect.name
         if dialect == 'mysql':
             session.execute(f'ALTER TABLE {self.__tablename__} MODIFY COLUMN description TEXT')
@@ -134,8 +134,8 @@ class Job(ToolModel, table=True):
     state: JobState
     result: JobResult
 
-    @classmethod
-    def migrate(self, session: Session):
+    @migration(20230516171430)
+    def add_build_id_as_primary_key(self, session: Session):
         dialect = session.bind.dialect.name
         if dialect == 'mysql':
             session.execute(f'ALTER TABLE {self.__tablename__} DROP PRIMARY KEY')

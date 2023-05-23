@@ -21,7 +21,6 @@ import sys
 
 import fire
 from sqlmodel import SQLModel, Session
-from sqlalchemy.inspection import inspect
 from sqlalchemy.engine import Engine
 
 import pydevlake.message as msg
@@ -107,19 +106,11 @@ class Plugin(ABC):
 
     def run_migrations(self, engine: Engine, force: bool = False):
         # NOTE: Not sure what "force" is for
-        # TODO: Support migration for transformation rule and connection tables
-        # They are currently created on go-side.
         tool_models = [stream.tool_model for stream in self._streams.values()]
-        tool_models.append(self.tool_scope_type)
-        inspector = inspect(engine)
         tables = SQLModel.metadata.tables
         with Session(engine) as session:
             for model in tool_models:
-                if inspector.has_table(model.__tablename__):
-                    # TODO: Add version table and migrate if needed
-                    model.migrate(session)
-                else:
-                    tables[model.__tablename__].create(engine)
+                model.migrate(session)
             session.commit()
         tables[SubtaskRun.__tablename__].create(engine, checkfirst=True)
 
