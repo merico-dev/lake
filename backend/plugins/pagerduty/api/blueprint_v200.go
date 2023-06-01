@@ -76,8 +76,12 @@ func makeDataSourcePipelinePlanV200(
 		// get scope configs from db
 		db := basicRes.GetDal()
 		err = db.First(scopeConfig, dal.Where(`id = ?`, service.ScopeConfigId))
-		if err != nil && !db.IsErrorNotFound(err) {
-			return nil, err
+		if err != nil {
+			if db.IsErrorNotFound(err) {
+				scopeConfig.Entities = []string{plugin.DOMAIN_TYPE_TICKET} //default to this
+			} else {
+				return nil, err
+			}
 		}
 		// construct task options for pagerduty
 		op := &tasks.PagerDutyOptions{
