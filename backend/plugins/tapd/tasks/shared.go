@@ -270,7 +270,7 @@ func getDefaultStdStatusMapping[S models.TapdStatus](data *TapdTaskData, db dal.
 // unicodeToZh converts a string containing Unicode escape sequences to a Chinese string.
 // It returns the converted string and an error if the conversion fails.
 func unicodeToZh(s string) (string, error) {
-	str, err := strconv.Unquote(strings.Replace(strconv.Quote(s), `\\u`, `\u`, -1))
+	str, err := strconv.Unquote(fmt.Sprintf(`"%v"`, strings.Replace(s, `"`, `\"`, -1)))
 	if err != nil {
 		return "", err
 	}

@@ -19,6 +19,12 @@ package tasks
 
 import (
 	"encoding/json"
+	"io/ioutil"
+	"net/http"
+	"reflect"
+	"strings"
+	"testing"
+
 	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 	mockdal "github.com/apache/incubator-devlake/mocks/core/dal"
@@ -26,11 +32,6 @@ import (
 	"github.com/apache/incubator-devlake/plugins/tapd/models"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"io/ioutil"
-	"net/http"
-	"reflect"
-	"strings"
-	"testing"
 )
 
 // TestParseIterationChangelog tests the parseIterationChangelog function
@@ -292,5 +293,17 @@ func Test_extractStatus(t *testing.T) {
 			assert.Equalf(t, tt.want, got, "extractStatus(%v)", tt.args.blob)
 			assert.Equalf(t, tt.want1, got1, "extractStatus(%v)", tt.args.blob)
 		})
+	}
+}
+
+func TestUnicodeToZh2(t *testing.T) {
+	input := "app\\\\user\"\\u4e2d\\u6587"
+	expected := "app\\user\"中文"
+	output, err := unicodeToZh(input)
+	if err != nil {
+		t.Errorf("unicodeToZh(%q) returned error %v", input, err)
+	}
+	if output != expected {
+		t.Errorf("unicodeToZh(%q) = %q, want %q", input, output, expected)
 	}
 }
