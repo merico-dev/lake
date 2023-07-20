@@ -140,7 +140,7 @@ type PipelineData struct {
 
 type ToolModel struct {
 	common.NoPKModel
-	ConnectionId string `json:"connectionId" gorm:"column:connection_id;not null"`
+	ConnectionId uint64 `json:"connectionId" gorm:"column:connection_id;not null"`
 }
 
 var _ plugin.ToolLayerScope = (*DynamicScopeModel)(nil)
