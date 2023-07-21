@@ -114,7 +114,7 @@ func pipelineServiceInit() {
 		pipelineMaxParallel = 10000
 	}
 	// run pipeline with independent goroutine
-	go RunPipelineInQueue(pipelineMaxParallel)
+	//go RunPipelineInQueue(pipelineMaxParallel)
 }
 
 // CreatePipeline and return the model
