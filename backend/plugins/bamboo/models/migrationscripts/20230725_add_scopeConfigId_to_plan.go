@@ -23,7 +23,7 @@ import (
 	"github.com/apache/incubator-devlake/core/plugin"
 )
 
-var _ plugin.MigrationScript = (*addRawParamTableForScope)(nil)
+var _ plugin.MigrationScript = (*addScopeConfigId)(nil)
 
 type plan20230725 struct {
 	ScopeConfigId uint64 `json:"scopeConfigId"`

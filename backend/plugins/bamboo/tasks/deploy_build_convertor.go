@@ -41,13 +41,6 @@ var ConvertDeployBuildsMeta = plugin.SubTaskMeta{
 func ConvertDeployBuilds(taskCtx plugin.SubTaskContext) errors.Error {
 	db := taskCtx.GetDal()
 	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_JOB_BUILD_TABLE)
-	deploymentPattern := data.Options.DeploymentPattern
-	productionPattern := data.Options.ProductionPattern
-	regexEnricher := api.NewRegexEnricher()
-	err := regexEnricher.AddRegexp(deploymentPattern, productionPattern)
-	if err != nil {
-		return err
-	}
 	cursor, err := db.Cursor(
 		dal.From(&models.BambooDeployBuild{}),
 		dal.Where("connection_id = ? and plan_key = ?", data.Options.ConnectionId, data.Options.PlanKey))
@@ -57,7 +50,6 @@ func ConvertDeployBuilds(taskCtx plugin.SubTaskContext) errors.Error {
 	defer cursor.Close()
 
 	deployBuildIdGen := didgen.NewDomainIdGenerator(&models.BambooDeployBuild{})
-	planBuildIdGen := didgen.NewDomainIdGenerator(&models.BambooPlanBuild{})
 	planIdGen := didgen.NewDomainIdGenerator(&models.BambooPlan{})
 
 	converter, err := api.NewDataConverter(api.DataConverterArgs{
@@ -66,11 +58,14 @@ func ConvertDeployBuilds(taskCtx plugin.SubTaskContext) errors.Error {
 		RawDataSubTaskArgs: *rawDataSubTaskArgs,
 		Convert: func(inputRow interface{}) ([]interface{}, errors.Error) {
 			deployBuild := inputRow.(*models.BambooDeployBuild)
+			if deployBuild.StartedDate == nil {
+				return nil, nil
+			}
 			domainTask := &devops.CICDTask{
 				DomainEntity: domainlayer.DomainEntity{
 					Id: deployBuildIdGen.Generate(data.Options.ConnectionId, deployBuild.DeployBuildId),
 				},
-				PipelineId:  planBuildIdGen.Generate(data.Options.ConnectionId, deployBuild.PlanKey),
+				PipelineId:  deployBuildIdGen.Generate(data.Options.ConnectionId, deployBuild.DeployBuildId),
 				CicdScopeId: planIdGen.Generate(data.Options.ConnectionId, data.Options.PlanKey),
 
 				Name: deployBuild.DeploymentVersionName,
@@ -86,16 +81,39 @@ func ConvertDeployBuilds(taskCtx plugin.SubTaskContext) errors.Error {
 					Default: devops.IN_PROGRESS,
 				}, deployBuild.LifeCycleState),
 
-				//DurationSec:  uint64(deployBuild),
 				StartedDate:  *deployBuild.StartedDate,
 				FinishedDate: deployBuild.FinishedDate,
 			}
 
 			domainTask.Type = devops.DEPLOYMENT
 			domainTask.Environment = deployBuild.Environment
+			if data.RegexEnricher.ReturnNameIfMatched(models.ENV_NAME_PATTERN, deployBuild.Environment) != "" {
+				domainTask.Environment = devops.PRODUCTION
+			}
+			if deployBuild.FinishedDate != nil && deployBuild.StartedDate != nil {
+				sec := deployBuild.FinishedDate.Sub(*deployBuild.StartedDate).Seconds()
+				if sec >= 0 {
+					domainTask.DurationSec = uint64(sec)
+				}
+			}
+			pipeline := &devops.CICDPipeline{
+				DomainEntity: domainlayer.DomainEntity{
+					Id: domainTask.PipelineId,
+				},
+				Name:         domainTask.Name,
+				Result:       domainTask.Result,
+				Status:       domainTask.Status,
+				DurationSec:  domainTask.DurationSec,
+				Type:         domainTask.Type,
+				Environment:  domainTask.Environment,
+				CreatedDate:  domainTask.StartedDate,
+				FinishedDate: domainTask.FinishedDate,
+				CicdScopeId:  domainTask.CicdScopeId,
+			}
 
 			return []interface{}{
 				domainTask,
+				pipeline,
 			}, nil
 		},
 	})

@@ -22,6 +22,8 @@ import (
 	"gorm.io/datatypes"
 )
 
+const ENV_NAME_PATTERN = "ENV_NAME_PATTERN"
+
 type BambooScopeConfig struct {
 	common.ScopeConfig `mapstructure:",squash" json:",inline" gorm:"embedded"`
 	ConnectionId       uint64 `mapstructure:"connectionId" json:"connectionId"`
@@ -30,6 +32,7 @@ type BambooScopeConfig struct {
 	RepoMap           datatypes.JSONMap
 	DeploymentPattern string `mapstructure:"deploymentPattern,omitempty" json:"deploymentPattern" gorm:"type:varchar(255)"`
 	ProductionPattern string `mapstructure:"productionPattern,omitempty" json:"productionPattern" gorm:"type:varchar(255)"`
+	EnvNamePattern    string `mapstructure:"envNamePattern,omitempty" json:"envNamePattern" gorm:"type:varchar(255)"`
 }
 
 func (BambooScopeConfig) TableName() string {

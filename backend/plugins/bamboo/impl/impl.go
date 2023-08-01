@@ -178,6 +178,9 @@ func (p Bamboo) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]i
 	if err := regexEnricher.TryAdd(devops.PRODUCTION, op.ProductionPattern); err != nil {
 		return nil, errors.BadInput.Wrap(err, "invalid value for `productionPattern`")
 	}
+	if err := regexEnricher.TryAdd(models.ENV_NAME_PATTERN, op.EnvNamePattern); err != nil {
+		return nil, errors.BadInput.Wrap(err, "invalid value for `envNamePattern`")
+	}
 	return &tasks.BambooTaskData{
 		Options:       op,
 		ApiClient:     apiClient,

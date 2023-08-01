@@ -37,13 +37,14 @@ var _ plugin.SubTaskEntryPoint = CollectDeployBuild
 
 type InputForEnv struct {
 	EnvId uint64 `json:"env_id"`
+	Name  string `json:"name"`
 }
 
 func CollectDeployBuild(taskCtx plugin.SubTaskContext) errors.Error {
 	rawDataSubTaskArgs, data := CreateRawDataSubTaskArgs(taskCtx, RAW_DEPLOY_BUILD_TABLE)
 	db := taskCtx.GetDal()
 	clauses := []dal.Clause{
-		dal.Select("env_id"),
+		dal.Select("env_id, name"),
 		dal.From(models.BambooDeployEnvironment{}.TableName()),
 		dal.Where("plan_key = ? and connection_id=?", data.Options.PlanKey, data.Options.ConnectionId),
 	}

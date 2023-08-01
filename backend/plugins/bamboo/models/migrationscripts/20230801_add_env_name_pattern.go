@@ -18,18 +18,31 @@ limitations under the License.
 package migrationscripts
 
 import (
+	"github.com/apache/incubator-devlake/core/context"
+	"github.com/apache/incubator-devlake/core/errors"
 	"github.com/apache/incubator-devlake/core/plugin"
 )
 
-// All return all the migration scripts
-func All() []plugin.MigrationScript {
-	return []plugin.MigrationScript{
-		new(addInitTables),
-		new(addConnectionIdToTransformationRule),
-		new(addTypeAndEnvironment),
-		new(renameTr2ScopeConfig),
-		new(addRawParamTableForScope),
-		new(addScopeConfigId),
-		new(addEnvNamePattern),
-	}
+var _ plugin.MigrationScript = (*addEnvNamePattern)(nil)
+
+type scopeConfig20230801 struct {
+	EnvNamePattern string `mapstructure:"envNamePattern,omitempty" json:"envNamePattern" gorm:"type:varchar(255)"`
+}
+
+func (scopeConfig20230801) TableName() string {
+	return "_tool_bamboo_scope_configs"
+}
+
+type addEnvNamePattern struct{}
+
+func (script *addEnvNamePattern) Up(basicRes context.BasicRes) errors.Error {
+	return basicRes.GetDal().AutoMigrate(&scopeConfig20230801{})
+}
+
+func (*addEnvNamePattern) Version() uint64 {
+	return 20230801213814
+}
+
+func (script *addEnvNamePattern) Name() string {
+	return "add env_name_pattern to _tool_bamboo_scope_configs"
 }
