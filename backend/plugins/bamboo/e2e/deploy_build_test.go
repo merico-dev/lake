@@ -80,6 +80,7 @@ func TestBambooDeployBuildDataFlow(t *testing.T) {
 
 	// verify conversion
 	dataflowTester.FlushTabler(&devops.CICDTask{})
+	dataflowTester.FlushTabler(&devops.CICDPipeline{})
 	dataflowTester.Subtask(tasks.ConvertDeployBuildsMeta, taskData)
 	dataflowTester.VerifyTableWithOptions(&devops.CICDTask{}, e2ehelper.TableOptions{
 		CSVRelPath:  "./snapshot_tables/cicd_tasks_deploy.csv",
