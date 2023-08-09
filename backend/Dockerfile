@@ -133,10 +133,10 @@ RUN apt-get update && \
 EXPOSE 8080
 
 RUN useradd -ms /bin/bash -d /app devlake -u 1010
+
 WORKDIR /app
+
 RUN mkdir logs
-VOLUME /app/logs
-RUN chown devlake:devlake /app/logs
 
 USER devlake
 ENV PYTHONUNBUFFERED=1
