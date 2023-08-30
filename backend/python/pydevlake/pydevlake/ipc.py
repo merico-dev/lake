@@ -129,6 +129,8 @@ def create_db_engine(db_url) -> Engine:
     connect_args = dict(parse_qsl(urlparse(db_url).query))
     if 'parseTime' in connect_args:
         del connect_args['parseTime']
+    if 'loc' in connect_args:
+        del connect_args['loc']
     try:
         engine = create_engine(base_url, connect_args=connect_args)
         tables = SubtaskRun.metadata.tables
