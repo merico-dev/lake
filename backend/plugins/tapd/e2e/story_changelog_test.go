@@ -36,13 +36,13 @@ func TestTapdStoryChangelogDataFlow(t *testing.T) {
 		Options: &tasks.TapdOptions{
 			ConnectionId: 1,
 			WorkspaceId:  991,
-			ScopeConfig: &tasks.TapdScopeConfig{
-				TypeMappings: tasks.TypeMappings{
+			ScopeConfig: &models.TapdScopeConfig{
+				TypeMappings: map[string]string{
 					"Techstory": "REQUIREMENT",
 					"技术债":       "REQUIREMENT",
 					"需求":        "REQUIREMENT",
 				},
-				StatusMappings: tasks.StatusMappings{
+				StatusMappings: map[string]string{
 					"已关闭":                   "DONE",
 					"接受/处理":                 "IN_PROGRESS",
 					"开发中":                   "IN_PROGRESS",

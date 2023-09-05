@@ -37,12 +37,12 @@ func TestTapdBugDataFlow(t *testing.T) {
 		Options: &tasks.TapdOptions{
 			ConnectionId: 1,
 			WorkspaceId:  991,
-			ScopeConfig: &tasks.TapdScopeConfig{
-				TypeMappings: tasks.TypeMappings{
+			ScopeConfig: &models.TapdScopeConfig{
+				TypeMappings: map[string]string{
 					"BUG":  "缺陷",
 					"TASK": "任务",
 				},
-				StatusMappings: tasks.StatusMappings{
+				StatusMappings: map[string]string{
 					"已关闭":   "完成",
 					"接受/处理": "处理中",
 				},

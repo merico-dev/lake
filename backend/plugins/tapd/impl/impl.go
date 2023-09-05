@@ -236,14 +236,9 @@ func (p Tapd) PrepareTaskData(taskCtx plugin.TaskContext, options map[string]int
 	}
 
 	if op.ScopeConfig == nil && op.ScopeConfigId != 0 {
-		var scopeConfig models.TapdScopeConfig
-		err = taskCtx.GetDal().First(&scopeConfig, dal.Where("id = ?", op.ScopeConfigId))
+		err = taskCtx.GetDal().First(&op.ScopeConfig, dal.Where("id = ?", op.ScopeConfigId))
 		if err != nil && taskCtx.GetDal().IsErrorNotFound(err) {
 			return nil, errors.BadInput.Wrap(err, "fail to get scopeConfig")
-		}
-		op.ScopeConfig, err = tasks.MakeScopeConfigs(scopeConfig)
-		if err != nil {
-			return nil, errors.BadInput.Wrap(err, "fail to make scopeConfig")
 		}
 	}
 
