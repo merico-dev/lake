@@ -184,19 +184,19 @@ type Dal interface {
 }
 
 type LockTable struct {
-	Table     string
-	Tabler    Tabler
+	Table     interface{}
 	Exclusive bool
 }
 
 func (l *LockTable) TableName() string {
-	if l.Table != "" {
-		return l.Table
+	switch table := l.Table.(type) {
+	case Tabler:
+		return table.TableName()
+	case string:
+		return table
+	default:
+		panic("either Table or Tabler must be specified")
 	}
-	if l.Tabler != nil {
-		return l.Tabler.TableName()
-	}
-	panic("either Table or Tabler must be specified")
 }
 
 type LockTables []*LockTable
