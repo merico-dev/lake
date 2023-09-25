@@ -23,6 +23,8 @@ import (
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type Iso8601TimeRecord struct {
@@ -118,9 +120,7 @@ func TestIso8601Time_Scan(t *testing.T) {
 			if !reflect.DeepEqual(tc.output, &output) {
 				t.Errorf("Expected output to be %v, but got %v", tc.output, output)
 			}
-			if !reflect.DeepEqual(tc.err, err) {
-				t.Errorf("Expected error to be %v, but got %v", tc.err, err)
-			}
+			assert.Equal(t, fmt.Sprintf("%v", err), fmt.Sprintf("%v", tc.err), "Expected error to be %v, but got %v", tc.err, err)
 		})
 	}
 }
