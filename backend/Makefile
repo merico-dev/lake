@@ -37,7 +37,7 @@ python-dep:
 
 dep: go-dep python-dep
 
-swag:
+swag: mock
 	scripts/swag.sh
 
 build-plugin:

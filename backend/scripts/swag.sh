@@ -36,9 +36,5 @@ if [ -n "$DEVLAKE_PLUGINS" ]; then
   fi
 fi
 
-swag -v
-ls -ahl
-go get ./...
-echo swag init --parseDependency --parseInternal -o $ROOT_DIR/server/api/docs -g $GENERAL_API_INFO_PATH -d $DOC_DIRS
 swag init --parseDependency --parseInternal -o $ROOT_DIR/server/api/docs -g $GENERAL_API_INFO_PATH -d $DOC_DIRS
 echo "visit the swagger document on http://localhost:8080/swagger/index.html";
