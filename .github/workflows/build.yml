@@ -26,6 +26,7 @@ on:
     branches:
       - main
       - release-*
+      - ci
 
 jobs:
   build-and-push-builder:
