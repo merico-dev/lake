@@ -43,7 +43,7 @@ swag:
 build-plugin:
 	scripts/build-plugins.sh
 
-build-server:
+build-server: swag
 	scripts/build-server.sh
 
 build-python: #don't mix this with the other build commands
