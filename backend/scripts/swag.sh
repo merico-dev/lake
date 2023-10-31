@@ -37,7 +37,7 @@ if [ -n "$DEVLAKE_PLUGINS" ]; then
 fi
 
 swag -v
-ls -l
+ls -ahl
 go get ./...
 echo swag init --parseDependency --parseInternal -o $ROOT_DIR/server/api/docs -g $GENERAL_API_INFO_PATH -d $DOC_DIRS
 swag init --parseDependency --parseInternal -o $ROOT_DIR/server/api/docs -g $GENERAL_API_INFO_PATH -d $DOC_DIRS
