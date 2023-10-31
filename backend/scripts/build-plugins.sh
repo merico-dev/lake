@@ -32,7 +32,7 @@ set -e
 
 echo "Usage: "
 echo "  build all plugins:              $0 [golang build flags...]"
-echo "  build and keep specified plugins only: PLUGIN=github,jira $0 [golang build flags...]"
+echo "  build and keep specified plugins only: DEVLAKE_PLUGINS=github,jira $0 [golang build flags...]"
 
 ROOT_DIR=$(dirname $(dirname "$0"))
 EXTRA=""
