@@ -136,7 +136,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n    count(distinct author_name) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND commit_files.commit_sha = commits.sha\nWHERE repo_id IN (${repo_id:sqlstring}+'')\n       AND $__timeFilter(commits.authored_date)\n       AND file_path REGEXP '(${selected_path:regex})'\nGROUP BY  file_path\nORDER BY  cnt DESC limit 10;",
+          "rawSql": "SELECT file_path,\n    count(distinct author_name) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND commit_files.commit_sha = commits.sha\nWHERE repo_id IN (${repo_id:sqlstring}+'')\n       AND $__timeFilter(commits.authored_date)\n       AND file_path REGEXP '(${selected_path:sqlstring}+'')'\nGROUP BY  file_path\nORDER BY  cnt DESC limit 10;",
           "refId": "A",
           "select": [
             [
@@ -349,7 +349,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n        count(distinct sha) AS modified_num\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\n        AND $__timeFilter(commits.authored_date)\nWHERE repo_id IN (${repo_id:sqlstring}+'') and file_path REGEXP  '(${selected_path:regex})'\nAND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  modified_num desc\nLIMIT 15;",
+          "rawSql": "SELECT file_path,\n        count(distinct sha) AS modified_num\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\n        AND $__timeFilter(commits.authored_date)\nWHERE repo_id IN (${repo_id:sqlstring}+'') and file_path REGEXP  '(${selected_path:sqlstring}+'')'\nAND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  modified_num desc\nLIMIT 15;",
           "refId": "A",
           "select": [
             [
