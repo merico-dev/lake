@@ -175,7 +175,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select \r\n  count(distinct i.id) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  $__timeFilter(i.created_date)\r\n  and bi.board_id in (${board_id:sqlstring}+'')",
+          "rawSql": "select \r\n  count(distinct i.id) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  $__timeFilter(i.created_date)\r\n  and bi.board_id in ($board_id)",
           "refId": "A",
           "select": [
             [
@@ -278,7 +278,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select \r\n  count(distinct i.id) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  i.original_status = 'resolved'\r\n  and $__timeFilter(i.created_date)\r\n  and bi.board_id in (${board_id:sqlstring}+'')",
+          "rawSql": "select \r\n  count(distinct i.id) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  i.original_status = 'resolved'\r\n  and $__timeFilter(i.created_date)\r\n  and bi.board_id in ($board_id)",
           "refId": "A",
           "select": [
             [
@@ -398,7 +398,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select \r\n  b.name as service,\r\n  i.issue_key,\r\n  i.description,\r\n  i.original_status,\r\n  i.priority,\r\n  i.created_date,\r\n  i.updated_date,\r\n  round((i.lead_time_minutes/1440),1) as lead_time_days,\r\n  i.url\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\n  join boards b on bi.board_id = b.id\r\nwhere \r\n  $__timeFilter(i.created_date)\r\n  and bi.board_id in (${board_id:sqlstring}+'')",
+          "rawSql": "select \r\n  b.name as service,\r\n  i.issue_key,\r\n  i.description,\r\n  i.original_status,\r\n  i.priority,\r\n  i.created_date,\r\n  i.updated_date,\r\n  round((i.lead_time_minutes/1440),1) as lead_time_days,\r\n  i.url\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\n  join boards b on bi.board_id = b.id\r\nwhere \r\n  $__timeFilter(i.created_date)\r\n  and bi.board_id in ($board_id)",
           "refId": "A",
           "select": [
             [
@@ -505,7 +505,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with _requirements as(\r\n  select\r\n    count(distinct i.id) as total_count,\r\n    count(distinct case when i.original_status = 'resolved' then i.id else null end) as resolved_count\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    $__timeFilter(i.created_date)\r\n    and bi.board_id in (${board_id:sqlstring}+'')\r\n)\r\n\r\nselect \r\n  now() as time,\r\n  1.0 * resolved_count/total_count as requirement_delivery_rate\r\nfrom _requirements",
+          "rawSql": "with _requirements as(\r\n  select\r\n    count(distinct i.id) as total_count,\r\n    count(distinct case when i.original_status = 'resolved' then i.id else null end) as resolved_count\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    $__timeFilter(i.created_date)\r\n    and bi.board_id in ($board_id)\r\n)\r\n\r\nselect \r\n  now() as time,\r\n  1.0 * resolved_count/total_count as requirement_delivery_rate\r\nfrom _requirements",
           "refId": "A",
           "select": [
             [
@@ -639,7 +639,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with _requirements as(\r\n  select\r\n    DATE_ADD(date(i.created_date), INTERVAL -DAYOFMONTH(date(i.created_date))+1 DAY) as time,\r\n    1.0 * count(distinct case when i.original_status = 'resolved' then i.id else null end)/count(distinct i.id) as resolved_rate\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    $__timeFilter(i.created_date)\r\n    and bi.board_id in (${board_id:sqlstring}+'')\r\n  group by 1\r\n)\r\n\r\nselect\r\n  time,\r\n  resolved_rate\r\nfrom _requirements\r\norder by time",
+          "rawSql": "with _requirements as(\r\n  select\r\n    DATE_ADD(date(i.created_date), INTERVAL -DAYOFMONTH(date(i.created_date))+1 DAY) as time,\r\n    1.0 * count(distinct case when i.original_status = 'resolved' then i.id else null end)/count(distinct i.id) as resolved_rate\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    $__timeFilter(i.created_date)\r\n    and bi.board_id in ($board_id)\r\n  group by 1\r\n)\r\n\r\nselect\r\n  time,\r\n  resolved_rate\r\nfrom _requirements\r\norder by time",
           "refId": "A",
           "select": [
             [
@@ -773,7 +773,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select \r\n  avg(lead_time_minutes/1440) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  i.original_status = 'resolved'\r\n  and $__timeFilter(i.resolution_date)\r\n  and bi.board_id in (${board_id:sqlstring}+'')",
+          "rawSql": "select \r\n  avg(lead_time_minutes/1440) as value\r\nfrom issues i\r\n  join board_issues bi on i.id = bi.issue_id\r\nwhere \r\n  i.original_status = 'resolved'\r\n  and $__timeFilter(i.resolution_date)\r\n  and bi.board_id in ($board_id)",
           "refId": "A",
           "select": [
             [
@@ -882,7 +882,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _ranks as(\r\n  select \r\n    i.lead_time_minutes,\r\n    percent_rank() over (order by lead_time_minutes asc) as ranks\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in (${board_id:sqlstring}+'')\r\n)\r\n\r\nselect\r\n  max(lead_time_minutes/1440) as value\r\nfrom _ranks\r\nwhere \r\n  ranks <= 0.8",
+          "rawSql": "with _ranks as(\r\n  select \r\n    i.lead_time_minutes,\r\n    percent_rank() over (order by lead_time_minutes asc) as ranks\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in ($board_id)\r\n)\r\n\r\nselect\r\n  max(lead_time_minutes/1440) as value\r\nfrom _ranks\r\nwhere \r\n  ranks <= 0.8",
           "refId": "A",
           "select": [
             [
@@ -1021,7 +1021,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _requirements as(\r\n  select \r\n    DATE_ADD(date(i.resolution_date), INTERVAL -DAYOFMONTH(date(i.resolution_date))+1 DAY) as time,\r\n    avg(lead_time_minutes/1440) as mean_incident_age\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in (${board_id:sqlstring}+'')\r\n  group by 1\r\n)\r\n\r\nselect \r\n  date_format(time,'%M %Y') as month,\r\n  mean_incident_age\r\nfrom _requirements\r\norder by time asc",
+          "rawSql": "with _requirements as(\r\n  select \r\n    DATE_ADD(date(i.resolution_date), INTERVAL -DAYOFMONTH(date(i.resolution_date))+1 DAY) as time,\r\n    avg(lead_time_minutes/1440) as mean_incident_age\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in ($board_id)\r\n  group by 1\r\n)\r\n\r\nselect \r\n  date_format(time,'%M %Y') as month,\r\n  mean_incident_age\r\nfrom _requirements\r\norder by time asc",
           "refId": "A",
           "select": [
             [
@@ -1123,7 +1123,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _ranks as(\r\n  select \r\n    round(i.lead_time_minutes/1440) as lead_time_day\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in (${board_id:sqlstring}+'')\r\n  order by lead_time_day asc\r\n)\r\n\r\nselect \r\n  now() as time,\r\n  lpad(concat(lead_time_day,'d'), 4, ' ') as metric,\r\n  percent_rank() over (order by lead_time_day asc) as value\r\nfrom _ranks\r\norder by lead_time_day asc",
+          "rawSql": "with _ranks as(\r\n  select \r\n    round(i.lead_time_minutes/1440) as lead_time_day\r\n  from issues i\r\n    join board_issues bi on i.id = bi.issue_id\r\n  where \r\n    i.original_status = 'resolved'\r\n    and $__timeFilter(i.resolution_date)\r\n    and bi.board_id in ($board_id)\r\n  order by lead_time_day asc\r\n)\r\n\r\nselect \r\n  now() as time,\r\n  lpad(concat(lead_time_day,'d'), 4, ' ') as metric,\r\n  percent_rank() over (order by lead_time_day asc) as value\r\nfrom _ranks\r\norder by lead_time_day asc",
           "refId": "A",
           "select": [
             [

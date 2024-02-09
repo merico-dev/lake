@@ -207,7 +207,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  count(distinct pr.id) as \"PR: Opened\",\n  count(distinct case when pr.merged_date is not null then id else null end) as \"PR: Merged\"\nFROM pull_requests pr\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in (${project:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  count(distinct pr.id) as \"PR: Opened\",\n  count(distinct case when pr.merged_date is not null then id else null end) as \"PR: Merged\"\nFROM pull_requests pr\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in ($project)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -356,7 +356,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -$interval(date(i.created_date))+1 DAY) as time,\n  count(distinct i.id) as 'Issues Opened',\n  count(distinct case when i.status = 'DONE' then i.id else null end) as 'Issues Completed'\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\n\tjoin project_mapping pm on b.id = pm.row_id\nWHERE\n  $__timeFilter(i.created_date)\n  and pm.project_name in (${project:sqlstring}+'')\ngroup by 1",
+          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -$interval(date(i.created_date))+1 DAY) as time,\n  count(distinct i.id) as 'Issues Opened',\n  count(distinct case when i.status = 'DONE' then i.id else null end) as 'Issues Completed'\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\n\tjoin project_mapping pm on b.id = pm.row_id\nWHERE\n  $__timeFilter(i.created_date)\n  and pm.project_name in ($project)\ngroup by 1",
           "refId": "A",
           "select": [
             [
@@ -476,7 +476,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(i.resolution_date), INTERVAL -$interval(date(i.resolution_date))+1 DAY) as time,\n  sum(case when i.status = 'DONE' then i.story_point else 0 end) as 'Story Points Completed'\nFROM (\n  SELECT DISTINCT i.id, i.resolution_date, i.status, i.story_point\n  FROM issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    join project_mapping pm on b.id = pm.row_id\n  WHERE\n    $__timeFilter(i.resolution_date)\n    and pm.project_name in (${project:sqlstring}+'')\n) as i\ngroup by 1\norder by 1",
+          "rawSql": "SELECT\n  DATE_ADD(date(i.resolution_date), INTERVAL -$interval(date(i.resolution_date))+1 DAY) as time,\n  sum(case when i.status = 'DONE' then i.story_point else 0 end) as 'Story Points Completed'\nFROM (\n  SELECT DISTINCT i.id, i.resolution_date, i.status, i.story_point\n  FROM issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    join project_mapping pm on b.id = pm.row_id\n  WHERE\n    $__timeFilter(i.resolution_date)\n    and pm.project_name in ($project)\n) as i\ngroup by 1\norder by 1",
           "refId": "A",
           "select": [
             [
@@ -612,7 +612,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  count(distinct prc.id)/count(distinct pr.id) as \"PR Review Depth\"\nFROM \n  pull_requests pr\n  left join pull_request_comments prc on pr.id = prc.pull_request_id\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in (${project:sqlstring}+'')\n  and pr.merged_date is not null\ngroup by 1\n",
+          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  count(distinct prc.id)/count(distinct pr.id) as \"PR Review Depth\"\nFROM \n  pull_requests pr\n  left join pull_request_comments prc on pr.id = prc.pull_request_id\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in ($project)\n  and pr.merged_date is not null\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -732,7 +732,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -$interval(date(i.created_date))+1 DAY) as time,\n  count(distinct i.id) as 'P0/P1 Bugs'\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\n\tjoin project_mapping pm on b.id = pm.row_id\nWHERE\n  $__timeFilter(i.created_date)\n  and pm.project_name in (${project:sqlstring}+'')\n  and i.type = 'BUG'\n  and i.priority in (${priority:sqlstring}+'')\ngroup by 1",
+          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -$interval(date(i.created_date))+1 DAY) as time,\n  count(distinct i.id) as 'P0/P1 Bugs'\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\n\tjoin project_mapping pm on b.id = pm.row_id\nWHERE\n  $__timeFilter(i.created_date)\n  and pm.project_name in ($project)\n  and i.type = 'BUG'\n  and i.priority in ($priority)\ngroup by 1",
           "refId": "A",
           "select": [
             [
@@ -852,7 +852,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _pr_commits_data as(\n  SELECT\n    DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n    pr.id as pr_id,\n    pr.merge_commit_sha,\n    sum(c.additions)+sum(c.deletions) as loc\n  FROM \n    pull_requests pr\n left join commits c on pr.merge_commit_sha = c.sha\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pm.project_name in (${project:sqlstring}+'')\n and pr.status = 'MERGED'\n    group by 1,2,3\n)\n\nSELECT \n  time,\n  sum(loc)/count(distinct pr_id) as 'PR Size'\nFROM _pr_commits_data\nGROUP BY 1",
+          "rawSql": "with _pr_commits_data as(\n  SELECT\n    DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n    pr.id as pr_id,\n    pr.merge_commit_sha,\n    sum(c.additions)+sum(c.deletions) as loc\n  FROM \n    pull_requests pr\n left join commits c on pr.merge_commit_sha = c.sha\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pm.project_name in ($project)\n and pr.status = 'MERGED'\n    group by 1,2,3\n)\n\nSELECT \n  time,\n  sum(loc)/count(distinct pr_id) as 'PR Size'\nFROM _pr_commits_data\nGROUP BY 1",
           "refId": "A",
           "select": [
             [
@@ -985,7 +985,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  sum(case when pr.id not in (SELECT pull_request_id FROM pull_request_comments) then 1 else 0 end) as \"PRs Merged w/o Review\"\nFROM \n  pull_requests pr\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in (${project:sqlstring}+'')\n  and pr.merged_date is not null\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "SELECT\n  DATE_ADD(date(pr.created_date), INTERVAL -$interval(date(pr.created_date))+1 DAY) as time,\n  sum(case when pr.id not in (SELECT pull_request_id FROM pull_request_comments) then 1 else 0 end) as \"PRs Merged w/o Review\"\nFROM \n  pull_requests pr\n  join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \nWHERE\n  $__timeFilter(pr.created_date)\n  and pm.project_name in ($project)\n  and pr.merged_date is not null\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1158,7 +1158,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no cycle_time to make sure cycle_time equals the sum of the four metrics below\n\t\tcoalesce(prm.pr_cycle_time/60,0) as cycle_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in (${project:sqlstring}+'')\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -DAYOFMONTH(date(pr_issued_date))+1 DAY) as time,\n  avg(cycle_time) as 'PR Cycle Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no cycle_time to make sure cycle_time equals the sum of the four metrics below\n\t\tcoalesce(prm.pr_cycle_time/60,0) as cycle_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in ($project)\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -DAYOFMONTH(date(pr_issued_date))+1 DAY) as time,\n  avg(cycle_time) as 'PR Cycle Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1274,7 +1274,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no coding_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_coding_time/60,0) as coding_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in (${project:sqlstring}+'')\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(coding_time) as 'Coding Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no coding_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_coding_time/60,0) as coding_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in ($project)\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(coding_time) as 'Coding Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1421,7 +1421,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no pickup_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_pickup_time/60,0) as pickup_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in (${project:sqlstring}+'')\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(pickup_time) as 'Pickup Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no pickup_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_pickup_time/60,0) as pickup_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in ($project)\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(pickup_time) as 'Pickup Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1568,7 +1568,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no review_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_review_time/60,0) as review_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in (${project:sqlstring}+'')\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(review_time) as 'Review Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no review_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_review_time/60,0) as review_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in ($project)\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(review_time) as 'Review Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -1715,7 +1715,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no deploy_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_deploy_time/60,0) as deploy_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in (${project:sqlstring}+'')\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(deploy_time) as 'PR Deploy Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
+          "rawSql": "with _prs as(\n  SELECT\n    pr.id,\n    pr.created_date as pr_issued_date,\n    -- convert null to 0 if a PR has no deploy_time to make sure cycle_time equals the sum of the four sub-metrics\n\t\tcoalesce(prm.pr_deploy_time/60,0) as deploy_time\n  FROM pull_requests pr\n    left join project_pr_metrics prm on pr.id = prm.id\n    join project_mapping pm on pr.base_repo_id = pm.row_id and pm.table = 'repos' \n  WHERE\n    $__timeFilter(pr.created_date)\n    and pr.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and pm.project_name in ($project)\n  GROUP BY 1,2,3\n)\n\nSELECT \n  DATE_ADD(date(pr_issued_date), INTERVAL -$interval(date(pr_issued_date))+1 DAY) as time,\n  avg(deploy_time) as 'PR Deploy Time(h)'\nFROM _prs\nGROUP BY 1\nORDER BY 1",
           "refId": "A",
           "select": [
             [

@@ -156,7 +156,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  count(distinct id) as 'Bugs'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'BUG'\n  and severity in (${severity:sqlstring}+'')\n  ",
+          "rawSql": "SELECT\n  count(distinct id) as 'Bugs'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'BUG'\n  and severity in ($severity)\n  ",
           "refId": "A",
           "select": [
             [
@@ -268,7 +268,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  count(distinct id) as 'Vulnerabilities'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'VULNERABILITY'\n  and severity in (${severity:sqlstring}+'')",
+          "rawSql": "SELECT\n  count(distinct id) as 'Vulnerabilities'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'VULNERABILITY'\n  and severity in ($severity)",
           "refId": "A",
           "select": [
             [
@@ -381,7 +381,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  COUNT(distinct id) AS 'Security Hotspots'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'HOTSPOTS'\n  and severity in (${severity:sqlstring}+'')\n",
+          "rawSql": "SELECT\n  COUNT(distinct id) AS 'Security Hotspots'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'HOTSPOTS'\n  and severity in ($severity)\n",
           "refId": "A",
           "select": [
             [
@@ -493,7 +493,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CONCAT(ROUND(COUNT(IF(status != 'TO_REVIEW', id, NULL)) / COUNT(distinct id) * 100, 2), '%') AS 'Reviewed'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'HOTSPOTS'\n  and severity in (${severity:sqlstring}+'')",
+          "rawSql": "SELECT\n  CONCAT(ROUND(COUNT(IF(status != 'TO_REVIEW', id, NULL)) / COUNT(distinct id) * 100, 2), '%') AS 'Reviewed'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'HOTSPOTS'\n  and severity in ($severity)",
           "refId": "A",
           "select": [
             [
@@ -630,7 +630,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CONCAT(ROUND((sum(lines_to_cover) - sum(uncovered_lines)) / sum(lines_to_cover) * 100, 1), '% ', 'Coverage on ', ROUND(sum(lines_to_cover) / 1000, 0),'k Lines to cover')\nFROM cq_file_metrics\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n",
+          "rawSql": "SELECT\n  CONCAT(ROUND((sum(lines_to_cover) - sum(uncovered_lines)) / sum(lines_to_cover) * 100, 1), '% ', 'Coverage on ', ROUND(sum(lines_to_cover) / 1000, 0),'k Lines to cover')\nFROM cq_file_metrics\nWHERE\n  project_key in ($project_id)\n",
           "refId": "A",
           "select": [
             [
@@ -742,7 +742,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  concat(FLOOR(SUM(debt)/8/60), \" day(s) \", FLOOR((SUM(debt)%480)/60), \" hour(s) \") AS 'Debt'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'CODE_SMELL'\n  and severity in (${severity:sqlstring}+'')\n  ",
+          "rawSql": "SELECT\n  concat(FLOOR(SUM(debt)/8/60), \" day(s) \", FLOOR((SUM(debt)%480)/60), \" hour(s) \") AS 'Debt'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'CODE_SMELL'\n  and severity in ($severity)\n  ",
           "refId": "A",
           "select": [
             [
@@ -855,7 +855,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n\tCOUNT(distinct id) as 'Code Smells'\nFROM cq_issues\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n  and type = 'CODE_SMELL'\n  and severity in (${severity:sqlstring}+'')",
+          "rawSql": "SELECT\n\tCOUNT(distinct id) as 'Code Smells'\nFROM cq_issues\nWHERE\n  project_key in ($project_id)\n  and type = 'CODE_SMELL'\n  and severity in ($severity)",
           "refId": "A",
           "select": [
             [
@@ -992,7 +992,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(duplicated_blocks)\nFROM cq_file_metrics\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n",
+          "rawSql": "SELECT\n  sum(duplicated_blocks)\nFROM cq_file_metrics\nWHERE\n  project_key in ($project_id)\n",
           "refId": "A",
           "select": [
             [
@@ -1103,7 +1103,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n  CONCAT(ROUND(sum(duplicated_lines) / sum(num_of_lines) * 100, 1), '% ', 'Duplications on ', ROUND(sum(ncloc) / 1000, 0),'k Lines')\nFROM cq_file_metrics\nWHERE\n  project_key in (${project_id:sqlstring}+'')\n",
+          "rawSql": "SELECT\n  CONCAT(ROUND(sum(duplicated_lines) / sum(num_of_lines) * 100, 1), '% ', 'Duplications on ', ROUND(sum(ncloc) / 1000, 0),'k Lines')\nFROM cq_file_metrics\nWHERE\n  project_key in ($project_id)\n",
           "refId": "A",
           "select": [
             [
@@ -1202,7 +1202,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n\tfile_name, num_of_lines as 'Lines of Code', bugs as 'Bugs', vulnerabilities as 'Vulnerabilities', code_smells as 'Code Smells', \n\tsecurity_hotspots as 'Security Hotspots', CONCAT(ROUND(coverage, 2), '%') as 'Coverage', CONCAT(ROUND(duplicated_lines_density, 2), '%') as 'Duplications'\nFROM cq_file_metrics\nWHERE\n  project_key in (${project_id:sqlstring}+'')\nORDER BY bugs desc\nlimit 20",
+          "rawSql": "SELECT\n\tfile_name, num_of_lines as 'Lines of Code', bugs as 'Bugs', vulnerabilities as 'Vulnerabilities', code_smells as 'Code Smells', \n\tsecurity_hotspots as 'Security Hotspots', CONCAT(ROUND(coverage, 2), '%') as 'Coverage', CONCAT(ROUND(duplicated_lines_density, 2), '%') as 'Duplications'\nFROM cq_file_metrics\nWHERE\n  project_key in ($project_id)\nORDER BY bugs desc\nlimit 20",
           "refId": "A",
           "select": [
             [

@@ -153,7 +153,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select \n\tcount(distinct i.id)\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.created_date)\n  and b.id in (${repo_id:sqlstring}+'')\n",
+          "rawSql": "select \n\tcount(distinct i.id)\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.created_date)\n  and b.id in ($repo_id)\n",
           "refId": "A",
           "select": [
             [
@@ -275,7 +275,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _issues as(\n  SELECT\n    DATE_ADD(date(i.created_date), INTERVAL -DAY(date(i.created_date))+1 DAY) as time,\n    count(distinct i.id) as issue_count\n  FROM issues i\n  \tjoin board_issues bi on i.id = bi.issue_id\n  \tjoin boards b on bi.board_id = b.id\n  WHERE\n    $__timeFilter(i.created_date)\n    and i.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and b.id in (${repo_id:sqlstring}+'')\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  issue_count as \"Issue Count\"\nFROM _issues\nORDER BY time\n",
+          "rawSql": "with _issues as(\n  SELECT\n    DATE_ADD(date(i.created_date), INTERVAL -DAY(date(i.created_date))+1 DAY) as time,\n    count(distinct i.id) as issue_count\n  FROM issues i\n  \tjoin board_issues bi on i.id = bi.issue_id\n  \tjoin boards b on bi.board_id = b.id\n  WHERE\n    $__timeFilter(i.created_date)\n    and i.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and b.id in ($repo_id)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  issue_count as \"Issue Count\"\nFROM _issues\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -391,7 +391,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select \n\tcount(distinct i.id)\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.created_date)\n  and b.id in (${repo_id:sqlstring}+'')\n  and i.status = \"DONE\"\n\n\n",
+          "rawSql": "select \n\tcount(distinct i.id)\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.created_date)\n  and b.id in ($repo_id)\n  and i.status = \"DONE\"\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -526,7 +526,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -DAYOFMONTH(date(i.created_date))+1 DAY) as time,\n  count(distinct case when status != 'DONE' then i.id else null end) as open_issue_count,\n  count(distinct case when status = 'DONE' then i.id else null end) as closed_issue_count\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nWHERE\n  $__timeFilter(i.created_date)\n  and i.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and b.id in (${repo_id:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "SELECT\n  DATE_ADD(date(i.created_date), INTERVAL -DAYOFMONTH(date(i.created_date))+1 DAY) as time,\n  count(distinct case when status != 'DONE' then i.id else null end) as open_issue_count,\n  count(distinct case when status = 'DONE' then i.id else null end) as closed_issue_count\nFROM issues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nWHERE\n  $__timeFilter(i.created_date)\n  and i.created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and b.id in ($repo_id)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -616,7 +616,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select \n\tAVG(i.lead_time_minutes/1440) issue_lead_time_in_days\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.resolution_date)\n  and i.resolution_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and b.id in (${repo_id:sqlstring}+'')\n  and i.status = \"DONE\"",
+          "rawSql": "select \n\tAVG(i.lead_time_minutes/1440) issue_lead_time_in_days\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  $__timeFilter(i.resolution_date)\n  and i.resolution_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and b.id in ($repo_id)\n  and i.status = \"DONE\"",
           "refId": "A",
           "select": [
             [
@@ -736,7 +736,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _issues as(\n  SELECT\n    DATE_ADD(date(i.resolution_date), INTERVAL -DAY(date(i.resolution_date))+1 DAY) as time,\n    AVG(i.lead_time_minutes/1440) as issue_lead_time\n  FROM issues i\n  \tjoin board_issues bi on i.id = bi.issue_id\n  \tjoin boards b on bi.board_id = b.id\n  WHERE\n    b.id in (${repo_id:sqlstring}+'')\n    and i.status = \"DONE\"\n    and $__timeFilter(i.resolution_date)\n    and i.resolution_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  issue_lead_time as \"Mean Issue Lead Time in Days\"\nFROM _issues\nORDER BY time\n",
+          "rawSql": "with _issues as(\n  SELECT\n    DATE_ADD(date(i.resolution_date), INTERVAL -DAY(date(i.resolution_date))+1 DAY) as time,\n    AVG(i.lead_time_minutes/1440) as issue_lead_time\n  FROM issues i\n  \tjoin board_issues bi on i.id = bi.issue_id\n  \tjoin boards b on bi.board_id = b.id\n  WHERE\n    b.id in ($repo_id)\n    and i.status = \"DONE\"\n    and $__timeFilter(i.resolution_date)\n    and i.resolution_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  issue_lead_time as \"Mean Issue Lead Time in Days\"\nFROM _issues\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -851,7 +851,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "-- Get the queue time of all outstanding bugs\nwith _outstanding_issues as(\n  select \n    DISTINCT\n    b.name as repo_name,\n    i.issue_key as issue_key,\n    i.title,\n    i.created_date,\n    (TIMESTAMPDIFF(MINUTE, i.created_date,NOW()))/1440 as queue_time_in_days,\n    concat(b.url,'/',i.issue_key) as url\n  from \n    issues i\n    left join board_issues bi on i.id = bi.issue_id\n    left join boards b on bi.board_id = b.id\n  where\n    b.id in (${repo_id:sqlstring}+'')\n    and $__timeFilter(i.created_date)\n    and i.status != 'DONE'\n)\n\nselect issue_key, title, queue_time_in_days from _outstanding_issues\norder by 3 desc",
+          "rawSql": "-- Get the queue time of all outstanding bugs\nwith _outstanding_issues as(\n  select \n    DISTINCT\n    b.name as repo_name,\n    i.issue_key as issue_key,\n    i.title,\n    i.created_date,\n    (TIMESTAMPDIFF(MINUTE, i.created_date,NOW()))/1440 as queue_time_in_days,\n    concat(b.url,'/',i.issue_key) as url\n  from \n    issues i\n    left join board_issues bi on i.id = bi.issue_id\n    left join boards b on bi.board_id = b.id\n  where\n    b.id in ($repo_id)\n    and $__timeFilter(i.created_date)\n    and i.status != 'DONE'\n)\n\nselect issue_key, title, queue_time_in_days from _outstanding_issues\norder by 3 desc",
           "refId": "A",
           "select": [
             [
@@ -1048,7 +1048,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "-- Get the queue time of all outstanding bugs\nselect \n  b.name as repo_name,\n  i.issue_key as issue_key,\n  i.title,\n  i.created_date,\n  (TIMESTAMPDIFF(MINUTE, i.created_date,NOW()))/1440 as queue_time_in_days,\n  concat(b.url,'/',i.issue_key) as url\nfrom \n  issues i\n  left join board_issues bi on i.id = bi.issue_id\n  left join boards b on bi.board_id = b.id\nwhere\n  b.id in (${repo_id:sqlstring}+'')\n  and $__timeFilter(i.created_date)\n  and i.status != 'DONE'\norder by queue_time_in_days desc",
+          "rawSql": "-- Get the queue time of all outstanding bugs\nselect \n  b.name as repo_name,\n  i.issue_key as issue_key,\n  i.title,\n  i.created_date,\n  (TIMESTAMPDIFF(MINUTE, i.created_date,NOW()))/1440 as queue_time_in_days,\n  concat(b.url,'/',i.issue_key) as url\nfrom \n  issues i\n  left join board_issues bi on i.id = bi.issue_id\n  left join boards b on bi.board_id = b.id\nwhere\n  b.id in ($repo_id)\n  and $__timeFilter(i.created_date)\n  and i.status != 'DONE'\norder by queue_time_in_days desc",
           "refId": "A",
           "select": [
             [
@@ -1164,7 +1164,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\t\n\n",
+          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\t\n\n",
           "refId": "A",
           "select": [
             [
@@ -1301,7 +1301,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    count(distinct id) as pr_count\n  FROM pull_requests\n  WHERE\n    base_repo_id in (${repo_id:sqlstring}+'')\n    and $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  pr_count as \"Pull Request Count\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    count(distinct id) as pr_count\n  FROM pull_requests\n  WHERE\n    base_repo_id in ($repo_id)\n    and $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  pr_count as \"Pull Request Count\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -1439,7 +1439,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n  and pr.status = 'MERGED'\ngroup by 1\norder by 2 desc\nlimit 20\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n  and pr.status = 'MERGED'\ngroup by 1\norder by 2 desc\nlimit 20\n",
           "refId": "A",
           "select": [
             [
@@ -1570,7 +1570,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  count(distinct case when status = 'MERGED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  count(distinct case when status = 'MERGED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -1684,7 +1684,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'OPEN' then id else null end) as \"PR: Open\",\n  count(distinct case when status = 'CLOSED' then id else null end) as \"PR: Closed without merging\",\n  count(distinct case when status = 'MERGED' then id else null end) as \"PR: Closed and merged\"\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and base_repo_id in (${repo_id:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'OPEN' then id else null end) as \"PR: Open\",\n  count(distinct case when status = 'CLOSED' then id else null end) as \"PR: Closed without merging\",\n  count(distinct case when status = 'MERGED' then id else null end) as \"PR: Closed and merged\"\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  and base_repo_id in ($repo_id)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -1774,7 +1774,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand pr.status = 'CLOSED'",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand pr.status = 'CLOSED'",
           "refId": "A",
           "select": [
             [
@@ -1907,7 +1907,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in (${repo_id:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in ($repo_id)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -1996,7 +1996,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not null\n\n\n",
+          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand merged_date is not null\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -2115,7 +2115,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440) as time_to_merge\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and base_repo_id in (${repo_id:sqlstring}+'')\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_merge as \"Time to Merge\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440) as time_to_merge\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and base_repo_id in ($repo_id)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_merge as \"Time to Merge\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -2202,7 +2202,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand status in ('CLOSED', 'MERGED')\n\n\n",
+          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand status in ('CLOSED', 'MERGED')\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -2321,7 +2321,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and base_repo_id in (${repo_id:sqlstring}+'')\n    and status in ('CLOSED', 'MERGED')\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_close as \"Time to Close\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n    and base_repo_id in ($repo_id)\n    and status in ('CLOSED', 'MERGED')\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_close as \"Time to Close\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -2416,7 +2416,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  count(distinct id)\nFROM \n  cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and result = 'SUCCESS'\n  and id like \"%github%\"\n  and cicd_scope_id in (${repo_id:sqlstring}+'')\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
+          "rawSql": "SELECT\n  count(distinct id)\nFROM \n  cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and result = 'SUCCESS'\n  and id like \"%github%\"\n  and cicd_scope_id in ($repo_id)\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
           "refId": "A",
           "select": [
             [
@@ -2518,7 +2518,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  1.0 * count(case when result = 'SUCCESS' then id else null end)/count(distinct id)\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in (${repo_id:sqlstring}+'')\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
+          "rawSql": "SELECT\n  1.0 * count(case when result = 'SUCCESS' then id else null end)/count(distinct id)\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in ($repo_id)\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
           "refId": "A",
           "select": [
             [
@@ -2705,7 +2705,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  result,\n  count(distinct id) as build_count\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in (${repo_id:sqlstring}+'')\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\nGROUP BY 1\nORDER BY 2 desc",
+          "rawSql": "SELECT\n  result,\n  count(distinct id) as build_count\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in ($repo_id)\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\nGROUP BY 1\nORDER BY 2 desc",
           "refId": "A",
           "select": [
             [
@@ -2805,7 +2805,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  avg(duration_sec/60) as duration_in_minutes\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in (${repo_id:sqlstring}+'')\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
+          "rawSql": "SELECT\n  avg(duration_sec/60) as duration_in_minutes\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in ($repo_id)\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)",
           "refId": "A",
           "select": [
             [
@@ -2942,7 +2942,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "WITH _builds as(\n  SELECT\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n    count(distinct id) as build_count\n  FROM cicd_pipelines\n  WHERE\n    $__timeFilter(finished_date)\n    and result = 'SUCCESS'\n    and id like \"%github%\"\n    and cicd_scope_id in (${repo_id:sqlstring}+'')\n    -- the following condition will remove the month with incomplete data\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  GROUP BY 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  build_count as \"Workflow Runs Count\"\nFROM _builds\nORDER BY time\n",
+          "rawSql": "WITH _builds as(\n  SELECT\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n    count(distinct id) as build_count\n  FROM cicd_pipelines\n  WHERE\n    $__timeFilter(finished_date)\n    and result = 'SUCCESS'\n    and id like \"%github%\"\n    and cicd_scope_id in ($repo_id)\n    -- the following condition will remove the month with incomplete data\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  GROUP BY 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  build_count as \"Workflow Runs Count\"\nFROM _builds\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -3098,7 +3098,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "WITH _build_success_rate as(\r\n  SELECT\r\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\r\n    result,\r\n    id\r\n  FROM\r\n    cicd_pipelines\r\n  WHERE\r\n    $__timeFilter(finished_date)\r\n    and id like \"%github%\"\r\n    and cicd_scope_id in (${repo_id:sqlstring}+'')\r\n    -- the following condition will remove the month with incomplete data\r\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\r\n  GROUP BY \r\n    time, result, id\r\n)\r\n\r\nSELECT \r\n  date_format(time,'%M %Y') as month,\r\n  1.0 * sum(case when result = 'SUCCESS' then 1 else 0 end)/ count(*) as \"Workflow Runs Success Rate\"\r\nFROM _build_success_rate\r\nGROUP BY time\r\nORDER BY time",
+          "rawSql": "WITH _build_success_rate as(\r\n  SELECT\r\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\r\n    result,\r\n    id\r\n  FROM\r\n    cicd_pipelines\r\n  WHERE\r\n    $__timeFilter(finished_date)\r\n    and id like \"%github%\"\r\n    and cicd_scope_id in ($repo_id)\r\n    -- the following condition will remove the month with incomplete data\r\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\r\n  GROUP BY \r\n    time, result, id\r\n)\r\n\r\nSELECT \r\n  date_format(time,'%M %Y') as month,\r\n  1.0 * sum(case when result = 'SUCCESS' then 1 else 0 end)/ count(*) as \"Workflow Runs Success Rate\"\r\nFROM _build_success_rate\r\nGROUP BY time\r\nORDER BY time",
           "refId": "A",
           "select": [
             [
@@ -3265,7 +3265,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n  count(distinct case when result = 'SUCCESS' then id else null end) as successful_workflow_run_count,\n  count(distinct case when result != 'SUCCESS' then id else null end) as failed_workflow_run_count\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in (${repo_id:sqlstring}+'')\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\nGROUP BY 1",
+          "rawSql": "SELECT\n  DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n  count(distinct case when result = 'SUCCESS' then id else null end) as successful_workflow_run_count,\n  count(distinct case when result != 'SUCCESS' then id else null end) as failed_workflow_run_count\nFROM cicd_pipelines\nWHERE\n  $__timeFilter(finished_date)\n  and id like \"%github%\"\n  and cicd_scope_id in ($repo_id)\n  -- the following condition will remove the month with incomplete data\n  and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\nGROUP BY 1",
           "refId": "A",
           "select": [
             [
@@ -3418,7 +3418,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "WITH _builds as(\n  SELECT\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n    avg(duration_sec) as mean_duration_sec\n  FROM \n    cicd_pipelines\n  WHERE\n    $__timeFilter(finished_date)\n    and id like \"%github%\"\n    and cicd_scope_id in (${repo_id:sqlstring}+'')\n    -- the following condition will remove the month with incomplete data\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  GROUP BY 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  mean_duration_sec/60 as mean_duration_minutes\nFROM _builds\nORDER BY time\n",
+          "rawSql": "WITH _builds as(\n  SELECT\n    DATE_ADD(date(finished_date), INTERVAL -DAYOFMONTH(date(finished_date))+1 DAY) as time,\n    avg(duration_sec) as mean_duration_sec\n  FROM \n    cicd_pipelines\n  WHERE\n    $__timeFilter(finished_date)\n    and id like \"%github%\"\n    and cicd_scope_id in ($repo_id)\n    -- the following condition will remove the month with incomplete data\n    and finished_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  GROUP BY 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  mean_duration_sec/60 as mean_duration_minutes\nFROM _builds\nORDER BY time\n",
           "refId": "A",
           "select": [
             [

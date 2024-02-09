@@ -154,7 +154,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\t\n\n",
+          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\t\n\n",
           "refId": "A",
           "select": [
             [
@@ -292,7 +292,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    count(distinct id) as pr_count\n  FROM pull_requests\n  WHERE\n    base_repo_id in (${repo_id:sqlstring}+'')\n    and $__timeFilter(created_date)\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  pr_count as \"Pull Request Count\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    count(distinct id) as pr_count\n  FROM pull_requests\n  WHERE\n    base_repo_id in ($repo_id)\n    and $__timeFilter(created_date)\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  pr_count as \"Pull Request Count\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -431,7 +431,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand pr.status = 'MERGED'\ngroup by 1\norder by 2 desc\nlimit 20\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand pr.status = 'MERGED'\ngroup by 1\norder by 2 desc\nlimit 20\n",
           "refId": "A",
           "select": [
             [
@@ -558,7 +558,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -672,7 +672,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'OPEN' then id else null end) as \"PR: Open\",\n  count(distinct case when status = 'CLOSED' then id else null end) as \"PR: Closed without merging\",\n  count(distinct case when status = 'MERGED' then id else null end) as \"PR: Merged\"\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in (${repo_id:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'OPEN' then id else null end) as \"PR: Open\",\n  count(distinct case when status = 'CLOSED' then id else null end) as \"PR: Closed without merging\",\n  count(distinct case when status = 'MERGED' then id else null end) as \"PR: Merged\"\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in ($repo_id)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -762,7 +762,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand pr.status = 'CLOSED'",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand pr.status = 'CLOSED'",
           "refId": "A",
           "select": [
             [
@@ -896,7 +896,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in (${repo_id:sqlstring}+'')\ngroup by 1\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nSELECT\n  DATE_ADD(date(created_date), INTERVAL -DAYOFMONTH(date(created_date))+1 DAY) as time,\n  count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nFROM pull_requests\nWHERE\n  $__timeFilter(created_date)\n  and base_repo_id in ($repo_id)\ngroup by 1\n",
           "refId": "A",
           "select": [
             [
@@ -984,7 +984,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not null\n\n\n",
+          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand merged_date is not null\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -1102,7 +1102,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440) as time_to_merge\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and base_repo_id in (${repo_id:sqlstring}+'')\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_merge as \"Time to Merge\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "with _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440) as time_to_merge\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and base_repo_id in ($repo_id)\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_merge as \"Time to Merge\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [
@@ -1205,7 +1205,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand status in ('CLOSED', 'MERGED')\n\n\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests\nwhere \n  $__timeFilter(created_date)\n\tand base_repo_id in ($repo_id)\n\tand status in ('CLOSED', 'MERGED')\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -1323,7 +1323,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nwith _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and base_repo_id in (${repo_id:sqlstring}+'')\n    and status in ('CLOSED', 'MERGED')\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_close as \"Time to Close\"\nFROM _prs\nORDER BY time\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nwith _prs as(\n  SELECT\n    DATE_ADD(date(created_date), INTERVAL -DAY(date(created_date))+1 DAY) as time,\n    avg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\n  FROM pull_requests\n  WHERE\n    $__timeFilter(created_date)\n    and base_repo_id in ($repo_id)\n    and status in ('CLOSED', 'MERGED')\n    -- The following condition will remove the month with incomplete data\n    -- and created_date >= DATE_ADD(DATE_ADD($__timeFrom(), INTERVAL -DAY($__timeFrom())+1 DAY), INTERVAL +1 MONTH)\n  group by 1\n)\n\nSELECT \n  date_format(time,'%M %Y') as month,\n  time_to_close as \"Time to Close\"\nFROM _prs\nORDER BY time\n",
           "refId": "A",
           "select": [
             [

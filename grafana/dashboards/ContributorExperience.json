@@ -117,7 +117,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    date(i.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440)\nfrom issue_comment_list\nwhere comment_rank = 1",
+          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    date(i.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and b.id in ($repo_id)\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440)\nfrom issue_comment_list\nwhere comment_rank = 1",
           "refId": "A",
           "select": [
             [
@@ -201,7 +201,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select \n\tAVG(i.lead_time_minutes/1440) issue_lead_time\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  date(i.created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n  and i.status = \"DONE\"\n  and b.id in (${repo_id:sqlstring}+'')",
+          "rawSql": "select \n\tAVG(i.lead_time_minutes/1440) issue_lead_time\nfrom \n\tissues i\n\tjoin board_issues bi on i.id = bi.issue_id\n\tjoin boards b on bi.board_id = b.id\nwhere\n  date(i.created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n  and i.status = \"DONE\"\n  and b.id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -285,7 +285,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    date(i.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n)\n\nselect\n  100 * sum(case when (TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/60 < $iir_sla then 1 else null end) / count(*)\nfrom issue_comment_list\nwhere comment_rank = 1",
+          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    date(i.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and b.id in ($repo_id)\n)\n\nselect\n  100 * sum(case when (TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/60 < $iir_sla then 1 else null end) / count(*)\nfrom issue_comment_list\nwhere comment_rank = 1",
           "refId": "A",
           "select": [
             [
@@ -369,7 +369,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\n  join issue_labels il on il.issue_id = i.id\nwhere\n  il.label_name = \"$label_gfi\" and\n  i.status != 'DONE' and\n  b.id in (${repo_id:sqlstring}+'')",
+          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\n  join issue_labels il on il.issue_id = i.id\nwhere\n  il.label_name = \"$label_gfi\" and\n  i.status != 'DONE' and\n  b.id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -470,7 +470,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with pr_comment_list as(\n  select\n    pr.id as issue_id,\n    pr.url,\n    pr.title,\n    pr.created_date as pr_created_date,\n    prc.id as comment_id,\n    prc.created_date as comment_date,\n    prc.account_id,\n    case when prc.id is not null then rank() over (partition by pr.id order by prc.created_date asc) else null end as comment_rank\n  from\n    pull_requests pr\n    left join pull_request_comments prc on pr.id = prc.pull_request_id\n  where\n    date(pr.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and pr.base_repo_id in (${repo_id:sqlstring}+'')\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, pr_created_date, comment_date))/1440)\nfrom pr_comment_list\nwhere comment_rank = 1",
+          "rawSql": "with pr_comment_list as(\n  select\n    pr.id as issue_id,\n    pr.url,\n    pr.title,\n    pr.created_date as pr_created_date,\n    prc.id as comment_id,\n    prc.created_date as comment_date,\n    prc.account_id,\n    case when prc.id is not null then rank() over (partition by pr.id order by prc.created_date asc) else null end as comment_rank\n  from\n    pull_requests pr\n    left join pull_request_comments prc on pr.id = prc.pull_request_id\n  where\n    date(pr.created_date) BETWEEN\n      curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n      curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n    and pr.base_repo_id in ($repo_id)\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, pr_created_date, comment_date))/1440)\nfrom pr_comment_list\nwhere comment_rank = 1",
           "refId": "A",
           "select": [
             [
@@ -554,7 +554,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests pr\nwhere \n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n\tand status in ('CLOSED', 'MERGED')\n\tand pr.base_repo_id in (${repo_id:sqlstring}+'')\n\n\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n\tavg(TIMESTAMPDIFF(Minute,created_date,closed_date)/1440) as time_to_close\nfrom \n\tpull_requests pr\nwhere \n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n\tand status in ('CLOSED', 'MERGED')\n\tand pr.base_repo_id in ($repo_id)\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -639,7 +639,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  100 * sum(case when TIMESTAMPDIFF(Minute, created_date, closed_date) / 1440 < $prrt_sla then 1 else null end) / count(*)\nfrom \n\tpull_requests pr\nwhere \n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n\tand status in ('CLOSED', 'MERGED')\n\tand pr.base_repo_id in (${repo_id:sqlstring}+'')\n\n\n",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  100 * sum(case when TIMESTAMPDIFF(Minute, created_date, closed_date) / 1440 < $prrt_sla then 1 else null end) / count(*)\nfrom \n\tpull_requests pr\nwhere \n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n\tand status in ('CLOSED', 'MERGED')\n\tand pr.base_repo_id in ($repo_id)\n\n\n",
           "refId": "A",
           "select": [
             [
@@ -747,7 +747,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  100 * count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n  and pr.base_repo_id in (${repo_id:sqlstring}+'')",
+          "rawSql": "-- The PR/MR statuses are standardized to DevLake's statuses 'OPEN', 'MERGED' and 'CLOSED'. You can check out the original status from the field `original_status`\nselect\n  100 * count(distinct case when status = 'CLOSED' then id else null end)/count(distinct case when status in ('CLOSED', 'MERGED') then id else null end) as ratio\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN\n    curdate() - INTERVAL DAYOFMONTH(curdate())-1 DAY - INTERVAL 1 month and\n    curdate() - INTERVAL DAYOFMONTH(curdate()) DAY\n  and pr.base_repo_id in ($repo_id)",
           "refId": "A",
           "select": [
             [

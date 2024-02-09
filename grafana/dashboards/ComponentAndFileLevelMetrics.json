@@ -136,7 +136,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n    count(distinct author_name) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND commit_files.commit_sha = commits.sha\nWHERE repo_id IN (${repo_id:sqlstring}+'')\n       AND $__timeFilter(commits.authored_date)\n       AND file_path REGEXP '(${selected_path:sqlstring}+'')'\nGROUP BY  file_path\nORDER BY  cnt DESC limit 10;",
+          "rawSql": "SELECT file_path,\n    count(distinct author_name) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND commit_files.commit_sha = commits.sha\nWHERE repo_id IN ($repo_id)\n       AND $__timeFilter(commits.authored_date)\n       AND file_path REGEXP '($selected_path)'\nGROUP BY  file_path\nORDER BY  cnt DESC limit 10;",
           "refId": "A",
           "select": [
             [
@@ -237,7 +237,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n       COUNT(DISTINCT author_name) AS author_count,\n       MAX(rst) AS file_total_size,\n       MAX(rst) / COUNT(DISTINCT author_name) AS rate\nFROM commits\nJOIN (\n  SELECT file_path,\n         commit_files.commit_sha,\n         SUM(additions - deletions) AS rst\n  FROM commit_files\n  JOIN repo_commits rc ON commit_files.commit_sha = rc.commit_sha\n  WHERE repo_id IN (${repo_id:sqlstring}+'')\n  GROUP BY file_path, commit_files.commit_sha\n) a ON a.commit_sha = commits.sha\nGROUP BY file_path\nHAVING author_count > 0\nORDER BY rate DESC\n",
+          "rawSql": "SELECT file_path,\n       COUNT(DISTINCT author_name) AS author_count,\n       MAX(rst) AS file_total_size,\n       MAX(rst) / COUNT(DISTINCT author_name) AS rate\nFROM commits\nJOIN (\n  SELECT file_path,\n         commit_files.commit_sha,\n         SUM(additions - deletions) AS rst\n  FROM commit_files\n  JOIN repo_commits rc ON commit_files.commit_sha = rc.commit_sha\n  WHERE repo_id IN ($repo_id)\n  GROUP BY file_path, commit_files.commit_sha\n) a ON a.commit_sha = commits.sha\nGROUP BY file_path\nHAVING author_count > 0\nORDER BY rate DESC\n",
           "refId": "A",
           "select": [
             [
@@ -349,7 +349,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n        count(distinct sha) AS modified_num\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\n        AND $__timeFilter(commits.authored_date)\nWHERE repo_id IN (${repo_id:sqlstring}+'') and file_path REGEXP  '(${selected_path:sqlstring}+'')'\nAND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  modified_num desc\nLIMIT 15;",
+          "rawSql": "SELECT file_path,\n        count(distinct sha) AS modified_num\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\n        AND $__timeFilter(commits.authored_date)\nWHERE repo_id IN ($repo_id) and file_path REGEXP  '($selected_path)'\nAND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  modified_num desc\nLIMIT 15;",
           "refId": "A",
           "select": [
             [
@@ -481,7 +481,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n        count(distinct sha) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\nWHERE repo_id IN (${repo_id:sqlstring}+'')\n  AND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  cnt desc\nLIMIT 10;",
+          "rawSql": "SELECT file_path,\n        count(distinct sha) AS cnt\nFROM commits\nJOIN commit_files\nJOIN repo_commits rc\n    ON commit_files.commit_sha = rc.commit_sha\n        AND sha=commit_files.commit_sha\nWHERE repo_id IN ($repo_id)\n  AND $__timeFilter(commits.authored_date)\nGROUP BY  file_path\nORDER BY  cnt desc\nLIMIT 10;",
           "refId": "A",
           "select": [
             [
@@ -638,7 +638,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT author_name,\n        count(distinct commit_sha) AS commit_nums\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN (${repo_id:sqlstring}+'')\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  author_name,author_id\nORDER BY  commit_nums desc\nLIMIT 10; ",
+          "rawSql": "SELECT author_name,\n        count(distinct commit_sha) AS commit_nums\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN ($repo_id)\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  author_name,author_id\nORDER BY  commit_nums desc\nLIMIT 10; ",
           "refId": "A",
           "select": [
             [
@@ -753,7 +753,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT author_name,\n         sum(additions-deletions) AS cnt\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN (${repo_id:sqlstring}+'')\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  author_name,author_id\nORDER BY  cnt DESC \nLIMIT 10;",
+          "rawSql": "SELECT author_name,\n         sum(additions-deletions) AS cnt\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN ($repo_id)\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  author_name,author_id\nORDER BY  cnt DESC \nLIMIT 10;",
           "refId": "A",
           "select": [
             [
@@ -892,7 +892,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n    CASE cast(dayofweek(authored_date) AS char) \n    WHEN '1' THEN\n    '1.Monday'\n    WHEN '2' THEN\n    '2.Tuesday'\n    WHEN '3' THEN\n    '3.Wednesday'\n    WHEN '4' THEN\n    '4.Thursday'\n    WHEN '5' THEN\n    '5.Friday'\n    WHEN '6' THEN\n    '6.Saturday'\n    WHEN '7' THEN\n    '7.Sunday'\n    END AS weekday , count(distinct commit_sha) AS commit_nums\nFROM commits\nJOIN repo_commits\nWHERE $__timeFilter(commits.authored_date)\n        AND commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN (${repo_id:sqlstring}+'')\nGROUP BY  weekday\n",
+          "rawSql": "SELECT\n    CASE cast(dayofweek(authored_date) AS char) \n    WHEN '1' THEN\n    '1.Monday'\n    WHEN '2' THEN\n    '2.Tuesday'\n    WHEN '3' THEN\n    '3.Wednesday'\n    WHEN '4' THEN\n    '4.Thursday'\n    WHEN '5' THEN\n    '5.Friday'\n    WHEN '6' THEN\n    '6.Saturday'\n    WHEN '7' THEN\n    '7.Sunday'\n    END AS weekday , count(distinct commit_sha) AS commit_nums\nFROM commits\nJOIN repo_commits\nWHERE $__timeFilter(commits.authored_date)\n        AND commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN ($repo_id)\nGROUP BY  weekday\n",
           "refId": "A",
           "select": [
             [
@@ -1005,7 +1005,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT\n    CASE cast(dayofweek(authored_date) AS char)\n    WHEN '1' THEN\n    '1.Monday'\n    WHEN '2' THEN\n    '2.Tuesday'\n    WHEN '3' THEN\n    '3.Wednesday'\n    WHEN '4' THEN\n    '4.Thursday'\n    WHEN '5' THEN\n    '5.Friday'\n    WHEN '6' THEN\n    '6.Saturday'\n    WHEN '7' THEN\n    '7.Sunday'\n    END AS weekday , sum(additions-deletions) AS changed_nums, sum(additions) AS total_additions, sum(deletions) AS total_deletions\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN (${repo_id:sqlstring}+'')\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  weekday\nORDER BY  weekday",
+          "rawSql": "SELECT\n    CASE cast(dayofweek(authored_date) AS char)\n    WHEN '1' THEN\n    '1.Monday'\n    WHEN '2' THEN\n    '2.Tuesday'\n    WHEN '3' THEN\n    '3.Wednesday'\n    WHEN '4' THEN\n    '4.Thursday'\n    WHEN '5' THEN\n    '5.Friday'\n    WHEN '6' THEN\n    '6.Saturday'\n    WHEN '7' THEN\n    '7.Sunday'\n    END AS weekday , sum(additions-deletions) AS changed_nums, sum(additions) AS total_additions, sum(deletions) AS total_deletions\nFROM commits\nJOIN repo_commits\nWHERE commits.sha =repo_commits.commit_sha\n        AND repo_commits.repo_id IN ($repo_id)\n        AND $__timeFilter(commits.authored_date)\nGROUP BY  weekday\nORDER BY  weekday",
           "refId": "A",
           "select": [
             [
@@ -1142,7 +1142,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT    CASE cast(dayofweek(commits.committed_date) AS char)\n              WHEN '1' THEN\n                  '1.Monday'\n              WHEN '2' THEN\n                  '2.Tuesday'\n              WHEN '3' THEN\n                  '3.Wednesday'\n              WHEN '4' THEN\n                  '4.Thursday'\n              WHEN '5' THEN\n                  '5.Friday'\n              WHEN '6' THEN\n                  '6.Saturday'\n              WHEN '7' THEN\n                  '7.Sunday'\n              END AS wd,\n          count(*) as lived_lines\nFROM repo_snapshot\n         JOIN commits\n              ON commits.sha=repo_snapshot.commit_sha\nWHERE repo_snapshot.repo_id IN (${repo_id:sqlstring}+'')\n  AND $__timeFilter(commits.committed_date)\nGROUP BY  wd\nORDER BY  wd ;",
+          "rawSql": "SELECT    CASE cast(dayofweek(commits.committed_date) AS char)\n              WHEN '1' THEN\n                  '1.Monday'\n              WHEN '2' THEN\n                  '2.Tuesday'\n              WHEN '3' THEN\n                  '3.Wednesday'\n              WHEN '4' THEN\n                  '4.Thursday'\n              WHEN '5' THEN\n                  '5.Friday'\n              WHEN '6' THEN\n                  '6.Saturday'\n              WHEN '7' THEN\n                  '7.Sunday'\n              END AS wd,\n          count(*) as lived_lines\nFROM repo_snapshot\n         JOIN commits\n              ON commits.sha=repo_snapshot.commit_sha\nWHERE repo_snapshot.repo_id IN ($repo_id)\n  AND $__timeFilter(commits.committed_date)\nGROUP BY  wd\nORDER BY  wd ;",
           "refId": "A",
           "select": [
             [
@@ -1228,7 +1228,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "SELECT file_path,\n        avg(timestampdiff(day,\n        commits.committed_date,\n        now())) AS line_age\nFROM repo_snapshot\nJOIN commits\n    ON repo_snapshot.commit_sha = commits.sha\nWHERE repo_snapshot.repo_id IN (${repo_id:sqlstring}+'')\n    AND $__timeFilter(commits.committed_date)\nGROUP BY  file_path\nORDER BY  line_age desc \nLIMIT 20;",
+          "rawSql": "SELECT file_path,\n        avg(timestampdiff(day,\n        commits.committed_date,\n        now())) AS line_age\nFROM repo_snapshot\nJOIN commits\n    ON repo_snapshot.commit_sha = commits.sha\nWHERE repo_snapshot.repo_id IN ($repo_id)\n    AND $__timeFilter(commits.committed_date)\nGROUP BY  file_path\nORDER BY  line_age desc \nLIMIT 20;",
           "refId": "A",
           "select": [
             [

@@ -147,7 +147,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in (${issue_type:sqlstring}+'')\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in (${repo_id:sqlstring}+'')",
+          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in ($issue_type)\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -254,7 +254,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in (${issue_type:sqlstring}+'')\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in (${repo_id:sqlstring}+'')\n  and i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n  count(distinct i.id)\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in ($issue_type)\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in ($repo_id)\n  and i.creator_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -362,7 +362,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  sum(case when i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+'')\n    ) then 1 else 0 end)/count(distinct i.id) as community_issue_ratio\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in (${issue_type:sqlstring}+'')\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in (${repo_id:sqlstring}+'')",
+          "rawSql": "select\n  sum(case when i.creator_id not in (select distinct id from accounts where organization in ($org)\n    ) then 1 else 0 end)/count(distinct i.id) as community_issue_ratio\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in ($issue_type)\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -472,7 +472,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  distinct i.creator_name\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in (${issue_type:sqlstring}+'')\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in (${repo_id:sqlstring}+'')\n  and i.creator_name not in (select distinct creator_name from issues where created_date < curdate() - INTERVAL WEEKDAY(curdate())+7 DAY and creator_name is not null)",
+          "rawSql": "select\n  distinct i.creator_name\nfrom\n  issues as i\n  join board_issues bi on i.id = bi.issue_id\n  join boards b on bi.board_id = b.id\nwhere\n  i.type in ($issue_type)\n  and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n  and b.id in ($repo_id)\n  and i.creator_name not in (select distinct creator_name from issues where created_date < curdate() - INTERVAL WEEKDAY(curdate())+7 DAY and creator_name is not null)",
           "refId": "A",
           "select": [
             [
@@ -566,7 +566,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in (${issue_type:sqlstring}+'')\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n    and i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n)\n\nselect\n  1 - count(distinct case when comment_id is null then issue_id else null end)/count(distinct issue_id) as response_rate\nfrom issue_comment_list",
+          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in ($issue_type)\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in ($repo_id)\n    and i.creator_id not in (select distinct id from accounts where organization in ($org))\n)\n\nselect\n  1 - count(distinct case when comment_id is null then issue_id else null end)/count(distinct issue_id) as response_rate\nfrom issue_comment_list",
           "refId": "A",
           "select": [
             [
@@ -736,7 +736,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.issue_key,\n    i.title,\n    i.creator_name,\n    i.created_date as issue_created_date,\n    i.status,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in (${issue_type:sqlstring}+'')\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n    and i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n)\n\nselect \n  issue_key,\n  title,\n  creator_name,\n  issue_created_date,\n  status,\n  (TIMESTAMPDIFF(MINUTE,issue_created_date,NOW()))/1440 as 'queue_time_in_days',\n  url\nfrom issue_comment_list\nwhere comment_id is null",
+          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.issue_key,\n    i.title,\n    i.creator_name,\n    i.created_date as issue_created_date,\n    i.status,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in ($issue_type)\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in ($repo_id)\n    and i.creator_id not in (select distinct id from accounts where organization in ($org))\n)\n\nselect \n  issue_key,\n  title,\n  creator_name,\n  issue_created_date,\n  status,\n  (TIMESTAMPDIFF(MINUTE,issue_created_date,NOW()))/1440 as 'queue_time_in_days',\n  url\nfrom issue_comment_list\nwhere comment_id is null",
           "refId": "A",
           "select": [
             [
@@ -846,7 +846,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in (${issue_type:sqlstring}+'')\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n    and i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440)\nfrom issue_comment_list\nwhere comment_rank = 1",
+          "rawSql": "with issue_comment_list as(\n  select\n    i.id as issue_id,\n    i.url,\n    i.title,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in ($issue_type)\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in ($repo_id)\n    and i.creator_id not in (select distinct id from accounts where organization in ($org))\n)\n\nselect\n  avg((TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440)\nfrom issue_comment_list\nwhere comment_rank = 1",
           "refId": "A",
           "select": [
             [
@@ -1020,7 +1020,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "with issue_comment_list as(\n  select\n    SUBSTRING_INDEX(i.url, '/', -1) as issue_number,\n    i.url,\n    i.issue_key,\n    i.title,\n    i.creator_name,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in (${issue_type:sqlstring}+'')\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in (${repo_id:sqlstring}+'')\n    and i.creator_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n)\n\nselect\n  issue_key,\n  title,\n  -- body,\n  creator_name,\n  issue_created_date,\n  comment_date,\n  (TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440 as response_time_in_days,\n  url\nfrom issue_comment_list\nwhere comment_rank = 1",
+          "rawSql": "with issue_comment_list as(\n  select\n    SUBSTRING_INDEX(i.url, '/', -1) as issue_number,\n    i.url,\n    i.issue_key,\n    i.title,\n    i.creator_name,\n    i.created_date as issue_created_date,\n    ic.id as comment_id,\n    ic.created_date as comment_date,\n    ic.body,\n    case when ic.id is not null then rank() over (partition by i.id order by ic.created_date asc) else null end as comment_rank\n  from\n    issues i\n    join board_issues bi on i.id = bi.issue_id\n    join boards b on bi.board_id = b.id\n    left join issue_comments ic on i.id = ic.issue_id\n  where\n    i.type in ($issue_type)\n    and date(i.created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n    and b.id in ($repo_id)\n    and i.creator_id not in (select distinct id from accounts where organization in ($org))\n)\n\nselect\n  issue_key,\n  title,\n  -- body,\n  creator_name,\n  issue_created_date,\n  comment_date,\n  (TIMESTAMPDIFF(MINUTE, issue_created_date,comment_date))/1440 as response_time_in_days,\n  url\nfrom issue_comment_list\nwhere comment_rank = 1",
           "refId": "A",
           "select": [
             [
@@ -1153,7 +1153,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\t\n\n",
+          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\t\n\n",
           "refId": "A",
           "select": [
             [
@@ -1260,7 +1260,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand author_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -1367,7 +1367,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  sum(case when author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n  then 1 else 0 end)/count(distinct pr.id) as community_pr_ratio\nfrom\n  pull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')",
+          "rawSql": "select\n  sum(case when author_id not in (select distinct id from accounts where organization in ($org))\n  then 1 else 0 end)/count(distinct pr.id) as community_pr_ratio\nfrom\n  pull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)",
           "refId": "A",
           "select": [
             [
@@ -1474,7 +1474,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not null\n\tand author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand merged_date is not null\n\tand author_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -1581,7 +1581,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not null\n\tand author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n\tavg(TIMESTAMPDIFF(Minute,created_date,merged_date)/1440)\nfrom \n\tpull_requests\nwhere \n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand merged_date is not null\n\tand author_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -1675,7 +1675,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n  distinct author_name\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand merged_date is not null\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand author_name not in (select distinct author_name from pull_requests where created_date < curdate() - INTERVAL WEEKDAY(curdate())+7 DAY and author_name is not null)",
+          "rawSql": "select\n  distinct author_name\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand merged_date is not null\n\tand base_repo_id in ($repo_id)\n\tand author_name not in (select distinct author_name from pull_requests where created_date < curdate() - INTERVAL WEEKDAY(curdate())+7 DAY and author_name is not null)",
           "refId": "A",
           "select": [
             [
@@ -1787,7 +1787,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct case when merged_date is not null then pr.id else null end)/ count(distinct pr.id) as merged_pull_request_ratio\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n\tcount(distinct case when merged_date is not null then pr.id else null end)/ count(distinct pr.id) as merged_pull_request_ratio\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand author_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -1926,7 +1926,7 @@
           "metricColumn": "none",
           "queryType": "randomWalk",
           "rawQuery": true,
-          "rawSql": "select\n  pull_request_key,\n  title,\n  status,\n  author_name,\n  created_date,\n  (TIMESTAMPDIFF(MINUTE, created_date,curdate()))/1440 as queue_time_in_days,\n  url\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is null\n  and author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))",
+          "rawSql": "select\n  pull_request_key,\n  title,\n  status,\n  author_name,\n  created_date,\n  (TIMESTAMPDIFF(MINUTE, created_date,curdate()))/1440 as queue_time_in_days,\n  url\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand merged_date is null\n  and author_id not in (select distinct id from accounts where organization in ($org))",
           "refId": "A",
           "select": [
             [
@@ -2064,7 +2064,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n  author_name,\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not NULL\n\tand author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\ngroup by 1\norder by 2 desc\nlimit 20\n",
+          "rawSql": "select\n  author_name,\n\tcount(distinct pr.id) as pull_request_count\nfrom \n\tpull_requests pr\nwhere\n  date(created_date) BETWEEN curdate() - INTERVAL WEEKDAY(curdate())+7 DAY AND curdate() - INTERVAL WEEKDAY(curdate()) DAY\n\tand base_repo_id in ($repo_id)\n\tand merged_date is not NULL\n\tand author_id not in (select distinct id from accounts where organization in ($org))\ngroup by 1\norder by 2 desc\nlimit 20\n",
           "refId": "A",
           "select": [
             [
@@ -2166,7 +2166,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n\tcount(distinct author_id) as all_contributor_count\nfrom \n\tpull_requests pr\nwhere\n\tbase_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not null\n\t-- and author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\n",
+          "rawSql": "select\n\tcount(distinct author_id) as all_contributor_count\nfrom \n\tpull_requests pr\nwhere\n\tbase_repo_id in ($repo_id)\n\tand merged_date is not null\n\t-- and author_id not in (select distinct id from accounts where organization in ($org))\n",
           "refId": "A",
           "select": [
             [
@@ -2273,7 +2273,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n\tbase_repo_id in (${repo_id:sqlstring}+'')\n\tand merged_date is not NULL\n\t-- and author_id not in (select distinct id from accounts where organization in (${org:sqlstring}+''))\ngroup by 1\norder by 2 desc\nlimit 20\n",
+          "rawSql": "select\n  author_name,\n\tcount(distinct pr.id) as merged_pull_request_count\nfrom \n\tpull_requests pr\nwhere\n\tbase_repo_id in ($repo_id)\n\tand merged_date is not NULL\n\t-- and author_id not in (select distinct id from accounts where organization in ($org))\ngroup by 1\norder by 2 desc\nlimit 20\n",
           "refId": "A",
           "select": [
             [
