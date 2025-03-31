@@ -121,8 +121,7 @@ One of the best ways to get started contributing is by improving DevLake's docum
 
 ## 💙 Community
 
-- Slack: Message us on <a href="https://join.slack.com/t/devlake-io/shared_invite/zt-26ulybksw-IDrJYuqY1FrdjlMMJhs53Q" target="_blank">Slack</a>
-- Wechat Community: [Check the barcode](resources/img/wechat_community_barcode.png)
+Message us on <a href="https://join.slack.com/t/devlake-io/shared_invite/zt-26ulybksw-IDrJYuqY1FrdjlMMJhs53Q" target="_blank">Slack</a>
 
 ## 📄 License<a id="license"></a>
 
