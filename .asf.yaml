@@ -23,6 +23,7 @@ github:
     issues: true
     projects: false
     wiki: false
+    discussions: true
   labels:
     - user-friendly
     - open-source
